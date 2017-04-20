@@ -1,0 +1,137 @@
+C:\Documents and Settings\denkon\Desktop\k-browser setup,code, publish\source code\Advance Webbrowser\Advance Webbrowser\bin\Debug\k-browser.exe.config
+C:\Documents and Settings\denkon\Desktop\k-browser setup,code, publish\source code\Advance Webbrowser\Advance Webbrowser\bin\Debug\k-browser.exe
+C:\Documents and Settings\denkon\Desktop\k-browser setup,code, publish\source code\Advance Webbrowser\Advance Webbrowser\bin\Debug\k-browser.pdb
+C:\Documents and Settings\denkon\Desktop\k-browser setup,code, publish\source code\Advance Webbrowser\Advance Webbrowser\bin\Debug\k-browser.xml
+C:\Documents and Settings\denkon\Desktop\k-browser setup,code, publish\source code\Advance Webbrowser\Advance Webbrowser\obj\Debug\ResolveAssemblyReference.cache
+C:\Documents and Settings\denkon\Desktop\k-browser setup,code, publish\source code\Advance Webbrowser\Advance Webbrowser\obj\Debug\Advance_Webbrowser.AboutBox.resources
+C:\Documents and Settings\denkon\Desktop\k-browser setup,code, publish\source code\Advance Webbrowser\Advance Webbrowser\obj\Debug\Advance_Webbrowser.Bookmarks.resources
+C:\Documents and Settings\denkon\Desktop\k-browser setup,code, publish\source code\Advance Webbrowser\Advance Webbrowser\obj\Debug\Advance_Webbrowser.Form1.resources
+C:\Documents and Settings\denkon\Desktop\k-browser setup,code, publish\source code\Advance Webbrowser\Advance Webbrowser\obj\Debug\Advance_Webbrowser.frmPhising.resources
+C:\Documents and Settings\denkon\Desktop\k-browser setup,code, publish\source code\Advance Webbrowser\Advance Webbrowser\obj\Debug\Advance_Webbrowser.frmRss.resources
+C:\Documents and Settings\denkon\Desktop\k-browser setup,code, publish\source code\Advance Webbrowser\Advance Webbrowser\obj\Debug\Advance_Webbrowser.History.resources
+C:\Documents and Settings\denkon\Desktop\k-browser setup,code, publish\source code\Advance Webbrowser\Advance Webbrowser\obj\Debug\Advance_Webbrowser.mainForm.resources
+C:\Documents and Settings\denkon\Desktop\k-browser setup,code, publish\source code\Advance Webbrowser\Advance Webbrowser\obj\Debug\Advance_Webbrowser.Resources.resources
+C:\Documents and Settings\denkon\Desktop\k-browser setup,code, publish\source code\Advance Webbrowser\Advance Webbrowser\obj\Debug\GenerateResource.read.1.tlog
+C:\Documents and Settings\denkon\Desktop\k-browser setup,code, publish\source code\Advance Webbrowser\Advance Webbrowser\obj\Debug\GenerateResource.write.1.tlog
+C:\Documents and Settings\denkon\Desktop\k-browser setup,code, publish\source code\Advance Webbrowser\Advance Webbrowser\obj\Debug\k-browser.exe
+C:\Documents and Settings\denkon\Desktop\k-browser setup,code, publish\source code\Advance Webbrowser\Advance Webbrowser\obj\Debug\k-browser.xml
+C:\Documents and Settings\denkon\Desktop\k-browser setup,code, publish\source code\Advance Webbrowser\Advance Webbrowser\obj\Debug\k-browser.pdb
+C:\Documents and Settings\denkon\Desktop\k-browser setup,code, publish\source code\k-browser\k-browser\bin\Debug\k-browser.exe.config
+C:\Documents and Settings\denkon\Desktop\k-browser setup,code, publish\source code\k-browser\k-browser\obj\Debug\k-browser.exe
+C:\Documents and Settings\denkon\Desktop\k-browser setup,code, publish\source code\k-browser\k-browser\obj\Debug\k-browser.xml
+C:\Documents and Settings\denkon\Desktop\k-browser setup,code, publish\source code\k-browser\k-browser\obj\Debug\k-browser.pdb
+C:\Documents and Settings\denkon\Desktop\k-browser setup,code, publish\source code\k-browser\k-browser\bin\Debug\k-browser.exe
+C:\Documents and Settings\denkon\Desktop\k-browser setup,code, publish\source code\k-browser\k-browser\bin\Debug\k-browser.pdb
+C:\Documents and Settings\denkon\Desktop\k-browser setup,code, publish\source code\k-browser\k-browser\bin\Debug\k-browser.xml
+C:\Documents and Settings\denkon\Desktop\k-browser setup,code, publish\source code\k-browser\k-browser\obj\Debug\ResolveAssemblyReference.cache
+C:\Documents and Settings\denkon\Desktop\k-browser setup,code, publish\source code\k-browser\k-browser\obj\Debug\Advance_Webbrowser.AboutBox.resources
+C:\Documents and Settings\denkon\Desktop\k-browser setup,code, publish\source code\k-browser\k-browser\obj\Debug\Advance_Webbrowser.Bookmarks.resources
+C:\Documents and Settings\denkon\Desktop\k-browser setup,code, publish\source code\k-browser\k-browser\obj\Debug\Advance_Webbrowser.Form1.resources
+C:\Documents and Settings\denkon\Desktop\k-browser setup,code, publish\source code\k-browser\k-browser\obj\Debug\Advance_Webbrowser.frmPhising.resources
+C:\Documents and Settings\denkon\Desktop\k-browser setup,code, publish\source code\k-browser\k-browser\obj\Debug\Advance_Webbrowser.frmRss.resources
+C:\Documents and Settings\denkon\Desktop\k-browser setup,code, publish\source code\k-browser\k-browser\obj\Debug\Advance_Webbrowser.History.resources
+C:\Documents and Settings\denkon\Desktop\k-browser setup,code, publish\source code\k-browser\k-browser\obj\Debug\Advance_Webbrowser.mainForm.resources
+C:\Documents and Settings\denkon\Desktop\k-browser setup,code, publish\source code\k-browser\k-browser\obj\Debug\Advance_Webbrowser.Resources.resources
+C:\Documents and Settings\denkon\Desktop\k-browser setup,code, publish\source code\k-browser\k-browser\obj\Debug\GenerateResource.read.1.tlog
+C:\Documents and Settings\denkon\Desktop\k-browser setup,code, publish\source code\k-browser\k-browser\obj\Debug\GenerateResource.write.1.tlog
+\\DENKON-AMD\k-browser\bin\Debug\k-browser.exe.config
+\\DENKON-AMD\k-browser\obj\Debug\k-browser.exe
+\\DENKON-AMD\k-browser\obj\Debug\k-browser.xml
+\\DENKON-AMD\k-browser\obj\Debug\k-browser.pdb
+\\DENKON-AMD\k-browser\bin\Debug\k-browser.exe
+\\DENKON-AMD\k-browser\bin\Debug\k-browser.pdb
+\\DENKON-AMD\k-browser\bin\Debug\k-browser.xml
+\\DENKON-AMD\k-browser\obj\Debug\ResolveAssemblyReference.cache
+\\DENKON-AMD\k-browser\obj\Debug\Advance_Webbrowser.AboutBox.resources
+\\DENKON-AMD\k-browser\obj\Debug\Advance_Webbrowser.Bookmarks.resources
+\\DENKON-AMD\k-browser\obj\Debug\Advance_Webbrowser.Form1.resources
+\\DENKON-AMD\k-browser\obj\Debug\Advance_Webbrowser.frmPhising.resources
+\\DENKON-AMD\k-browser\obj\Debug\Advance_Webbrowser.frmRss.resources
+\\DENKON-AMD\k-browser\obj\Debug\Advance_Webbrowser.History.resources
+\\DENKON-AMD\k-browser\obj\Debug\Advance_Webbrowser.mainForm.resources
+\\DENKON-AMD\k-browser\obj\Debug\Advance_Webbrowser.Resources.resources
+\\DENKON-AMD\k-browser\obj\Debug\GenerateResource.read.1.tlog
+\\DENKON-AMD\k-browser\obj\Debug\GenerateResource.write.1.tlog
+C:\Users\denkonn\Documents\Visual Studio 2010\Projects\k-browser2\k-browser\bin\Debug\k-browser.exe.config
+C:\Users\denkonn\Documents\Visual Studio 2010\Projects\k-browser2\k-browser\obj\Debug\k-browser.exe
+C:\Users\denkonn\Documents\Visual Studio 2010\Projects\k-browser2\k-browser\obj\Debug\k-browser.xml
+C:\Users\denkonn\Documents\Visual Studio 2010\Projects\k-browser2\k-browser\obj\Debug\k-browser.pdb
+C:\Users\denkonn\Documents\Visual Studio 2010\Projects\k-browser2\k-browser\bin\Debug\k-browser.exe
+C:\Users\denkonn\Documents\Visual Studio 2010\Projects\k-browser2\k-browser\bin\Debug\k-browser.pdb
+C:\Users\denkonn\Documents\Visual Studio 2010\Projects\k-browser2\k-browser\bin\Debug\k-browser.xml
+C:\Users\denkonn\Documents\Visual Studio 2010\Projects\k-browser2\k-browser\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\denkonn\Documents\Visual Studio 2010\Projects\k-browser2\k-browser\obj\Debug\Advance_Webbrowser.AboutBox.resources
+C:\Users\denkonn\Documents\Visual Studio 2010\Projects\k-browser2\k-browser\obj\Debug\Advance_Webbrowser.Bookmarks.resources
+C:\Users\denkonn\Documents\Visual Studio 2010\Projects\k-browser2\k-browser\obj\Debug\Advance_Webbrowser.Form1.resources
+C:\Users\denkonn\Documents\Visual Studio 2010\Projects\k-browser2\k-browser\obj\Debug\Advance_Webbrowser.frmPhising.resources
+C:\Users\denkonn\Documents\Visual Studio 2010\Projects\k-browser2\k-browser\obj\Debug\Advance_Webbrowser.frmRss.resources
+C:\Users\denkonn\Documents\Visual Studio 2010\Projects\k-browser2\k-browser\obj\Debug\Advance_Webbrowser.History.resources
+C:\Users\denkonn\Documents\Visual Studio 2010\Projects\k-browser2\k-browser\obj\Debug\Advance_Webbrowser.mainForm.resources
+C:\Users\denkonn\Documents\Visual Studio 2010\Projects\k-browser2\k-browser\obj\Debug\Advance_Webbrowser.Resources.resources
+C:\Users\denkonn\Documents\Visual Studio 2010\Projects\k-browser2\k-browser\obj\Debug\GenerateResource.read.1.tlog
+C:\Users\denkonn\Documents\Visual Studio 2010\Projects\k-browser2\k-browser\obj\Debug\GenerateResource.write.1.tlog
+C:\Users\denkonn\Documents\Visual Studio 2010\Projects\k-browser2\k-browser host-ed.me\bin\Debug\Interop.WMPLib.dll
+C:\Users\denkonn\Documents\Visual Studio 2010\Projects\k-browser2\k-browser host-ed.me\bin\Debug\k-browser.exe.config
+C:\Users\denkonn\Documents\Visual Studio 2010\Projects\k-browser2\k-browser host-ed.me\bin\Debug\k-browser.exe
+C:\Users\denkonn\Documents\Visual Studio 2010\Projects\k-browser2\k-browser host-ed.me\bin\Debug\k-browser.pdb
+C:\Users\denkonn\Documents\Visual Studio 2010\Projects\k-browser2\k-browser host-ed.me\bin\Debug\k-browser.xml
+C:\Users\denkonn\Documents\Visual Studio 2010\Projects\k-browser2\k-browser host-ed.me\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\denkonn\Documents\Visual Studio 2010\Projects\k-browser2\k-browser host-ed.me\obj\Debug\Interop.AXVLC.dll
+C:\Users\denkonn\Documents\Visual Studio 2010\Projects\k-browser2\k-browser host-ed.me\obj\Debug\k-browser.vbproj.ResolveComReference.cache
+C:\Users\denkonn\Documents\Visual Studio 2010\Projects\k-browser2\k-browser host-ed.me\obj\Debug\Advance_Webbrowser.AboutBox.resources
+C:\Users\denkonn\Documents\Visual Studio 2010\Projects\k-browser2\k-browser host-ed.me\obj\Debug\Advance_Webbrowser.Bookmarks.resources
+C:\Users\denkonn\Documents\Visual Studio 2010\Projects\k-browser2\k-browser host-ed.me\obj\Debug\Advance_Webbrowser.fb.resources
+C:\Users\denkonn\Documents\Visual Studio 2010\Projects\k-browser2\k-browser host-ed.me\obj\Debug\Advance_Webbrowser.Form1.resources
+C:\Users\denkonn\Documents\Visual Studio 2010\Projects\k-browser2\k-browser host-ed.me\obj\Debug\Advance_Webbrowser.Form12.resources
+C:\Users\denkonn\Documents\Visual Studio 2010\Projects\k-browser2\k-browser host-ed.me\obj\Debug\Advance_Webbrowser.Form4.resources
+C:\Users\denkonn\Documents\Visual Studio 2010\Projects\k-browser2\k-browser host-ed.me\obj\Debug\Advance_Webbrowser.ftp.resources
+C:\Users\denkonn\Documents\Visual Studio 2010\Projects\k-browser2\k-browser host-ed.me\obj\Debug\Advance_Webbrowser.gp.resources
+C:\Users\denkonn\Documents\Visual Studio 2010\Projects\k-browser2\k-browser host-ed.me\obj\Debug\Advance_Webbrowser.History.resources
+C:\Users\denkonn\Documents\Visual Studio 2010\Projects\k-browser2\k-browser host-ed.me\obj\Debug\Advance_Webbrowser.Resources.resources
+C:\Users\denkonn\Documents\Visual Studio 2010\Projects\k-browser2\k-browser host-ed.me\obj\Debug\Advance_Webbrowser.tw.resources
+C:\Users\denkonn\Documents\Visual Studio 2010\Projects\k-browser2\k-browser host-ed.me\obj\Debug\GenerateResource.read.1.tlog
+C:\Users\denkonn\Documents\Visual Studio 2010\Projects\k-browser2\k-browser host-ed.me\obj\Debug\GenerateResource.write.1.tlog
+C:\Users\denkonn\Documents\Visual Studio 2010\Projects\k-browser2\k-browser host-ed.me\obj\Debug\k-browser.exe
+C:\Users\denkonn\Documents\Visual Studio 2010\Projects\k-browser2\k-browser host-ed.me\obj\Debug\k-browser.xml
+C:\Users\denkonn\Documents\Visual Studio 2010\Projects\k-browser2\k-browser host-ed.me\obj\Debug\k-browser.pdb
+C:\Users\denkonn\Documents\Visual Studio 2010\Projects\k-browser2\k-browser host-ed.me\obj\Debug\Advance_Webbrowser.CookieViewer.resources
+C:\Users\denkonn\Documents\Visual Studio 2010\Projects\k-browser2\k-browser host-ed.me\obj\Debug\Advance_Webbrowser.Phising.resources
+C:\Users\denkonn\Documents\Visual Studio 2010\Projects\k-browser2\k-browser host-ed.me\obj\Debug\Advance_Webbrowser.Settings.resources
+C:\Users\denkonn\Documents\Visual Studio 2010\Projects\k-browser2\k-browser host-ed.me\obj\Debug\Advance_Webbrowser.Rss.resources
+C:\Users\denkonn\Documents\Visual Studio 2010\Projects\k-browser2\k-browser host-ed.me\obj\Debug\Advance_Webbrowser.Source.resources
+C:\Users\denkonn\Documents\Visual Studio 2010\Projects\k-browser2\k-browser host-ed.me\obj\Debug\Advance_Webbrowser.task_manager.resources
+C:\Users\denkonn\Documents\Visual Studio 2010\Projects\k-browser2\k-browser host-ed.me\bin\Debug\Interop.DHTMLEDLib.dll
+C:\Users\denkonn\Documents\Visual Studio 2010\Projects\k-browser2\k-browser host-ed.me\bin\Debug\AxInterop.DHTMLEDLib.dll
+C:\Users\denkonn\Documents\Visual Studio 2010\Projects\k-browser2\k-browser host-ed.me\obj\Debug\Interop.DHTMLEDLib.dll
+C:\Users\denkonn\Documents\Visual Studio 2010\Projects\k-browser2\k-browser host-ed.me\obj\Debug\AxInterop.DHTMLEDLib.dll
+C:\Users\denkonn\Documents\Visual Studio 2010\Projects\k-browser2\k-browser host-ed.me\obj\Debug\Advance_Webbrowser.downman.resources
+C:\Users\denkonn\Documents\Visual Studio 2010\Projects\k-browser2\k-browser host-ed.me\obj\Debug\Advance_Webbrowser.Form3.resources
+C:\Users\denniskon\Documents\k-browser 4.8.1 source code\k-browser 4.8.1 source code\bin\Debug\K-Browser.exe.config
+C:\Users\denniskon\Documents\k-browser 4.8.1 source code\k-browser 4.8.1 source code\bin\Debug\K-Browser.exe
+C:\Users\denniskon\Documents\k-browser 4.8.1 source code\k-browser 4.8.1 source code\bin\Debug\K-Browser.pdb
+C:\Users\denniskon\Documents\k-browser 4.8.1 source code\k-browser 4.8.1 source code\bin\Debug\K-Browser.xml
+C:\Users\denniskon\Documents\k-browser 4.8.1 source code\k-browser 4.8.1 source code\obj\Debug\Interop.AXVLC.dll
+C:\Users\denniskon\Documents\k-browser 4.8.1 source code\k-browser 4.8.1 source code\obj\Debug\k-browser.vbproj.ResolveComReference.cache
+C:\Users\denniskon\Documents\k-browser 4.8.1 source code\k-browser 4.8.1 source code\obj\Debug\Advance_Webbrowser.AboutBox.resources
+C:\Users\denniskon\Documents\k-browser 4.8.1 source code\k-browser 4.8.1 source code\obj\Debug\Advance_Webbrowser.Bookmarks.resources
+C:\Users\denniskon\Documents\k-browser 4.8.1 source code\k-browser 4.8.1 source code\obj\Debug\Advance_Webbrowser.fb.resources
+C:\Users\denniskon\Documents\k-browser 4.8.1 source code\k-browser 4.8.1 source code\obj\Debug\Advance_Webbrowser.Form1.resources
+C:\Users\denniskon\Documents\k-browser 4.8.1 source code\k-browser 4.8.1 source code\obj\Debug\Advance_Webbrowser.Form12.resources
+C:\Users\denniskon\Documents\k-browser 4.8.1 source code\k-browser 4.8.1 source code\obj\Debug\Advance_Webbrowser.Form3.resources
+C:\Users\denniskon\Documents\k-browser 4.8.1 source code\k-browser 4.8.1 source code\obj\Debug\Advance_Webbrowser.Form4.resources
+C:\Users\denniskon\Documents\k-browser 4.8.1 source code\k-browser 4.8.1 source code\obj\Debug\Advance_Webbrowser.CookieViewer.resources
+C:\Users\denniskon\Documents\k-browser 4.8.1 source code\k-browser 4.8.1 source code\obj\Debug\Advance_Webbrowser.Phising.resources
+C:\Users\denniskon\Documents\k-browser 4.8.1 source code\k-browser 4.8.1 source code\obj\Debug\Advance_Webbrowser.Rss.resources
+C:\Users\denniskon\Documents\k-browser 4.8.1 source code\k-browser 4.8.1 source code\obj\Debug\Advance_Webbrowser.Settings.resources
+C:\Users\denniskon\Documents\k-browser 4.8.1 source code\k-browser 4.8.1 source code\obj\Debug\Advance_Webbrowser.ftp.resources
+C:\Users\denniskon\Documents\k-browser 4.8.1 source code\k-browser 4.8.1 source code\obj\Debug\Advance_Webbrowser.gp.resources
+C:\Users\denniskon\Documents\k-browser 4.8.1 source code\k-browser 4.8.1 source code\obj\Debug\Advance_Webbrowser.History.resources
+C:\Users\denniskon\Documents\k-browser 4.8.1 source code\k-browser 4.8.1 source code\obj\Debug\Advance_Webbrowser.downman.resources
+C:\Users\denniskon\Documents\k-browser 4.8.1 source code\k-browser 4.8.1 source code\obj\Debug\Advance_Webbrowser.Resources.resources
+C:\Users\denniskon\Documents\k-browser 4.8.1 source code\k-browser 4.8.1 source code\obj\Debug\Advance_Webbrowser.Source.resources
+C:\Users\denniskon\Documents\k-browser 4.8.1 source code\k-browser 4.8.1 source code\obj\Debug\Advance_Webbrowser.task_manager.resources
+C:\Users\denniskon\Documents\k-browser 4.8.1 source code\k-browser 4.8.1 source code\obj\Debug\Advance_Webbrowser.tw.resources
+C:\Users\denniskon\Documents\k-browser 4.8.1 source code\k-browser 4.8.1 source code\obj\Debug\k-browser.vbproj.GenerateResource.Cache
+C:\Users\denniskon\Documents\k-browser 4.8.1 source code\k-browser 4.8.1 source code\obj\Debug\K-Browser.exe
+C:\Users\denniskon\Documents\k-browser 4.8.1 source code\k-browser 4.8.1 source code\obj\Debug\K-Browser.xml
+C:\Users\denniskon\Documents\k-browser 4.8.1 source code\k-browser 4.8.1 source code\obj\Debug\K-Browser.pdb

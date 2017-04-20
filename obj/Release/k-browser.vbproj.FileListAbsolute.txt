@@ -1,0 +1,36 @@
+C:\vb codes\web browsers\Advance webbrowser\Advance Webbrowser\Advance Webbrowser\obj\Release\ResolveAssemblyReference.cache
+C:\vb codes\web browsers\Advance webbrowser\Advance Webbrowser\Advance Webbrowser\obj\Release\Advance_Webbrowser.Bookmarks.resources
+C:\vb codes\web browsers\Advance webbrowser\Advance Webbrowser\Advance Webbrowser\obj\Release\Advance_Webbrowser.Form1.resources
+C:\vb codes\web browsers\Advance webbrowser\Advance Webbrowser\Advance Webbrowser\obj\Release\Advance_Webbrowser.History.resources
+C:\vb codes\web browsers\Advance webbrowser\Advance Webbrowser\Advance Webbrowser\obj\Release\Advance_Webbrowser.Resources.resources
+C:\vb codes\web browsers\Advance webbrowser\Advance Webbrowser\Advance Webbrowser\obj\Release\GenerateResource.read.1.tlog
+C:\vb codes\web browsers\Advance webbrowser\Advance Webbrowser\Advance Webbrowser\obj\Release\GenerateResource.write.1.tlog
+C:\vb codes\web browsers\Advance webbrowser\Advance Webbrowser\Advance Webbrowser\bin\Release\k-browser.exe.config
+C:\vb codes\web browsers\Advance webbrowser\Advance Webbrowser\Advance Webbrowser\bin\Release\k-browser.exe
+C:\vb codes\web browsers\Advance webbrowser\Advance Webbrowser\Advance Webbrowser\bin\Release\k-browser.pdb
+C:\vb codes\web browsers\Advance webbrowser\Advance Webbrowser\Advance Webbrowser\bin\Release\k-browser.xml
+C:\vb codes\web browsers\Advance webbrowser\Advance Webbrowser\Advance Webbrowser\obj\Release\k-browser.exe
+C:\vb codes\web browsers\Advance webbrowser\Advance Webbrowser\Advance Webbrowser\obj\Release\k-browser.xml
+C:\vb codes\web browsers\Advance webbrowser\Advance Webbrowser\Advance Webbrowser\obj\Release\k-browser.pdb
+C:\vb codes\web browsers\Advance webbrowser\Advance Webbrowser\Advance Webbrowser\obj\Release\Advance_Webbrowser.AboutBox.resources
+C:\vb codes\web browsers\Advance webbrowser\Advance Webbrowser\Advance Webbrowser\obj\Release\Advance_Webbrowser.mainForm.resources
+C:\vb codes\web browsers\Advance webbrowser\Advance Webbrowser\Advance Webbrowser\obj\Release\Advance_Webbrowser.frmPhising.resources
+C:\vb codes\web browsers\Advance webbrowser\Advance Webbrowser\Advance Webbrowser\obj\Release\Advance_Webbrowser.frmRss.resources
+C:\Documents and Settings\denkon\Desktop\k-browser setup,code, publish\source code\Advance Webbrowser\Advance Webbrowser\bin\Release\k-browser.exe.config
+C:\Documents and Settings\denkon\Desktop\k-browser setup,code, publish\source code\Advance Webbrowser\Advance Webbrowser\bin\Release\k-browser.exe
+C:\Documents and Settings\denkon\Desktop\k-browser setup,code, publish\source code\Advance Webbrowser\Advance Webbrowser\bin\Release\k-browser.pdb
+C:\Documents and Settings\denkon\Desktop\k-browser setup,code, publish\source code\Advance Webbrowser\Advance Webbrowser\bin\Release\k-browser.xml
+C:\Documents and Settings\denkon\Desktop\k-browser setup,code, publish\source code\Advance Webbrowser\Advance Webbrowser\obj\Release\ResolveAssemblyReference.cache
+C:\Documents and Settings\denkon\Desktop\k-browser setup,code, publish\source code\Advance Webbrowser\Advance Webbrowser\obj\Release\Advance_Webbrowser.AboutBox.resources
+C:\Documents and Settings\denkon\Desktop\k-browser setup,code, publish\source code\Advance Webbrowser\Advance Webbrowser\obj\Release\Advance_Webbrowser.Bookmarks.resources
+C:\Documents and Settings\denkon\Desktop\k-browser setup,code, publish\source code\Advance Webbrowser\Advance Webbrowser\obj\Release\Advance_Webbrowser.Form1.resources
+C:\Documents and Settings\denkon\Desktop\k-browser setup,code, publish\source code\Advance Webbrowser\Advance Webbrowser\obj\Release\Advance_Webbrowser.frmPhising.resources
+C:\Documents and Settings\denkon\Desktop\k-browser setup,code, publish\source code\Advance Webbrowser\Advance Webbrowser\obj\Release\Advance_Webbrowser.frmRss.resources
+C:\Documents and Settings\denkon\Desktop\k-browser setup,code, publish\source code\Advance Webbrowser\Advance Webbrowser\obj\Release\Advance_Webbrowser.History.resources
+C:\Documents and Settings\denkon\Desktop\k-browser setup,code, publish\source code\Advance Webbrowser\Advance Webbrowser\obj\Release\Advance_Webbrowser.mainForm.resources
+C:\Documents and Settings\denkon\Desktop\k-browser setup,code, publish\source code\Advance Webbrowser\Advance Webbrowser\obj\Release\Advance_Webbrowser.Resources.resources
+C:\Documents and Settings\denkon\Desktop\k-browser setup,code, publish\source code\Advance Webbrowser\Advance Webbrowser\obj\Release\GenerateResource.read.1.tlog
+C:\Documents and Settings\denkon\Desktop\k-browser setup,code, publish\source code\Advance Webbrowser\Advance Webbrowser\obj\Release\GenerateResource.write.1.tlog
+C:\Documents and Settings\denkon\Desktop\k-browser setup,code, publish\source code\Advance Webbrowser\Advance Webbrowser\obj\Release\k-browser.exe
+C:\Documents and Settings\denkon\Desktop\k-browser setup,code, publish\source code\Advance Webbrowser\Advance Webbrowser\obj\Release\k-browser.xml
+C:\Documents and Settings\denkon\Desktop\k-browser setup,code, publish\source code\Advance Webbrowser\Advance Webbrowser\obj\Release\k-browser.pdb
