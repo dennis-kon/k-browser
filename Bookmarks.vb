@@ -1,4 +1,4 @@
-Public Class Bookmarks
+﻿Public Class Bookmarks
 
     Private Sub Bookmarks_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
         Try

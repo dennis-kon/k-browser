@@ -1,5 +1,5 @@
 Imports System.Net
-Public Class mainForm
+Public Class downman
 
     Dim whereToSave As String
     Delegate Sub ChangeTextsSafe(ByVal length As Long, ByVal position As Integer, ByVal percent As Integer, ByVal speed As Double)
@@ -95,7 +95,7 @@ Public Class mainForm
             theResponse = theRequest.GetResponse
         Catch ex As Exception
 
-            MessageBox.Show("An error occurred while downloading this file. Possibe causes:" & ControlChars.CrLf & _
+            MessageBox.Show("An error occurred while downloading this file." & ControlChars.CrLf & _
                             "1) The File doesn't exist" & ControlChars.CrLf & _
                             "2) Remote server error", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
 
@@ -178,5 +178,9 @@ Public Class mainForm
 
     Private Sub btnCancel_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnCancel.Click
         Me.BackgroundWorker1.CancelAsync()
+    End Sub
+
+    Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button1.Click
+        Me.Close()
     End Sub
 End Class
