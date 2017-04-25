@@ -135,3 +135,33 @@ C:\Users\denniskon\Documents\k-browser 4.8.1 source code\k-browser 4.8.1 source 
 C:\Users\denniskon\Documents\k-browser 4.8.1 source code\k-browser 4.8.1 source code\obj\Debug\K-Browser.exe
 C:\Users\denniskon\Documents\k-browser 4.8.1 source code\k-browser 4.8.1 source code\obj\Debug\K-Browser.xml
 C:\Users\denniskon\Documents\k-browser 4.8.1 source code\k-browser 4.8.1 source code\obj\Debug\K-Browser.pdb
+D:\github\k-browser\bin\Debug\K-Browser.exe.config
+D:\github\k-browser\bin\Debug\K-Browser.exe
+D:\github\k-browser\bin\Debug\K-Browser.pdb
+D:\github\k-browser\bin\Debug\K-Browser.xml
+D:\github\k-browser\obj\Debug\k-browser.vbprojResolveAssemblyReference.cache
+D:\github\k-browser\obj\Debug\Interop.AXVLC.dll
+D:\github\k-browser\obj\Debug\k-browser.vbproj.ResolveComReference.cache
+D:\github\k-browser\obj\Debug\Advance_Webbrowser.AboutBox.resources
+D:\github\k-browser\obj\Debug\Advance_Webbrowser.Bookmarks.resources
+D:\github\k-browser\obj\Debug\Advance_Webbrowser.fb.resources
+D:\github\k-browser\obj\Debug\Advance_Webbrowser.Form1.resources
+D:\github\k-browser\obj\Debug\Advance_Webbrowser.Form12.resources
+D:\github\k-browser\obj\Debug\Advance_Webbrowser.Form3.resources
+D:\github\k-browser\obj\Debug\Advance_Webbrowser.Form4.resources
+D:\github\k-browser\obj\Debug\Advance_Webbrowser.CookieViewer.resources
+D:\github\k-browser\obj\Debug\Advance_Webbrowser.Phising.resources
+D:\github\k-browser\obj\Debug\Advance_Webbrowser.Rss.resources
+D:\github\k-browser\obj\Debug\Advance_Webbrowser.Settings.resources
+D:\github\k-browser\obj\Debug\Advance_Webbrowser.ftp.resources
+D:\github\k-browser\obj\Debug\Advance_Webbrowser.gp.resources
+D:\github\k-browser\obj\Debug\Advance_Webbrowser.History.resources
+D:\github\k-browser\obj\Debug\Advance_Webbrowser.downman.resources
+D:\github\k-browser\obj\Debug\Advance_Webbrowser.Resources.resources
+D:\github\k-browser\obj\Debug\Advance_Webbrowser.Source.resources
+D:\github\k-browser\obj\Debug\Advance_Webbrowser.task_manager.resources
+D:\github\k-browser\obj\Debug\Advance_Webbrowser.tw.resources
+D:\github\k-browser\obj\Debug\k-browser.vbproj.GenerateResource.Cache
+D:\github\k-browser\obj\Debug\K-Browser.exe
+D:\github\k-browser\obj\Debug\K-Browser.xml
+D:\github\k-browser\obj\Debug\K-Browser.pdb
