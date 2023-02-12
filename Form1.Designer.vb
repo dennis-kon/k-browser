@@ -100,8 +100,8 @@ Partial Class Form1
         Me.CPUStatsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.PropertiesToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator14 = New System.Windows.Forms.ToolStripSeparator()
-        Me.FullScreenToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.CookieToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.FullScreenToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.BookmarksToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ViewToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
@@ -133,7 +133,6 @@ Partial Class Form1
         Me.DownloadManagerToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.SetHomePageToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.FtpClientToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.MediaToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.TaskToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.SendALinkToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator9 = New System.Windows.Forms.ToolStripSeparator()
@@ -147,14 +146,14 @@ Partial Class Form1
         Me.AboutToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.CheckForUpdatesToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator10 = New System.Windows.Forms.ToolStripSeparator()
+        Me.KBrowserToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.SubmitFeedbackToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.SToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator16 = New System.Windows.Forms.ToolStripSeparator()
         Me.CalendarToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
         Me.ToolStripTextBox2 = New System.Windows.Forms.ToolStripTextBox()
         Me.Timer1 = New System.Windows.Forms.Timer(Me.components)
-        Me.SToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.KBrowserToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ToolStripSeparator16 = New System.Windows.Forms.ToolStripSeparator()
         Me.Back = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripButton2 = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripButton3 = New System.Windows.Forms.ToolStripButton()
@@ -207,8 +206,8 @@ Partial Class Form1
         '
         Me.TabControl1.AllowDrop = True
         Me.TabControl1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-                    Or System.Windows.Forms.AnchorStyles.Left) _
-                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.TabControl1.ContextMenuStrip = Me.ContextMenuStrip1
         Me.TabControl1.Location = New System.Drawing.Point(0, 66)
         Me.TabControl1.Multiline = True
@@ -344,7 +343,7 @@ Partial Class Form1
         '
         Me.HomeToolStripMenuItem1.Name = "HomeToolStripMenuItem1"
         Me.HomeToolStripMenuItem1.ShortcutKeys = CType(((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.Shift) _
-                    Or System.Windows.Forms.Keys.H), System.Windows.Forms.Keys)
+            Or System.Windows.Forms.Keys.H), System.Windows.Forms.Keys)
         Me.HomeToolStripMenuItem1.Size = New System.Drawing.Size(211, 22)
         Me.HomeToolStripMenuItem1.Text = "Home Page"
         '
@@ -666,7 +665,7 @@ Partial Class Form1
         Me.ToolStripMenuItem3.Image = CType(resources.GetObject("ToolStripMenuItem3.Image"), System.Drawing.Image)
         Me.ToolStripMenuItem3.Name = "ToolStripMenuItem3"
         Me.ToolStripMenuItem3.ShortcutKeys = CType(((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.Shift) _
-                    Or System.Windows.Forms.Keys.H), System.Windows.Forms.Keys)
+            Or System.Windows.Forms.Keys.H), System.Windows.Forms.Keys)
         Me.ToolStripMenuItem3.Size = New System.Drawing.Size(211, 22)
         Me.ToolStripMenuItem3.Text = "Home Page"
         '
@@ -700,19 +699,19 @@ Partial Class Form1
         Me.ToolStripSeparator14.Name = "ToolStripSeparator14"
         Me.ToolStripSeparator14.Size = New System.Drawing.Size(166, 6)
         '
-        'FullScreenToolStripMenuItem
-        '
-        Me.FullScreenToolStripMenuItem.Name = "FullScreenToolStripMenuItem"
-        Me.FullScreenToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F11
-        Me.FullScreenToolStripMenuItem.Size = New System.Drawing.Size(169, 22)
-        Me.FullScreenToolStripMenuItem.Text = "Full Screen"
-        '
         'CookieToolStripMenuItem
         '
         Me.CookieToolStripMenuItem.Image = CType(resources.GetObject("CookieToolStripMenuItem.Image"), System.Drawing.Image)
         Me.CookieToolStripMenuItem.Name = "CookieToolStripMenuItem"
         Me.CookieToolStripMenuItem.Size = New System.Drawing.Size(169, 22)
         Me.CookieToolStripMenuItem.Text = "Cookie Viewer"
+        '
+        'FullScreenToolStripMenuItem
+        '
+        Me.FullScreenToolStripMenuItem.Name = "FullScreenToolStripMenuItem"
+        Me.FullScreenToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F11
+        Me.FullScreenToolStripMenuItem.Size = New System.Drawing.Size(169, 22)
+        Me.FullScreenToolStripMenuItem.Text = "Full Screen"
         '
         'BookmarksToolStripMenuItem
         '
@@ -753,76 +752,76 @@ Partial Class Form1
         '
         Me.BingToolStripMenuItem.Image = CType(resources.GetObject("BingToolStripMenuItem.Image"), System.Drawing.Image)
         Me.BingToolStripMenuItem.Name = "BingToolStripMenuItem"
-        Me.BingToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.BingToolStripMenuItem.Size = New System.Drawing.Size(149, 22)
         Me.BingToolStripMenuItem.Text = "Bing"
         '
         'GoogleToolStripMenuItem1
         '
         Me.GoogleToolStripMenuItem1.Image = CType(resources.GetObject("GoogleToolStripMenuItem1.Image"), System.Drawing.Image)
         Me.GoogleToolStripMenuItem1.Name = "GoogleToolStripMenuItem1"
-        Me.GoogleToolStripMenuItem1.Size = New System.Drawing.Size(152, 22)
+        Me.GoogleToolStripMenuItem1.Size = New System.Drawing.Size(149, 22)
         Me.GoogleToolStripMenuItem1.Text = "Google"
         '
         'YahooToolStripMenuItem
         '
         Me.YahooToolStripMenuItem.Image = CType(resources.GetObject("YahooToolStripMenuItem.Image"), System.Drawing.Image)
         Me.YahooToolStripMenuItem.Name = "YahooToolStripMenuItem"
-        Me.YahooToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.YahooToolStripMenuItem.Size = New System.Drawing.Size(149, 22)
         Me.YahooToolStripMenuItem.Text = "Yahoo"
         '
         'EBayToolStripMenuItem
         '
         Me.EBayToolStripMenuItem.Image = CType(resources.GetObject("EBayToolStripMenuItem.Image"), System.Drawing.Image)
         Me.EBayToolStripMenuItem.Name = "EBayToolStripMenuItem"
-        Me.EBayToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.EBayToolStripMenuItem.Size = New System.Drawing.Size(149, 22)
         Me.EBayToolStripMenuItem.Text = "eBay"
         '
         'MSNToolStripMenuItem
         '
         Me.MSNToolStripMenuItem.Image = CType(resources.GetObject("MSNToolStripMenuItem.Image"), System.Drawing.Image)
         Me.MSNToolStripMenuItem.Name = "MSNToolStripMenuItem"
-        Me.MSNToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.MSNToolStripMenuItem.Size = New System.Drawing.Size(149, 22)
         Me.MSNToolStripMenuItem.Text = "MSN Search"
         '
         'DuckDuckGoToolStripMenuItem
         '
         Me.DuckDuckGoToolStripMenuItem.Image = CType(resources.GetObject("DuckDuckGoToolStripMenuItem.Image"), System.Drawing.Image)
         Me.DuckDuckGoToolStripMenuItem.Name = "DuckDuckGoToolStripMenuItem"
-        Me.DuckDuckGoToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.DuckDuckGoToolStripMenuItem.Size = New System.Drawing.Size(149, 22)
         Me.DuckDuckGoToolStripMenuItem.Text = "DuckDuckGo"
         '
         'DogpileToolStripMenuItem
         '
         Me.DogpileToolStripMenuItem.Image = CType(resources.GetObject("DogpileToolStripMenuItem.Image"), System.Drawing.Image)
         Me.DogpileToolStripMenuItem.Name = "DogpileToolStripMenuItem"
-        Me.DogpileToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.DogpileToolStripMenuItem.Size = New System.Drawing.Size(149, 22)
         Me.DogpileToolStripMenuItem.Text = "Dogpile"
         '
         'WebCrawlerToolStripMenuItem
         '
         Me.WebCrawlerToolStripMenuItem.Image = CType(resources.GetObject("WebCrawlerToolStripMenuItem.Image"), System.Drawing.Image)
         Me.WebCrawlerToolStripMenuItem.Name = "WebCrawlerToolStripMenuItem"
-        Me.WebCrawlerToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.WebCrawlerToolStripMenuItem.Size = New System.Drawing.Size(149, 22)
         Me.WebCrawlerToolStripMenuItem.Text = "WebCrawler"
         '
         'LycosToolStripMenuItem
         '
         Me.LycosToolStripMenuItem.Image = CType(resources.GetObject("LycosToolStripMenuItem.Image"), System.Drawing.Image)
         Me.LycosToolStripMenuItem.Name = "LycosToolStripMenuItem"
-        Me.LycosToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.LycosToolStripMenuItem.Size = New System.Drawing.Size(149, 22)
         Me.LycosToolStripMenuItem.Text = "Lycos"
         '
         'VimeoToolStripMenuItem
         '
         Me.VimeoToolStripMenuItem.Image = CType(resources.GetObject("VimeoToolStripMenuItem.Image"), System.Drawing.Image)
         Me.VimeoToolStripMenuItem.Name = "VimeoToolStripMenuItem"
-        Me.VimeoToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.VimeoToolStripMenuItem.Size = New System.Drawing.Size(149, 22)
         Me.VimeoToolStripMenuItem.Text = "Vimeo"
         '
         'AccuWeatherToolStripMenuItem
         '
         Me.AccuWeatherToolStripMenuItem.Name = "AccuWeatherToolStripMenuItem"
-        Me.AccuWeatherToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.AccuWeatherToolStripMenuItem.Size = New System.Drawing.Size(149, 22)
         Me.AccuWeatherToolStripMenuItem.Text = "AccuWeather"
         '
         'SocialNetworksToolStripMenuItem
@@ -837,50 +836,50 @@ Partial Class Form1
         '
         Me.FacebookToolStripMenuItem.Image = CType(resources.GetObject("FacebookToolStripMenuItem.Image"), System.Drawing.Image)
         Me.FacebookToolStripMenuItem.Name = "FacebookToolStripMenuItem"
-        Me.FacebookToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.FacebookToolStripMenuItem.Size = New System.Drawing.Size(133, 22)
         Me.FacebookToolStripMenuItem.Text = "Facebook"
-        Me.FacebookToolStripMenuItem.ToolTipText = "Facebook is a social utility that connects people with friends and others who wor" & _
-            "k, study and live around them."
+        Me.FacebookToolStripMenuItem.ToolTipText = "Facebook is a social utility that connects people with friends and others who wor" &
+    "k, study and live around them."
         '
         'TwitterToolStripMenuItem
         '
         Me.TwitterToolStripMenuItem.Image = CType(resources.GetObject("TwitterToolStripMenuItem.Image"), System.Drawing.Image)
         Me.TwitterToolStripMenuItem.Name = "TwitterToolStripMenuItem"
-        Me.TwitterToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.TwitterToolStripMenuItem.Size = New System.Drawing.Size(133, 22)
         Me.TwitterToolStripMenuItem.Text = "Twitter"
-        Me.TwitterToolStripMenuItem.ToolTipText = "Instantly connect to what's most important to you. Follow your friends, experts, " & _
-            "favorite celebrities, and breaking news."
+        Me.TwitterToolStripMenuItem.ToolTipText = "Instantly connect to what's most important to you. Follow your friends, experts, " &
+    "favorite celebrities, and breaking news."
         '
         'GoogleToolStripMenuItem
         '
         Me.GoogleToolStripMenuItem.Image = CType(resources.GetObject("GoogleToolStripMenuItem.Image"), System.Drawing.Image)
         Me.GoogleToolStripMenuItem.Name = "GoogleToolStripMenuItem"
-        Me.GoogleToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.GoogleToolStripMenuItem.Size = New System.Drawing.Size(133, 22)
         Me.GoogleToolStripMenuItem.Text = "Google+"
-        Me.GoogleToolStripMenuItem.ToolTipText = "Connect with friends and family, explore your interests, and see how all of Googl" & _
-            "e gets better."
+        Me.GoogleToolStripMenuItem.ToolTipText = "Connect with friends and family, explore your interests, and see how all of Googl" &
+    "e gets better."
         '
         'LinkedinToolStripMenuItem
         '
         Me.LinkedinToolStripMenuItem.Image = CType(resources.GetObject("LinkedinToolStripMenuItem.Image"), System.Drawing.Image)
         Me.LinkedinToolStripMenuItem.Name = "LinkedinToolStripMenuItem"
-        Me.LinkedinToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.LinkedinToolStripMenuItem.Size = New System.Drawing.Size(133, 22)
         Me.LinkedinToolStripMenuItem.Text = "LinkedIn"
-        Me.LinkedinToolStripMenuItem.ToolTipText = "Manage your professional identity. Build and engage with your professional networ" & _
-            "k. Access knowledge, insights and opportunities."
+        Me.LinkedinToolStripMenuItem.ToolTipText = "Manage your professional identity. Build and engage with your professional networ" &
+    "k. Access knowledge, insights and opportunities."
         '
         'InstagramToolStripMenuItem
         '
         Me.InstagramToolStripMenuItem.Image = CType(resources.GetObject("InstagramToolStripMenuItem.Image"), System.Drawing.Image)
         Me.InstagramToolStripMenuItem.Name = "InstagramToolStripMenuItem"
-        Me.InstagramToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.InstagramToolStripMenuItem.Size = New System.Drawing.Size(133, 22)
         Me.InstagramToolStripMenuItem.Text = "Instagram"
         '
         'BadooToolStripMenuItem
         '
         Me.BadooToolStripMenuItem.Image = CType(resources.GetObject("BadooToolStripMenuItem.Image"), System.Drawing.Image)
         Me.BadooToolStripMenuItem.Name = "BadooToolStripMenuItem"
-        Me.BadooToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.BadooToolStripMenuItem.Size = New System.Drawing.Size(133, 22)
         Me.BadooToolStripMenuItem.Text = "Badoo"
         Me.BadooToolStripMenuItem.ToolTipText = "Meet People on Badoo, Make New Friends, Chat, Flirt"
         '
@@ -888,25 +887,25 @@ Partial Class Form1
         '
         Me.VkToolStripMenuItem.Image = CType(resources.GetObject("VkToolStripMenuItem.Image"), System.Drawing.Image)
         Me.VkToolStripMenuItem.Name = "VkToolStripMenuItem"
-        Me.VkToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.VkToolStripMenuItem.Size = New System.Drawing.Size(133, 22)
         Me.VkToolStripMenuItem.Text = "VK"
-        Me.VkToolStripMenuItem.ToolTipText = "VK is the largest European social network with over a 100 million active users, e" & _
-            "specially in Russia, Ukraine, Kazakhstan, Moldova, Belarus and more.."
+        Me.VkToolStripMenuItem.ToolTipText = "VK is the largest European social network with over a 100 million active users, e" &
+    "specially in Russia, Ukraine, Kazakhstan, Moldova, Belarus and more.."
         '
         'PinterestToolStripMenuItem
         '
         Me.PinterestToolStripMenuItem.Image = CType(resources.GetObject("PinterestToolStripMenuItem.Image"), System.Drawing.Image)
         Me.PinterestToolStripMenuItem.Name = "PinterestToolStripMenuItem"
-        Me.PinterestToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.PinterestToolStripMenuItem.Size = New System.Drawing.Size(133, 22)
         Me.PinterestToolStripMenuItem.Text = "Pinterest"
-        Me.PinterestToolStripMenuItem.ToolTipText = "A content sharing service that allows members to ""pin"" images, videos and other o" & _
-            "bjects to their pinboard"
+        Me.PinterestToolStripMenuItem.ToolTipText = "A content sharing service that allows members to ""pin"" images, videos and other o" &
+    "bjects to their pinboard"
         '
         'FormspringToolStripMenuItem
         '
         Me.FormspringToolStripMenuItem.Image = CType(resources.GetObject("FormspringToolStripMenuItem.Image"), System.Drawing.Image)
         Me.FormspringToolStripMenuItem.Name = "FormspringToolStripMenuItem"
-        Me.FormspringToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.FormspringToolStripMenuItem.Size = New System.Drawing.Size(133, 22)
         Me.FormspringToolStripMenuItem.Text = "Formspring"
         Me.FormspringToolStripMenuItem.ToolTipText = "The place to share your perspective on anything"
         '
@@ -914,13 +913,13 @@ Partial Class Form1
         '
         Me.KeekToolStripMenuItem.Image = CType(resources.GetObject("KeekToolStripMenuItem.Image"), System.Drawing.Image)
         Me.KeekToolStripMenuItem.Name = "KeekToolStripMenuItem"
-        Me.KeekToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.KeekToolStripMenuItem.Size = New System.Drawing.Size(133, 22)
         Me.KeekToolStripMenuItem.Text = "Keek"
         Me.KeekToolStripMenuItem.ToolTipText = "Share Quick Video Updates With Friends"
         '
         'ToolsToolStripMenuItem
         '
-        Me.ToolsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.DownloadManagerToolStripMenuItem, Me.SetHomePageToolStripMenuItem, Me.FtpClientToolStripMenuItem, Me.MediaToolStripMenuItem, Me.TaskToolStripMenuItem, Me.SendALinkToolStripMenuItem, Me.ToolStripSeparator9, Me.InternetSettingsToolStripMenuItem, Me.SettingsToolStripMenuItem, Me.ProxySettingsToolStripMenuItem, Me.CookieViewerToolStripMenuItem, Me.ToolStripSeparator15, Me.OpePageInNToolStripMenuItem})
+        Me.ToolsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.DownloadManagerToolStripMenuItem, Me.SetHomePageToolStripMenuItem, Me.FtpClientToolStripMenuItem, Me.TaskToolStripMenuItem, Me.SendALinkToolStripMenuItem, Me.ToolStripSeparator9, Me.InternetSettingsToolStripMenuItem, Me.SettingsToolStripMenuItem, Me.ProxySettingsToolStripMenuItem, Me.CookieViewerToolStripMenuItem, Me.ToolStripSeparator15, Me.OpePageInNToolStripMenuItem})
         Me.ToolsToolStripMenuItem.Name = "ToolsToolStripMenuItem"
         Me.ToolsToolStripMenuItem.Size = New System.Drawing.Size(48, 20)
         Me.ToolsToolStripMenuItem.Text = "&Tools"
@@ -946,13 +945,6 @@ Partial Class Form1
         Me.FtpClientToolStripMenuItem.Name = "FtpClientToolStripMenuItem"
         Me.FtpClientToolStripMenuItem.Size = New System.Drawing.Size(219, 22)
         Me.FtpClientToolStripMenuItem.Text = "Ftp Client"
-        '
-        'MediaToolStripMenuItem
-        '
-        Me.MediaToolStripMenuItem.Image = CType(resources.GetObject("MediaToolStripMenuItem.Image"), System.Drawing.Image)
-        Me.MediaToolStripMenuItem.Name = "MediaToolStripMenuItem"
-        Me.MediaToolStripMenuItem.Size = New System.Drawing.Size(219, 22)
-        Me.MediaToolStripMenuItem.Text = "Media player"
         '
         'TaskToolStripMenuItem
         '
@@ -1039,11 +1031,28 @@ Partial Class Form1
         Me.ToolStripSeparator10.Name = "ToolStripSeparator10"
         Me.ToolStripSeparator10.Size = New System.Drawing.Size(174, 6)
         '
+        'KBrowserToolStripMenuItem
+        '
+        Me.KBrowserToolStripMenuItem.Name = "KBrowserToolStripMenuItem"
+        Me.KBrowserToolStripMenuItem.Size = New System.Drawing.Size(177, 22)
+        Me.KBrowserToolStripMenuItem.Text = "&Visit Home Page"
+        '
         'SubmitFeedbackToolStripMenuItem
         '
         Me.SubmitFeedbackToolStripMenuItem.Name = "SubmitFeedbackToolStripMenuItem"
         Me.SubmitFeedbackToolStripMenuItem.Size = New System.Drawing.Size(177, 22)
         Me.SubmitFeedbackToolStripMenuItem.Text = "Submit  Feedback"
+        '
+        'SToolStripMenuItem
+        '
+        Me.SToolStripMenuItem.Name = "SToolStripMenuItem"
+        Me.SToolStripMenuItem.Size = New System.Drawing.Size(177, 22)
+        Me.SToolStripMenuItem.Text = "&Mail to Author"
+        '
+        'ToolStripSeparator16
+        '
+        Me.ToolStripSeparator16.Name = "ToolStripSeparator16"
+        Me.ToolStripSeparator16.Size = New System.Drawing.Size(174, 6)
         '
         'CalendarToolStripMenuItem
         '
@@ -1065,29 +1074,13 @@ Partial Class Form1
         '
         'ToolStripTextBox2
         '
+        Me.ToolStripTextBox2.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.ToolStripTextBox2.Name = "ToolStripTextBox2"
         Me.ToolStripTextBox2.Size = New System.Drawing.Size(100, 22)
         '
         'Timer1
         '
         Me.Timer1.Interval = 10000
-        '
-        'SToolStripMenuItem
-        '
-        Me.SToolStripMenuItem.Name = "SToolStripMenuItem"
-        Me.SToolStripMenuItem.Size = New System.Drawing.Size(177, 22)
-        Me.SToolStripMenuItem.Text = "&Mail to Author"
-        '
-        'KBrowserToolStripMenuItem
-        '
-        Me.KBrowserToolStripMenuItem.Name = "KBrowserToolStripMenuItem"
-        Me.KBrowserToolStripMenuItem.Size = New System.Drawing.Size(177, 22)
-        Me.KBrowserToolStripMenuItem.Text = "&Visit Home Page"
-        '
-        'ToolStripSeparator16
-        '
-        Me.ToolStripSeparator16.Name = "ToolStripSeparator16"
-        Me.ToolStripSeparator16.Size = New System.Drawing.Size(174, 6)
         '
         'Back
         '
@@ -1163,6 +1156,7 @@ Partial Class Form1
         Me.ToolStripTextBox1.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend
         Me.ToolStripTextBox1.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.AllUrl
         Me.ToolStripTextBox1.BackColor = System.Drawing.SystemColors.ControlLightLight
+        Me.ToolStripTextBox1.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.ToolStripTextBox1.Name = "ToolStripTextBox1"
         Me.ToolStripTextBox1.Size = New System.Drawing.Size(520, 39)
         '
@@ -1248,6 +1242,7 @@ Partial Class Form1
         '
         Me.searchTextBox2.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest
         Me.searchTextBox2.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.AllSystemSources
+        Me.searchTextBox2.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.searchTextBox2.Name = "searchTextBox2"
         Me.searchTextBox2.Size = New System.Drawing.Size(190, 39)
         Me.searchTextBox2.ToolTipText = "Search using Google"
@@ -1403,7 +1398,6 @@ Partial Class Form1
     Friend WithEvents CookieViewerToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolStripSeparator15 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents FtpClientToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents MediaToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents OpePageInNToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents HelpToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents AboutToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem

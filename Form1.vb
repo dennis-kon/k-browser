@@ -435,7 +435,7 @@ Public Class Form1
     End Sub
 
     Private Sub SubmitFeedbackToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles SubmitFeedbackToolStripMenuItem.Click
-        wb.Navigate("http://k-browser.host-ed.me/feedback.html")
+        wb.Navigate("https://www.k-browser.com/")
     End Sub
 
     Private Sub ShareThisOnToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ShareThisOnToolStripMenuItem.Click
@@ -556,8 +556,8 @@ Public Class Form1
         wb.Navigate("https://vimeo.com/")
     End Sub
 
-    Private Sub MediaToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MediaToolStripMenuItem.Click
-        Form4.Show()
+    Private Sub MediaToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
+
     End Sub
 
 
@@ -588,7 +588,7 @@ Public Class Form1
         ToolStripTextBox1.Text = wb.Url.ToString
         Dim url As Uri = New Uri(ToolStripTextBox1.Text)
         If url.HostNameType = UriHostNameType.Dns Then
-            Dim icons = "http://" & url.Host & "/favicon.ico"
+            Dim icons = "https://" & url.Host & "/favicon.ico"
             Dim req As System.Net.WebRequest = System.Net.HttpWebRequest.Create(icons)
             Dim res As System.Net.HttpWebResponse = req.GetResponse()
             Dim stream As System.IO.Stream = res.GetResponseStream()
@@ -714,7 +714,7 @@ Public Class Form1
 
 
     Private Sub CheckForUpdatesToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckForUpdatesToolStripMenuItem.Click
-        wb.Navigate("http://k-browser.host-ed.me/download.html")
+        wb.Navigate("https://www.k-browser.com/")
     End Sub
 
     Private Sub CPUStatsToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CPUStatsToolStripMenuItem.Click
@@ -1010,7 +1010,7 @@ Public Class Form1
     End Sub
 
     Private Sub KBrowserToolStripMenuItem_Click_1(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles KBrowserToolStripMenuItem.Click
-        wb.Navigate("http://k-browser.host-ed.me/index2.html")
+        wb.Navigate("https://www.k-browser.com/")
     End Sub
 
     Private Sub SToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles SToolStripMenuItem.Click
