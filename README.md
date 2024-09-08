@@ -1,13 +1,9 @@
 k-browser
 =========
 
-An advanced tabbed Web browser made in Visual Basic 
+An advanced tabbed Web browser made in Visual Basic, the web browser is full it has History, Bookmarks, RSS reader, Tabs nice icons!
 
-It is made with VS2010 just enter in the file and run the solution
-you do not need anything else :P
-the web browser is full it has History , Bookmarks, Rss reader, Tabs nice icons !
-
- check https://k-browser.com
+ Please check for more on https://k-browser.com
 
 This program is free software; you can redistribute it and/or modify it under the
 terms of the GNU General Public License as published by the Free Software Foundation;
