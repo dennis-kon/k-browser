@@ -1,5 +1,5 @@
-﻿Imports System.Net
-Imports System.IO
+﻿Imports System.IO
+Imports System.Net
 
 Public Class ftp
     Public Property UseSystemPasswordChar As Boolean
@@ -152,7 +152,7 @@ Public Class ftp
         ListBox1.Items.Clear()
     End Sub
 
-    
+
     Private Sub ftp_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
         txt_pw.TextBox.PasswordChar = "*"c
     End Sub

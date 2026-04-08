@@ -1,16 +1,4 @@
-﻿Imports System.Windows.Forms
-Imports System.Net
-Imports System.IO
-Imports System.Xml
-Imports System.Drawing
-Imports System.Text
-Imports Microsoft.Win32
-Imports System.Collections.Generic
-Imports System.ComponentModel
-Imports System.Data
-
-
-Public Class AboutBox
+﻿Public Class AboutBox
 
     Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button1.Click
         Me.Close()
@@ -25,4 +13,3 @@ Public Class AboutBox
     End Sub
 
 End Class
- 

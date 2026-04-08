@@ -4,10 +4,7 @@
 'most of the settings in the application
 'other than search providers and feeds.
 '///////////////////////////////////////////
-Imports System.Enum
-Imports System.Data.OleDb
 Imports System.Net
-Imports System.Runtime.InteropServices
 
 
 Public Class Settings
@@ -234,5 +231,5 @@ Public Class Settings
     End Sub
 
 
- 
+
 End Class

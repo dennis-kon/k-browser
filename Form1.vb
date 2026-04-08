@@ -1,14 +1,6 @@
-﻿Imports System.Net
-Imports System.IO
-Imports System.Xml
-Imports System.Drawing
-Imports System.Text
+﻿Imports System.IO
+Imports System.Net
 Imports Microsoft.Win32
-Imports System.Collections.Generic
-Imports System.ComponentModel
-Imports System.Data
-Imports System.Windows.Forms
-Imports System.Runtime.InteropServices
 
 Public Class Form1
 
@@ -668,14 +660,14 @@ Public Class Form1
                                                                        If Me.IsHandleCreated Then
                                                                            Me.Invoke(Sub()
                                                                                          If resultImg IsNot Nothing Then
-                                                                                              If faviconCache.Count >= MAX_FAVICON_CACHE Then
-                                                                                                  For Each kvp In faviconCache.Values.ToList()
-                                                                                                      kvp.Dispose()
-                                                                                                  Next
-                                                                                                  faviconCache.Clear()
-                                                                                              End If
-                                                                                              img.BackgroundImage = resultImg
-                                                                                              faviconCache(hostKey) = resultImg
+                                                                                             If faviconCache.Count >= MAX_FAVICON_CACHE Then
+                                                                                                 For Each kvp In faviconCache.Values.ToList()
+                                                                                                     kvp.Dispose()
+                                                                                                 Next
+                                                                                                 faviconCache.Clear()
+                                                                                             End If
+                                                                                             img.BackgroundImage = resultImg
+                                                                                             faviconCache(hostKey) = resultImg
                                                                                          Else
                                                                                              img.BackgroundImage = Nothing
                                                                                          End If

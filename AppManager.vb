@@ -1,7 +1,4 @@
-﻿Imports System.IO
-Imports System.Net
-
-Public Class AppManager
+﻿Public Class AppManager
 
 
     Public Shared Function IsValidUrl(ByVal url As String) As Boolean
@@ -25,5 +22,5 @@ Public Class AppManager
         Then sURL = "http://" & sURL
         Return sURL
     End Function
-   
+
 End Class
