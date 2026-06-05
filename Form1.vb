@@ -19,6 +19,7 @@ Public Class Form1
     Private Declare Function GetSystemMetrics Lib "user32.dll" Alias "GetSystemMetrics" (ByVal Which As Integer) As Integer
 
     Public Sub New()
+        SetBrowserFeatureControl()
         InitializeComponent()
         wb = New WebBrowser
         isUserAgentSet = False
@@ -33,6 +34,19 @@ Public Class Form1
         Me.WindowState = FormWindowState.Maximized
         Me.FormBorderStyle = FormBorderStyle.None
         Me.TopMost = True
+    End Sub
+
+    Private Sub SetBrowserFeatureControl()
+        Try
+            Dim exeName As String = System.IO.Path.GetFileName(System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName)
+            Using key As RegistryKey = Registry.CurrentUser.CreateSubKey("Software\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_BROWSER_EMULATION")
+                If key IsNot Nothing Then
+                    key.SetValue(exeName, 11001, RegistryValueKind.DWord)
+                End If
+            End Using
+        Catch ex As Exception
+            System.Diagnostics.Debug.WriteLine("Failed to set browser emulation registry key: " & ex.Message)
+        End Try
     End Sub
 
     Private Function IsPopupWindow() As Boolean

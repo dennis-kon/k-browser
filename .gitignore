@@ -1,0 +1,54 @@
+## Visual Studio Ignored Files
+
+# User-specific files
+*.rsuser
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# User-specific project files
+*.vbproj.user
+*.csproj.user
+*.sqlproj.user
+
+# Build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+x64/
+x86/
+build/
+bin/
+obj/
+
+# Visual Studio 2015/2017/2019 cache/options directory
+.vs/
+
+# Visual Studio Code settings
+.vscode/
+
+# Backup and restore files
+_Chutzpah*
+ipch/
+*.aps
+*.ncb
+*.opendb
+*.sdf
+*.cache
+*.tlog
+*.log
+*.patch
+*.diff
+
+# Diagnostic/Test Results
+TestResults/
+[Bb]uild[Ll]og.htm
+[Bb]uild[Ll]og.xml
+
+# Others
+upgradebackup/
+Backup*/
+_UpgradeReport_Files/
+UpgradeLog.XML
+UpgradeLog.htm
