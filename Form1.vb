@@ -1,4 +1,4 @@
-﻿Imports System.IO
+Imports System.IO
 Imports System.Net
 Imports Microsoft.Win32
 
@@ -570,7 +570,11 @@ Public Class Form1
 
 
     Private Sub TabControl1_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles TabControl1.SelectedIndexChanged
-        wb = Me.TabControl1.SelectedTab.Controls(0)
+        If Me.TabControl1.SelectedTab IsNot Nothing AndAlso Me.TabControl1.SelectedTab.Controls.Count > 0 Then
+            wb = TryCast(Me.TabControl1.SelectedTab.Controls(0), WebBrowser)
+        Else
+            wb = Nothing
+        End If
     End Sub
 
     Private Sub wb_DocumentCompleted(ByVal sender As Object, ByVal e As WebBrowserDocumentCompletedEventArgs) Handles wb.DocumentCompleted
