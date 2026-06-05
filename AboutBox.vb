@@ -9,7 +9,7 @@
     End Sub
 
     Private Sub LinkLabel1_LinkClicked(ByVal sender As System.Object, ByVal e As System.Windows.Forms.LinkLabelLinkClickedEventArgs) Handles LinkLabel1.LinkClicked
-        Form1.wb.Navigate("http://k-browser.host-ed.me/index2.html")
+        Form1.wb.Navigate("https://www.k-browser.com/")
     End Sub
 
 End Class

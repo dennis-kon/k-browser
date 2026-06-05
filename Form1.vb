@@ -445,7 +445,7 @@ Public Class Form1
     End Sub
 
     Private Sub SubmitFeedbackToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles SubmitFeedbackToolStripMenuItem.Click
-        wb.Navigate("http://k-browser.host-ed.me/feedback.html")
+        wb.Navigate("https://www.k-browser.com/")
     End Sub
 
     Private Sub ShareThisOnToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ShareThisOnToolStripMenuItem.Click
