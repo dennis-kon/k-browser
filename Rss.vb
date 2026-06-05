@@ -1,4 +1,4 @@
-﻿Imports System.Xml
+Imports System.Xml
 Imports System.Xml.XPath
 
 
@@ -144,15 +144,18 @@ Public Class Rss
                                    Handles tvwRss.AfterSelect
 
         Try
-            ' get the first four characters from the link for a
-            ' quick test
-            Dim tmp As String = tvwRss.SelectedNode.Text.Substring(0, 4)
+            Dim text As String = tvwRss.SelectedNode.Text
+            If text IsNot Nothing AndAlso text.Length >= 4 Then
+                ' get the first four characters from the link for a
+                ' quick test
+                Dim tmp As String = text.Substring(0, 4)
 
-            ' test the link text and then
-            ' navigate the browser to that link
-            If tmp = "http" Then
-                webBrowser1.Navigate(tvwRss.SelectedNode.Text)
-                webBrowser1.ScriptErrorsSuppressed = True
+                ' test the link text and then
+                ' navigate the browser to that link
+                If tmp = "http" Then
+                    webBrowser1.Navigate(text)
+                    webBrowser1.ScriptErrorsSuppressed = True
+                End If
             End If
 
         Catch

@@ -1,4 +1,4 @@
-﻿Imports System.IO
+Imports System.IO
 Imports System.Net
 
 Public Class ftp
@@ -133,7 +133,7 @@ Public Class ftp
 
     Private Sub Button3_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button3.Click
         If (OpenFileDialog1.ShowDialog() = Windows.Forms.DialogResult.OK) Then
-            uploadFTP(OpenFileDialog1.FileName, txt_server.Text + "/" + Path.GetFileName(OpenFileDialog1.FileName), txt_user.Text, txt_pw.Text)
+            uploadFTP(txt_server.Text + "/" + Path.GetFileName(OpenFileDialog1.FileName), OpenFileDialog1.FileName, txt_user.Text, txt_pw.Text)
         End If
     End Sub
 

@@ -1,4 +1,4 @@
-﻿Public Class History
+Public Class History
 
     Private Sub History_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
         Try
@@ -58,5 +58,10 @@
 
     Private Sub Button3_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button3.Click
         ListBox1.Items.Clear()
+        Try
+            My.Settings.History.Clear()
+            My.Settings.Save()
+        Catch ex As Exception
+        End Try
     End Sub
 End Class

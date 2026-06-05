@@ -78,35 +78,24 @@ Public Class Form1
     End Sub
 
     Private Sub Form1_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
+        Dim brws As WebBrowser = Nothing
         Try
-            Dim tab As New TabPage
-            Dim brws As New WebBrowser
-            wb = brws
+            brws = CreateNewTab(Path.Combine(Application.StartupPath, "homepage", "index.html"))
             brws.Name = "k-Browser"
-            brws.Dock = DockStyle.Fill
-            tab.Text = "Loading..."
-            tab.Controls.Add(brws)
-            TabControl1.TabPages.Add(tab)
-            TabControl1.SelectedTab = tab
-            ' Wire document completed to the working handler (avoid unimplemented Browser_DocumentCompleted)
-            AddHandler brws.DocumentCompleted, AddressOf wb_DocumentCompleted
-            brws.ScriptErrorsSuppressed = True
-            brws.Navigate(Path.Combine(Application.StartupPath, "homepage", "index.html"))
+            Me.TabControl1.SelectedTab.Text = "Loading..."
             Me.Size = My.Settings.MainSize
             Me.Location = My.Settings.MainLocation
-            AddHandler brws.ProgressChanged, AddressOf Loading
-
-            brws.ScriptErrorsSuppressed = True
-            ' Removed immediate access to wb.Document.ActiveElement (document not ready here).
-            ' Navigation that depends on the document/active element is handled in wb_DocumentCompleted.
         Catch ex As Exception
         End Try
         CalendarToolStripMenuItem.Text = DateTime.Now.ToLongDateString()
-        Label1.Text = brws.StatusText
+        If brws IsNot Nothing Then
+            Label1.Text = brws.StatusText
+        End If
         Me.SetStyle(System.Windows.Forms.ControlStyles.SupportsTransparentBackColor, True)
         Me.BackColor = System.Drawing.Color.Transparent
-        wb.IsWebBrowserContextMenuEnabled = True
-
+        If wb IsNot Nothing Then
+            wb.IsWebBrowserContextMenuEnabled = True
+        End If
     End Sub
 
     Private Sub Browser_DocumentCompleted(sender As Object, e As WebBrowserDocumentCompletedEventArgs)
@@ -233,17 +222,7 @@ Public Class Form1
 
     Private Sub ToolStripButton7_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton7.Click
         Try
-            Dim tab As New TabPage
-            Dim brws As New WebBrowser
-            brws.Name = "WebBrowser"
-            brws.Dock = DockStyle.Fill
-            tab.Text = "New Tab"
-            tab.Controls.Add(brws)
-            Me.TabControl1.TabPages.Add(tab)
-            Me.TabControl1.SelectedTab = tab
-            AddHandler brws.ProgressChanged, AddressOf Loading
-
-            brws.ScriptErrorsSuppressed = True
+            CreateNewTab()
         Catch ex As Exception
         End Try
     End Sub
@@ -361,17 +340,7 @@ Public Class Form1
 
     Private Sub NewTabToolStripMenuItem1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles NewTabToolStripMenuItem1.Click
         Try
-            Dim tab As New TabPage
-            Dim brws As New WebBrowser
-            brws.Dock = DockStyle.Fill
-            tab.Text = "New Tab"
-            tab.Controls.Add(brws)
-            Me.TabControl1.TabPages.Add(tab)
-            Me.TabControl1.SelectedTab = tab
-
-            AddHandler wb.ProgressChanged, AddressOf Loading
-
-            wb.ScriptErrorsSuppressed = True
+            CreateNewTab()
         Catch ex As Exception
         End Try
     End Sub
@@ -427,7 +396,6 @@ Public Class Form1
         Try
             If Me.WindowState = FormWindowState.Normal Then
                 My.Settings.MainLocation = Me.Location
-                My.Settings.Save()
             End If
         Catch ex As Exception
 
@@ -568,6 +536,76 @@ Public Class Form1
 
 
 
+
+    Private Shared ReadOnly IgnoredUrls As New System.Collections.Generic.HashSet(Of String)()
+
+    Private Function CreateNewTab(Optional ByVal targetUrl As String = "") As WebBrowser
+        Dim tab As New TabPage()
+        Dim brws As New WebBrowser()
+        brws.Name = "WebBrowser"
+        brws.Dock = DockStyle.Fill
+        brws.ScriptErrorsSuppressed = True
+        tab.Text = "New Tab"
+        tab.Controls.Add(brws)
+        
+        AddHandler brws.ProgressChanged, AddressOf Loading
+        AddHandler brws.Navigating, AddressOf WebBrowser_Navigating
+        
+        Me.TabControl1.TabPages.Add(tab)
+        Me.TabControl1.SelectedTab = tab
+        
+        If Not String.IsNullOrEmpty(targetUrl) Then
+            brws.Navigate(targetUrl)
+        End If
+        
+        Return brws
+    End Function
+
+    Private Sub WebBrowser_Navigating(ByVal sender As Object, ByVal e As WebBrowserNavigatingEventArgs)
+        Dim currentBrowser As WebBrowser = TryCast(sender, WebBrowser)
+        If currentBrowser Is Nothing Then Return
+        
+        Dim url As String = e.Url.ToString()
+        If String.IsNullOrEmpty(url) OrElse url = "about:blank" Then Return
+        
+        ' 1. Blocked Sites Check
+        If My.Settings.BlockedSites IsNot Nothing Then
+            For Each blockedUrl As String In My.Settings.BlockedSites
+                If Not String.IsNullOrEmpty(blockedUrl) Then
+                    If url.ToLower().Contains(blockedUrl.ToLower()) Then
+                        e.Cancel = True
+                        MsgBox("This site is blocked by K-Browser Settings.", MsgBoxStyle.Critical, "Access Blocked")
+                        Return
+                    End If
+                End If
+            Next
+        End If
+        
+        ' 2. Phishing Sites Check
+        If My.Settings.UsePhishingFilter AndAlso My.Settings.PhishingSites IsNot Nothing Then
+            For Each phishingUrl As String In My.Settings.PhishingSites
+                If Not String.IsNullOrEmpty(phishingUrl) Then
+                    If url.ToLower().Contains(phishingUrl.ToLower()) Then
+                        If IgnoredUrls.Contains(url) Then Return
+                        
+                        e.Cancel = True
+                        
+                        Dim warningForm As New Phising()
+                        warningForm.lbPhishing.Items.Clear()
+                        warningForm.lbPhishing.Items.Add("Detected Phishing URL:")
+                        warningForm.lbPhishing.Items.Add(url)
+                        
+                        Dim result As DialogResult = warningForm.ShowDialog()
+                        If result = DialogResult.Ignore Then
+                            IgnoredUrls.Add(url)
+                            currentBrowser.Navigate(url)
+                        End If
+                        Return
+                    End If
+                End If
+            Next
+        End If
+    End Sub
 
     Private Sub TabControl1_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles TabControl1.SelectedIndexChanged
         If Me.TabControl1.SelectedTab IsNot Nothing AndAlso Me.TabControl1.SelectedTab.Controls.Count > 0 Then
@@ -820,17 +858,7 @@ Public Class Form1
 
     Private Sub NewTabToolStripMenuItem2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles NewTabToolStripMenuItem2.Click
         Try
-            Dim tab As New TabPage
-            Dim brws As New WebBrowser
-            brws.Name = "WebBrowser"
-            brws.Dock = DockStyle.Fill
-            tab.Text = "New Tab"
-            tab.Controls.Add(brws)
-            Me.TabControl1.TabPages.Add(tab)
-            Me.TabControl1.SelectedTab = tab
-            AddHandler brws.ProgressChanged, AddressOf Loading
-
-            brws.ScriptErrorsSuppressed = True
+            CreateNewTab()
         Catch ex As Exception
         End Try
     End Sub
@@ -856,6 +884,13 @@ Public Class Form1
     End Sub
 
     Private Sub Form1_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
+        Try
+            My.Settings.MainLocation = Me.Location
+            My.Settings.MainSize = Me.Size
+            My.Settings.Save()
+        Catch ex As Exception
+        End Try
+        
         e.Cancel = True ' This line cancels the form closing
 
         ' Optionally, you can hide the form instead of closing it

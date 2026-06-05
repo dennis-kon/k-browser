@@ -1,4 +1,4 @@
-﻿Public Class AppManager
+Public Class AppManager
 
 
     Public Shared Function IsValidUrl(ByVal url As String) As Boolean
@@ -18,8 +18,11 @@
 
 
     Public Shared Function FixURL(ByVal sURL As String) As String
-        If Not sURL.ToLower().StartsWith("http://") _
-        Then sURL = "http://" & sURL
+        If String.IsNullOrEmpty(sURL) Then Return sURL
+        Dim lowered As String = sURL.ToLower()
+        If Not (lowered.StartsWith("http://") OrElse lowered.StartsWith("https://") OrElse lowered.StartsWith("file://")) Then
+            sURL = "http://" & sURL
+        End If
         Return sURL
     End Function
 

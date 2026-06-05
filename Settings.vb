@@ -100,10 +100,7 @@ Public Class Settings
     End Sub
 
     Private Sub btnBlockRemoveAll_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnBlockRemoveAll.Click
-        Dim s As String
-        For Each s In My.Settings.BlockedSites
-            My.Settings.BlockedSites.Remove(s)
-        Next
+        My.Settings.BlockedSites.Clear()
         LoadBlockedSites()
     End Sub
 
@@ -152,10 +149,7 @@ Public Class Settings
     End Sub
 
     Private Sub btnRemoveAllPhish_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnRemoveAllPhish.Click
-        Dim s As String
-        For Each s In My.Settings.PhishingSites
-            My.Settings.PhishingSites.Remove(s)
-        Next
+        My.Settings.PhishingSites.Clear()
         LoadPhishingSites()
     End Sub
 
