@@ -143,7 +143,8 @@ Partial Class Settings
         Me.lblHomePage.AutoSize = True
         Me.lblHomePage.Location = New System.Drawing.Point(13, 15)
         Me.lblHomePage.Name = "lblHomePage"
-        Me.lblHomePage.Size = New System.Drawing.Size(83, 13)
+        Me.lblHomePage.Size = New System.Drawing.Size(87, 13)
+        Me.lblHomePage.TabIndex = 0
         Me.lblHomePage.Text = "Home Page URL:"
         '
         'txtHomePage
@@ -181,7 +182,7 @@ Partial Class Settings
         Me.rbStartupHome.Checked = True
         Me.rbStartupHome.Location = New System.Drawing.Point(15, 22)
         Me.rbStartupHome.Name = "rbStartupHome"
-        Me.rbStartupHome.Size = New System.Drawing.Size(107, 17)
+        Me.rbStartupHome.Size = New System.Drawing.Size(108, 17)
         Me.rbStartupHome.TabIndex = 0
         Me.rbStartupHome.TabStop = True
         Me.rbStartupHome.Text = "Open Home page"
@@ -192,7 +193,7 @@ Partial Class Settings
         Me.rbStartupBlank.AutoSize = True
         Me.rbStartupBlank.Location = New System.Drawing.Point(150, 22)
         Me.rbStartupBlank.Name = "rbStartupBlank"
-        Me.rbStartupBlank.Size = New System.Drawing.Size(103, 17)
+        Me.rbStartupBlank.Size = New System.Drawing.Size(106, 17)
         Me.rbStartupBlank.TabIndex = 1
         Me.rbStartupBlank.Text = "Open Blank page"
         Me.rbStartupBlank.UseVisualStyleBackColor = True
@@ -202,7 +203,7 @@ Partial Class Settings
         Me.rbStartupRestore.AutoSize = True
         Me.rbStartupRestore.Location = New System.Drawing.Point(15, 45)
         Me.rbStartupRestore.Name = "rbStartupRestore"
-        Me.rbStartupRestore.Size = New System.Drawing.Size(139, 17)
+        Me.rbStartupRestore.Size = New System.Drawing.Size(145, 17)
         Me.rbStartupRestore.TabIndex = 2
         Me.rbStartupRestore.Text = "Restore previous session"
         Me.rbStartupRestore.UseVisualStyleBackColor = True
@@ -212,7 +213,7 @@ Partial Class Settings
         Me.rbStartupSpecific.AutoSize = True
         Me.rbStartupSpecific.Location = New System.Drawing.Point(150, 45)
         Me.rbStartupSpecific.Name = "rbStartupSpecific"
-        Me.rbStartupSpecific.Size = New System.Drawing.Size(117, 17)
+        Me.rbStartupSpecific.Size = New System.Drawing.Size(116, 17)
         Me.rbStartupSpecific.TabIndex = 3
         Me.rbStartupSpecific.Text = "Open specific page"
         Me.rbStartupSpecific.UseVisualStyleBackColor = True
@@ -222,7 +223,8 @@ Partial Class Settings
         Me.lblNewTab.AutoSize = True
         Me.lblNewTab.Location = New System.Drawing.Point(13, 135)
         Me.lblNewTab.Name = "lblNewTab"
-        Me.lblNewTab.Size = New System.Drawing.Size(81, 13)
+        Me.lblNewTab.Size = New System.Drawing.Size(80, 13)
+        Me.lblNewTab.TabIndex = 4
         Me.lblNewTab.Text = "New Tab Page:"
         '
         'cmbNewTab
@@ -240,7 +242,8 @@ Partial Class Settings
         Me.lblSearchEngine.AutoSize = True
         Me.lblSearchEngine.Location = New System.Drawing.Point(13, 170)
         Me.lblSearchEngine.Name = "lblSearchEngine"
-        Me.lblSearchEngine.Size = New System.Drawing.Size(114, 13)
+        Me.lblSearchEngine.Size = New System.Drawing.Size(117, 13)
+        Me.lblSearchEngine.TabIndex = 5
         Me.lblSearchEngine.Text = "Default Search Engine:"
         '
         'cmbSearchEngine
@@ -258,7 +261,8 @@ Partial Class Settings
         Me.lblDownloads.AutoSize = True
         Me.lblDownloads.Location = New System.Drawing.Point(13, 205)
         Me.lblDownloads.Name = "lblDownloads"
-        Me.lblDownloads.Size = New System.Drawing.Size(95, 13)
+        Me.lblDownloads.Size = New System.Drawing.Size(96, 13)
+        Me.lblDownloads.TabIndex = 6
         Me.lblDownloads.Text = "Downloads Folder:"
         '
         'txtDownloads
@@ -282,7 +286,8 @@ Partial Class Settings
         Me.lblFontSize.AutoSize = True
         Me.lblFontSize.Location = New System.Drawing.Point(13, 240)
         Me.lblFontSize.Name = "lblFontSize"
-        Me.lblFontSize.Size = New System.Drawing.Size(56, 13)
+        Me.lblFontSize.Size = New System.Drawing.Size(55, 13)
+        Me.lblFontSize.TabIndex = 8
         Me.lblFontSize.Text = "Font Size:"
         '
         'cmbFontSize
@@ -300,7 +305,7 @@ Partial Class Settings
         Me.chkFullScreen.AutoSize = True
         Me.chkFullScreen.Location = New System.Drawing.Point(135, 275)
         Me.chkFullScreen.Name = "chkFullScreen"
-        Me.chkFullScreen.Size = New System.Drawing.Size(211, 17)
+        Me.chkFullScreen.Size = New System.Drawing.Size(208, 17)
         Me.chkFullScreen.TabIndex = 9
         Me.chkFullScreen.Text = "Launch in Full-Screen mode by default"
         Me.chkFullScreen.UseVisualStyleBackColor = True
@@ -344,7 +349,7 @@ Partial Class Settings
         Me.chkPermCamera.CheckState = System.Windows.Forms.CheckState.Checked
         Me.chkPermCamera.Location = New System.Drawing.Point(15, 22)
         Me.chkPermCamera.Name = "chkPermCamera"
-        Me.chkPermCamera.Size = New System.Drawing.Size(92, 17)
+        Me.chkPermCamera.Size = New System.Drawing.Size(91, 17)
         Me.chkPermCamera.TabIndex = 0
         Me.chkPermCamera.Text = "Allow Camera"
         Me.chkPermCamera.UseVisualStyleBackColor = True
@@ -380,7 +385,7 @@ Partial Class Settings
         Me.chkPermNotifications.CheckState = System.Windows.Forms.CheckState.Checked
         Me.chkPermNotifications.Location = New System.Drawing.Point(380, 22)
         Me.chkPermNotifications.Name = "chkPermNotifications"
-        Me.chkPermNotifications.Size = New System.Drawing.Size(115, 17)
+        Me.chkPermNotifications.Size = New System.Drawing.Size(113, 17)
         Me.chkPermNotifications.TabIndex = 3
         Me.chkPermNotifications.Text = "Allow Notifications"
         Me.chkPermNotifications.UseVisualStyleBackColor = True
@@ -390,7 +395,7 @@ Partial Class Settings
         Me.chkIncognito.AutoSize = True
         Me.chkIncognito.Location = New System.Drawing.Point(13, 82)
         Me.chkIncognito.Name = "chkIncognito"
-        Me.chkIncognito.Size = New System.Drawing.Size(201, 17)
+        Me.chkIncognito.Size = New System.Drawing.Size(197, 17)
         Me.chkIncognito.TabIndex = 1
         Me.chkIncognito.Text = "Incognito / Private Mode by Default"
         Me.chkIncognito.UseVisualStyleBackColor = True
@@ -400,7 +405,7 @@ Partial Class Settings
         Me.chkHttpsOnly.AutoSize = True
         Me.chkHttpsOnly.Location = New System.Drawing.Point(260, 82)
         Me.chkHttpsOnly.Name = "chkHttpsOnly"
-        Me.chkHttpsOnly.Size = New System.Drawing.Size(262, 17)
+        Me.chkHttpsOnly.Size = New System.Drawing.Size(237, 17)
         Me.chkHttpsOnly.TabIndex = 2
         Me.chkHttpsOnly.Text = "HTTPS-Only Mode (Upgrade HTTP requests)"
         Me.chkHttpsOnly.UseVisualStyleBackColor = True
@@ -412,7 +417,7 @@ Partial Class Settings
         Me.chkAdBlocker.CheckState = System.Windows.Forms.CheckState.Checked
         Me.chkAdBlocker.Location = New System.Drawing.Point(13, 105)
         Me.chkAdBlocker.Name = "chkAdBlocker"
-        Me.chkAdBlocker.Size = New System.Drawing.Size(193, 17)
+        Me.chkAdBlocker.Size = New System.Drawing.Size(187, 17)
         Me.chkAdBlocker.TabIndex = 3
         Me.chkAdBlocker.Text = "Enable Ad Blocker (EasyList rules)"
         Me.chkAdBlocker.UseVisualStyleBackColor = True
@@ -433,7 +438,7 @@ Partial Class Settings
         Me.chkPhishing.CheckState = System.Windows.Forms.CheckState.Checked
         Me.chkPhishing.Location = New System.Drawing.Point(260, 105)
         Me.chkPhishing.Name = "chkPhishing"
-        Me.chkPhishing.Size = New System.Drawing.Size(182, 17)
+        Me.chkPhishing.Size = New System.Drawing.Size(179, 17)
         Me.chkPhishing.TabIndex = 4
         Me.chkPhishing.Text = "Enable Phishing Protection Filter"
         Me.chkPhishing.UseVisualStyleBackColor = True
@@ -445,7 +450,7 @@ Partial Class Settings
         Me.chkAllowPop.CheckState = System.Windows.Forms.CheckState.Checked
         Me.chkAllowPop.Location = New System.Drawing.Point(13, 128)
         Me.chkAllowPop.Name = "chkAllowPop"
-        Me.chkAllowPop.Size = New System.Drawing.Size(147, 17)
+        Me.chkAllowPop.Size = New System.Drawing.Size(132, 17)
         Me.chkAllowPop.TabIndex = 5
         Me.chkAllowPop.Text = "Enable Pop-up Blocker"
         Me.chkAllowPop.UseVisualStyleBackColor = True
@@ -572,7 +577,7 @@ Partial Class Settings
         Me.chkMemorySaver.CheckState = System.Windows.Forms.CheckState.Checked
         Me.chkMemorySaver.Location = New System.Drawing.Point(15, 25)
         Me.chkMemorySaver.Name = "chkMemorySaver"
-        Me.chkMemorySaver.Size = New System.Drawing.Size(271, 17)
+        Me.chkMemorySaver.Size = New System.Drawing.Size(289, 17)
         Me.chkMemorySaver.TabIndex = 0
         Me.chkMemorySaver.Text = "Enable Memory Saver (sleep inactive background tabs)"
         Me.chkMemorySaver.UseVisualStyleBackColor = True
@@ -584,7 +589,7 @@ Partial Class Settings
         Me.chkHardwareAccel.CheckState = System.Windows.Forms.CheckState.Checked
         Me.chkHardwareAccel.Location = New System.Drawing.Point(15, 55)
         Me.chkHardwareAccel.Name = "chkHardwareAccel"
-        Me.chkHardwareAccel.Size = New System.Drawing.Size(256, 17)
+        Me.chkHardwareAccel.Size = New System.Drawing.Size(244, 17)
         Me.chkHardwareAccel.TabIndex = 1
         Me.chkHardwareAccel.Text = "Enable Hardware Acceleration when available"
         Me.chkHardwareAccel.UseVisualStyleBackColor = True
@@ -608,6 +613,7 @@ Partial Class Settings
         Me.lblDoH.Location = New System.Drawing.Point(15, 30)
         Me.lblDoH.Name = "lblDoH"
         Me.lblDoH.Size = New System.Drawing.Size(74, 13)
+        Me.lblDoH.TabIndex = 0
         Me.lblDoH.Text = "DoH Provider:"
         '
         'cmbDoH
@@ -625,7 +631,8 @@ Partial Class Settings
         Me.lblDoHCustom.AutoSize = True
         Me.lblDoHCustom.Location = New System.Drawing.Point(15, 68)
         Me.lblDoHCustom.Name = "lblDoHCustom"
-        Me.lblDoHCustom.Size = New System.Drawing.Size(89, 13)
+        Me.lblDoHCustom.Size = New System.Drawing.Size(92, 13)
+        Me.lblDoHCustom.TabIndex = 2
         Me.lblDoHCustom.Text = "Custom DoH URL:"
         '
         'txtDoHCustom
@@ -663,7 +670,8 @@ Partial Class Settings
         Me.lblCustomDns.AutoSize = True
         Me.lblCustomDns.Location = New System.Drawing.Point(15, 30)
         Me.lblCustomDns.Name = "lblCustomDns"
-        Me.lblCustomDns.Size = New System.Drawing.Size(107, 13)
+        Me.lblCustomDns.Size = New System.Drawing.Size(121, 13)
+        Me.lblCustomDns.TabIndex = 0
         Me.lblCustomDns.Text = "DNS Server IP Address:"
         '
         'txtCustomDns
@@ -693,7 +701,7 @@ Partial Class Settings
         Me.chkEnableProxy.AutoSize = True
         Me.chkEnableProxy.Location = New System.Drawing.Point(15, 25)
         Me.chkEnableProxy.Name = "chkEnableProxy"
-        Me.chkEnableProxy.Size = New System.Drawing.Size(123, 17)
+        Me.chkEnableProxy.Size = New System.Drawing.Size(128, 17)
         Me.chkEnableProxy.TabIndex = 0
         Me.chkEnableProxy.Text = "Enable Custom Proxy"
         Me.chkEnableProxy.UseVisualStyleBackColor = True
@@ -703,7 +711,8 @@ Partial Class Settings
         Me.lblProxyHost.AutoSize = True
         Me.lblProxyHost.Location = New System.Drawing.Point(15, 60)
         Me.lblProxyHost.Name = "lblProxyHost"
-        Me.lblProxyHost.Size = New System.Drawing.Size(83, 13)
+        Me.lblProxyHost.Size = New System.Drawing.Size(84, 13)
+        Me.lblProxyHost.TabIndex = 1
         Me.lblProxyHost.Text = "Proxy Host / IP:"
         '
         'txtProxyHost
@@ -719,6 +728,7 @@ Partial Class Settings
         Me.lblProxyPort.Location = New System.Drawing.Point(15, 92)
         Me.lblProxyPort.Name = "lblProxyPort"
         Me.lblProxyPort.Size = New System.Drawing.Size(31, 13)
+        Me.lblProxyPort.TabIndex = 2
         Me.lblProxyPort.Text = "Port:"
         '
         'txtProxyPort
@@ -735,7 +745,7 @@ Partial Class Settings
         Me.btnConfigureProxy.Name = "btnConfigureProxy"
         Me.btnConfigureProxy.Size = New System.Drawing.Size(270, 25)
         Me.btnConfigureProxy.TabIndex = 4
-        Me.btnConfigureProxy.Text = "Open Advanced Proxy Config (Form3)..."
+        Me.btnConfigureProxy.Text = "Open Proxy Config"
         Me.btnConfigureProxy.UseVisualStyleBackColor = True
         '
         'Panel1

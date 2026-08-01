@@ -257,7 +257,7 @@ Public Class Form1
         Bookmarks.ShowDialog()
     End Sub
 
-    Private Sub BookmarkThisPageToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles BookmarkThisPageToolStripMenuItem.Click
+    Private Sub BookmarkThisPageToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles BookmarkThisPageToolStripMenuItem.Click, ToolStripButton9.Click
         Dim brws = GetActiveWebView()
         If brws IsNot Nothing AndAlso brws.CoreWebView2 IsNot Nothing Then
             Dim currentUrl As String = brws.CoreWebView2.Source
@@ -403,24 +403,6 @@ Public Class Form1
         Rss.ShowDialog()
     End Sub
 
-    Private Sub ToolStripButton9_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton9.Click
-        Try
-            If wb IsNot Nothing AndAlso wb.CoreWebView2 IsNot Nothing Then
-                Dim url As String = wb.CoreWebView2.Source
-                Dim title As String = If(String.IsNullOrWhiteSpace(wb.CoreWebView2.DocumentTitle), url, wb.CoreWebView2.DocumentTitle)
-                If Not String.IsNullOrWhiteSpace(url) AndAlso url <> "about:blank" Then
-                    If My.Settings.BookmarksTreeData Is Nothing Then
-                        My.Settings.BookmarksTreeData = New System.Collections.Specialized.StringCollection()
-                    End If
-                    My.Settings.BookmarksTreeData.Add("URL:0:" & title & ":" & url)
-                    My.Settings.Save()
-                    MsgBox(title & " Has Been Bookmarked!", MsgBoxStyle.OkOnly, "K-Browser")
-                End If
-            End If
-        Catch ex As Exception
-            System.Diagnostics.Debug.WriteLine("Error bookmarking page: " & ex.Message)
-        End Try
-    End Sub
 
     Private Sub SetHomePageToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles SetHomePageToolStripMenuItem.Click
         NavigateActiveTab(GetHomePageUrl())
@@ -997,10 +979,6 @@ Public Class Form1
 
     Private Sub CheckForUpdatesToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckForUpdatesToolStripMenuItem.Click
         NavigateActiveTab("https://k-browser.com/")
-    End Sub
-
-    Private Sub CPUStatsToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CPUStatsToolStripMenuItem.Click
-        task_manager.ShowDialog()
     End Sub
 
     Private Sub Form1_MouseDoubleClick(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles Me.MouseDoubleClick

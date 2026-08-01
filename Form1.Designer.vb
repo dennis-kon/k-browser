@@ -96,7 +96,6 @@ Partial Class Form1
         Me.ToolStripMenuItem3 = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator13 = New System.Windows.Forms.ToolStripSeparator()
         Me.SourceToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.CPUStatsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.PropertiesToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator14 = New System.Windows.Forms.ToolStripSeparator()
         Me.FullScreenToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -547,7 +546,7 @@ Partial Class Form1
         '
         'ViewToolStripMenuItem
         '
-        Me.ViewToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.HistoryToolStripMenuItem, Me.ToolbarToolStripMenuItem, Me.NavigateToolStripMenuItem, Me.ToolStripSeparator13, Me.SourceToolStripMenuItem, Me.CPUStatsToolStripMenuItem, Me.PropertiesToolStripMenuItem, Me.ToolStripSeparator14, Me.FullScreenToolStripMenuItem})
+        Me.ViewToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.HistoryToolStripMenuItem, Me.ToolbarToolStripMenuItem, Me.NavigateToolStripMenuItem, Me.ToolStripSeparator13, Me.SourceToolStripMenuItem, Me.PropertiesToolStripMenuItem, Me.ToolStripSeparator14, Me.FullScreenToolStripMenuItem})
         Me.ViewToolStripMenuItem.Name = "ViewToolStripMenuItem"
         Me.ViewToolStripMenuItem.Size = New System.Drawing.Size(46, 20)
         Me.ViewToolStripMenuItem.Text = "&View"
@@ -660,12 +659,6 @@ Partial Class Form1
         Me.SourceToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F4
         Me.SourceToolStripMenuItem.Size = New System.Drawing.Size(169, 22)
         Me.SourceToolStripMenuItem.Text = "Source"
-        '
-        'CPUStatsToolStripMenuItem
-        '
-        Me.CPUStatsToolStripMenuItem.Name = "CPUStatsToolStripMenuItem"
-        Me.CPUStatsToolStripMenuItem.Size = New System.Drawing.Size(169, 22)
-        Me.CPUStatsToolStripMenuItem.Text = "Page Setup"
         '
         'PropertiesToolStripMenuItem
         '
@@ -1276,7 +1269,6 @@ Partial Class Form1
     Friend WithEvents StopToolStripMenuItem1 As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolStripSeparator13 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents SourceToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents CPUStatsToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents PropertiesToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolStripSeparator14 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents FullScreenToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem

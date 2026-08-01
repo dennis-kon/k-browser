@@ -19,8 +19,11 @@
 x64/
 x86/
 build/
-bin/
+bin/Debug
+bin/Release
 obj/
+obj/Debug/
+obj/Release/
 
 # Visual Studio 2015/2017/2019 cache/options directory
 .vs/

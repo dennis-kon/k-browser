@@ -3,6 +3,10 @@
   "WorkspaceRootPath": "C:\\Users\\dennis\\Documents\\GitHub\\k-browser\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{9645AECE-B836-48FA-ACD0-B247683FB5A8}|k-browser.vbproj|c:\\users\\dennis\\documents\\github\\k-browser\\settings.vb||{2C015C70-C72C-11D0-88C3-00A0C9110049}|Form",
+      "RelativeMoniker": "D:0:0:{9645AECE-B836-48FA-ACD0-B247683FB5A8}|k-browser.vbproj|solutionrelative:settings.vb||{2C015C70-C72C-11D0-88C3-00A0C9110049}|Form"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{9645AECE-B836-48FA-ACD0-B247683FB5A8}|k-browser.vbproj|c:\\users\\dennis\\documents\\github\\k-browser\\form1.vb||{2C015C70-C72C-11D0-88C3-00A0C9110049}|Form",
       "RelativeMoniker": "D:0:0:{9645AECE-B836-48FA-ACD0-B247683FB5A8}|k-browser.vbproj|solutionrelative:form1.vb||{2C015C70-C72C-11D0-88C3-00A0C9110049}|Form"
     },
@@ -18,24 +22,36 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 0,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
+              "Title": "Settings.vb [Design]",
+              "DocumentMoniker": "C:\\Users\\dennis\\Documents\\GitHub\\k-browser\\Settings.vb",
+              "RelativeDocumentMoniker": "Settings.vb",
+              "ToolTip": "C:\\Users\\dennis\\Documents\\GitHub\\k-browser\\Settings.vb [Design]",
+              "RelativeToolTip": "Settings.vb [Design]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003361|",
+              "WhenOpened": "2026-08-01T18:53:59.742Z",
+              "EditorCaption": " [Design]"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
               "Title": "Form1.vb",
               "DocumentMoniker": "C:\\Users\\dennis\\Documents\\GitHub\\k-browser\\Form1.vb",
               "RelativeDocumentMoniker": "Form1.vb",
               "ToolTip": "C:\\Users\\dennis\\Documents\\GitHub\\k-browser\\Form1.vb",
               "RelativeToolTip": "Form1.vb",
-              "ViewState": "AgIAANUDAAAAAAAAAAAQwOYDAAAjAAAAAAAAAA==",
+              "ViewState": "AgIAAPQAAAAAAAAAAAAqwAQBAAAIAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003361|",
               "WhenOpened": "2026-08-01T17:41:58.836Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "Form1.vb [Design]",
               "DocumentMoniker": "C:\\Users\\dennis\\Documents\\GitHub\\k-browser\\Form1.vb",
               "RelativeDocumentMoniker": "Form1.vb",
