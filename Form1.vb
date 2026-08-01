@@ -1212,6 +1212,8 @@ Public Class Form1
         End Try
     End Sub
 
+
+
     Private Sub KBrowserToolStripMenuItem_Click_1(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles KBrowserToolStripMenuItem.Click
         NavigateActiveTab("https://k-browser.com/")
     End Sub

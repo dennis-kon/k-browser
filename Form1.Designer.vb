@@ -557,14 +557,14 @@ Partial Class Form1
         Me.HistoryToolStripMenuItem.Image = CType(resources.GetObject("HistoryToolStripMenuItem.Image"), System.Drawing.Image)
         Me.HistoryToolStripMenuItem.Name = "HistoryToolStripMenuItem"
         Me.HistoryToolStripMenuItem.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.H), System.Windows.Forms.Keys)
-        Me.HistoryToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.HistoryToolStripMenuItem.Size = New System.Drawing.Size(169, 22)
         Me.HistoryToolStripMenuItem.Text = "History"
         '
         'ToolbarToolStripMenuItem
         '
         Me.ToolbarToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.HideMainMenuToolStripMenuItem, Me.ShowToolStripMenuItem, Me.HideBarToolStripMenuItem})
         Me.ToolbarToolStripMenuItem.Name = "ToolbarToolStripMenuItem"
-        Me.ToolbarToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.ToolbarToolStripMenuItem.Size = New System.Drawing.Size(169, 22)
         Me.ToolbarToolStripMenuItem.Text = "Toolbars"
         '
         'HideMainMenuToolStripMenuItem
@@ -589,7 +589,7 @@ Partial Class Form1
         '
         Me.NavigateToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.BackToolStripMenuItem, Me.ForwardToolStripMenuItem, Me.ReloadToolStripMenuItem, Me.StopToolStripMenuItem1, Me.ToolStripSeparator17, Me.ToolStripMenuItem3})
         Me.NavigateToolStripMenuItem.Name = "NavigateToolStripMenuItem"
-        Me.NavigateToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.NavigateToolStripMenuItem.Size = New System.Drawing.Size(169, 22)
         Me.NavigateToolStripMenuItem.Text = "Navigate"
         '
         'BackToolStripMenuItem
@@ -652,38 +652,38 @@ Partial Class Form1
         'ToolStripSeparator13
         '
         Me.ToolStripSeparator13.Name = "ToolStripSeparator13"
-        Me.ToolStripSeparator13.Size = New System.Drawing.Size(177, 6)
+        Me.ToolStripSeparator13.Size = New System.Drawing.Size(166, 6)
         '
         'SourceToolStripMenuItem
         '
         Me.SourceToolStripMenuItem.Name = "SourceToolStripMenuItem"
         Me.SourceToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F4
-        Me.SourceToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.SourceToolStripMenuItem.Size = New System.Drawing.Size(169, 22)
         Me.SourceToolStripMenuItem.Text = "Source"
         '
         'CPUStatsToolStripMenuItem
         '
         Me.CPUStatsToolStripMenuItem.Name = "CPUStatsToolStripMenuItem"
-        Me.CPUStatsToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.CPUStatsToolStripMenuItem.Size = New System.Drawing.Size(169, 22)
         Me.CPUStatsToolStripMenuItem.Text = "Page Setup"
         '
         'PropertiesToolStripMenuItem
         '
         Me.PropertiesToolStripMenuItem.Name = "PropertiesToolStripMenuItem"
         Me.PropertiesToolStripMenuItem.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.P), System.Windows.Forms.Keys)
-        Me.PropertiesToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.PropertiesToolStripMenuItem.Size = New System.Drawing.Size(169, 22)
         Me.PropertiesToolStripMenuItem.Text = "Properties"
         '
         'ToolStripSeparator14
         '
         Me.ToolStripSeparator14.Name = "ToolStripSeparator14"
-        Me.ToolStripSeparator14.Size = New System.Drawing.Size(177, 6)
+        Me.ToolStripSeparator14.Size = New System.Drawing.Size(166, 6)
         '
         'FullScreenToolStripMenuItem
         '
         Me.FullScreenToolStripMenuItem.Name = "FullScreenToolStripMenuItem"
         Me.FullScreenToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F11
-        Me.FullScreenToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.FullScreenToolStripMenuItem.Size = New System.Drawing.Size(169, 22)
         Me.FullScreenToolStripMenuItem.Text = "Full Screen"
         '
         'CookieToolStripMenuItem
@@ -1003,42 +1003,42 @@ Partial Class Form1
         '
         Me.AboutToolStripMenuItem.Image = CType(resources.GetObject("AboutToolStripMenuItem.Image"), System.Drawing.Image)
         Me.AboutToolStripMenuItem.Name = "AboutToolStripMenuItem"
-        Me.AboutToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.AboutToolStripMenuItem.Size = New System.Drawing.Size(177, 22)
         Me.AboutToolStripMenuItem.Text = "&About"
         '
         'CheckForUpdatesToolStripMenuItem
         '
         Me.CheckForUpdatesToolStripMenuItem.Image = CType(resources.GetObject("CheckForUpdatesToolStripMenuItem.Image"), System.Drawing.Image)
         Me.CheckForUpdatesToolStripMenuItem.Name = "CheckForUpdatesToolStripMenuItem"
-        Me.CheckForUpdatesToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.CheckForUpdatesToolStripMenuItem.Size = New System.Drawing.Size(177, 22)
         Me.CheckForUpdatesToolStripMenuItem.Text = "Check For Updates"
         '
         'ToolStripSeparator10
         '
         Me.ToolStripSeparator10.Name = "ToolStripSeparator10"
-        Me.ToolStripSeparator10.Size = New System.Drawing.Size(177, 6)
+        Me.ToolStripSeparator10.Size = New System.Drawing.Size(174, 6)
         '
         'KBrowserToolStripMenuItem
         '
         Me.KBrowserToolStripMenuItem.Name = "KBrowserToolStripMenuItem"
-        Me.KBrowserToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.KBrowserToolStripMenuItem.Size = New System.Drawing.Size(177, 22)
         Me.KBrowserToolStripMenuItem.Text = "&Visit Home Page"
         '
         'SToolStripMenuItem
         '
         Me.SToolStripMenuItem.Name = "SToolStripMenuItem"
-        Me.SToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.SToolStripMenuItem.Size = New System.Drawing.Size(177, 22)
         Me.SToolStripMenuItem.Text = "&Mail to Author"
         '
         'ToolStripSeparator16
         '
         Me.ToolStripSeparator16.Name = "ToolStripSeparator16"
-        Me.ToolStripSeparator16.Size = New System.Drawing.Size(177, 6)
+        Me.ToolStripSeparator16.Size = New System.Drawing.Size(174, 6)
         '
         'CalendarToolStripMenuItem
         '
         Me.CalendarToolStripMenuItem.Name = "CalendarToolStripMenuItem"
-        Me.CalendarToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.CalendarToolStripMenuItem.Size = New System.Drawing.Size(177, 22)
         Me.CalendarToolStripMenuItem.Text = "Calendar"
         '
         'MenuStrip1

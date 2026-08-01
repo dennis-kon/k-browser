@@ -55,6 +55,7 @@ Public Class Bookmarks
                 Dim title As String = parts(2)
                 Dim url As String = parts(3)
                 Dim urlNode As New TreeNode(title)
+                urlNode.ToolTipText = url
                 urlNode.Tag = New BookmarkNodeData With {.IsFolder = False, .Url = url}
 
                 If depth = 0 OrElse Not stack.ContainsKey(depth - 1) Then
@@ -66,7 +67,25 @@ Public Class Bookmarks
         Next
 
         tvBookmarks.ExpandAll()
+        UpdateBookmarkCount()
     End Sub
+
+    Private Sub UpdateBookmarkCount()
+        Dim totalCount As Integer = CountBookmarkNodes(tvBookmarks.Nodes)
+        lblCount.Text = totalCount & " bookmark" & If(totalCount = 1, "", "s")
+    End Sub
+
+    Private Function CountBookmarkNodes(ByVal nodes As TreeNodeCollection) As Integer
+        Dim count As Integer = 0
+        For Each node As TreeNode In nodes
+            Dim data = TryCast(node.Tag, BookmarkNodeData)
+            If data IsNot Nothing AndAlso Not data.IsFolder Then
+                count += 1
+            End If
+            count += CountBookmarkNodes(node.Nodes)
+        Next
+        Return count
+    End Function
 
     Public Sub SaveTreeToSettings()
         If My.Settings.BookmarksTreeData Is Nothing Then
@@ -79,6 +98,7 @@ Public Class Bookmarks
         Next
 
         My.Settings.Save()
+        UpdateBookmarkCount()
     End Sub
 
     Private Sub SerializeNode(ByVal node As TreeNode, ByVal depth As Integer)
@@ -95,7 +115,40 @@ Public Class Bookmarks
         End If
     End Sub
 
-    Private Sub btnAddFolder_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnAddFolder.Click
+    Private Sub txtSearch_TextChanged(ByVal sender As Object, ByVal e As EventArgs) Handles txtSearch.TextChanged
+        Dim filter As String = txtSearch.Text.Trim().ToLower()
+        If String.IsNullOrWhiteSpace(filter) Then
+            LoadTreeFromSettings()
+            Return
+        End If
+
+        For Each node As TreeNode In tvBookmarks.Nodes
+            FilterNode(node, filter)
+        Next
+    End Sub
+
+    Private Function FilterNode(ByVal node As TreeNode, ByVal filter As String) As Boolean
+        Dim data = TryCast(node.Tag, BookmarkNodeData)
+        Dim isMatch As Boolean = node.Text.ToLower().Contains(filter) OrElse (data IsNot Nothing AndAlso data.Url.ToLower().Contains(filter))
+        Dim hasMatchingChild As Boolean = False
+
+        For Each child As TreeNode In node.Nodes
+            If FilterNode(child, filter) Then
+                hasMatchingChild = True
+            End If
+        Next
+
+        If isMatch OrElse hasMatchingChild Then
+            node.Expand()
+            node.ForeColor = System.Drawing.Color.DarkBlue
+            Return True
+        Else
+            node.ForeColor = System.Drawing.Color.Gray
+            Return False
+        End If
+    End Function
+
+    Private Sub btnAddFolder_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnAddFolder.Click, tsmAddFolder.Click
         Dim folderName As String = InputBox("Enter folder name:", "New Folder", "New Folder")
         If String.IsNullOrWhiteSpace(folderName) Then Return
 
@@ -120,15 +173,17 @@ Public Class Bookmarks
         SaveTreeToSettings()
     End Sub
 
-    Private Sub btnAddBookmark_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnAddBookmark.Click
+    Private Sub btnAddBookmark_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnAddBookmark.Click, tsmAddBookmark.Click
         Dim title As String = InputBox("Enter website name:", "Add Website Bookmark", "New Bookmark")
         If String.IsNullOrWhiteSpace(title) Then Return
 
         Dim url As String = InputBox("Enter website URL:", "Add Website Bookmark", "https://")
         If String.IsNullOrWhiteSpace(url) Then Return
 
+        Dim fixedUrl As String = AppManager.FixURL(url)
         Dim urlNode As New TreeNode(title)
-        urlNode.Tag = New BookmarkNodeData With {.IsFolder = False, .Url = AppManager.FixURL(url)}
+        urlNode.ToolTipText = fixedUrl
+        urlNode.Tag = New BookmarkNodeData With {.IsFolder = False, .Url = fixedUrl}
 
         Dim selectedNode = tvBookmarks.SelectedNode
         If selectedNode IsNot Nothing Then
@@ -148,15 +203,35 @@ Public Class Bookmarks
         SaveTreeToSettings()
     End Sub
 
-    Private Sub btnOpen_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnOpen.Click
-        OpenSelectedBookmark()
+    Private Sub btnOpen_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnOpen.Click, tsmOpenActive.Click
+        OpenSelectedBookmarkInActiveTab()
+    End Sub
+
+    Private Async Sub btnOpenNewTab_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnOpenNewTab.Click, tsmOpenNewTab.Click
+        Dim selectedNode = tvBookmarks.SelectedNode
+        If selectedNode IsNot Nothing Then
+            Dim data = TryCast(selectedNode.Tag, BookmarkNodeData)
+            If data IsNot Nothing AndAlso Not data.IsFolder AndAlso Not String.IsNullOrWhiteSpace(data.Url) Then
+                Await Form1.CreateNewTab(data.Url)
+            End If
+        End If
+    End Sub
+
+    Private Sub tsmCopyUrl_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles tsmCopyUrl.Click
+        Dim selectedNode = tvBookmarks.SelectedNode
+        If selectedNode IsNot Nothing Then
+            Dim data = TryCast(selectedNode.Tag, BookmarkNodeData)
+            If data IsNot Nothing AndAlso Not data.IsFolder AndAlso Not String.IsNullOrWhiteSpace(data.Url) Then
+                Clipboard.SetText(data.Url)
+            End If
+        End If
     End Sub
 
     Private Sub tvBookmarks_NodeMouseDoubleClick(ByVal sender As Object, ByVal e As System.Windows.Forms.TreeNodeMouseClickEventArgs) Handles tvBookmarks.NodeMouseDoubleClick
-        OpenSelectedBookmark()
+        OpenSelectedBookmarkInActiveTab()
     End Sub
 
-    Private Sub OpenSelectedBookmark()
+    Private Sub OpenSelectedBookmarkInActiveTab()
         Dim selectedNode = tvBookmarks.SelectedNode
         If selectedNode IsNot Nothing Then
             Dim data = TryCast(selectedNode.Tag, BookmarkNodeData)
@@ -166,7 +241,7 @@ Public Class Bookmarks
         End If
     End Sub
 
-    Private Sub btnEdit_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnEdit.Click
+    Private Sub btnEdit_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnEdit.Click, tsmEdit.Click
         Dim selectedNode = tvBookmarks.SelectedNode
         If selectedNode Is Nothing Then Return
         Dim data = TryCast(selectedNode.Tag, BookmarkNodeData)
@@ -184,19 +259,58 @@ Public Class Bookmarks
             Dim newUrl As String = InputBox("Edit Bookmark URL:", "Edit Bookmark", data.Url)
             If String.IsNullOrWhiteSpace(newUrl) Then Return
 
+            Dim fixedUrl As String = AppManager.FixURL(newUrl)
             selectedNode.Text = newTitle
-            data.Url = AppManager.FixURL(newUrl)
+            selectedNode.ToolTipText = fixedUrl
+            data.Url = fixedUrl
             SaveTreeToSettings()
         End If
     End Sub
 
-    Private Sub btnDelete_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnDelete.Click
+    Private Sub btnDelete_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnDelete.Click, tsmDelete.Click
         Dim selectedNode = tvBookmarks.SelectedNode
         If selectedNode IsNot Nothing Then
             If MessageBox.Show("Are you sure you want to delete '" & selectedNode.Text & "'?", "Delete Bookmark", MessageBoxButtons.YesNo, MessageBoxIcon.Question) = DialogResult.Yes Then
                 selectedNode.Remove()
                 SaveTreeToSettings()
             End If
+        End If
+    End Sub
+
+    Private Sub tvBookmarks_ItemDrag(ByVal sender As Object, ByVal e As ItemDragEventArgs) Handles tvBookmarks.ItemDrag
+        DoDragDrop(e.Item, DragDropEffects.Move)
+    End Sub
+
+    Private Sub tvBookmarks_DragEnter(ByVal sender As Object, ByVal e As DragEventArgs) Handles tvBookmarks.DragEnter
+        e.Effect = DragDropEffects.Move
+    End Sub
+
+    Private Sub tvBookmarks_DragOver(ByVal sender As Object, ByVal e As DragEventArgs) Handles tvBookmarks.DragOver
+        Dim targetPoint As System.Drawing.Point = tvBookmarks.PointToClient(New System.Drawing.Point(e.X, e.Y))
+        tvBookmarks.SelectedNode = tvBookmarks.GetNodeAt(targetPoint)
+    End Sub
+
+    Private Sub tvBookmarks_DragDrop(ByVal sender As Object, ByVal e As DragEventArgs) Handles tvBookmarks.DragDrop
+        Dim targetPoint As System.Drawing.Point = tvBookmarks.PointToClient(New System.Drawing.Point(e.X, e.Y))
+        Dim targetNode As TreeNode = tvBookmarks.GetNodeAt(targetPoint)
+        Dim draggedNode As TreeNode = TryCast(e.Data.GetData(GetType(TreeNode)), TreeNode)
+
+        If draggedNode IsNot Nothing AndAlso targetNode IsNot draggedNode Then
+            draggedNode.Remove()
+            If targetNode IsNot Nothing Then
+                Dim targetData = TryCast(targetNode.Tag, BookmarkNodeData)
+                If targetData IsNot Nothing AndAlso targetData.IsFolder Then
+                    targetNode.Nodes.Add(draggedNode)
+                    targetNode.Expand()
+                ElseIf targetNode.Parent IsNot Nothing Then
+                    targetNode.Parent.Nodes.Add(draggedNode)
+                Else
+                    tvBookmarks.Nodes.Add(draggedNode)
+                End If
+            Else
+                tvBookmarks.Nodes.Add(draggedNode)
+            End If
+            SaveTreeToSettings()
         End If
     End Sub
 

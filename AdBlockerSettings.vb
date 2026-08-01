@@ -16,6 +16,14 @@ Public Class AdBlockerSettings
     }
 
     Private Sub AdBlockerSettings_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
+        Try
+            If Form1.ActiveForm IsNot Nothing AndAlso Form1.ActiveForm.Icon IsNot Nothing Then
+                Me.Icon = Form1.ActiveForm.Icon
+            ElseIf Application.OpenForms.Count > 0 AndAlso Application.OpenForms(0).Icon IsNot Nothing Then
+                Me.Icon = Application.OpenForms(0).Icon
+            End If
+        Catch
+        End Try
         chkEnableAdBlocker.Checked = My.Settings.AdBlockerEnabled
         chkShowBlockedCount.Checked = My.Settings.ShowBlockedCount
 
