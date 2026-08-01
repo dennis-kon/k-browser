@@ -1,249 +1,413 @@
-'///////////////////////////////////////////
-'Form to facilitate settings in the application.
-'I am using built in vs 2005 settings for 
-'most of the settings in the application
-'other than search providers and feeds.
-'///////////////////////////////////////////
-Imports System.Net
-
+Imports System.IO
+Imports System.Windows.Forms
 
 Public Class Settings
-    Dim host As String
-    Dim port As Integer
-    Dim counter As Integer
-    Private Sub frmSettings_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
-        LoadBlockedSites()
-        LoadPhishingSites()
-        LoadPopUpSettings()
-        LoadPopAllowed()
-        LoadAdditional()
+
+    Private Sub Settings_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
+        LoadAllSettings()
     End Sub
 
-#Region " Popup Blocker Settings "
+    Private Sub LoadAllSettings()
+        ' Browser Settings
+        txtHomePage.Text = If(String.IsNullOrEmpty(My.Settings.HomePageUrl), "https://www.google.com", My.Settings.HomePageUrl)
+        Select Case My.Settings.StartupBehavior
+            Case 1 : rbStartupBlank.Checked = True
+            Case 2 : rbStartupRestore.Checked = True
+            Case 3 : rbStartupSpecific.Checked = True
+            Case Else : rbStartupHome.Checked = True
+        End Select
+        cmbNewTab.SelectedIndex = Math.Max(0, Math.Min(2, My.Settings.NewTabPage))
+        cmbSearchEngine.SelectedItem = If(String.IsNullOrEmpty(My.Settings.SearchEngine), "Google", My.Settings.SearchEngine)
+        If cmbSearchEngine.SelectedIndex < 0 Then cmbSearchEngine.SelectedIndex = 0
+        txtDownloads.Text = If(String.IsNullOrEmpty(My.Settings.DownloadsFolder), Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Downloads"), My.Settings.DownloadsFolder)
+        cmbFontSize.SelectedIndex = Math.Max(0, Math.Min(3, My.Settings.FontSize))
+        chkFullScreen.Checked = My.Settings.FullScreenOnStartup
 
-
-
-    Private Sub LoadPopUpSettings()
+        ' Privacy & Security
+        chkPermCamera.Checked = My.Settings.PermissionCamera
+        chkPermMic.Checked = My.Settings.PermissionMic
+        chkPermLocation.Checked = My.Settings.PermissionLocation
+        chkPermNotifications.Checked = My.Settings.PermissionNotifications
+        chkIncognito.Checked = My.Settings.IncognitoEnabled
+        chkHttpsOnly.Checked = My.Settings.HttpsOnlyMode
+        chkAdBlocker.Checked = My.Settings.AdBlockerEnabled
+        chkPhishing.Checked = My.Settings.UsePhishingFilter
         chkAllowPop.Checked = My.Settings.PopUpBlockerEnabled
-        chkPopSound.Checked = My.Settings.PopSound
-        chkPopInfo.Checked = My.Settings.PopInfoBar
+
+        LoadJsDisabledSites()
+        LoadBlockedSites()
+
+        ' Performance
+        chkMemorySaver.Checked = My.Settings.MemorySaverEnabled
+        chkHardwareAccel.Checked = My.Settings.HardwareAcceleration
+        cmbDoH.SelectedIndex = Math.Max(0, Math.Min(3, My.Settings.DnsOverHttpsProvider))
+        txtDoHCustom.Text = My.Settings.CustomDnsServer
+
+        ' Advanced
+        txtCustomDns.Text = My.Settings.CustomDnsServer
+        chkEnableProxy.Checked = My.Settings.CustomProxyEnabled
+        txtProxyHost.Text = My.Settings.CustomProxyHost
+        txtProxyPort.Text = My.Settings.CustomProxyPort.ToString()
     End Sub
 
-    Private Sub LoadPopAllowed()
-        lbPop.Items.Clear()
-        Dim li As ListItem
-        Dim s As String
-        For Each s In My.Settings.AllowedPopSites
-            li = New ListItem
-            li.Text = s
-            lbPop.Items.Add(li)
+    Private Sub SaveAllSettings()
+        ' Browser Settings
+        My.Settings.HomePageUrl = txtHomePage.Text
+        If rbStartupBlank.Checked Then
+            My.Settings.StartupBehavior = 1
+        ElseIf rbStartupRestore.Checked Then
+            My.Settings.StartupBehavior = 2
+        ElseIf rbStartupSpecific.Checked Then
+            My.Settings.StartupBehavior = 3
+        Else
+            My.Settings.StartupBehavior = 0
+        End If
+        My.Settings.NewTabPage = cmbNewTab.SelectedIndex
+        My.Settings.SearchEngine = If(cmbSearchEngine.SelectedItem IsNot Nothing, cmbSearchEngine.SelectedItem.ToString(), "Google")
+        My.Settings.DownloadsFolder = txtDownloads.Text
+        My.Settings.FontSize = cmbFontSize.SelectedIndex
+        My.Settings.FullScreenOnStartup = chkFullScreen.Checked
+
+        ' Privacy & Security
+        My.Settings.PermissionCamera = chkPermCamera.Checked
+        My.Settings.PermissionMic = chkPermMic.Checked
+        My.Settings.PermissionLocation = chkPermLocation.Checked
+        My.Settings.PermissionNotifications = chkPermNotifications.Checked
+        My.Settings.IncognitoEnabled = chkIncognito.Checked
+        My.Settings.HttpsOnlyMode = chkHttpsOnly.Checked
+        My.Settings.AdBlockerEnabled = chkAdBlocker.Checked
+        My.Settings.UsePhishingFilter = chkPhishing.Checked
+        My.Settings.PopUpBlockerEnabled = chkAllowPop.Checked
+
+        ' Performance
+        My.Settings.MemorySaverEnabled = chkMemorySaver.Checked
+        My.Settings.HardwareAcceleration = chkHardwareAccel.Checked
+        My.Settings.DnsOverHttpsProvider = cmbDoH.SelectedIndex
+
+        ' Advanced
+        My.Settings.CustomDnsServer = If(txtCustomDns.Text.Trim() <> "", txtCustomDns.Text.Trim(), txtDoHCustom.Text.Trim())
+        My.Settings.CustomProxyEnabled = chkEnableProxy.Checked
+        My.Settings.CustomProxyHost = txtProxyHost.Text
+        Dim port As Integer = 8080
+        Integer.TryParse(txtProxyPort.Text, port)
+        My.Settings.CustomProxyPort = port
+
+        My.Settings.Save()
+    End Sub
+
+    Private Sub LoadJsDisabledSites()
+        lbJsDisabled.Items.Clear()
+        If My.Settings.JsDisabledSites Is Nothing Then My.Settings.JsDisabledSites = New System.Collections.Specialized.StringCollection()
+        For Each s As String In My.Settings.JsDisabledSites
+            lbJsDisabled.Items.Add(s)
         Next
     End Sub
 
-    Private Sub chkAllowPop_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkAllowPop.CheckedChanged
-        My.Settings.PopUpBlockerEnabled = chkAllowPop.Checked
-    End Sub
-
-    Private Sub chkPopSound_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkPopSound.CheckedChanged
-        My.Settings.PopSound = chkPopSound.Checked
-    End Sub
-
-    Private Sub chkPopInfo_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkPopInfo.CheckedChanged
-        My.Settings.PopInfoBar = chkPopInfo.Checked
-    End Sub
-
-    Private Sub btnPopAdd_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnPopAdd.Click
-        If txtPop.Text = "" Then
-            'Do nothing
-        Else
-            My.Settings.AllowedPopSites.Add(AppManager.FixURL(txtPop.Text))
-            txtPop.Text = String.Empty
-            LoadPopAllowed()
-        End If
-    End Sub
-
-    Private Sub btnPopRemove_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnPopRemove.Click
-        Dim li As ListItem
-        If lbPop.SelectedItems.Count > 0 Then
-            For Each li In lbPop.SelectedItems
-                My.Settings.AllowedPopSites.Remove(li.Text)
-            Next
-            LoadPopAllowed()
-        End If
-    End Sub
-
-    Private Sub btnPopRemoveAll_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnPopRemoveAll.Click
-        My.Settings.AllowedPopSites.Clear()
-        lbPop.Items.Clear()
-    End Sub
-
-#End Region
-
-#Region " Blocked Sites "
-
     Private Sub LoadBlockedSites()
         lbBlocked.Items.Clear()
-        Dim s As String
-        For Each s In My.Settings.BlockedSites
+        If My.Settings.BlockedSites Is Nothing Then My.Settings.BlockedSites = New System.Collections.Specialized.StringCollection()
+        For Each s As String In My.Settings.BlockedSites
             lbBlocked.Items.Add(s)
         Next
     End Sub
 
+    Private Sub btnAddJsDomain_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnAddJsDomain.Click
+        If Not String.IsNullOrWhiteSpace(txtJsDomain.Text) Then
+            If My.Settings.JsDisabledSites Is Nothing Then My.Settings.JsDisabledSites = New System.Collections.Specialized.StringCollection()
+            Dim domain As String = txtJsDomain.Text.Trim().ToLower()
+            If Not My.Settings.JsDisabledSites.Contains(domain) Then
+                My.Settings.JsDisabledSites.Add(domain)
+                LoadJsDisabledSites()
+            End If
+            txtJsDomain.Text = String.Empty
+        End If
+    End Sub
+
+    Private Sub btnRemoveJsDomain_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnRemoveJsDomain.Click
+        If lbJsDisabled.SelectedItem IsNot Nothing Then
+            My.Settings.JsDisabledSites.Remove(lbJsDisabled.SelectedItem.ToString())
+            LoadJsDisabledSites()
+        End If
+    End Sub
+
     Private Sub btnAddBlock_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnAddBlock.Click
-        If txtBlock.Text = "" Then
-            'Do nothing
-        Else
+        If Not String.IsNullOrWhiteSpace(txtBlock.Text) Then
+            If My.Settings.BlockedSites Is Nothing Then My.Settings.BlockedSites = New System.Collections.Specialized.StringCollection()
             My.Settings.BlockedSites.Add(AppManager.FixURL(txtBlock.Text))
             LoadBlockedSites()
             txtBlock.Text = String.Empty
         End If
     End Sub
 
-    Private Sub btnBlockRemoveAll_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnBlockRemoveAll.Click
-        My.Settings.BlockedSites.Clear()
-        LoadBlockedSites()
-    End Sub
-
     Private Sub btnRemoveBlock_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnRemoveBlock.Click
-        If lbBlocked.SelectedIndices.Count > 0 Then
-            My.Settings.BlockedSites.Remove(lbBlocked.SelectedItem)
+        If lbBlocked.SelectedItem IsNot Nothing Then
+            My.Settings.BlockedSites.Remove(lbBlocked.SelectedItem.ToString())
             LoadBlockedSites()
         End If
     End Sub
 
-#End Region
-
-#Region " Integrations "
-
-    Private Sub LoadAdditional()
-        chkPhishing.Checked = My.Settings.UsePhishingFilter
+    Private Sub btnBrowseDownloads_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnBrowseDownloads.Click
+        Using fbd As New FolderBrowserDialog()
+            fbd.Description = "Select Default Downloads Folder"
+            If fbd.ShowDialog() = DialogResult.OK Then
+                txtDownloads.Text = fbd.SelectedPath
+            End If
+        End Using
     End Sub
 
-#End Region
-
-
-
-#Region " Phishing "
-    Private Sub LoadPhishingSites()
-        lbPhishing.Items.Clear()
-        Dim s As String
-        For Each s In My.Settings.PhishingSites
-            lbPhishing.Items.Add(s)
-        Next
-    End Sub
-    Private Sub btnAddPhish_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnAddPhish.Click
-        If txtPhishing.Text = "" Then
-            'Do nothing
-        Else
-            My.Settings.PhishingSites.Add(AppManager.FixURL(txtPhishing.Text))
-            LoadPhishingSites()
-            txtPhishing.Text = String.Empty
-        End If
+    Private Sub btnDefaultHomePage_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnDefaultHomePage.Click
+        txtHomePage.Text = "https://www.google.com"
     End Sub
 
-    Private Sub btnRemovePhish_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnRemovePhish.Click
-        If lbPhishing.SelectedIndices.Count > 0 Then
-            My.Settings.PhishingSites.Remove(lbPhishing.SelectedItem)
-            LoadPhishingSites()
-        End If
+    Private Sub btnConfigureProxy_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnConfigureProxy.Click
+        Form3.ShowDialog()
     End Sub
-
-    Private Sub btnRemoveAllPhish_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnRemoveAllPhish.Click
-        My.Settings.PhishingSites.Clear()
-        LoadPhishingSites()
-    End Sub
-
-#End Region
 
     Private Sub btnOK_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnOK.Click
-        My.Settings.Save()
+        SaveAllSettings()
+        Me.DialogResult = DialogResult.OK
         Me.Close()
     End Sub
 
-
-
-    Private Sub chkPhishing_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkPhishing.CheckedChanged
-        My.Settings.UsePhishingFilter = chkPhishing.Checked
-        My.Settings.Save()
+    Private Sub btnApply_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnApply.Click
+        SaveAllSettings()
+        MessageBox.Show("Settings applied successfully!", "Browser Settings", MessageBoxButtons.OK, MessageBoxIcon.Information)
     End Sub
 
-    Private Sub btnAddProvider_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
-
-    End Sub
-
-
-    Private Sub Button2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
+    Private Sub btnCancel_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnCancel.Click
+        Me.DialogResult = DialogResult.Cancel
         Me.Close()
     End Sub
 
-
-    Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button1.Click
-        Dim hostname As IPHostEntry = Dns.GetHostEntry(TextBox1.Text.Trim())
-
-        Dim ip As IPAddress() = hostname.AddressList
-
-        TextBox2.Text = ip(0).ToString()
+    Private Sub btnConfigureAdBlocker_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnConfigureAdBlocker.Click
+        AdBlockerSettings.ShowDialog()
+        chkAdBlocker.Checked = My.Settings.AdBlockerEnabled
     End Sub
 
-    Private Async Sub Timer1_Tick(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Timer1.Tick
-        Timer1.Stop()
-        counter += 1
-        TextBox3.Text = counter.ToString()
-        Dim targetHost As String = TextBox1.Text.Trim()
-        Dim targetPort As Integer = counter
-
-        If String.IsNullOrEmpty(targetHost) Then
-            Timer1.Start()
-            Return
-        End If
-
-        Dim isOpen As Boolean = False
-        Await System.Threading.Tasks.Task.Run(Sub()
-                                                  Try
-                                                      Dim addresses = System.Net.Dns.GetHostAddresses(targetHost)
-                                                      If addresses IsNot Nothing AndAlso addresses.Length > 0 Then
-                                                          Using s As New System.Net.Sockets.Socket(System.Net.Sockets.AddressFamily.InterNetwork, System.Net.Sockets.SocketType.Stream, System.Net.Sockets.ProtocolType.Tcp)
-                                                              Dim result = s.BeginConnect(addresses(0), targetPort, Nothing, Nothing)
-                                                              Dim success = result.AsyncWaitHandle.WaitOne(500, False)
-                                                              If success AndAlso s.Connected Then
-                                                                  isOpen = True
-                                                                  s.EndConnect(result)
-                                                                  s.Close()
-                                                              End If
-                                                          End Using
-                                                      End If
-                                                  Catch ex As Exception
-                                                      isOpen = False
-                                                  End Try
-                                              End Sub)
-
-        If isOpen Then
-            ListBox1.Items.Add("Port " & targetPort & " is open")
-            ListBox2.Items.Add(targetPort.ToString())
-        Else
-            ListBox1.Items.Add("Port " & targetPort & " is not open")
-        End If
-
-        Label3.Text = "Open Ports: " & ListBox2.Items.Count.ToString()
-
-        If Timer1.Enabled Then
-            Timer1.Start()
-        End If
-    End Sub
-
-    Private Sub Button3_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button3.Click
-        ListBox1.Items.Add("Scanning: " + TextBox1.Text)
-        ListBox1.Items.Add("-------------------")
-        Button2.Enabled = True
-        Button1.Enabled = False
-        Timer1.Enabled = True
-        Timer1.Start()
-    End Sub
-
-    Private Sub Button2_Click_1(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button2.Click
-        Timer1.Stop()
-        Timer1.Enabled = False
-        Button1.Enabled = True
-        Button2.Enabled = False
-    End Sub
 End Class
+
+Namespace My
+    Partial Friend Class MySettings
+
+        <Global.System.Configuration.UserScopedSettingAttribute(), Global.System.Configuration.DefaultSettingValueAttribute("https://www.google.com")> _
+        Public Property HomePageUrl() As String
+            Get
+                Return If(CStr(Me("HomePageUrl")), "https://www.google.com")
+            End Get
+            Set(ByVal value As String)
+                Me("HomePageUrl") = value
+            End Set
+        End Property
+
+        <Global.System.Configuration.UserScopedSettingAttribute(), Global.System.Configuration.DefaultSettingValueAttribute("0")> _
+        Public Property StartupBehavior() As Integer
+            Get
+                Return CInt(Me("StartupBehavior"))
+            End Get
+            Set(ByVal value As Integer)
+                Me("StartupBehavior") = value
+            End Set
+        End Property
+
+        <Global.System.Configuration.UserScopedSettingAttribute(), Global.System.Configuration.DefaultSettingValueAttribute("0")> _
+        Public Property NewTabPage() As Integer
+            Get
+                Return CInt(Me("NewTabPage"))
+            End Get
+            Set(ByVal value As Integer)
+                Me("NewTabPage") = value
+            End Set
+        End Property
+
+        <Global.System.Configuration.UserScopedSettingAttribute(), Global.System.Configuration.DefaultSettingValueAttribute("Google")> _
+        Public Property SearchEngine() As String
+            Get
+                Return If(CStr(Me("SearchEngine")), "Google")
+            End Get
+            Set(ByVal value As String)
+                Me("SearchEngine") = value
+            End Set
+        End Property
+
+        <Global.System.Configuration.UserScopedSettingAttribute(), Global.System.Configuration.DefaultSettingValueAttribute("")> _
+        Public Property DownloadsFolder() As String
+            Get
+                Return CStr(Me("DownloadsFolder"))
+            End Get
+            Set(ByVal value As String)
+                Me("DownloadsFolder") = value
+            End Set
+        End Property
+
+        <Global.System.Configuration.UserScopedSettingAttribute(), Global.System.Configuration.DefaultSettingValueAttribute("1")> _
+        Public Property FontSize() As Integer
+            Get
+                Return CInt(Me("FontSize"))
+            End Get
+            Set(ByVal value As Integer)
+                Me("FontSize") = value
+            End Set
+        End Property
+
+        <Global.System.Configuration.UserScopedSettingAttribute(), Global.System.Configuration.DefaultSettingValueAttribute("False")> _
+        Public Property FullScreenOnStartup() As Boolean
+            Get
+                Return CBool(Me("FullScreenOnStartup"))
+            End Get
+            Set(ByVal value As Boolean)
+                Me("FullScreenOnStartup") = value
+            End Set
+        End Property
+
+        <Global.System.Configuration.UserScopedSettingAttribute(), Global.System.Configuration.DefaultSettingValueAttribute("True")> _
+        Public Property PermissionCamera() As Boolean
+            Get
+                Return CBool(Me("PermissionCamera"))
+            End Get
+            Set(ByVal value As Boolean)
+                Me("PermissionCamera") = value
+            End Set
+        End Property
+
+        <Global.System.Configuration.UserScopedSettingAttribute(), Global.System.Configuration.DefaultSettingValueAttribute("True")> _
+        Public Property PermissionMic() As Boolean
+            Get
+                Return CBool(Me("PermissionMic"))
+            End Get
+            Set(ByVal value As Boolean)
+                Me("PermissionMic") = value
+            End Set
+        End Property
+
+        <Global.System.Configuration.UserScopedSettingAttribute(), Global.System.Configuration.DefaultSettingValueAttribute("True")> _
+        Public Property PermissionLocation() As Boolean
+            Get
+                Return CBool(Me("PermissionLocation"))
+            End Get
+            Set(ByVal value As Boolean)
+                Me("PermissionLocation") = value
+            End Set
+        End Property
+
+        <Global.System.Configuration.UserScopedSettingAttribute(), Global.System.Configuration.DefaultSettingValueAttribute("True")> _
+        Public Property PermissionNotifications() As Boolean
+            Get
+                Return CBool(Me("PermissionNotifications"))
+            End Get
+            Set(ByVal value As Boolean)
+                Me("PermissionNotifications") = value
+            End Set
+        End Property
+
+        <Global.System.Configuration.UserScopedSettingAttribute(), Global.System.Configuration.DefaultSettingValueAttribute("False")> _
+        Public Property IncognitoEnabled() As Boolean
+            Get
+                Return CBool(Me("IncognitoEnabled"))
+            End Get
+            Set(ByVal value As Boolean)
+                Me("IncognitoEnabled") = value
+            End Set
+        End Property
+
+        <Global.System.Configuration.UserScopedSettingAttribute(), Global.System.Configuration.DefaultSettingValueAttribute("False")> _
+        Public Property HttpsOnlyMode() As Boolean
+            Get
+                Return CBool(Me("HttpsOnlyMode"))
+            End Get
+            Set(ByVal value As Boolean)
+                Me("HttpsOnlyMode") = value
+            End Set
+        End Property
+
+        <Global.System.Configuration.UserScopedSettingAttribute(), Global.System.Configuration.DefaultSettingValueAttribute("True")> _
+        Public Property AdBlockerEnabled() As Boolean
+            Get
+                Return CBool(Me("AdBlockerEnabled"))
+            End Get
+            Set(ByVal value As Boolean)
+                Me("AdBlockerEnabled") = value
+            End Set
+        End Property
+
+        <Global.System.Configuration.UserScopedSettingAttribute(), Global.System.Configuration.DefaultSettingValueAttribute("True")> _
+        Public Property MemorySaverEnabled() As Boolean
+            Get
+                Return CBool(Me("MemorySaverEnabled"))
+            End Get
+            Set(ByVal value As Boolean)
+                Me("MemorySaverEnabled") = value
+            End Set
+        End Property
+
+        <Global.System.Configuration.UserScopedSettingAttribute(), Global.System.Configuration.DefaultSettingValueAttribute("True")> _
+        Public Property HardwareAcceleration() As Boolean
+            Get
+                Return CBool(Me("HardwareAcceleration"))
+            End Get
+            Set(ByVal value As Boolean)
+                Me("HardwareAcceleration") = value
+            End Set
+        End Property
+
+        <Global.System.Configuration.UserScopedSettingAttribute(), Global.System.Configuration.DefaultSettingValueAttribute("0")> _
+        Public Property DnsOverHttpsProvider() As Integer
+            Get
+                Return CInt(Me("DnsOverHttpsProvider"))
+            End Get
+            Set(ByVal value As Integer)
+                Me("DnsOverHttpsProvider") = value
+            End Set
+        End Property
+
+        <Global.System.Configuration.UserScopedSettingAttribute(), Global.System.Configuration.DefaultSettingValueAttribute("")> _
+        Public Property CustomDnsServer() As String
+            Get
+                Return CStr(Me("CustomDnsServer"))
+            End Get
+            Set(ByVal value As String)
+                Me("CustomDnsServer") = value
+            End Set
+        End Property
+
+        <Global.System.Configuration.UserScopedSettingAttribute(), Global.System.Configuration.DefaultSettingValueAttribute("False")> _
+        Public Property CustomProxyEnabled() As Boolean
+            Get
+                Return CBool(Me("CustomProxyEnabled"))
+            End Get
+            Set(ByVal value As Boolean)
+                Me("CustomProxyEnabled") = value
+            End Set
+        End Property
+
+        <Global.System.Configuration.UserScopedSettingAttribute(), Global.System.Configuration.DefaultSettingValueAttribute("")> _
+        Public Property CustomProxyHost() As String
+            Get
+                Return CStr(Me("CustomProxyHost"))
+            End Get
+            Set(ByVal value As String)
+                Me("CustomProxyHost") = value
+            End Set
+        End Property
+
+        <Global.System.Configuration.UserScopedSettingAttribute(), Global.System.Configuration.DefaultSettingValueAttribute("8080")> _
+        Public Property CustomProxyPort() As Integer
+            Get
+                Return CInt(Me("CustomProxyPort"))
+            End Get
+            Set(ByVal value As Integer)
+                Me("CustomProxyPort") = value
+            End Set
+        End Property
+
+        <Global.System.Configuration.UserScopedSettingAttribute()> _
+        Public Property JsDisabledSites() As Global.System.Collections.Specialized.StringCollection
+            Get
+                Return CType(Me("JsDisabledSites"), Global.System.Collections.Specialized.StringCollection)
+            End Get
+            Set(ByVal value As Global.System.Collections.Specialized.StringCollection)
+                Me("JsDisabledSites") = value
+            End Set
+        End Property
+
+    End Class
+End Namespace

@@ -33,14 +33,27 @@ Public Class Form1
         Me.TopMost = True
     End Sub
 
+    Public Shared Function GetHomePageUrl() As String
+        If Not String.IsNullOrWhiteSpace(My.Settings.HomePageUrl) Then
+            Return AppManager.FixURL(My.Settings.HomePageUrl)
+        End If
+        Return Path.Combine(Application.StartupPath, "homepage", "index.html")
+    End Function
+
     Public Async Sub NavigateActiveTab(ByVal url As String)
         If String.IsNullOrWhiteSpace(url) Then Return
-        Dim target As String = AppManager.FixURL(url)
-        If wb IsNot Nothing Then
-            If wb.CoreWebView2 IsNot Nothing Then
-                wb.CoreWebView2.Navigate(target)
+        Dim target As String = AppManager.ResolveUrlOrSearch(url, My.Settings.SearchEngine)
+
+        Dim activeBrws As WebView2 = Nothing
+        If TabControl1.SelectedTab IsNot Nothing AndAlso TabControl1.SelectedTab.Controls.Count > 0 Then
+            activeBrws = TryCast(TabControl1.SelectedTab.Controls(0), WebView2)
+        End If
+
+        If activeBrws IsNot Nothing Then
+            If activeBrws.CoreWebView2 IsNot Nothing Then
+                activeBrws.CoreWebView2.Navigate(target)
             Else
-                wb.Source = New Uri(target)
+                activeBrws.Source = New Uri(target)
             End If
         Else
             Await CreateNewTab(target)
@@ -95,12 +108,37 @@ Public Class Form1
 
     Private Async Sub Form1_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
         Try
-            Dim brws = Await CreateNewTab(Path.Combine(Application.StartupPath, "homepage", "index.html"))
-            Me.Size = My.Settings.MainSize
-            Me.Location = My.Settings.MainLocation
+            If My.Settings.FullScreenOnStartup Then
+                FullScreen()
+                full = True
+            End If
+            Dim initialUrl As String = GetHomePageUrl()
+            Select Case My.Settings.StartupBehavior
+                Case 1
+                    initialUrl = "about:blank"
+                Case 2
+                    If My.Settings.History IsNot Nothing AndAlso My.Settings.History.Count > 0 Then
+                        initialUrl = My.Settings.History(My.Settings.History.Count - 1)
+                    End If
+                Case 3
+                    initialUrl = GetHomePageUrl()
+            End Select
+            Dim brws = Await CreateNewTab(initialUrl)
+            AdBlockEngine.LoadAllRules()
+            If tsbAdBlockBadge IsNot Nothing Then
+                tsbAdBlockBadge.Visible = My.Settings.ShowBlockedCount AndAlso My.Settings.AdBlockerEnabled
+                tsbAdBlockBadge.Text = "🛡️ " & AdBlockEngine.TotalBlockedCount
+            End If
+
+            If My.Settings.MainSize.Width > 200 AndAlso My.Settings.MainSize.Height > 200 Then
+                Me.Size = My.Settings.MainSize
+            End If
+            If CalendarToolStripMenuItem IsNot Nothing Then
+                CalendarToolStripMenuItem.Text = DateTime.Now.ToLongDateString()
+            End If
         Catch ex As Exception
+            System.Diagnostics.Debug.WriteLine("Form1_Load error: " & ex.Message)
         End Try
-        CalendarToolStripMenuItem.Text = DateTime.Now.ToLongDateString()
     End Sub
 
 
@@ -196,26 +234,27 @@ Public Class Form1
         End If
     End Sub
 
-    Private Sub PropertiesToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PropertiesToolStripMenuItem.Click
-        OpenDevTools()
+    Private Sub ViewToolStripMenuItem1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ViewToolStripMenuItem1.Click
+        Bookmarks.ShowDialog()
     End Sub
 
     Private Sub BookmarkThisPageToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles BookmarkThisPageToolStripMenuItem.Click
-        Try
-            If wb IsNot Nothing AndAlso wb.CoreWebView2 IsNot Nothing Then
-                Dim bmUrl As String = wb.CoreWebView2.Source
-                If My.Settings.Bookmarks Is Nothing Then My.Settings.Bookmarks = New System.Collections.Specialized.StringCollection()
-                My.Settings.Bookmarks.Add(bmUrl)
+        If wb IsNot Nothing AndAlso wb.CoreWebView2 IsNot Nothing Then
+            Dim currentUrl As String = wb.CoreWebView2.Source
+            Dim currentTitle As String = If(String.IsNullOrWhiteSpace(wb.CoreWebView2.DocumentTitle), currentUrl, wb.CoreWebView2.DocumentTitle)
+            If Not String.IsNullOrWhiteSpace(currentUrl) AndAlso currentUrl <> "about:blank" Then
+                If My.Settings.BookmarksTreeData Is Nothing Then
+                    My.Settings.BookmarksTreeData = New System.Collections.Specialized.StringCollection()
+                End If
+                My.Settings.BookmarksTreeData.Add("URL:0:" & currentTitle & ":" & currentUrl)
                 My.Settings.Save()
-                MsgBox(bmUrl & " Has Been Bookmarked!", MsgBoxStyle.OkOnly, "K-Browser")
+                MessageBox.Show("Page bookmarked successfully!", "Bookmark Saved", MessageBoxButtons.OK, MessageBoxIcon.Information)
             End If
-        Catch ex As Exception
-            System.Diagnostics.Debug.WriteLine("Error bookmarking page: " & ex.Message)
-        End Try
+        End If
     End Sub
 
-    Private Sub ViewToolStripMenuItem1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ViewToolStripMenuItem1.Click
-        Bookmarks.ShowDialog()
+    Private Sub PropertiesToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PropertiesToolStripMenuItem.Click
+        OpenDevTools()
     End Sub
 
     Private Sub HistoryToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles HistoryToolStripMenuItem.Click
@@ -235,7 +274,7 @@ Public Class Form1
     End Sub
 
     Private Sub ToolStripButton4_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton4.Click
-        NavigateActiveTab(Path.Combine(Application.StartupPath, "homepage", "index.html"))
+        NavigateActiveTab(GetHomePageUrl())
     End Sub
 
     Private Sub ToolStripButton5_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton5.Click
@@ -345,7 +384,7 @@ Public Class Form1
     End Sub
 
     Private Sub SetHomePageToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles SetHomePageToolStripMenuItem.Click
-        NavigateActiveTab(Path.Combine(Application.StartupPath, "homepage", "index.html"))
+        NavigateActiveTab(GetHomePageUrl())
     End Sub
 
     Private Async Sub NewTabToolStripMenuItem1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles NewTabToolStripMenuItem1.Click
@@ -558,30 +597,155 @@ Public Class Form1
             brws.CoreWebView2.Settings.IsWebMessageEnabled = True
             brws.CoreWebView2.Settings.AreDevToolsEnabled = True
 
+            Select Case My.Settings.FontSize
+                Case 0 : brws.ZoomFactor = 0.85
+                Case 2 : brws.ZoomFactor = 1.25
+                Case 3 : brws.ZoomFactor = 1.5
+                Case Else : brws.ZoomFactor = 1.0
+            End Select
+
             AddHandler brws.CoreWebView2.NavigationStarting, AddressOf WebView2_NavigationStarting
             AddHandler brws.CoreWebView2.NavigationCompleted, AddressOf WebView2_NavigationCompleted
             AddHandler brws.CoreWebView2.SourceChanged, AddressOf WebView2_SourceChanged
             AddHandler brws.CoreWebView2.DocumentTitleChanged, AddressOf WebView2_DocumentTitleChanged
             AddHandler brws.CoreWebView2.HistoryChanged, AddressOf WebView2_HistoryChanged
+            AddHandler brws.CoreWebView2.PermissionRequested, AddressOf WebView2_PermissionRequested
+            AddHandler brws.CoreWebView2.DownloadStarting, AddressOf WebView2_DownloadStarting
+
+            Try
+                brws.CoreWebView2.AddWebResourceRequestedFilter("*", CoreWebView2WebResourceContext.All)
+                AddHandler brws.CoreWebView2.WebResourceRequested, AddressOf WebView2_WebResourceRequested
+            Catch ex As Exception
+                System.Diagnostics.Debug.WriteLine("AddWebResourceRequestedFilter failed: " & ex.Message)
+            End Try
         End If
 
-        If Not String.IsNullOrEmpty(targetUrl) Then
-            Dim targetFix As String = AppManager.FixURL(targetUrl)
-            If brws.CoreWebView2 IsNot Nothing Then
-                brws.CoreWebView2.Navigate(targetFix)
-            Else
-                brws.Source = New Uri(targetFix)
-            End If
+        Dim effectiveUrl As String = targetUrl
+        If String.IsNullOrEmpty(effectiveUrl) Then
+            Select Case My.Settings.NewTabPage
+                Case 1 : effectiveUrl = GetHomePageUrl()
+                Case 2 : effectiveUrl = "about:blank"
+                Case Else : effectiveUrl = Path.Combine(Application.StartupPath, "homepage", "index.html")
+            End Select
+        End If
+
+        Dim targetFix As String = AppManager.ResolveUrlOrSearch(effectiveUrl, My.Settings.SearchEngine)
+        If brws.CoreWebView2 IsNot Nothing Then
+            brws.CoreWebView2.Navigate(targetFix)
+        Else
+            brws.Source = New Uri(targetFix)
         End If
 
         Return brws
     End Function
 
+    Private Sub WebView2_DownloadStarting(ByVal sender As Object, ByVal e As CoreWebView2DownloadStartingEventArgs)
+        Try
+            If Not String.IsNullOrWhiteSpace(My.Settings.DownloadsFolder) AndAlso System.IO.Directory.Exists(My.Settings.DownloadsFolder) Then
+                e.ResultFilePath = System.IO.Path.Combine(My.Settings.DownloadsFolder, System.IO.Path.GetFileName(e.ResultFilePath))
+            End If
+        Catch ex As Exception
+        End Try
+    End Sub
+
+    Private Sub WebView2_PermissionRequested(ByVal sender As Object, ByVal e As CoreWebView2PermissionRequestedEventArgs)
+        Select Case e.PermissionKind
+            Case CoreWebView2PermissionKind.Camera
+                If Not My.Settings.PermissionCamera Then e.State = CoreWebView2PermissionState.Deny
+            Case CoreWebView2PermissionKind.Microphone
+                If Not My.Settings.PermissionMic Then e.State = CoreWebView2PermissionState.Deny
+            Case CoreWebView2PermissionKind.Geolocation
+                If Not My.Settings.PermissionLocation Then e.State = CoreWebView2PermissionState.Deny
+            Case CoreWebView2PermissionKind.Notifications
+                If Not My.Settings.PermissionNotifications Then e.State = CoreWebView2PermissionState.Deny
+        End Select
+    End Sub
+
+    Private Sub WebView2_WebResourceRequested(ByVal sender As Object, ByVal e As CoreWebView2WebResourceRequestedEventArgs)
+        If Not My.Settings.AdBlockerEnabled Then Return
+
+        Dim isBlocked As Boolean = False
+        If e.ResourceContext = CoreWebView2WebResourceContext.Document Then
+            isBlocked = AdBlockEngine.ShouldBlockDocument(e.Request.Uri)
+        Else
+            isBlocked = AdBlockEngine.ShouldBlock(e.Request.Uri)
+        End If
+
+        If isBlocked Then
+            Dim core = TryCast(sender, CoreWebView2)
+            If core IsNot Nothing Then
+                Try
+                    e.Response = core.Environment.CreateWebResourceResponse(Nothing, 403, "Blocked by AdBlocker", "Content-Type: text/plain")
+                Catch
+                End Try
+            End If
+            IncrementBlockedAdCount()
+        End If
+    End Sub
+
+    Private Sub IncrementBlockedAdCount()
+        If Me.InvokeRequired Then
+            Me.BeginInvoke(Sub() IncrementBlockedAdCount())
+            Return
+        End If
+        AdBlockEngine.TotalBlockedCount += 1
+        If tsbAdBlockBadge IsNot Nothing Then
+            tsbAdBlockBadge.Text = "🛡️ " & AdBlockEngine.TotalBlockedCount
+            tsbAdBlockBadge.Visible = My.Settings.ShowBlockedCount AndAlso My.Settings.AdBlockerEnabled
+        End If
+    End Sub
+
+    Private Sub tsbAdBlockBadge_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles tsbAdBlockBadge.Click
+        AdBlockerSettings.ShowDialog()
+        If tsbAdBlockBadge IsNot Nothing Then
+            tsbAdBlockBadge.Visible = My.Settings.ShowBlockedCount AndAlso My.Settings.AdBlockerEnabled
+            tsbAdBlockBadge.Text = "🛡️ " & AdBlockEngine.TotalBlockedCount
+        End If
+    End Sub
+
     Private Sub WebView2_NavigationStarting(ByVal sender As Object, ByVal e As CoreWebView2NavigationStartingEventArgs)
         Dim url As String = e.Uri
         If String.IsNullOrEmpty(url) OrElse url = "about:blank" Then Return
 
-        ' 1. Blocked Sites Check
+        ' 1. HTTPS-Only Mode Check
+        If My.Settings.HttpsOnlyMode AndAlso url.StartsWith("http://", StringComparison.OrdinalIgnoreCase) Then
+            e.Cancel = True
+            Dim httpsUrl As String = "https://" & url.Substring(7)
+            Dim core = TryCast(sender, CoreWebView2)
+            If core IsNot Nothing Then core.Navigate(httpsUrl)
+            Return
+        End If
+
+        ' 2. Ad Blocker Check
+        If My.Settings.AdBlockerEnabled Then
+            Dim adDomains As String() = {"doubleclick.net", "adservice.google.com", "adnxs.com", "googlesyndication.com", "taboola.com", "outbrain.com"}
+            For Each adDomain As String In adDomains
+                If url.ToLower().Contains(adDomain) Then
+                    e.Cancel = True
+                    Return
+                End If
+            Next
+        End If
+
+        ' 3. Per-Site JavaScript Check
+        If My.Settings.JsDisabledSites IsNot Nothing AndAlso My.Settings.JsDisabledSites.Count > 0 Then
+            Dim core = TryCast(sender, CoreWebView2)
+            If core IsNot Nothing Then
+                Dim isJsDisabled As Boolean = False
+                If Uri.IsWellFormedUriString(url, UriKind.Absolute) Then
+                    Dim u As New Uri(url)
+                    For Each disabledDomain As String In My.Settings.JsDisabledSites
+                        If Not String.IsNullOrEmpty(disabledDomain) AndAlso u.Host.ToLower().Contains(disabledDomain.ToLower()) Then
+                            isJsDisabled = True
+                            Exit For
+                        End If
+                    Next
+                End If
+                core.Settings.IsScriptEnabled = Not isJsDisabled
+            End If
+        End If
+
+        ' 4. Blocked Sites Check
         If My.Settings.BlockedSites IsNot Nothing Then
             For Each blockedUrl As String In My.Settings.BlockedSites
                 If Not String.IsNullOrEmpty(blockedUrl) Then
@@ -594,7 +758,7 @@ Public Class Form1
             Next
         End If
 
-        ' 2. Phishing Sites Check
+        ' 5. Phishing Sites Check
         If My.Settings.UsePhishingFilter AndAlso My.Settings.PhishingSites IsNot Nothing Then
             For Each phishingUrl As String In My.Settings.PhishingSites
                 If Not String.IsNullOrEmpty(phishingUrl) Then
@@ -683,10 +847,29 @@ Public Class Form1
                 If wb.CoreWebView2 IsNot Nothing Then
                     ToolStripTextBox1.Text = wb.CoreWebView2.Source
                     Label1.Text = wb.CoreWebView2.DocumentTitle
+                    Try
+                        wb.CoreWebView2.Resume()
+                    Catch ex As Exception
+                    End Try
                 End If
             End If
         Else
             wb = Nothing
+        End If
+
+        ' Memory Saver: Suspend background inactive tabs
+        If My.Settings.MemorySaverEnabled Then
+            For Each page As TabPage In TabControl1.TabPages
+                If page IsNot TabControl1.SelectedTab AndAlso page.Controls.Count > 0 Then
+                    Dim view = TryCast(page.Controls(0), WebView2)
+                    If view IsNot Nothing AndAlso view.CoreWebView2 IsNot Nothing Then
+                        Try
+                            view.CoreWebView2.TrySuspendAsync()
+                        Catch ex As Exception
+                        End Try
+                    End If
+                End If
+            Next
         End If
     End Sub
 
@@ -933,6 +1116,10 @@ Public Class Form1
 
     Private Sub ProxySettingsToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ProxySettingsToolStripMenuItem.Click
         Form3.ShowDialog()
+    End Sub
+
+    Private Sub SettingsToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles SettingsToolStripMenuItem.Click
+        Settings.ShowDialog()
     End Sub
 
     Private Sub wb_ResizeEnd(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.ResizeEnd

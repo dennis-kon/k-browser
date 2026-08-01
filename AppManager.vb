@@ -29,4 +29,30 @@ Public Class AppManager
         Return "http://" & trimmed
     End Function
 
+    Public Shared Function ResolveUrlOrSearch(ByVal input As String, Optional ByVal engine As String = "Google") As String
+        If String.IsNullOrWhiteSpace(input) Then Return "about:blank"
+        Dim trimmed As String = input.Trim()
+        Dim lowered As String = trimmed.ToLowerInvariant()
+
+        If lowered.StartsWith("http://") OrElse lowered.StartsWith("https://") OrElse lowered.StartsWith("file://") OrElse lowered.StartsWith("about:") OrElse lowered.StartsWith("ftp://") Then
+            Return trimmed
+        End If
+
+        If trimmed.Contains(" ") OrElse (Not trimmed.Contains(".") AndAlso Not trimmed.Contains(":")) Then
+            Dim query As String = Uri.EscapeDataString(trimmed)
+            Select Case If(engine, "Google").ToLowerInvariant()
+                Case "bing"
+                    Return "https://www.bing.com/search?q=" & query
+                Case "duckduckgo"
+                    Return "https://duckduckgo.com/?q=" & query
+                Case "yahoo"
+                    Return "https://search.yahoo.com/search?p=" & query
+                Case Else
+                    Return "https://www.google.com/search?q=" & query
+            End Select
+        End If
+
+        Return FixURL(trimmed)
+    End Function
+
 End Class

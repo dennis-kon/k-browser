@@ -113,6 +113,13 @@
     </Compile>
     <Compile Include="ApplicationEvents.vb" />
     <Compile Include="AppManager.vb" />
+    <Compile Include="AdBlockEngine.vb" />
+    <Compile Include="AdBlockerSettings.Designer.vb">
+      <DependentUpon>AdBlockerSettings.vb</DependentUpon>
+    </Compile>
+    <Compile Include="AdBlockerSettings.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Bookmarks.Designer.vb">
       <DependentUpon>Bookmarks.vb</DependentUpon>
     </Compile>

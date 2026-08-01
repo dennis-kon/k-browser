@@ -19,686 +19,879 @@ Partial Class Settings
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-        Me.components = New System.ComponentModel.Container()
-        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Settings))
-        Me.cmSearch = New System.Windows.Forms.ContextMenuStrip(Me.components)
-        Me.cmSearchRemove = New System.Windows.Forms.ToolStripMenuItem()
+        Me.TabControl1 = New System.Windows.Forms.TabControl()
+        Me.tpBrowser = New System.Windows.Forms.TabPage()
+        Me.lblHomePage = New System.Windows.Forms.Label()
+        Me.txtHomePage = New System.Windows.Forms.TextBox()
+        Me.btnDefaultHomePage = New System.Windows.Forms.Button()
+        Me.grpStartup = New System.Windows.Forms.GroupBox()
+        Me.rbStartupHome = New System.Windows.Forms.RadioButton()
+        Me.rbStartupBlank = New System.Windows.Forms.RadioButton()
+        Me.rbStartupRestore = New System.Windows.Forms.RadioButton()
+        Me.rbStartupSpecific = New System.Windows.Forms.RadioButton()
+        Me.lblNewTab = New System.Windows.Forms.Label()
+        Me.cmbNewTab = New System.Windows.Forms.ComboBox()
+        Me.lblSearchEngine = New System.Windows.Forms.Label()
+        Me.cmbSearchEngine = New System.Windows.Forms.ComboBox()
+        Me.lblDownloads = New System.Windows.Forms.Label()
+        Me.txtDownloads = New System.Windows.Forms.TextBox()
+        Me.btnBrowseDownloads = New System.Windows.Forms.Button()
+        Me.lblFontSize = New System.Windows.Forms.Label()
+        Me.cmbFontSize = New System.Windows.Forms.ComboBox()
+        Me.chkFullScreen = New System.Windows.Forms.CheckBox()
+        Me.tpPrivacy = New System.Windows.Forms.TabPage()
+        Me.grpPermissions = New System.Windows.Forms.GroupBox()
+        Me.chkPermCamera = New System.Windows.Forms.CheckBox()
+        Me.chkPermMic = New System.Windows.Forms.CheckBox()
+        Me.chkPermLocation = New System.Windows.Forms.CheckBox()
+        Me.chkPermNotifications = New System.Windows.Forms.CheckBox()
+        Me.chkIncognito = New System.Windows.Forms.CheckBox()
+        Me.chkHttpsOnly = New System.Windows.Forms.CheckBox()
+        Me.chkAdBlocker = New System.Windows.Forms.CheckBox()
+        Me.btnConfigureAdBlocker = New System.Windows.Forms.Button()
+        Me.chkPhishing = New System.Windows.Forms.CheckBox()
+        Me.chkAllowPop = New System.Windows.Forms.CheckBox()
+        Me.grpJsSites = New System.Windows.Forms.GroupBox()
+        Me.lbJsDisabled = New System.Windows.Forms.ListBox()
+        Me.txtJsDomain = New System.Windows.Forms.TextBox()
+        Me.btnAddJsDomain = New System.Windows.Forms.Button()
+        Me.btnRemoveJsDomain = New System.Windows.Forms.Button()
+        Me.grpBlocked = New System.Windows.Forms.GroupBox()
+        Me.lbBlocked = New System.Windows.Forms.ListBox()
+        Me.txtBlock = New System.Windows.Forms.TextBox()
+        Me.btnAddBlock = New System.Windows.Forms.Button()
+        Me.btnRemoveBlock = New System.Windows.Forms.Button()
+        Me.tpPerformance = New System.Windows.Forms.TabPage()
+        Me.grpPerfGeneral = New System.Windows.Forms.GroupBox()
+        Me.chkMemorySaver = New System.Windows.Forms.CheckBox()
+        Me.chkHardwareAccel = New System.Windows.Forms.CheckBox()
+        Me.grpDoH = New System.Windows.Forms.GroupBox()
+        Me.lblDoH = New System.Windows.Forms.Label()
+        Me.cmbDoH = New System.Windows.Forms.ComboBox()
+        Me.lblDoHCustom = New System.Windows.Forms.Label()
+        Me.txtDoHCustom = New System.Windows.Forms.TextBox()
+        Me.tpAdvanced = New System.Windows.Forms.TabPage()
+        Me.grpDns = New System.Windows.Forms.GroupBox()
+        Me.lblCustomDns = New System.Windows.Forms.Label()
+        Me.txtCustomDns = New System.Windows.Forms.TextBox()
+        Me.grpProxy = New System.Windows.Forms.GroupBox()
+        Me.chkEnableProxy = New System.Windows.Forms.CheckBox()
+        Me.lblProxyHost = New System.Windows.Forms.Label()
+        Me.txtProxyHost = New System.Windows.Forms.TextBox()
+        Me.lblProxyPort = New System.Windows.Forms.Label()
+        Me.txtProxyPort = New System.Windows.Forms.TextBox()
+        Me.btnConfigureProxy = New System.Windows.Forms.Button()
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.btnOK = New System.Windows.Forms.Button()
-        Me.HelpProvider1 = New System.Windows.Forms.HelpProvider()
-        Me.txtPop = New System.Windows.Forms.TextBox()
-        Me.lbPop = New System.Windows.Forms.ListBox()
-        Me.chkAllowPop = New System.Windows.Forms.CheckBox()
-        Me.TabPage7 = New System.Windows.Forms.TabPage()
-        Me.GroupBox6 = New System.Windows.Forms.GroupBox()
-        Me.chkPhishing = New System.Windows.Forms.CheckBox()
-        Me.btnRemoveAllPhish = New System.Windows.Forms.Button()
-        Me.btnRemovePhish = New System.Windows.Forms.Button()
-        Me.Label11 = New System.Windows.Forms.Label()
-        Me.Label12 = New System.Windows.Forms.Label()
-        Me.lbPhishing = New System.Windows.Forms.ListBox()
-        Me.btnAddPhish = New System.Windows.Forms.Button()
-        Me.txtPhishing = New System.Windows.Forms.TextBox()
-        Me.TabPage3 = New System.Windows.Forms.TabPage()
-        Me.GroupBox2 = New System.Windows.Forms.GroupBox()
-        Me.btnBlockRemoveAll = New System.Windows.Forms.Button()
-        Me.btnRemoveBlock = New System.Windows.Forms.Button()
-        Me.Label3 = New System.Windows.Forms.Label()
-        Me.Label4 = New System.Windows.Forms.Label()
-        Me.lbBlocked = New System.Windows.Forms.ListBox()
-        Me.btnAddBlock = New System.Windows.Forms.Button()
-        Me.txtBlock = New System.Windows.Forms.TextBox()
-        Me.TabPage1 = New System.Windows.Forms.TabPage()
-        Me.GroupBox4 = New System.Windows.Forms.GroupBox()
-        Me.btnPopRemoveAll = New System.Windows.Forms.Button()
-        Me.btnPopRemove = New System.Windows.Forms.Button()
-        Me.Label5 = New System.Windows.Forms.Label()
-        Me.Label6 = New System.Windows.Forms.Label()
-        Me.btnPopAdd = New System.Windows.Forms.Button()
-        Me.GroupBox3 = New System.Windows.Forms.GroupBox()
-        Me.chkPopInfo = New System.Windows.Forms.CheckBox()
-        Me.chkPopSound = New System.Windows.Forms.CheckBox()
-        Me.TabControl1 = New System.Windows.Forms.TabControl()
-        Me.TabPage2 = New System.Windows.Forms.TabPage()
-        Me.Panel2 = New System.Windows.Forms.Panel()
-        Me.TextBox3 = New System.Windows.Forms.TextBox()
-        Me.Label8 = New System.Windows.Forms.Label()
-        Me.Button2 = New System.Windows.Forms.Button()
-        Me.Button3 = New System.Windows.Forms.Button()
-        Me.ListBox2 = New System.Windows.Forms.ListBox()
-        Me.Label7 = New System.Windows.Forms.Label()
-        Me.ListBox1 = New System.Windows.Forms.ListBox()
-        Me.Button1 = New System.Windows.Forms.Button()
-        Me.TextBox2 = New System.Windows.Forms.TextBox()
-        Me.TextBox1 = New System.Windows.Forms.TextBox()
-        Me.Label2 = New System.Windows.Forms.Label()
-        Me.Label1 = New System.Windows.Forms.Label()
-        Me.Timer1 = New System.Windows.Forms.Timer(Me.components)
-        Me.Label9 = New System.Windows.Forms.Label()
-        Me.cmSearch.SuspendLayout()
-        Me.Panel1.SuspendLayout()
-        Me.TabPage7.SuspendLayout()
-        Me.GroupBox6.SuspendLayout()
-        Me.TabPage3.SuspendLayout()
-        Me.GroupBox2.SuspendLayout()
-        Me.TabPage1.SuspendLayout()
-        Me.GroupBox4.SuspendLayout()
-        Me.GroupBox3.SuspendLayout()
+        Me.btnCancel = New System.Windows.Forms.Button()
+        Me.btnApply = New System.Windows.Forms.Button()
         Me.TabControl1.SuspendLayout()
-        Me.TabPage2.SuspendLayout()
-        Me.Panel2.SuspendLayout()
+        Me.tpBrowser.SuspendLayout()
+        Me.grpStartup.SuspendLayout()
+        Me.tpPrivacy.SuspendLayout()
+        Me.grpPermissions.SuspendLayout()
+        Me.grpJsSites.SuspendLayout()
+        Me.grpBlocked.SuspendLayout()
+        Me.tpPerformance.SuspendLayout()
+        Me.grpPerfGeneral.SuspendLayout()
+        Me.grpDoH.SuspendLayout()
+        Me.tpAdvanced.SuspendLayout()
+        Me.grpDns.SuspendLayout()
+        Me.grpProxy.SuspendLayout()
+        Me.Panel1.SuspendLayout()
         Me.SuspendLayout()
         '
-        'cmSearch
+        'TabControl1
         '
-        Me.cmSearch.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.cmSearchRemove})
-        Me.cmSearch.Name = "cmSearch"
-        Me.cmSearch.Size = New System.Drawing.Size(118, 26)
+        Me.TabControl1.Controls.Add(Me.tpBrowser)
+        Me.TabControl1.Controls.Add(Me.tpPrivacy)
+        Me.TabControl1.Controls.Add(Me.tpPerformance)
+        Me.TabControl1.Controls.Add(Me.tpAdvanced)
+        Me.TabControl1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TabControl1.Location = New System.Drawing.Point(0, 0)
+        Me.TabControl1.Name = "TabControl1"
+        Me.TabControl1.SelectedIndex = 0
+        Me.TabControl1.Size = New System.Drawing.Size(560, 435)
+        Me.TabControl1.TabIndex = 0
         '
-        'cmSearchRemove
+        'tpBrowser
         '
-        Me.cmSearchRemove.Name = "cmSearchRemove"
-        Me.cmSearchRemove.Size = New System.Drawing.Size(117, 22)
-        Me.cmSearchRemove.Text = "Remove"
+        Me.tpBrowser.Controls.Add(Me.lblHomePage)
+        Me.tpBrowser.Controls.Add(Me.txtHomePage)
+        Me.tpBrowser.Controls.Add(Me.btnDefaultHomePage)
+        Me.tpBrowser.Controls.Add(Me.grpStartup)
+        Me.tpBrowser.Controls.Add(Me.lblNewTab)
+        Me.tpBrowser.Controls.Add(Me.cmbNewTab)
+        Me.tpBrowser.Controls.Add(Me.lblSearchEngine)
+        Me.tpBrowser.Controls.Add(Me.cmbSearchEngine)
+        Me.tpBrowser.Controls.Add(Me.lblDownloads)
+        Me.tpBrowser.Controls.Add(Me.txtDownloads)
+        Me.tpBrowser.Controls.Add(Me.btnBrowseDownloads)
+        Me.tpBrowser.Controls.Add(Me.lblFontSize)
+        Me.tpBrowser.Controls.Add(Me.cmbFontSize)
+        Me.tpBrowser.Controls.Add(Me.chkFullScreen)
+        Me.tpBrowser.Location = New System.Drawing.Point(4, 22)
+        Me.tpBrowser.Name = "tpBrowser"
+        Me.tpBrowser.Padding = New System.Windows.Forms.Padding(10)
+        Me.tpBrowser.Size = New System.Drawing.Size(552, 409)
+        Me.tpBrowser.TabIndex = 0
+        Me.tpBrowser.Text = "Browser Settings"
+        Me.tpBrowser.UseVisualStyleBackColor = True
         '
-        'Panel1
+        'lblHomePage
         '
-        Me.Panel1.Controls.Add(Me.btnOK)
-        Me.Panel1.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.Panel1.Location = New System.Drawing.Point(0, 401)
-        Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(443, 32)
-        Me.Panel1.TabIndex = 1
+        Me.lblHomePage.AutoSize = True
+        Me.lblHomePage.Location = New System.Drawing.Point(13, 15)
+        Me.lblHomePage.Name = "lblHomePage"
+        Me.lblHomePage.Size = New System.Drawing.Size(83, 13)
+        Me.lblHomePage.Text = "Home Page URL:"
         '
-        'btnOK
+        'txtHomePage
         '
-        Me.btnOK.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btnOK.Location = New System.Drawing.Point(350, 2)
-        Me.btnOK.Name = "btnOK"
-        Me.btnOK.Size = New System.Drawing.Size(88, 27)
-        Me.btnOK.TabIndex = 0
-        Me.btnOK.Text = "OK"
-        Me.btnOK.UseVisualStyleBackColor = True
+        Me.txtHomePage.Location = New System.Drawing.Point(135, 12)
+        Me.txtHomePage.Name = "txtHomePage"
+        Me.txtHomePage.Size = New System.Drawing.Size(280, 21)
+        Me.txtHomePage.TabIndex = 1
         '
-        'txtPop
+        'btnDefaultHomePage
         '
-        Me.HelpProvider1.SetHelpString(Me.txtPop, "URL of site you want to add to allowed list (http://www.microsoft.com)")
-        Me.txtPop.Location = New System.Drawing.Point(6, 31)
-        Me.txtPop.Name = "txtPop"
-        Me.HelpProvider1.SetShowHelp(Me.txtPop, True)
-        Me.txtPop.Size = New System.Drawing.Size(283, 21)
-        Me.txtPop.TabIndex = 0
+        Me.btnDefaultHomePage.Location = New System.Drawing.Point(425, 10)
+        Me.btnDefaultHomePage.Name = "btnDefaultHomePage"
+        Me.btnDefaultHomePage.Size = New System.Drawing.Size(110, 25)
+        Me.btnDefaultHomePage.TabIndex = 2
+        Me.btnDefaultHomePage.Text = "Use Default"
+        Me.btnDefaultHomePage.UseVisualStyleBackColor = True
         '
-        'lbPop
+        'grpStartup
         '
-        Me.lbPop.FormattingEnabled = True
-        Me.HelpProvider1.SetHelpString(Me.lbPop, "This is a list of sites where popups are allowed. You can use shift + click to al" & _
-                "low a popup at anytime.")
-        Me.lbPop.Location = New System.Drawing.Point(6, 74)
-        Me.lbPop.Name = "lbPop"
-        Me.HelpProvider1.SetShowHelp(Me.lbPop, True)
-        Me.lbPop.Size = New System.Drawing.Size(283, 173)
-        Me.lbPop.TabIndex = 2
+        Me.grpStartup.Controls.Add(Me.rbStartupHome)
+        Me.grpStartup.Controls.Add(Me.rbStartupBlank)
+        Me.grpStartup.Controls.Add(Me.rbStartupRestore)
+        Me.grpStartup.Controls.Add(Me.rbStartupSpecific)
+        Me.grpStartup.Location = New System.Drawing.Point(16, 45)
+        Me.grpStartup.Name = "grpStartup"
+        Me.grpStartup.Size = New System.Drawing.Size(519, 75)
+        Me.grpStartup.TabIndex = 3
+        Me.grpStartup.TabStop = False
+        Me.grpStartup.Text = "Startup Behavior"
         '
-        'chkAllowPop
+        'rbStartupHome
         '
-        Me.chkAllowPop.AutoSize = True
-        Me.HelpProvider1.SetHelpString(Me.chkAllowPop, "Enables or disables the popup blocker feature.")
-        Me.chkAllowPop.Location = New System.Drawing.Point(11, 7)
-        Me.chkAllowPop.Name = "chkAllowPop"
-        Me.HelpProvider1.SetShowHelp(Me.chkAllowPop, True)
-        Me.chkAllowPop.Size = New System.Drawing.Size(128, 17)
-        Me.chkAllowPop.TabIndex = 7
-        Me.chkAllowPop.Text = "Enable popup blocker"
-        Me.chkAllowPop.UseVisualStyleBackColor = True
+        Me.rbStartupHome.AutoSize = True
+        Me.rbStartupHome.Checked = True
+        Me.rbStartupHome.Location = New System.Drawing.Point(15, 22)
+        Me.rbStartupHome.Name = "rbStartupHome"
+        Me.rbStartupHome.Size = New System.Drawing.Size(107, 17)
+        Me.rbStartupHome.TabIndex = 0
+        Me.rbStartupHome.TabStop = True
+        Me.rbStartupHome.Text = "Open Home page"
+        Me.rbStartupHome.UseVisualStyleBackColor = True
         '
-        'TabPage7
+        'rbStartupBlank
         '
-        Me.TabPage7.Controls.Add(Me.GroupBox6)
-        Me.TabPage7.Location = New System.Drawing.Point(4, 22)
-        Me.TabPage7.Name = "TabPage7"
-        Me.TabPage7.Padding = New System.Windows.Forms.Padding(3)
-        Me.TabPage7.Size = New System.Drawing.Size(435, 375)
-        Me.TabPage7.TabIndex = 6
-        Me.TabPage7.Text = "Phishing"
-        Me.TabPage7.UseVisualStyleBackColor = True
+        Me.rbStartupBlank.AutoSize = True
+        Me.rbStartupBlank.Location = New System.Drawing.Point(150, 22)
+        Me.rbStartupBlank.Name = "rbStartupBlank"
+        Me.rbStartupBlank.Size = New System.Drawing.Size(103, 17)
+        Me.rbStartupBlank.TabIndex = 1
+        Me.rbStartupBlank.Text = "Open Blank page"
+        Me.rbStartupBlank.UseVisualStyleBackColor = True
         '
-        'GroupBox6
+        'rbStartupRestore
         '
-        Me.GroupBox6.Controls.Add(Me.chkPhishing)
-        Me.GroupBox6.Controls.Add(Me.btnRemoveAllPhish)
-        Me.GroupBox6.Controls.Add(Me.btnRemovePhish)
-        Me.GroupBox6.Controls.Add(Me.Label11)
-        Me.GroupBox6.Controls.Add(Me.Label12)
-        Me.GroupBox6.Controls.Add(Me.lbPhishing)
-        Me.GroupBox6.Controls.Add(Me.btnAddPhish)
-        Me.GroupBox6.Controls.Add(Me.txtPhishing)
-        Me.GroupBox6.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.GroupBox6.Location = New System.Drawing.Point(3, 3)
-        Me.GroupBox6.Name = "GroupBox6"
-        Me.GroupBox6.Size = New System.Drawing.Size(429, 369)
-        Me.GroupBox6.TabIndex = 4
-        Me.GroupBox6.TabStop = False
-        Me.GroupBox6.Text = "Phishing Manager"
+        Me.rbStartupRestore.AutoSize = True
+        Me.rbStartupRestore.Location = New System.Drawing.Point(15, 45)
+        Me.rbStartupRestore.Name = "rbStartupRestore"
+        Me.rbStartupRestore.Size = New System.Drawing.Size(139, 17)
+        Me.rbStartupRestore.TabIndex = 2
+        Me.rbStartupRestore.Text = "Restore previous session"
+        Me.rbStartupRestore.UseVisualStyleBackColor = True
+        '
+        'rbStartupSpecific
+        '
+        Me.rbStartupSpecific.AutoSize = True
+        Me.rbStartupSpecific.Location = New System.Drawing.Point(150, 45)
+        Me.rbStartupSpecific.Name = "rbStartupSpecific"
+        Me.rbStartupSpecific.Size = New System.Drawing.Size(117, 17)
+        Me.rbStartupSpecific.TabIndex = 3
+        Me.rbStartupSpecific.Text = "Open specific page"
+        Me.rbStartupSpecific.UseVisualStyleBackColor = True
+        '
+        'lblNewTab
+        '
+        Me.lblNewTab.AutoSize = True
+        Me.lblNewTab.Location = New System.Drawing.Point(13, 135)
+        Me.lblNewTab.Name = "lblNewTab"
+        Me.lblNewTab.Size = New System.Drawing.Size(81, 13)
+        Me.lblNewTab.Text = "New Tab Page:"
+        '
+        'cmbNewTab
+        '
+        Me.cmbNewTab.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.cmbNewTab.FormattingEnabled = True
+        Me.cmbNewTab.Items.AddRange(New Object() {"Default Page", "Home Page", "Blank Page"})
+        Me.cmbNewTab.Location = New System.Drawing.Point(135, 132)
+        Me.cmbNewTab.Name = "cmbNewTab"
+        Me.cmbNewTab.Size = New System.Drawing.Size(280, 21)
+        Me.cmbNewTab.TabIndex = 4
+        '
+        'lblSearchEngine
+        '
+        Me.lblSearchEngine.AutoSize = True
+        Me.lblSearchEngine.Location = New System.Drawing.Point(13, 170)
+        Me.lblSearchEngine.Name = "lblSearchEngine"
+        Me.lblSearchEngine.Size = New System.Drawing.Size(114, 13)
+        Me.lblSearchEngine.Text = "Default Search Engine:"
+        '
+        'cmbSearchEngine
+        '
+        Me.cmbSearchEngine.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.cmbSearchEngine.FormattingEnabled = True
+        Me.cmbSearchEngine.Items.AddRange(New Object() {"Google", "Bing", "DuckDuckGo", "Yahoo"})
+        Me.cmbSearchEngine.Location = New System.Drawing.Point(135, 167)
+        Me.cmbSearchEngine.Name = "cmbSearchEngine"
+        Me.cmbSearchEngine.Size = New System.Drawing.Size(280, 21)
+        Me.cmbSearchEngine.TabIndex = 5
+        '
+        'lblDownloads
+        '
+        Me.lblDownloads.AutoSize = True
+        Me.lblDownloads.Location = New System.Drawing.Point(13, 205)
+        Me.lblDownloads.Name = "lblDownloads"
+        Me.lblDownloads.Size = New System.Drawing.Size(95, 13)
+        Me.lblDownloads.Text = "Downloads Folder:"
+        '
+        'txtDownloads
+        '
+        Me.txtDownloads.Location = New System.Drawing.Point(135, 202)
+        Me.txtDownloads.Name = "txtDownloads"
+        Me.txtDownloads.Size = New System.Drawing.Size(280, 21)
+        Me.txtDownloads.TabIndex = 6
+        '
+        'btnBrowseDownloads
+        '
+        Me.btnBrowseDownloads.Location = New System.Drawing.Point(425, 200)
+        Me.btnBrowseDownloads.Name = "btnBrowseDownloads"
+        Me.btnBrowseDownloads.Size = New System.Drawing.Size(110, 25)
+        Me.btnBrowseDownloads.TabIndex = 7
+        Me.btnBrowseDownloads.Text = "Browse..."
+        Me.btnBrowseDownloads.UseVisualStyleBackColor = True
+        '
+        'lblFontSize
+        '
+        Me.lblFontSize.AutoSize = True
+        Me.lblFontSize.Location = New System.Drawing.Point(13, 240)
+        Me.lblFontSize.Name = "lblFontSize"
+        Me.lblFontSize.Size = New System.Drawing.Size(56, 13)
+        Me.lblFontSize.Text = "Font Size:"
+        '
+        'cmbFontSize
+        '
+        Me.cmbFontSize.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.cmbFontSize.FormattingEnabled = True
+        Me.cmbFontSize.Items.AddRange(New Object() {"Small", "Medium", "Large", "Extra Large"})
+        Me.cmbFontSize.Location = New System.Drawing.Point(135, 237)
+        Me.cmbFontSize.Name = "cmbFontSize"
+        Me.cmbFontSize.Size = New System.Drawing.Size(280, 21)
+        Me.cmbFontSize.TabIndex = 8
+        '
+        'chkFullScreen
+        '
+        Me.chkFullScreen.AutoSize = True
+        Me.chkFullScreen.Location = New System.Drawing.Point(135, 275)
+        Me.chkFullScreen.Name = "chkFullScreen"
+        Me.chkFullScreen.Size = New System.Drawing.Size(211, 17)
+        Me.chkFullScreen.TabIndex = 9
+        Me.chkFullScreen.Text = "Launch in Full-Screen mode by default"
+        Me.chkFullScreen.UseVisualStyleBackColor = True
+        '
+        'tpPrivacy
+        '
+        Me.tpPrivacy.Controls.Add(Me.grpPermissions)
+        Me.tpPrivacy.Controls.Add(Me.chkIncognito)
+        Me.tpPrivacy.Controls.Add(Me.chkHttpsOnly)
+        Me.tpPrivacy.Controls.Add(Me.chkAdBlocker)
+        Me.tpPrivacy.Controls.Add(Me.btnConfigureAdBlocker)
+        Me.tpPrivacy.Controls.Add(Me.chkPhishing)
+        Me.tpPrivacy.Controls.Add(Me.chkAllowPop)
+        Me.tpPrivacy.Controls.Add(Me.grpJsSites)
+        Me.tpPrivacy.Controls.Add(Me.grpBlocked)
+        Me.tpPrivacy.Location = New System.Drawing.Point(4, 22)
+        Me.tpPrivacy.Name = "tpPrivacy"
+        Me.tpPrivacy.Padding = New System.Windows.Forms.Padding(10)
+        Me.tpPrivacy.Size = New System.Drawing.Size(552, 409)
+        Me.tpPrivacy.TabIndex = 1
+        Me.tpPrivacy.Text = "Privacy & Security"
+        Me.tpPrivacy.UseVisualStyleBackColor = True
+        '
+        'grpPermissions
+        '
+        Me.grpPermissions.Controls.Add(Me.chkPermCamera)
+        Me.grpPermissions.Controls.Add(Me.chkPermMic)
+        Me.grpPermissions.Controls.Add(Me.chkPermLocation)
+        Me.grpPermissions.Controls.Add(Me.chkPermNotifications)
+        Me.grpPermissions.Location = New System.Drawing.Point(13, 10)
+        Me.grpPermissions.Name = "grpPermissions"
+        Me.grpPermissions.Size = New System.Drawing.Size(523, 65)
+        Me.grpPermissions.TabIndex = 0
+        Me.grpPermissions.TabStop = False
+        Me.grpPermissions.Text = "Permission Manager"
+        '
+        'chkPermCamera
+        '
+        Me.chkPermCamera.AutoSize = True
+        Me.chkPermCamera.Checked = True
+        Me.chkPermCamera.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.chkPermCamera.Location = New System.Drawing.Point(15, 22)
+        Me.chkPermCamera.Name = "chkPermCamera"
+        Me.chkPermCamera.Size = New System.Drawing.Size(92, 17)
+        Me.chkPermCamera.TabIndex = 0
+        Me.chkPermCamera.Text = "Allow Camera"
+        Me.chkPermCamera.UseVisualStyleBackColor = True
+        '
+        'chkPermMic
+        '
+        Me.chkPermMic.AutoSize = True
+        Me.chkPermMic.Checked = True
+        Me.chkPermMic.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.chkPermMic.Location = New System.Drawing.Point(130, 22)
+        Me.chkPermMic.Name = "chkPermMic"
+        Me.chkPermMic.Size = New System.Drawing.Size(109, 17)
+        Me.chkPermMic.TabIndex = 1
+        Me.chkPermMic.Text = "Allow Microphone"
+        Me.chkPermMic.UseVisualStyleBackColor = True
+        '
+        'chkPermLocation
+        '
+        Me.chkPermLocation.AutoSize = True
+        Me.chkPermLocation.Checked = True
+        Me.chkPermLocation.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.chkPermLocation.Location = New System.Drawing.Point(260, 22)
+        Me.chkPermLocation.Name = "chkPermLocation"
+        Me.chkPermLocation.Size = New System.Drawing.Size(94, 17)
+        Me.chkPermLocation.TabIndex = 2
+        Me.chkPermLocation.Text = "Allow Location"
+        Me.chkPermLocation.UseVisualStyleBackColor = True
+        '
+        'chkPermNotifications
+        '
+        Me.chkPermNotifications.AutoSize = True
+        Me.chkPermNotifications.Checked = True
+        Me.chkPermNotifications.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.chkPermNotifications.Location = New System.Drawing.Point(380, 22)
+        Me.chkPermNotifications.Name = "chkPermNotifications"
+        Me.chkPermNotifications.Size = New System.Drawing.Size(115, 17)
+        Me.chkPermNotifications.TabIndex = 3
+        Me.chkPermNotifications.Text = "Allow Notifications"
+        Me.chkPermNotifications.UseVisualStyleBackColor = True
+        '
+        'chkIncognito
+        '
+        Me.chkIncognito.AutoSize = True
+        Me.chkIncognito.Location = New System.Drawing.Point(13, 82)
+        Me.chkIncognito.Name = "chkIncognito"
+        Me.chkIncognito.Size = New System.Drawing.Size(201, 17)
+        Me.chkIncognito.TabIndex = 1
+        Me.chkIncognito.Text = "Incognito / Private Mode by Default"
+        Me.chkIncognito.UseVisualStyleBackColor = True
+        '
+        'chkHttpsOnly
+        '
+        Me.chkHttpsOnly.AutoSize = True
+        Me.chkHttpsOnly.Location = New System.Drawing.Point(260, 82)
+        Me.chkHttpsOnly.Name = "chkHttpsOnly"
+        Me.chkHttpsOnly.Size = New System.Drawing.Size(262, 17)
+        Me.chkHttpsOnly.TabIndex = 2
+        Me.chkHttpsOnly.Text = "HTTPS-Only Mode (Upgrade HTTP requests)"
+        Me.chkHttpsOnly.UseVisualStyleBackColor = True
+        '
+        'chkAdBlocker
+        '
+        Me.chkAdBlocker.AutoSize = True
+        Me.chkAdBlocker.Checked = True
+        Me.chkAdBlocker.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.chkAdBlocker.Location = New System.Drawing.Point(13, 105)
+        Me.chkAdBlocker.Name = "chkAdBlocker"
+        Me.chkAdBlocker.Size = New System.Drawing.Size(193, 17)
+        Me.chkAdBlocker.TabIndex = 3
+        Me.chkAdBlocker.Text = "Enable Ad Blocker (EasyList rules)"
+        Me.chkAdBlocker.UseVisualStyleBackColor = True
+        '
+        'btnConfigureAdBlocker
+        '
+        Me.btnConfigureAdBlocker.Location = New System.Drawing.Point(210, 102)
+        Me.btnConfigureAdBlocker.Name = "btnConfigureAdBlocker"
+        Me.btnConfigureAdBlocker.Size = New System.Drawing.Size(42, 23)
+        Me.btnConfigureAdBlocker.TabIndex = 8
+        Me.btnConfigureAdBlocker.Text = "..."
+        Me.btnConfigureAdBlocker.UseVisualStyleBackColor = True
         '
         'chkPhishing
         '
         Me.chkPhishing.AutoSize = True
-        Me.chkPhishing.Location = New System.Drawing.Point(9, 20)
+        Me.chkPhishing.Checked = True
+        Me.chkPhishing.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.chkPhishing.Location = New System.Drawing.Point(260, 105)
         Me.chkPhishing.Name = "chkPhishing"
-        Me.chkPhishing.Size = New System.Drawing.Size(127, 17)
-        Me.chkPhishing.TabIndex = 7
-        Me.chkPhishing.Text = "Enable Phishing Filter"
+        Me.chkPhishing.Size = New System.Drawing.Size(182, 17)
+        Me.chkPhishing.TabIndex = 4
+        Me.chkPhishing.Text = "Enable Phishing Protection Filter"
         Me.chkPhishing.UseVisualStyleBackColor = True
         '
-        'btnRemoveAllPhish
+        'chkAllowPop
         '
-        Me.btnRemoveAllPhish.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btnRemoveAllPhish.Location = New System.Drawing.Point(347, 130)
-        Me.btnRemoveAllPhish.Name = "btnRemoveAllPhish"
-        Me.btnRemoveAllPhish.Size = New System.Drawing.Size(74, 23)
-        Me.btnRemoveAllPhish.TabIndex = 6
-        Me.btnRemoveAllPhish.Text = "Remove ALL"
-        Me.btnRemoveAllPhish.UseVisualStyleBackColor = True
+        Me.chkAllowPop.AutoSize = True
+        Me.chkAllowPop.Checked = True
+        Me.chkAllowPop.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.chkAllowPop.Location = New System.Drawing.Point(13, 128)
+        Me.chkAllowPop.Name = "chkAllowPop"
+        Me.chkAllowPop.Size = New System.Drawing.Size(147, 17)
+        Me.chkAllowPop.TabIndex = 5
+        Me.chkAllowPop.Text = "Enable Pop-up Blocker"
+        Me.chkAllowPop.UseVisualStyleBackColor = True
         '
-        'btnRemovePhish
+        'grpJsSites
         '
-        Me.btnRemovePhish.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btnRemovePhish.Location = New System.Drawing.Point(347, 101)
-        Me.btnRemovePhish.Name = "btnRemovePhish"
-        Me.btnRemovePhish.Size = New System.Drawing.Size(74, 23)
-        Me.btnRemovePhish.TabIndex = 5
-        Me.btnRemovePhish.Text = "Remove"
-        Me.btnRemovePhish.UseVisualStyleBackColor = True
+        Me.grpJsSites.Controls.Add(Me.lbJsDisabled)
+        Me.grpJsSites.Controls.Add(Me.txtJsDomain)
+        Me.grpJsSites.Controls.Add(Me.btnAddJsDomain)
+        Me.grpJsSites.Controls.Add(Me.btnRemoveJsDomain)
+        Me.grpJsSites.Location = New System.Drawing.Point(13, 150)
+        Me.grpJsSites.Name = "grpJsSites"
+        Me.grpJsSites.Size = New System.Drawing.Size(250, 245)
+        Me.grpJsSites.TabIndex = 6
+        Me.grpJsSites.TabStop = False
+        Me.grpJsSites.Text = "Disable JavaScript Per Site"
         '
-        'Label11
+        'lbJsDisabled
         '
-        Me.Label11.Location = New System.Drawing.Point(5, 78)
-        Me.Label11.Name = "Label11"
-        Me.Label11.Size = New System.Drawing.Size(294, 16)
-        Me.Label11.TabIndex = 4
-        Me.Label11.Text = "Phishing Sites"
+        Me.lbJsDisabled.FormattingEnabled = True
+        Me.lbJsDisabled.Location = New System.Drawing.Point(10, 20)
+        Me.lbJsDisabled.Name = "lbJsDisabled"
+        Me.lbJsDisabled.Size = New System.Drawing.Size(230, 147)
+        Me.lbJsDisabled.TabIndex = 0
         '
-        'Label12
+        'txtJsDomain
         '
-        Me.Label12.Location = New System.Drawing.Point(6, 39)
-        Me.Label12.Name = "Label12"
-        Me.Label12.Size = New System.Drawing.Size(363, 13)
-        Me.Label12.TabIndex = 3
-        Me.Label12.Text = "Address of phishing website"
+        Me.txtJsDomain.Location = New System.Drawing.Point(10, 175)
+        Me.txtJsDomain.Name = "txtJsDomain"
+        Me.txtJsDomain.Size = New System.Drawing.Size(230, 21)
+        Me.txtJsDomain.TabIndex = 1
         '
-        'lbPhishing
+        'btnAddJsDomain
         '
-        Me.lbPhishing.FormattingEnabled = True
-        Me.lbPhishing.Location = New System.Drawing.Point(6, 100)
-        Me.lbPhishing.Name = "lbPhishing"
-        Me.lbPhishing.Size = New System.Drawing.Size(292, 264)
-        Me.lbPhishing.TabIndex = 2
+        Me.btnAddJsDomain.Location = New System.Drawing.Point(10, 204)
+        Me.btnAddJsDomain.Name = "btnAddJsDomain"
+        Me.btnAddJsDomain.Size = New System.Drawing.Size(105, 25)
+        Me.btnAddJsDomain.TabIndex = 2
+        Me.btnAddJsDomain.Text = "Add Domain"
+        Me.btnAddJsDomain.UseVisualStyleBackColor = True
         '
-        'btnAddPhish
+        'btnRemoveJsDomain
         '
-        Me.btnAddPhish.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btnAddPhish.Location = New System.Drawing.Point(346, 53)
-        Me.btnAddPhish.Name = "btnAddPhish"
-        Me.btnAddPhish.Size = New System.Drawing.Size(75, 23)
-        Me.btnAddPhish.TabIndex = 1
-        Me.btnAddPhish.Text = "Add"
-        Me.btnAddPhish.UseVisualStyleBackColor = True
+        Me.btnRemoveJsDomain.Location = New System.Drawing.Point(135, 204)
+        Me.btnRemoveJsDomain.Name = "btnRemoveJsDomain"
+        Me.btnRemoveJsDomain.Size = New System.Drawing.Size(105, 25)
+        Me.btnRemoveJsDomain.TabIndex = 3
+        Me.btnRemoveJsDomain.Text = "Remove"
+        Me.btnRemoveJsDomain.UseVisualStyleBackColor = True
         '
-        'txtPhishing
+        'grpBlocked
         '
-        Me.txtPhishing.Location = New System.Drawing.Point(5, 54)
-        Me.txtPhishing.Name = "txtPhishing"
-        Me.txtPhishing.Size = New System.Drawing.Size(292, 21)
-        Me.txtPhishing.TabIndex = 0
-        '
-        'TabPage3
-        '
-        Me.TabPage3.Controls.Add(Me.GroupBox2)
-        Me.TabPage3.Location = New System.Drawing.Point(4, 22)
-        Me.TabPage3.Name = "TabPage3"
-        Me.TabPage3.Size = New System.Drawing.Size(435, 375)
-        Me.TabPage3.TabIndex = 2
-        Me.TabPage3.Text = "Blocked Sites"
-        Me.TabPage3.UseVisualStyleBackColor = True
-        '
-        'GroupBox2
-        '
-        Me.GroupBox2.Controls.Add(Me.btnBlockRemoveAll)
-        Me.GroupBox2.Controls.Add(Me.btnRemoveBlock)
-        Me.GroupBox2.Controls.Add(Me.Label3)
-        Me.GroupBox2.Controls.Add(Me.Label4)
-        Me.GroupBox2.Controls.Add(Me.lbBlocked)
-        Me.GroupBox2.Controls.Add(Me.btnAddBlock)
-        Me.GroupBox2.Controls.Add(Me.txtBlock)
-        Me.GroupBox2.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.GroupBox2.Location = New System.Drawing.Point(0, 0)
-        Me.GroupBox2.Name = "GroupBox2"
-        Me.GroupBox2.Size = New System.Drawing.Size(435, 375)
-        Me.GroupBox2.TabIndex = 3
-        Me.GroupBox2.TabStop = False
-        Me.GroupBox2.Text = "Blocked Sites Manager"
-        '
-        'btnBlockRemoveAll
-        '
-        Me.btnBlockRemoveAll.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btnBlockRemoveAll.Location = New System.Drawing.Point(353, 111)
-        Me.btnBlockRemoveAll.Name = "btnBlockRemoveAll"
-        Me.btnBlockRemoveAll.Size = New System.Drawing.Size(74, 23)
-        Me.btnBlockRemoveAll.TabIndex = 6
-        Me.btnBlockRemoveAll.Text = "Remove ALL"
-        Me.btnBlockRemoveAll.UseVisualStyleBackColor = True
-        '
-        'btnRemoveBlock
-        '
-        Me.btnRemoveBlock.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btnRemoveBlock.Location = New System.Drawing.Point(353, 82)
-        Me.btnRemoveBlock.Name = "btnRemoveBlock"
-        Me.btnRemoveBlock.Size = New System.Drawing.Size(74, 23)
-        Me.btnRemoveBlock.TabIndex = 5
-        Me.btnRemoveBlock.Text = "Remove"
-        Me.btnRemoveBlock.UseVisualStyleBackColor = True
-        '
-        'Label3
-        '
-        Me.Label3.Location = New System.Drawing.Point(6, 55)
-        Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(294, 16)
-        Me.Label3.TabIndex = 4
-        Me.Label3.Text = "Blocked Sites"
-        '
-        'Label4
-        '
-        Me.Label4.Location = New System.Drawing.Point(7, 16)
-        Me.Label4.Name = "Label4"
-        Me.Label4.Size = New System.Drawing.Size(363, 13)
-        Me.Label4.TabIndex = 3
-        Me.Label4.Text = "Address of website to block"
+        Me.grpBlocked.Controls.Add(Me.lbBlocked)
+        Me.grpBlocked.Controls.Add(Me.txtBlock)
+        Me.grpBlocked.Controls.Add(Me.btnAddBlock)
+        Me.grpBlocked.Controls.Add(Me.btnRemoveBlock)
+        Me.grpBlocked.Location = New System.Drawing.Point(286, 150)
+        Me.grpBlocked.Name = "grpBlocked"
+        Me.grpBlocked.Size = New System.Drawing.Size(250, 245)
+        Me.grpBlocked.TabIndex = 7
+        Me.grpBlocked.TabStop = False
+        Me.grpBlocked.Text = "Blocked Sites"
         '
         'lbBlocked
         '
         Me.lbBlocked.FormattingEnabled = True
-        Me.lbBlocked.Location = New System.Drawing.Point(6, 74)
+        Me.lbBlocked.Location = New System.Drawing.Point(10, 20)
         Me.lbBlocked.Name = "lbBlocked"
-        Me.lbBlocked.Size = New System.Drawing.Size(292, 290)
-        Me.lbBlocked.TabIndex = 2
-        '
-        'btnAddBlock
-        '
-        Me.btnAddBlock.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btnAddBlock.Location = New System.Drawing.Point(353, 31)
-        Me.btnAddBlock.Name = "btnAddBlock"
-        Me.btnAddBlock.Size = New System.Drawing.Size(75, 23)
-        Me.btnAddBlock.TabIndex = 1
-        Me.btnAddBlock.Text = "Add"
-        Me.btnAddBlock.UseVisualStyleBackColor = True
+        Me.lbBlocked.Size = New System.Drawing.Size(230, 147)
+        Me.lbBlocked.TabIndex = 0
         '
         'txtBlock
         '
-        Me.txtBlock.Location = New System.Drawing.Point(6, 31)
+        Me.txtBlock.Location = New System.Drawing.Point(10, 175)
         Me.txtBlock.Name = "txtBlock"
-        Me.txtBlock.Size = New System.Drawing.Size(292, 21)
-        Me.txtBlock.TabIndex = 0
+        Me.txtBlock.Size = New System.Drawing.Size(230, 21)
+        Me.txtBlock.TabIndex = 1
         '
-        'TabPage1
+        'btnAddBlock
         '
-        Me.TabPage1.Controls.Add(Me.chkAllowPop)
-        Me.TabPage1.Controls.Add(Me.GroupBox4)
-        Me.TabPage1.Controls.Add(Me.GroupBox3)
-        Me.TabPage1.ImageIndex = 0
-        Me.TabPage1.Location = New System.Drawing.Point(4, 22)
-        Me.TabPage1.Name = "TabPage1"
-        Me.TabPage1.Padding = New System.Windows.Forms.Padding(3)
-        Me.TabPage1.Size = New System.Drawing.Size(435, 375)
-        Me.TabPage1.TabIndex = 0
-        Me.TabPage1.Text = "Popup Blocker"
-        Me.TabPage1.UseVisualStyleBackColor = True
+        Me.btnAddBlock.Location = New System.Drawing.Point(10, 204)
+        Me.btnAddBlock.Name = "btnAddBlock"
+        Me.btnAddBlock.Size = New System.Drawing.Size(105, 25)
+        Me.btnAddBlock.TabIndex = 2
+        Me.btnAddBlock.Text = "Add Site"
+        Me.btnAddBlock.UseVisualStyleBackColor = True
         '
-        'GroupBox4
+        'btnRemoveBlock
         '
-        Me.GroupBox4.Controls.Add(Me.btnPopRemoveAll)
-        Me.GroupBox4.Controls.Add(Me.btnPopRemove)
-        Me.GroupBox4.Controls.Add(Me.Label5)
-        Me.GroupBox4.Controls.Add(Me.Label6)
-        Me.GroupBox4.Controls.Add(Me.lbPop)
-        Me.GroupBox4.Controls.Add(Me.btnPopAdd)
-        Me.GroupBox4.Controls.Add(Me.txtPop)
-        Me.GroupBox4.Location = New System.Drawing.Point(5, 30)
-        Me.GroupBox4.Name = "GroupBox4"
-        Me.GroupBox4.Size = New System.Drawing.Size(376, 262)
-        Me.GroupBox4.TabIndex = 6
-        Me.GroupBox4.TabStop = False
-        Me.GroupBox4.Text = "Exceptions"
+        Me.btnRemoveBlock.Location = New System.Drawing.Point(135, 204)
+        Me.btnRemoveBlock.Name = "btnRemoveBlock"
+        Me.btnRemoveBlock.Size = New System.Drawing.Size(105, 25)
+        Me.btnRemoveBlock.TabIndex = 3
+        Me.btnRemoveBlock.Text = "Remove"
+        Me.btnRemoveBlock.UseVisualStyleBackColor = True
         '
-        'btnPopRemoveAll
+        'tpPerformance
         '
-        Me.btnPopRemoveAll.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btnPopRemoveAll.Location = New System.Drawing.Point(294, 122)
-        Me.btnPopRemoveAll.Name = "btnPopRemoveAll"
-        Me.btnPopRemoveAll.Size = New System.Drawing.Size(74, 23)
-        Me.btnPopRemoveAll.TabIndex = 6
-        Me.btnPopRemoveAll.Text = "Remove ALL"
-        Me.btnPopRemoveAll.UseVisualStyleBackColor = True
+        Me.tpPerformance.Controls.Add(Me.grpPerfGeneral)
+        Me.tpPerformance.Controls.Add(Me.grpDoH)
+        Me.tpPerformance.Location = New System.Drawing.Point(4, 22)
+        Me.tpPerformance.Name = "tpPerformance"
+        Me.tpPerformance.Padding = New System.Windows.Forms.Padding(10)
+        Me.tpPerformance.Size = New System.Drawing.Size(552, 409)
+        Me.tpPerformance.TabIndex = 2
+        Me.tpPerformance.Text = "Performance"
+        Me.tpPerformance.UseVisualStyleBackColor = True
         '
-        'btnPopRemove
+        'grpPerfGeneral
         '
-        Me.btnPopRemove.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btnPopRemove.Location = New System.Drawing.Point(294, 93)
-        Me.btnPopRemove.Name = "btnPopRemove"
-        Me.btnPopRemove.Size = New System.Drawing.Size(74, 23)
-        Me.btnPopRemove.TabIndex = 5
-        Me.btnPopRemove.Text = "Remove"
-        Me.btnPopRemove.UseVisualStyleBackColor = True
+        Me.grpPerfGeneral.Controls.Add(Me.chkMemorySaver)
+        Me.grpPerfGeneral.Controls.Add(Me.chkHardwareAccel)
+        Me.grpPerfGeneral.Location = New System.Drawing.Point(13, 10)
+        Me.grpPerfGeneral.Name = "grpPerfGeneral"
+        Me.grpPerfGeneral.Size = New System.Drawing.Size(523, 90)
+        Me.grpPerfGeneral.TabIndex = 0
+        Me.grpPerfGeneral.TabStop = False
+        Me.grpPerfGeneral.Text = "Resource Management"
         '
-        'Label5
+        'chkMemorySaver
         '
-        Me.Label5.Location = New System.Drawing.Point(6, 55)
-        Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(79, 16)
-        Me.Label5.TabIndex = 4
-        Me.Label5.Text = "Allowed Sites"
+        Me.chkMemorySaver.AutoSize = True
+        Me.chkMemorySaver.Checked = True
+        Me.chkMemorySaver.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.chkMemorySaver.Location = New System.Drawing.Point(15, 25)
+        Me.chkMemorySaver.Name = "chkMemorySaver"
+        Me.chkMemorySaver.Size = New System.Drawing.Size(271, 17)
+        Me.chkMemorySaver.TabIndex = 0
+        Me.chkMemorySaver.Text = "Enable Memory Saver (sleep inactive background tabs)"
+        Me.chkMemorySaver.UseVisualStyleBackColor = True
         '
-        'Label6
+        'chkHardwareAccel
         '
-        Me.Label6.Location = New System.Drawing.Point(7, 16)
-        Me.Label6.Name = "Label6"
-        Me.Label6.Size = New System.Drawing.Size(363, 13)
-        Me.Label6.TabIndex = 3
-        Me.Label6.Text = "Address of website to allow"
+        Me.chkHardwareAccel.AutoSize = True
+        Me.chkHardwareAccel.Checked = True
+        Me.chkHardwareAccel.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.chkHardwareAccel.Location = New System.Drawing.Point(15, 55)
+        Me.chkHardwareAccel.Name = "chkHardwareAccel"
+        Me.chkHardwareAccel.Size = New System.Drawing.Size(256, 17)
+        Me.chkHardwareAccel.TabIndex = 1
+        Me.chkHardwareAccel.Text = "Enable Hardware Acceleration when available"
+        Me.chkHardwareAccel.UseVisualStyleBackColor = True
         '
-        'btnPopAdd
+        'grpDoH
         '
-        Me.btnPopAdd.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btnPopAdd.Location = New System.Drawing.Point(293, 51)
-        Me.btnPopAdd.Name = "btnPopAdd"
-        Me.btnPopAdd.Size = New System.Drawing.Size(75, 23)
-        Me.btnPopAdd.TabIndex = 1
-        Me.btnPopAdd.Text = "Add"
-        Me.btnPopAdd.UseVisualStyleBackColor = True
+        Me.grpDoH.Controls.Add(Me.lblDoH)
+        Me.grpDoH.Controls.Add(Me.cmbDoH)
+        Me.grpDoH.Controls.Add(Me.lblDoHCustom)
+        Me.grpDoH.Controls.Add(Me.txtDoHCustom)
+        Me.grpDoH.Location = New System.Drawing.Point(13, 115)
+        Me.grpDoH.Name = "grpDoH"
+        Me.grpDoH.Size = New System.Drawing.Size(523, 110)
+        Me.grpDoH.TabIndex = 1
+        Me.grpDoH.TabStop = False
+        Me.grpDoH.Text = "DNS-over-HTTPS (DoH) Settings"
         '
-        'GroupBox3
+        'lblDoH
         '
-        Me.GroupBox3.Controls.Add(Me.chkPopInfo)
-        Me.GroupBox3.Controls.Add(Me.chkPopSound)
-        Me.GroupBox3.Location = New System.Drawing.Point(5, 298)
-        Me.GroupBox3.Name = "GroupBox3"
-        Me.GroupBox3.Size = New System.Drawing.Size(376, 70)
-        Me.GroupBox3.TabIndex = 5
-        Me.GroupBox3.TabStop = False
-        Me.GroupBox3.Text = "Default action"
+        Me.lblDoH.AutoSize = True
+        Me.lblDoH.Location = New System.Drawing.Point(15, 30)
+        Me.lblDoH.Name = "lblDoH"
+        Me.lblDoH.Size = New System.Drawing.Size(74, 13)
+        Me.lblDoH.Text = "DoH Provider:"
         '
-        'chkPopInfo
+        'cmbDoH
         '
-        Me.chkPopInfo.AutoSize = True
-        Me.chkPopInfo.Location = New System.Drawing.Point(10, 43)
-        Me.chkPopInfo.Name = "chkPopInfo"
-        Me.chkPopInfo.Size = New System.Drawing.Size(218, 17)
-        Me.chkPopInfo.TabIndex = 4
-        Me.chkPopInfo.Text = "Show Info bar when a popup is blocked."
-        Me.chkPopInfo.UseVisualStyleBackColor = True
+        Me.cmbDoH.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.cmbDoH.FormattingEnabled = True
+        Me.cmbDoH.Items.AddRange(New Object() {"Off (Default System DNS)", "Cloudflare (1.1.1.1)", "Google (8.8.8.8)", "Custom"})
+        Me.cmbDoH.Location = New System.Drawing.Point(120, 27)
+        Me.cmbDoH.Name = "cmbDoH"
+        Me.cmbDoH.Size = New System.Drawing.Size(250, 21)
+        Me.cmbDoH.TabIndex = 1
         '
-        'chkPopSound
+        'lblDoHCustom
         '
-        Me.chkPopSound.AutoSize = True
-        Me.chkPopSound.Location = New System.Drawing.Point(10, 20)
-        Me.chkPopSound.Name = "chkPopSound"
-        Me.chkPopSound.Size = New System.Drawing.Size(203, 17)
-        Me.chkPopSound.TabIndex = 3
-        Me.chkPopSound.Text = "Play Sound when a popup is blocked."
-        Me.chkPopSound.UseVisualStyleBackColor = True
+        Me.lblDoHCustom.AutoSize = True
+        Me.lblDoHCustom.Location = New System.Drawing.Point(15, 68)
+        Me.lblDoHCustom.Name = "lblDoHCustom"
+        Me.lblDoHCustom.Size = New System.Drawing.Size(89, 13)
+        Me.lblDoHCustom.Text = "Custom DoH URL:"
         '
-        'TabControl1
+        'txtDoHCustom
         '
-        Me.TabControl1.Controls.Add(Me.TabPage1)
-        Me.TabControl1.Controls.Add(Me.TabPage3)
-        Me.TabControl1.Controls.Add(Me.TabPage7)
-        Me.TabControl1.Controls.Add(Me.TabPage2)
-        Me.TabControl1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TabControl1.Location = New System.Drawing.Point(0, 0)
-        Me.TabControl1.Multiline = True
-        Me.TabControl1.Name = "TabControl1"
-        Me.TabControl1.SelectedIndex = 0
-        Me.TabControl1.Size = New System.Drawing.Size(443, 401)
-        Me.TabControl1.SizeMode = System.Windows.Forms.TabSizeMode.FillToRight
-        Me.TabControl1.TabIndex = 0
+        Me.txtDoHCustom.Location = New System.Drawing.Point(120, 65)
+        Me.txtDoHCustom.Name = "txtDoHCustom"
+        Me.txtDoHCustom.Size = New System.Drawing.Size(380, 21)
+        Me.txtDoHCustom.TabIndex = 3
         '
-        'TabPage2
+        'tpAdvanced
         '
-        Me.TabPage2.Controls.Add(Me.Panel2)
-        Me.TabPage2.Location = New System.Drawing.Point(4, 22)
-        Me.TabPage2.Name = "TabPage2"
-        Me.TabPage2.Padding = New System.Windows.Forms.Padding(3)
-        Me.TabPage2.Size = New System.Drawing.Size(435, 375)
-        Me.TabPage2.TabIndex = 7
-        Me.TabPage2.Text = "IP Fnder"
-        Me.TabPage2.UseVisualStyleBackColor = True
+        Me.tpAdvanced.Controls.Add(Me.grpDns)
+        Me.tpAdvanced.Controls.Add(Me.grpProxy)
+        Me.tpAdvanced.Location = New System.Drawing.Point(4, 22)
+        Me.tpAdvanced.Name = "tpAdvanced"
+        Me.tpAdvanced.Padding = New System.Windows.Forms.Padding(10)
+        Me.tpAdvanced.Size = New System.Drawing.Size(552, 409)
+        Me.tpAdvanced.TabIndex = 3
+        Me.tpAdvanced.Text = "Advanced"
+        Me.tpAdvanced.UseVisualStyleBackColor = True
         '
-        'Panel2
+        'grpDns
         '
-        Me.Panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.Panel2.Controls.Add(Me.Label9)
-        Me.Panel2.Controls.Add(Me.TextBox3)
-        Me.Panel2.Controls.Add(Me.Label8)
-        Me.Panel2.Controls.Add(Me.Button2)
-        Me.Panel2.Controls.Add(Me.Button3)
-        Me.Panel2.Controls.Add(Me.ListBox2)
-        Me.Panel2.Controls.Add(Me.Label7)
-        Me.Panel2.Controls.Add(Me.ListBox1)
-        Me.Panel2.Controls.Add(Me.Button1)
-        Me.Panel2.Controls.Add(Me.TextBox2)
-        Me.Panel2.Controls.Add(Me.TextBox1)
-        Me.Panel2.Controls.Add(Me.Label2)
-        Me.Panel2.Controls.Add(Me.Label1)
-        Me.Panel2.Location = New System.Drawing.Point(8, 6)
-        Me.Panel2.Name = "Panel2"
-        Me.Panel2.Size = New System.Drawing.Size(402, 369)
-        Me.Panel2.TabIndex = 0
+        Me.grpDns.Controls.Add(Me.lblCustomDns)
+        Me.grpDns.Controls.Add(Me.txtCustomDns)
+        Me.grpDns.Location = New System.Drawing.Point(13, 10)
+        Me.grpDns.Name = "grpDns"
+        Me.grpDns.Size = New System.Drawing.Size(523, 70)
+        Me.grpDns.TabIndex = 0
+        Me.grpDns.TabStop = False
+        Me.grpDns.Text = "Custom DNS Server"
         '
-        'TextBox3
+        'lblCustomDns
         '
-        Me.TextBox3.Location = New System.Drawing.Point(76, 101)
-        Me.TextBox3.Name = "TextBox3"
-        Me.TextBox3.ReadOnly = True
-        Me.TextBox3.Size = New System.Drawing.Size(71, 21)
-        Me.TextBox3.TabIndex = 19
+        Me.lblCustomDns.AutoSize = True
+        Me.lblCustomDns.Location = New System.Drawing.Point(15, 30)
+        Me.lblCustomDns.Name = "lblCustomDns"
+        Me.lblCustomDns.Size = New System.Drawing.Size(107, 13)
+        Me.lblCustomDns.Text = "DNS Server IP Address:"
         '
-        'Label8
+        'txtCustomDns
         '
-        Me.Label8.AutoSize = True
-        Me.Label8.Location = New System.Drawing.Point(13, 106)
-        Me.Label8.Name = "Label8"
-        Me.Label8.Size = New System.Drawing.Size(31, 13)
-        Me.Label8.TabIndex = 18
-        Me.Label8.Text = "Port:"
+        Me.txtCustomDns.Location = New System.Drawing.Point(135, 27)
+        Me.txtCustomDns.Name = "txtCustomDns"
+        Me.txtCustomDns.Size = New System.Drawing.Size(250, 21)
+        Me.txtCustomDns.TabIndex = 1
         '
-        'Button2
+        'grpProxy
         '
-        Me.Button2.Location = New System.Drawing.Point(322, 249)
-        Me.Button2.Name = "Button2"
-        Me.Button2.Size = New System.Drawing.Size(75, 23)
-        Me.Button2.TabIndex = 17
-        Me.Button2.Text = "Stop"
-        Me.Button2.UseVisualStyleBackColor = True
+        Me.grpProxy.Controls.Add(Me.chkEnableProxy)
+        Me.grpProxy.Controls.Add(Me.lblProxyHost)
+        Me.grpProxy.Controls.Add(Me.txtProxyHost)
+        Me.grpProxy.Controls.Add(Me.lblProxyPort)
+        Me.grpProxy.Controls.Add(Me.txtProxyPort)
+        Me.grpProxy.Controls.Add(Me.btnConfigureProxy)
+        Me.grpProxy.Location = New System.Drawing.Point(13, 95)
+        Me.grpProxy.Name = "grpProxy"
+        Me.grpProxy.Size = New System.Drawing.Size(523, 150)
+        Me.grpProxy.TabIndex = 1
+        Me.grpProxy.TabStop = False
+        Me.grpProxy.Text = "Proxy Settings"
         '
-        'Button3
+        'chkEnableProxy
         '
-        Me.Button3.Location = New System.Drawing.Point(322, 194)
-        Me.Button3.Name = "Button3"
-        Me.Button3.Size = New System.Drawing.Size(75, 23)
-        Me.Button3.TabIndex = 16
-        Me.Button3.Text = "Start"
-        Me.Button3.UseVisualStyleBackColor = True
+        Me.chkEnableProxy.AutoSize = True
+        Me.chkEnableProxy.Location = New System.Drawing.Point(15, 25)
+        Me.chkEnableProxy.Name = "chkEnableProxy"
+        Me.chkEnableProxy.Size = New System.Drawing.Size(123, 17)
+        Me.chkEnableProxy.TabIndex = 0
+        Me.chkEnableProxy.Text = "Enable Custom Proxy"
+        Me.chkEnableProxy.UseVisualStyleBackColor = True
         '
-        'ListBox2
+        'lblProxyHost
         '
-        Me.ListBox2.FormattingEnabled = True
-        Me.ListBox2.Location = New System.Drawing.Point(16, 294)
-        Me.ListBox2.Name = "ListBox2"
-        Me.ListBox2.Size = New System.Drawing.Size(268, 56)
-        Me.ListBox2.TabIndex = 15
+        Me.lblProxyHost.AutoSize = True
+        Me.lblProxyHost.Location = New System.Drawing.Point(15, 60)
+        Me.lblProxyHost.Name = "lblProxyHost"
+        Me.lblProxyHost.Size = New System.Drawing.Size(83, 13)
+        Me.lblProxyHost.Text = "Proxy Host / IP:"
         '
-        'Label7
+        'txtProxyHost
         '
-        Me.Label7.AutoSize = True
-        Me.Label7.Location = New System.Drawing.Point(10, 271)
-        Me.Label7.Name = "Label7"
-        Me.Label7.Size = New System.Drawing.Size(65, 13)
-        Me.Label7.TabIndex = 14
-        Me.Label7.Text = "Open Ports:"
+        Me.txtProxyHost.Location = New System.Drawing.Point(135, 57)
+        Me.txtProxyHost.Name = "txtProxyHost"
+        Me.txtProxyHost.Size = New System.Drawing.Size(250, 21)
+        Me.txtProxyHost.TabIndex = 1
         '
-        'ListBox1
+        'lblProxyPort
         '
-        Me.ListBox1.FormattingEnabled = True
-        Me.ListBox1.Location = New System.Drawing.Point(13, 164)
-        Me.ListBox1.Name = "ListBox1"
-        Me.ListBox1.Size = New System.Drawing.Size(268, 95)
-        Me.ListBox1.TabIndex = 13
+        Me.lblProxyPort.AutoSize = True
+        Me.lblProxyPort.Location = New System.Drawing.Point(15, 92)
+        Me.lblProxyPort.Name = "lblProxyPort"
+        Me.lblProxyPort.Size = New System.Drawing.Size(31, 13)
+        Me.lblProxyPort.Text = "Port:"
         '
-        'Button1
+        'txtProxyPort
         '
-        Me.Button1.Location = New System.Drawing.Point(322, 28)
-        Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(64, 23)
-        Me.Button1.TabIndex = 4
-        Me.Button1.Text = "Check IP"
-        Me.Button1.UseVisualStyleBackColor = True
+        Me.txtProxyPort.Location = New System.Drawing.Point(135, 89)
+        Me.txtProxyPort.Name = "txtProxyPort"
+        Me.txtProxyPort.Size = New System.Drawing.Size(80, 21)
+        Me.txtProxyPort.TabIndex = 3
+        Me.txtProxyPort.Text = "8080"
         '
-        'TextBox2
+        'btnConfigureProxy
         '
-        Me.TextBox2.Location = New System.Drawing.Point(76, 67)
-        Me.TextBox2.Name = "TextBox2"
-        Me.TextBox2.Size = New System.Drawing.Size(208, 21)
-        Me.TextBox2.TabIndex = 3
+        Me.btnConfigureProxy.Location = New System.Drawing.Point(235, 87)
+        Me.btnConfigureProxy.Name = "btnConfigureProxy"
+        Me.btnConfigureProxy.Size = New System.Drawing.Size(270, 25)
+        Me.btnConfigureProxy.TabIndex = 4
+        Me.btnConfigureProxy.Text = "Open Advanced Proxy Config (Form3)..."
+        Me.btnConfigureProxy.UseVisualStyleBackColor = True
         '
-        'TextBox1
+        'Panel1
         '
-        Me.TextBox1.Location = New System.Drawing.Point(76, 31)
-        Me.TextBox1.Name = "TextBox1"
-        Me.TextBox1.Size = New System.Drawing.Size(208, 21)
-        Me.TextBox1.TabIndex = 2
+        Me.Panel1.Controls.Add(Me.btnOK)
+        Me.Panel1.Controls.Add(Me.btnCancel)
+        Me.Panel1.Controls.Add(Me.btnApply)
+        Me.Panel1.Dock = System.Windows.Forms.DockStyle.Bottom
+        Me.Panel1.Location = New System.Drawing.Point(0, 435)
+        Me.Panel1.Name = "Panel1"
+        Me.Panel1.Size = New System.Drawing.Size(560, 45)
+        Me.Panel1.TabIndex = 1
         '
-        'Label2
+        'btnOK
         '
-        Me.Label2.AutoSize = True
-        Me.Label2.Location = New System.Drawing.Point(10, 70)
-        Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(60, 13)
-        Me.Label2.TabIndex = 1
-        Me.Label2.Text = "Ip Adress :"
+        Me.btnOK.Location = New System.Drawing.Point(295, 10)
+        Me.btnOK.Name = "btnOK"
+        Me.btnOK.Size = New System.Drawing.Size(80, 26)
+        Me.btnOK.TabIndex = 0
+        Me.btnOK.Text = "OK"
+        Me.btnOK.UseVisualStyleBackColor = True
         '
-        'Label1
+        'btnCancel
         '
-        Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(4, 33)
-        Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(66, 13)
-        Me.Label1.TabIndex = 0
-        Me.Label1.Text = "Host Name :"
+        Me.btnCancel.Location = New System.Drawing.Point(380, 10)
+        Me.btnCancel.Name = "btnCancel"
+        Me.btnCancel.Size = New System.Drawing.Size(80, 26)
+        Me.btnCancel.TabIndex = 1
+        Me.btnCancel.Text = "Cancel"
+        Me.btnCancel.UseVisualStyleBackColor = True
         '
-        'Timer1
+        'btnApply
         '
-        Me.Timer1.Interval = 10
-        '
-        'Label9
-        '
-        Me.Label9.AutoSize = True
-        Me.Label9.Location = New System.Drawing.Point(10, 0)
-        Me.Label9.Name = "Label9"
-        Me.Label9.Size = New System.Drawing.Size(122, 13)
-        Me.Label9.TabIndex = 20
-        Me.Label9.Text = "Ip Finder | Port Scanner"
+        Me.btnApply.Location = New System.Drawing.Point(465, 10)
+        Me.btnApply.Name = "btnApply"
+        Me.btnApply.Size = New System.Drawing.Size(80, 26)
+        Me.btnApply.TabIndex = 2
+        Me.btnApply.Text = "Apply"
+        Me.btnApply.UseVisualStyleBackColor = True
         '
         'Settings
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(443, 433)
+        Me.ClientSize = New System.Drawing.Size(560, 480)
         Me.Controls.Add(Me.TabControl1)
         Me.Controls.Add(Me.Panel1)
         Me.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
-        Me.HelpButton = True
-        Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.MaximizeBox = False
         Me.MinimizeBox = False
         Me.Name = "Settings"
-        Me.HelpProvider1.SetShowHelp(Me, True)
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
-        Me.Text = "Settings"
-        Me.cmSearch.ResumeLayout(False)
-        Me.Panel1.ResumeLayout(False)
-        Me.TabPage7.ResumeLayout(False)
-        Me.GroupBox6.ResumeLayout(False)
-        Me.GroupBox6.PerformLayout()
-        Me.TabPage3.ResumeLayout(False)
-        Me.GroupBox2.ResumeLayout(False)
-        Me.GroupBox2.PerformLayout()
-        Me.TabPage1.ResumeLayout(False)
-        Me.TabPage1.PerformLayout()
-        Me.GroupBox4.ResumeLayout(False)
-        Me.GroupBox4.PerformLayout()
-        Me.GroupBox3.ResumeLayout(False)
-        Me.GroupBox3.PerformLayout()
+        Me.Text = "Browser Settings"
         Me.TabControl1.ResumeLayout(False)
-        Me.TabPage2.ResumeLayout(False)
-        Me.Panel2.ResumeLayout(False)
-        Me.Panel2.PerformLayout()
+        Me.tpBrowser.ResumeLayout(False)
+        Me.tpBrowser.PerformLayout()
+        Me.grpStartup.ResumeLayout(False)
+        Me.grpStartup.PerformLayout()
+        Me.tpPrivacy.ResumeLayout(False)
+        Me.tpPrivacy.PerformLayout()
+        Me.grpPermissions.ResumeLayout(False)
+        Me.grpPermissions.PerformLayout()
+        Me.grpJsSites.ResumeLayout(False)
+        Me.grpJsSites.PerformLayout()
+        Me.grpBlocked.ResumeLayout(False)
+        Me.grpBlocked.PerformLayout()
+        Me.tpPerformance.ResumeLayout(False)
+        Me.grpPerfGeneral.ResumeLayout(False)
+        Me.grpPerfGeneral.PerformLayout()
+        Me.grpDoH.ResumeLayout(False)
+        Me.grpDoH.PerformLayout()
+        Me.tpAdvanced.ResumeLayout(False)
+        Me.grpDns.ResumeLayout(False)
+        Me.grpDns.PerformLayout()
+        Me.grpProxy.ResumeLayout(False)
+        Me.grpProxy.PerformLayout()
+        Me.Panel1.ResumeLayout(False)
         Me.ResumeLayout(False)
 
     End Sub
+
+    Friend WithEvents TabControl1 As System.Windows.Forms.TabControl
+    Friend WithEvents tpBrowser As System.Windows.Forms.TabPage
+    Friend WithEvents tpPrivacy As System.Windows.Forms.TabPage
+    Friend WithEvents tpPerformance As System.Windows.Forms.TabPage
+    Friend WithEvents tpAdvanced As System.Windows.Forms.TabPage
     Friend WithEvents Panel1 As System.Windows.Forms.Panel
     Friend WithEvents btnOK As System.Windows.Forms.Button
-    Friend WithEvents cmSearch As System.Windows.Forms.ContextMenuStrip
-    Friend WithEvents cmSearchRemove As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents HelpProvider1 As System.Windows.Forms.HelpProvider
-    Friend WithEvents TabPage7 As System.Windows.Forms.TabPage
-    Friend WithEvents GroupBox6 As System.Windows.Forms.GroupBox
+    Friend WithEvents btnCancel As System.Windows.Forms.Button
+    Friend WithEvents btnApply As System.Windows.Forms.Button
+
+    ' Browser Settings Controls
+    Friend WithEvents lblHomePage As System.Windows.Forms.Label
+    Friend WithEvents txtHomePage As System.Windows.Forms.TextBox
+    Friend WithEvents btnDefaultHomePage As System.Windows.Forms.Button
+    Friend WithEvents grpStartup As System.Windows.Forms.GroupBox
+    Friend WithEvents rbStartupHome As System.Windows.Forms.RadioButton
+    Friend WithEvents rbStartupBlank As System.Windows.Forms.RadioButton
+    Friend WithEvents rbStartupRestore As System.Windows.Forms.RadioButton
+    Friend WithEvents rbStartupSpecific As System.Windows.Forms.RadioButton
+    Friend WithEvents lblNewTab As System.Windows.Forms.Label
+    Friend WithEvents cmbNewTab As System.Windows.Forms.ComboBox
+    Friend WithEvents lblSearchEngine As System.Windows.Forms.Label
+    Friend WithEvents cmbSearchEngine As System.Windows.Forms.ComboBox
+    Friend WithEvents lblDownloads As System.Windows.Forms.Label
+    Friend WithEvents txtDownloads As System.Windows.Forms.TextBox
+    Friend WithEvents btnBrowseDownloads As System.Windows.Forms.Button
+    Friend WithEvents lblFontSize As System.Windows.Forms.Label
+    Friend WithEvents cmbFontSize As System.Windows.Forms.ComboBox
+    Friend WithEvents chkFullScreen As System.Windows.Forms.CheckBox
+
+    ' Privacy Controls
+    Friend WithEvents grpPermissions As System.Windows.Forms.GroupBox
+    Friend WithEvents chkPermCamera As System.Windows.Forms.CheckBox
+    Friend WithEvents chkPermMic As System.Windows.Forms.CheckBox
+    Friend WithEvents chkPermLocation As System.Windows.Forms.CheckBox
+    Friend WithEvents chkPermNotifications As System.Windows.Forms.CheckBox
+    Friend WithEvents chkIncognito As System.Windows.Forms.CheckBox
+    Friend WithEvents chkHttpsOnly As System.Windows.Forms.CheckBox
+    Friend WithEvents chkAdBlocker As System.Windows.Forms.CheckBox
+    Friend WithEvents btnConfigureAdBlocker As System.Windows.Forms.Button
     Friend WithEvents chkPhishing As System.Windows.Forms.CheckBox
-    Friend WithEvents btnRemoveAllPhish As System.Windows.Forms.Button
-    Friend WithEvents btnRemovePhish As System.Windows.Forms.Button
-    Friend WithEvents Label11 As System.Windows.Forms.Label
-    Friend WithEvents Label12 As System.Windows.Forms.Label
-    Friend WithEvents lbPhishing As System.Windows.Forms.ListBox
-    Friend WithEvents btnAddPhish As System.Windows.Forms.Button
-    Friend WithEvents txtPhishing As System.Windows.Forms.TextBox
-    Friend WithEvents TabPage3 As System.Windows.Forms.TabPage
-    Friend WithEvents GroupBox2 As System.Windows.Forms.GroupBox
-    Friend WithEvents btnBlockRemoveAll As System.Windows.Forms.Button
-    Friend WithEvents btnRemoveBlock As System.Windows.Forms.Button
-    Friend WithEvents Label3 As System.Windows.Forms.Label
-    Friend WithEvents Label4 As System.Windows.Forms.Label
-    Friend WithEvents lbBlocked As System.Windows.Forms.ListBox
-    Friend WithEvents btnAddBlock As System.Windows.Forms.Button
-    Friend WithEvents txtBlock As System.Windows.Forms.TextBox
-    Friend WithEvents TabPage1 As System.Windows.Forms.TabPage
     Friend WithEvents chkAllowPop As System.Windows.Forms.CheckBox
-    Friend WithEvents GroupBox4 As System.Windows.Forms.GroupBox
-    Friend WithEvents btnPopRemoveAll As System.Windows.Forms.Button
-    Friend WithEvents btnPopRemove As System.Windows.Forms.Button
-    Friend WithEvents Label5 As System.Windows.Forms.Label
-    Friend WithEvents Label6 As System.Windows.Forms.Label
-    Friend WithEvents lbPop As System.Windows.Forms.ListBox
-    Friend WithEvents btnPopAdd As System.Windows.Forms.Button
-    Friend WithEvents txtPop As System.Windows.Forms.TextBox
-    Friend WithEvents GroupBox3 As System.Windows.Forms.GroupBox
-    Friend WithEvents chkPopInfo As System.Windows.Forms.CheckBox
-    Friend WithEvents chkPopSound As System.Windows.Forms.CheckBox
-    Friend WithEvents TabControl1 As System.Windows.Forms.TabControl
-    Friend WithEvents TabPage2 As System.Windows.Forms.TabPage
-    Friend WithEvents Panel2 As System.Windows.Forms.Panel
-    Friend WithEvents Button1 As System.Windows.Forms.Button
-    Friend WithEvents TextBox2 As System.Windows.Forms.TextBox
-    Friend WithEvents TextBox1 As System.Windows.Forms.TextBox
-    Friend WithEvents Label2 As System.Windows.Forms.Label
-    Friend WithEvents Label1 As System.Windows.Forms.Label
-    Friend WithEvents Timer1 As System.Windows.Forms.Timer
-    Friend WithEvents Button2 As System.Windows.Forms.Button
-    Friend WithEvents Button3 As System.Windows.Forms.Button
-    Friend WithEvents ListBox2 As System.Windows.Forms.ListBox
-    Friend WithEvents Label7 As System.Windows.Forms.Label
-    Friend WithEvents ListBox1 As System.Windows.Forms.ListBox
-    Friend WithEvents TextBox3 As System.Windows.Forms.TextBox
-    Friend WithEvents Label8 As System.Windows.Forms.Label
-    Friend WithEvents Label9 As System.Windows.Forms.Label
+    Friend WithEvents grpJsSites As System.Windows.Forms.GroupBox
+    Friend WithEvents lbJsDisabled As System.Windows.Forms.ListBox
+    Friend WithEvents txtJsDomain As System.Windows.Forms.TextBox
+    Friend WithEvents btnAddJsDomain As System.Windows.Forms.Button
+    Friend WithEvents btnRemoveJsDomain As System.Windows.Forms.Button
+    Friend WithEvents grpBlocked As System.Windows.Forms.GroupBox
+    Friend WithEvents lbBlocked As System.Windows.Forms.ListBox
+    Friend WithEvents txtBlock As System.Windows.Forms.TextBox
+    Friend WithEvents btnAddBlock As System.Windows.Forms.Button
+    Friend WithEvents btnRemoveBlock As System.Windows.Forms.Button
+
+    ' Performance Controls
+    Friend WithEvents grpPerfGeneral As System.Windows.Forms.GroupBox
+    Friend WithEvents chkMemorySaver As System.Windows.Forms.CheckBox
+    Friend WithEvents chkHardwareAccel As System.Windows.Forms.CheckBox
+    Friend WithEvents grpDoH As System.Windows.Forms.GroupBox
+    Friend WithEvents lblDoH As System.Windows.Forms.Label
+    Friend WithEvents cmbDoH As System.Windows.Forms.ComboBox
+    Friend WithEvents lblDoHCustom As System.Windows.Forms.Label
+    Friend WithEvents txtDoHCustom As System.Windows.Forms.TextBox
+
+    ' Advanced Controls
+    Friend WithEvents grpDns As System.Windows.Forms.GroupBox
+    Friend WithEvents lblCustomDns As System.Windows.Forms.Label
+    Friend WithEvents txtCustomDns As System.Windows.Forms.TextBox
+    Friend WithEvents grpProxy As System.Windows.Forms.GroupBox
+    Friend WithEvents chkEnableProxy As System.Windows.Forms.CheckBox
+    Friend WithEvents lblProxyHost As System.Windows.Forms.Label
+    Friend WithEvents txtProxyHost As System.Windows.Forms.TextBox
+    Friend WithEvents lblProxyPort As System.Windows.Forms.Label
+    Friend WithEvents txtProxyPort As System.Windows.Forms.TextBox
+    Friend WithEvents btnConfigureProxy As System.Windows.Forms.Button
+
 End Class

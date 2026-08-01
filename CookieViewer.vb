@@ -9,10 +9,13 @@ Public Class CookieViewer
 
     Private Sub LoadCookies()
         tvCookies.Nodes.Clear()
+        Dim cookiesDir As String = Environment.GetFolderPath(Environment.SpecialFolder.Cookies)
+        If Not Directory.Exists(cookiesDir) Then Return
+
         Dim s As String
         Dim oNode As TreeNode
         Dim oInfo As FileInfo
-        For Each s In Directory.GetFiles(Environment.GetFolderPath(Environment.SpecialFolder.Cookies))
+        For Each s In Directory.GetFiles(cookiesDir)
             If s.EndsWith(".txt") Then
                 oInfo = New FileInfo(s)
                 oNode = New TreeNode
@@ -74,12 +77,15 @@ Public Class CookieViewer
     Private Sub btnDeleteALL_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnDeleteALL.Click
         If MessageBox.Show("Are you sure you want to delete all cookies?", "Confirm Delete", MessageBoxButtons.YesNoCancel) = Windows.Forms.DialogResult.Yes Then
             Try
-                Dim s As String
-                For Each s In Directory.GetFiles(Environment.GetFolderPath(Environment.SpecialFolder.Cookies))
-                    If s.EndsWith(".txt") Then
-                        File.Delete(s)
-                    End If
-                Next
+                Dim cookiesDir As String = Environment.GetFolderPath(Environment.SpecialFolder.Cookies)
+                If Directory.Exists(cookiesDir) Then
+                    Dim s As String
+                    For Each s In Directory.GetFiles(cookiesDir)
+                        If s.EndsWith(".txt") Then
+                            File.Delete(s)
+                        End If
+                    Next
+                End If
                 tvCookies.Nodes.Clear()
             Catch ex As Exception
 

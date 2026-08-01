@@ -1,4 +1,4 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class Form1
     Inherits System.Windows.Forms.Form
 
@@ -166,6 +166,7 @@ Partial Class Form1
         Me.ToolStripButton5 = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripButton8 = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripButton9 = New System.Windows.Forms.ToolStripButton()
+        Me.tsbAdBlockBadge = New System.Windows.Forms.ToolStripButton()
         Me.ToolStrip1 = New System.Windows.Forms.ToolStrip()
         Me.StatusStrip1.SuspendLayout()
         Me.ContextMenuStrip1.SuspendLayout()
@@ -708,7 +709,7 @@ Partial Class Form1
         '
         'BookmarksToolStripMenuItem
         '
-        Me.BookmarksToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ViewToolStripMenuItem1, Me.ToolStripSeparator1, Me.BookmarkThisPageToolStripMenuItem, Me.LinksToolStripMenuItem, Me.SocialNetworksToolStripMenuItem})
+        Me.BookmarksToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ViewToolStripMenuItem1, Me.ToolStripSeparator1, Me.BookmarkThisPageToolStripMenuItem})
         Me.BookmarksToolStripMenuItem.Name = "BookmarksToolStripMenuItem"
         Me.BookmarksToolStripMenuItem.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.B), System.Windows.Forms.Keys)
         Me.BookmarksToolStripMenuItem.Size = New System.Drawing.Size(77, 20)
@@ -977,7 +978,7 @@ Partial Class Form1
         Me.SettingsToolStripMenuItem.Image = CType(resources.GetObject("SettingsToolStripMenuItem.Image"), System.Drawing.Image)
         Me.SettingsToolStripMenuItem.Name = "SettingsToolStripMenuItem"
         Me.SettingsToolStripMenuItem.Size = New System.Drawing.Size(219, 22)
-        Me.SettingsToolStripMenuItem.Text = "&Security Settings"
+        Me.SettingsToolStripMenuItem.Text = "Browser &Settings"
         '
         'ProxySettingsToolStripMenuItem
         '
@@ -1190,11 +1191,21 @@ Partial Class Form1
         Me.ToolStripButton9.Size = New System.Drawing.Size(36, 36)
         Me.ToolStripButton9.Text = " Add Bookmark"
         '
+        'tsbAdBlockBadge
+        '
+        Me.tsbAdBlockBadge.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text
+        Me.tsbAdBlockBadge.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold)
+        Me.tsbAdBlockBadge.ForeColor = System.Drawing.Color.DarkRed
+        Me.tsbAdBlockBadge.Name = "tsbAdBlockBadge"
+        Me.tsbAdBlockBadge.Size = New System.Drawing.Size(45, 36)
+        Me.tsbAdBlockBadge.Text = "🛡️ 0"
+        Me.tsbAdBlockBadge.ToolTipText = "Ads & Trackers Blocked"
+        '
         'ToolStrip1
         '
         Me.ToolStrip1.BackColor = System.Drawing.Color.WhiteSmoke
         Me.ToolStrip1.Font = New System.Drawing.Font("Segoe UI", 8.25!)
-        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.Back, Me.ToolStripButton2, Me.ToolStripButton3, Me.ToolStripButton4, Me.ToolStripButton7, Me.ToolStripButton6, Me.img, Me.ToolStripTextBox1, Me.ToolStripButton5, Me.ToolStripButton8, Me.ToolStripButton9})
+        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.Back, Me.ToolStripButton2, Me.ToolStripButton3, Me.ToolStripButton4, Me.ToolStripButton7, Me.ToolStripButton6, Me.img, Me.ToolStripTextBox1, Me.ToolStripButton5, Me.ToolStripButton8, Me.ToolStripButton9, Me.tsbAdBlockBadge})
         Me.ToolStrip1.Location = New System.Drawing.Point(0, 24)
         Me.ToolStrip1.Name = "ToolStrip1"
         Me.ToolStrip1.Size = New System.Drawing.Size(1234, 39)
@@ -1372,6 +1383,7 @@ Partial Class Form1
     Friend WithEvents ToolStripButton5 As System.Windows.Forms.ToolStripButton
     Friend WithEvents ToolStripButton8 As System.Windows.Forms.ToolStripButton
     Friend WithEvents ToolStripButton9 As System.Windows.Forms.ToolStripButton
+    Friend WithEvents tsbAdBlockBadge As System.Windows.Forms.ToolStripButton
     Friend WithEvents ToolStrip1 As System.Windows.Forms.ToolStrip
 
 End Class

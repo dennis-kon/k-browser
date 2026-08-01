@@ -2,18 +2,15 @@ Public Class History
 
     Private Sub History_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
         Try
-
             ListBox1.Items.Clear()
-
-            Dim c As Integer = My.Settings.History.Count
-            Dim x As Integer
-            For x = 0 To c - 1
-                ListBox1.Items.Add(My.Settings.History.Item(x))
-            Next
-
-
+            If My.Settings.History IsNot Nothing Then
+                For Each item As String In My.Settings.History
+                    If Not String.IsNullOrWhiteSpace(item) Then
+                        ListBox1.Items.Add(item)
+                    End If
+                Next
+            End If
         Catch ex As Exception
-
         End Try
     End Sub
 
