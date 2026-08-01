@@ -60,9 +60,17 @@ Public Class Form1
         End If
     End Sub
 
+    Private Function GetActiveWebView() As WebView2
+        If TabControl1.SelectedTab IsNot Nothing AndAlso TabControl1.SelectedTab.Controls.Count > 0 Then
+            Return TryCast(TabControl1.SelectedTab.Controls(0), WebView2)
+        End If
+        Return Nothing
+    End Function
+
     Public Sub OpenDevTools()
-        If wb IsNot Nothing AndAlso wb.CoreWebView2 IsNot Nothing Then
-            wb.CoreWebView2.OpenDevToolsWindow()
+        Dim brws = GetActiveWebView()
+        If brws IsNot Nothing AndAlso brws.CoreWebView2 IsNot Nothing Then
+            brws.CoreWebView2.OpenDevToolsWindow()
         End If
     End Sub
 
@@ -70,7 +78,7 @@ Public Class Form1
         Try
             Dim exeName As String = System.IO.Path.GetFileName(System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName)
             Dim targetExes As String() = {exeName, "K-Browser.exe", "K-Browser.vshost.exe", "devenv.exe"}
-            
+
             Dim featureKeys As New Dictionary(Of String, Integer) From {
                 {"FEATURE_BROWSER_EMULATION", 11001},
                 {"FEATURE_GPU_RENDERING", 1},
@@ -183,17 +191,24 @@ Public Class Form1
     End Sub
 
     Private Async Sub SaveFileToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles SaveFileToolStripMenuItem.Click
-        If wb IsNot Nothing AndAlso wb.CoreWebView2 IsNot Nothing Then
-            Await wb.CoreWebView2.ExecuteScriptAsync("window.print()")
+        Dim brws = GetActiveWebView()
+        If brws IsNot Nothing AndAlso brws.CoreWebView2 IsNot Nothing Then
+            Await brws.CoreWebView2.ExecuteScriptAsync("window.print()")
         End If
     End Sub
 
     Private Sub PrintToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PrintToolStripMenuItem.Click
-        If wb IsNot Nothing AndAlso wb.CoreWebView2 IsNot Nothing Then wb.CoreWebView2.ShowPrintUI(CoreWebView2PrintDialogKind.Browser)
+        Dim brws = GetActiveWebView()
+        If brws IsNot Nothing AndAlso brws.CoreWebView2 IsNot Nothing Then
+            brws.CoreWebView2.ShowPrintUI(CoreWebView2PrintDialogKind.Browser)
+        End If
     End Sub
 
     Private Sub PrintPreviewToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PrintPreviewToolStripMenuItem.Click
-        If wb IsNot Nothing AndAlso wb.CoreWebView2 IsNot Nothing Then wb.CoreWebView2.ShowPrintUI(CoreWebView2PrintDialogKind.Browser)
+        Dim brws = GetActiveWebView()
+        If brws IsNot Nothing AndAlso brws.CoreWebView2 IsNot Nothing Then
+            brws.CoreWebView2.ShowPrintUI(CoreWebView2PrintDialogKind.Browser)
+        End If
     End Sub
 
     Private Sub ExitToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ExitToolStripMenuItem.Click
@@ -201,23 +216,20 @@ Public Class Form1
         Dim title As String
         Dim style As MsgBoxStyle
         Dim response As MsgBoxResult
-        msg = "Are you sure you want to exit?"   ' shows your message you can change it
-        style = MsgBoxStyle.Information Or
-            MsgBoxStyle.YesNo 'The dialog will be a Yes No answer
-        title = "K-Browser"   ' What did you name you application?
+        msg = "Are you sure you want to exit?"
+        style = MsgBoxStyle.Information Or MsgBoxStyle.YesNo
+        title = "K-Browser"
         response = MsgBox(msg, style, title)
-        If response = MsgBoxResult.Yes Then   ' if the user chooses Yes it is going to execute the Me.Close() which will close the programme
-            'Else it will still show up.
-
+        If response = MsgBoxResult.Yes Then
             Me.Close()
-
         End If
     End Sub
 
     Private Async Sub SourceToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles SourceToolStripMenuItem.Click
-        If wb IsNot Nothing AndAlso wb.CoreWebView2 IsNot Nothing Then
+        Dim brws = GetActiveWebView()
+        If brws IsNot Nothing AndAlso brws.CoreWebView2 IsNot Nothing Then
             Try
-                Dim htmlJson As String = Await wb.CoreWebView2.ExecuteScriptAsync("document.documentElement.outerHTML")
+                Dim htmlJson As String = Await brws.CoreWebView2.ExecuteScriptAsync("document.documentElement.outerHTML")
                 Dim htmlText As String = htmlJson
                 If htmlText.StartsWith("""") AndAlso htmlText.EndsWith("""") Then
                     Try
@@ -239,9 +251,10 @@ Public Class Form1
     End Sub
 
     Private Sub BookmarkThisPageToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles BookmarkThisPageToolStripMenuItem.Click
-        If wb IsNot Nothing AndAlso wb.CoreWebView2 IsNot Nothing Then
-            Dim currentUrl As String = wb.CoreWebView2.Source
-            Dim currentTitle As String = If(String.IsNullOrWhiteSpace(wb.CoreWebView2.DocumentTitle), currentUrl, wb.CoreWebView2.DocumentTitle)
+        Dim brws = GetActiveWebView()
+        If brws IsNot Nothing AndAlso brws.CoreWebView2 IsNot Nothing Then
+            Dim currentUrl As String = brws.CoreWebView2.Source
+            Dim currentTitle As String = If(String.IsNullOrWhiteSpace(brws.CoreWebView2.DocumentTitle), currentUrl, brws.CoreWebView2.DocumentTitle)
             If Not String.IsNullOrWhiteSpace(currentUrl) AndAlso currentUrl <> "about:blank" Then
                 If My.Settings.BookmarksTreeData Is Nothing Then
                     My.Settings.BookmarksTreeData = New System.Collections.Specialized.StringCollection()
@@ -262,15 +275,24 @@ Public Class Form1
     End Sub
 
     Private Sub ToolStripButton1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Back.Click
-        If wb IsNot Nothing AndAlso wb.CanGoBack Then wb.GoBack()
+        Dim brws = GetActiveWebView()
+        If brws IsNot Nothing AndAlso brws.CoreWebView2 IsNot Nothing AndAlso brws.CanGoBack Then
+            brws.GoBack()
+        End If
     End Sub
 
     Private Sub ToolStripButton2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton2.Click
-        If wb IsNot Nothing AndAlso wb.CanGoForward Then wb.GoForward()
+        Dim brws = GetActiveWebView()
+        If brws IsNot Nothing AndAlso brws.CoreWebView2 IsNot Nothing AndAlso brws.CanGoForward Then
+            brws.GoForward()
+        End If
     End Sub
 
     Private Sub ToolStripButton3_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton3.Click
-        If wb IsNot Nothing Then wb.Reload()
+        Dim brws = GetActiveWebView()
+        If brws IsNot Nothing AndAlso brws.CoreWebView2 IsNot Nothing Then
+            brws.Reload()
+        End If
     End Sub
 
     Private Sub ToolStripButton4_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton4.Click
@@ -295,24 +317,29 @@ Public Class Form1
     End Sub
 
     Private Async Sub CutToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CutToolStripMenuItem.Click
-        If wb IsNot Nothing AndAlso wb.CoreWebView2 IsNot Nothing Then Await wb.CoreWebView2.ExecuteScriptAsync("document.execCommand('cut')")
+        Dim brws = GetActiveWebView()
+        If brws IsNot Nothing AndAlso brws.CoreWebView2 IsNot Nothing Then Await brws.CoreWebView2.ExecuteScriptAsync("document.execCommand('cut')")
     End Sub
 
     Private Async Sub CopyToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CopyToolStripMenuItem.Click
-        If wb IsNot Nothing AndAlso wb.CoreWebView2 IsNot Nothing Then Await wb.CoreWebView2.ExecuteScriptAsync("document.execCommand('copy')")
+        Dim brws = GetActiveWebView()
+        If brws IsNot Nothing AndAlso brws.CoreWebView2 IsNot Nothing Then Await brws.CoreWebView2.ExecuteScriptAsync("document.execCommand('copy')")
     End Sub
 
     Private Async Sub PasteToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PasteToolStripMenuItem.Click
-        If wb IsNot Nothing AndAlso wb.CoreWebView2 IsNot Nothing Then Await wb.CoreWebView2.ExecuteScriptAsync("document.execCommand('paste')")
+        Dim brws = GetActiveWebView()
+        If brws IsNot Nothing AndAlso brws.CoreWebView2 IsNot Nothing Then Await brws.CoreWebView2.ExecuteScriptAsync("document.execCommand('paste')")
     End Sub
 
     Private Async Sub SelectAllToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles SelectAllToolStripMenuItem.Click
-        If wb IsNot Nothing AndAlso wb.CoreWebView2 IsNot Nothing Then Await wb.CoreWebView2.ExecuteScriptAsync("document.execCommand('selectAll')")
+        Dim brws = GetActiveWebView()
+        If brws IsNot Nothing AndAlso brws.CoreWebView2 IsNot Nothing Then Await brws.CoreWebView2.ExecuteScriptAsync("document.execCommand('selectAll')")
     End Sub
 
     Private Sub SeToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles SeToolStripMenuItem.Click
-        If wb IsNot Nothing Then
-            wb.Focus()
+        Dim brws = GetActiveWebView()
+        If brws IsNot Nothing Then
+            brws.Focus()
             SendKeys.Send("^f")
         End If
     End Sub
@@ -605,6 +632,8 @@ Public Class Form1
             End Select
 
             AddHandler brws.CoreWebView2.NavigationStarting, AddressOf WebView2_NavigationStarting
+            AddHandler brws.CoreWebView2.ContentLoading, AddressOf WebView2_ContentLoading
+            AddHandler brws.CoreWebView2.DOMContentLoaded, AddressOf WebView2_DOMContentLoaded
             AddHandler brws.CoreWebView2.NavigationCompleted, AddressOf WebView2_NavigationCompleted
             AddHandler brws.CoreWebView2.SourceChanged, AddressOf WebView2_SourceChanged
             AddHandler brws.CoreWebView2.DocumentTitleChanged, AddressOf WebView2_DocumentTitleChanged
@@ -703,7 +732,37 @@ Public Class Form1
         End If
     End Sub
 
+    Private Function IsActiveTabWebView(ByVal core As CoreWebView2) As Boolean
+        If core Is Nothing Then Return False
+        Dim activeBrws = GetActiveWebView()
+        Return activeBrws IsNot Nothing AndAlso activeBrws.CoreWebView2 Is core
+    End Function
+
+    Private Async Sub ResetProgressBar()
+        Try
+            Await System.Threading.Tasks.Task.Delay(1000)
+            ProgressBar1.Value = 0
+        Catch
+        End Try
+    End Sub
+
+    Private Sub ProgressBar1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ProgressBar1.Click
+        Dim activeBrws = GetActiveWebView()
+        If activeBrws IsNot Nothing AndAlso activeBrws.CoreWebView2 IsNot Nothing Then
+            activeBrws.Stop()
+            ProgressBar1.Value = 0
+            Label1.Text = "Loading stopped"
+        End If
+    End Sub
+
     Private Sub WebView2_NavigationStarting(ByVal sender As Object, ByVal e As CoreWebView2NavigationStartingEventArgs)
+        Dim coreSender = TryCast(sender, CoreWebView2)
+        If IsActiveTabWebView(coreSender) Then
+            ProgressBar1.Visible = True
+            ProgressBar1.Value = 25
+            Label1.Text = "Connecting: " & e.Uri
+        End If
+
         Dim url As String = e.Uri
         If String.IsNullOrEmpty(url) OrElse url = "about:blank" Then Return
 
@@ -785,18 +844,42 @@ Public Class Form1
         End If
     End Sub
 
+    Private Sub WebView2_ContentLoading(ByVal sender As Object, ByVal e As CoreWebView2ContentLoadingEventArgs)
+        Dim core = TryCast(sender, CoreWebView2)
+        If IsActiveTabWebView(core) Then
+            ProgressBar1.Value = 60
+            Label1.Text = "Loading content..."
+        End If
+    End Sub
+
+    Private Sub WebView2_DOMContentLoaded(ByVal sender As Object, ByVal e As CoreWebView2DOMContentLoadedEventArgs)
+        Dim core = TryCast(sender, CoreWebView2)
+        If IsActiveTabWebView(core) Then
+            ProgressBar1.Value = 85
+            Label1.Text = "Rendering..."
+        End If
+    End Sub
+
     Private Sub WebView2_NavigationCompleted(ByVal sender As Object, ByVal e As CoreWebView2NavigationCompletedEventArgs)
         Dim core = TryCast(sender, CoreWebView2)
+        If IsActiveTabWebView(core) Then
+            ProgressBar1.Value = 100
+            Label1.Text = If(e.IsSuccess, "Done", "Failed")
+            ResetProgressBar()
+        End If
+
         If core IsNot Nothing AndAlso e.IsSuccess Then
             Dim currentUri As String = core.Source
-            If wb IsNot Nothing AndAlso wb.CoreWebView2 Is core Then
+            Dim activeBrws = GetActiveWebView()
+            If activeBrws IsNot Nothing AndAlso activeBrws.CoreWebView2 Is core Then
                 ToolStripTextBox1.Text = currentUri
             End If
             Try
                 If My.Settings.History Is Nothing Then My.Settings.History = New System.Collections.Specialized.StringCollection()
-                My.Settings.History.Add(currentUri)
-                My.Settings.Save()
-                History.ListBox1.Items.Add(currentUri)
+                If Not My.Settings.History.Contains(currentUri) Then
+                    My.Settings.History.Add(currentUri)
+                    My.Settings.Save()
+                End If
             Catch ex As Exception
                 System.Diagnostics.Debug.WriteLine("Error recording history: " & ex.Message)
             End Try
