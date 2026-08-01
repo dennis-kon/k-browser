@@ -101,8 +101,6 @@ Public Class Form1
         Catch ex As Exception
         End Try
         CalendarToolStripMenuItem.Text = DateTime.Now.ToLongDateString()
-        Me.SetStyle(System.Windows.Forms.ControlStyles.SupportsTransparentBackColor, True)
-        Me.BackColor = System.Drawing.Color.Transparent
     End Sub
 
 
@@ -133,19 +131,16 @@ Public Class Form1
     End Sub
 
     Private Sub OpenFileToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OpenFileToolStripMenuItem.Click
-        Dim cdlOpen As New OpenFileDialog
         Try
-            cdlOpen.Filter = "HTML Files (*.html)|*.html|TextFiles" &
-                "(*.txt)|*.txt|Gif Files (*.gif)|*.gif|JPEG Files (*.jpg)|*.jpeg|" &
-                "PNG Files (*.png)|*.png|Art Files (*.art)|*.art|AU Fles (*.au)|*.au|" &
-                "AIFF Files (*.aif|*.aiff|XBM Files (*.xbm)|*.xbm|All Files (*.*)|*.*"
-            cdlOpen.Title = " Open File "
-            cdlOpen.ShowDialog()
-            If Not String.IsNullOrEmpty(cdlOpen.FileName) Then
-                NavigateActiveTab(cdlOpen.FileName)
-            End If
+            Using cdlOpen As New OpenFileDialog()
+                cdlOpen.Filter = "HTML Files (*.html)|*.html|Text Files (*.txt)|*.txt|Image Files (*.gif;*.jpg;*.jpeg;*.png)|*.gif;*.jpg;*.jpeg;*.png|Audio Files (*.au;*.aif;*.aiff)|*.au;*.aif;*.aiff|All Files (*.*)|*.*"
+                cdlOpen.Title = "Open File"
+                If cdlOpen.ShowDialog() = DialogResult.OK AndAlso Not String.IsNullOrEmpty(cdlOpen.FileName) Then
+                    NavigateActiveTab(cdlOpen.FileName)
+                End If
+            End Using
         Catch ex As Exception
-            Throw New Exception(ex.Message.ToString)
+            System.Diagnostics.Debug.WriteLine("Error opening file: " & ex.Message)
         End Try
     End Sub
 
@@ -187,7 +182,11 @@ Public Class Form1
                 Dim htmlJson As String = Await wb.CoreWebView2.ExecuteScriptAsync("document.documentElement.outerHTML")
                 Dim htmlText As String = htmlJson
                 If htmlText.StartsWith("""") AndAlso htmlText.EndsWith("""") Then
-                    htmlText = System.Text.RegularExpressions.Regex.Unescape(htmlText.Substring(1, htmlText.Length - 2))
+                    Try
+                        htmlText = System.Text.RegularExpressions.Regex.Unescape(htmlText.Substring(1, htmlText.Length - 2))
+                    Catch
+                        htmlText = htmlJson.Substring(1, htmlJson.Length - 2).Replace("\""", """").Replace("\n", vbCrLf).Replace("\r", "").Replace("\\", "\")
+                    End Try
                 End If
                 Source.Show()
                 Source.RichTextBox1.Text = htmlText
@@ -201,19 +200,17 @@ Public Class Form1
         OpenDevTools()
     End Sub
 
-    Private Sub Button5_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
-        NavigateActiveTab(ToolStripTextBox1.Text)
-    End Sub
-
     Private Sub BookmarkThisPageToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles BookmarkThisPageToolStripMenuItem.Click
         Try
             If wb IsNot Nothing AndAlso wb.CoreWebView2 IsNot Nothing Then
                 Dim bmUrl As String = wb.CoreWebView2.Source
+                If My.Settings.Bookmarks Is Nothing Then My.Settings.Bookmarks = New System.Collections.Specialized.StringCollection()
                 My.Settings.Bookmarks.Add(bmUrl)
                 My.Settings.Save()
                 MsgBox(bmUrl & " Has Been Bookmarked!", MsgBoxStyle.OkOnly, "K-Browser")
             End If
         Catch ex As Exception
+            System.Diagnostics.Debug.WriteLine("Error bookmarking page: " & ex.Message)
         End Try
     End Sub
 
@@ -337,11 +334,13 @@ Public Class Form1
         Try
             If wb IsNot Nothing AndAlso wb.CoreWebView2 IsNot Nothing Then
                 Dim url As String = wb.CoreWebView2.Source
+                If My.Settings.Bookmarks Is Nothing Then My.Settings.Bookmarks = New System.Collections.Specialized.StringCollection()
                 My.Settings.Bookmarks.Add(url)
                 My.Settings.Save()
                 MsgBox(url & " Has Been Bookmarked!", MsgBoxStyle.OkOnly, "K-Browser")
             End If
         Catch ex As Exception
+            System.Diagnostics.Debug.WriteLine("Error bookmarking page: " & ex.Message)
         End Try
     End Sub
 
@@ -386,27 +385,19 @@ Public Class Form1
         End If
     End Sub
 
-    Private Sub ToolStripButton1_Click_1(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton1.Click
-        If Not String.IsNullOrWhiteSpace(searchTextBox2.Text) Then
-            NavigateActiveTab("http://www.google.com/search?hl=en&q=" & Uri.EscapeDataString(searchTextBox2.Text))
-            My.Settings.History.Add(searchTextBox2.Text)
-            My.Settings.Save()
-            History.ListBox1.Items.Add(searchTextBox2.Text)
-        End If
-    End Sub
 
-    Private Sub searchTextBox2_KeyDown(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles searchTextBox2.KeyDown
-        If e.KeyCode = Keys.Enter AndAlso Not String.IsNullOrWhiteSpace(searchTextBox2.Text) Then
-            NavigateActiveTab("http://www.google.com/search?hl=en&q=" & Uri.EscapeDataString(searchTextBox2.Text))
-            History.ListBox1.Items.Add(searchTextBox2.Text)
-        End If
-    End Sub
+
+
 
     Private Sub SendALinkToolStripMenuItem_Click_1(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles SendALinkToolStripMenuItem.Click
-        System.Diagnostics.Process.Start("outlook")
+        Try
+            System.Diagnostics.Process.Start(New System.Diagnostics.ProcessStartInfo("outlook") With {.UseShellExecute = True})
+        Catch ex As Exception
+            MessageBox.Show("Unable to launch email client.", "K-Browser", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
     End Sub
 
-    Private Sub wb_LocationChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.LocationChanged
+    Private Sub Form1_LocationChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.LocationChanged
         Try
             If Me.WindowState = FormWindowState.Normal Then
                 My.Settings.MainLocation = Me.Location
@@ -416,7 +407,7 @@ Public Class Form1
         End Try
     End Sub
 
-    Private Sub wb_Click(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles Me.MouseClick
+    Private Sub Form1_MouseClick(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles Me.MouseClick
         If e.Button = Windows.Forms.MouseButtons.Left Then
             ContextMenuStrip1.Show(CType(sender, Control), e.Location)
         End If
@@ -430,21 +421,11 @@ Public Class Form1
         NavigateActiveTab("https://www.k-browser.com/")
     End Sub
 
-    Private Sub ShareThisOnToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ShareThisOnToolStripMenuItem.Click
+    Private Sub ShareThisOnToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles FacebookToolStripMenuItem.Click
         fb.ShowDialog()
     End Sub
 
-    Private Sub ToolStripSplitButton1_ButtonClick(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripSplitButton1.ButtonClick
-        NavigateActiveTab("https://www.facebook.com/login.php")
-        History.ListBox1.Items.Add(searchTextBox2.Text)
-    End Sub
-
-    Private Sub ToolStripSplitButton2_ButtonClick(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripSplitButton2.ButtonClick
-        NavigateActiveTab("https://twitter.com/login")
-        History.ListBox1.Items.Add(searchTextBox2.Text)
-    End Sub
-
-    Private Sub TweetToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TweetToolStripMenuItem.Click
+    Private Sub TweetToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TwitterToolStripMenuItem.Click
         tw.ShowDialog()
     End Sub
 
@@ -532,7 +513,7 @@ Public Class Form1
         NavigateActiveTab("http://www.webcrawler.com/")
     End Sub
 
-    Private Sub GopherToolStripMenuItem_Click(ByVal sender As System.Object)
+    Private Sub GopherToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
         NavigateActiveTab("http://wt.gopherite.org/")
     End Sub
 
@@ -560,10 +541,10 @@ Public Class Form1
         brws.Dock = DockStyle.Fill
         tab.Text = "Loading..."
         tab.Controls.Add(brws)
-        
+
         Me.TabControl1.TabPages.Add(tab)
         Me.TabControl1.SelectedTab = tab
-        
+
         Try
             Await brws.EnsureCoreWebView2Async(Nothing)
         Catch ex As Exception
@@ -599,7 +580,7 @@ Public Class Form1
     Private Sub WebView2_NavigationStarting(ByVal sender As Object, ByVal e As CoreWebView2NavigationStartingEventArgs)
         Dim url As String = e.Uri
         If String.IsNullOrEmpty(url) OrElse url = "about:blank" Then Return
-        
+
         ' 1. Blocked Sites Check
         If My.Settings.BlockedSites IsNot Nothing Then
             For Each blockedUrl As String In My.Settings.BlockedSites
@@ -612,21 +593,21 @@ Public Class Form1
                 End If
             Next
         End If
-        
+
         ' 2. Phishing Sites Check
         If My.Settings.UsePhishingFilter AndAlso My.Settings.PhishingSites IsNot Nothing Then
             For Each phishingUrl As String In My.Settings.PhishingSites
                 If Not String.IsNullOrEmpty(phishingUrl) Then
                     If url.ToLower().Contains(phishingUrl.ToLower()) Then
                         If IgnoredUrls.Contains(url) Then Return
-                        
+
                         e.Cancel = True
-                        
+
                         Dim warningForm As New Phising()
                         warningForm.lbPhishing.Items.Clear()
                         warningForm.lbPhishing.Items.Add("Detected Phishing URL:")
                         warningForm.lbPhishing.Items.Add(url)
-                        
+
                         Dim result As DialogResult = warningForm.ShowDialog()
                         If result = DialogResult.Ignore Then
                             IgnoredUrls.Add(url)
@@ -641,38 +622,53 @@ Public Class Form1
     End Sub
 
     Private Sub WebView2_NavigationCompleted(ByVal sender As Object, ByVal e As CoreWebView2NavigationCompletedEventArgs)
-        If wb IsNot Nothing AndAlso wb.CoreWebView2 IsNot Nothing Then
-            Dim currentUri As String = wb.CoreWebView2.Source
-            ToolStripTextBox1.Text = currentUri
-            If e.IsSuccess Then
-                Try
-                    My.Settings.History.Add(currentUri)
-                    My.Settings.Save()
-                    History.ListBox1.Items.Add(currentUri)
-                Catch ex As Exception
-                End Try
+        Dim core = TryCast(sender, CoreWebView2)
+        If core IsNot Nothing AndAlso e.IsSuccess Then
+            Dim currentUri As String = core.Source
+            If wb IsNot Nothing AndAlso wb.CoreWebView2 Is core Then
+                ToolStripTextBox1.Text = currentUri
             End If
+            Try
+                If My.Settings.History Is Nothing Then My.Settings.History = New System.Collections.Specialized.StringCollection()
+                My.Settings.History.Add(currentUri)
+                My.Settings.Save()
+                History.ListBox1.Items.Add(currentUri)
+            Catch ex As Exception
+                System.Diagnostics.Debug.WriteLine("Error recording history: " & ex.Message)
+            End Try
         End If
     End Sub
 
     Private Sub WebView2_SourceChanged(ByVal sender As Object, ByVal e As CoreWebView2SourceChangedEventArgs)
-        If wb IsNot Nothing AndAlso wb.CoreWebView2 IsNot Nothing Then
-            ToolStripTextBox1.Text = wb.CoreWebView2.Source
+        Dim core = TryCast(sender, CoreWebView2)
+        If core IsNot Nothing AndAlso wb IsNot Nothing AndAlso wb.CoreWebView2 Is core Then
+            ToolStripTextBox1.Text = core.Source
         End If
     End Sub
 
     Private Sub WebView2_DocumentTitleChanged(ByVal sender As Object, ByVal e As Object)
         Dim core = TryCast(sender, CoreWebView2)
-        If core IsNot Nothing Then
-            Label1.Text = core.DocumentTitle
-            If TabControl1.SelectedTab IsNot Nothing AndAlso Not String.IsNullOrEmpty(core.DocumentTitle) Then
-                TabControl1.SelectedTab.Text = If(core.DocumentTitle.Length > 20, core.DocumentTitle.Substring(0, 17) & "...", core.DocumentTitle)
+        If core Is Nothing Then Return
+
+        For Each page As TabPage In TabControl1.TabPages
+            If page.Controls.Count > 0 Then
+                Dim browserControl = TryCast(page.Controls(0), WebView2)
+                If browserControl IsNot Nothing AndAlso browserControl.CoreWebView2 Is core Then
+                    If Not String.IsNullOrEmpty(core.DocumentTitle) Then
+                        page.Text = If(core.DocumentTitle.Length > 20, core.DocumentTitle.Substring(0, 17) & "...", core.DocumentTitle)
+                    End If
+                    If page Is TabControl1.SelectedTab Then
+                        Label1.Text = core.DocumentTitle
+                    End If
+                    Exit For
+                End If
             End If
-        End If
+        Next
     End Sub
 
     Private Sub WebView2_HistoryChanged(ByVal sender As Object, ByVal e As Object)
-        If wb IsNot Nothing Then
+        Dim core = TryCast(sender, CoreWebView2)
+        If core IsNot Nothing AndAlso wb IsNot Nothing AndAlso wb.CoreWebView2 Is core Then
             Back.Enabled = wb.CanGoBack
             ToolStripButton2.Enabled = wb.CanGoForward
         End If
@@ -798,7 +794,7 @@ Public Class Form1
         NavigateActiveTab("about:blank")
     End Sub
 
-    Private Sub ToolStripSplitButton1_DoubleClick(ByVal sender As Object, ByVal e As System.EventArgs) Handles ToolStripSplitButton1.DoubleClick
+    Private Sub ToolStripSplitButton1_DoubleClick(ByVal sender As Object, ByVal e As System.EventArgs)
         ToolStripTextBox1.Focus()
     End Sub
 
@@ -953,6 +949,10 @@ Public Class Form1
     End Sub
 
     Private Sub SToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles SToolStripMenuItem.Click
-        System.Diagnostics.Process.Start("mailto:""denkon24@yahoo.com")
+        Try
+            System.Diagnostics.Process.Start(New System.Diagnostics.ProcessStartInfo("mailto:denkon24@yahoo.com") With {.UseShellExecute = True})
+        Catch ex As Exception
+            MessageBox.Show("Unable to open email client.", "K-Browser", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
     End Sub
 End Class
