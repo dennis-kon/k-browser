@@ -57,6 +57,51 @@ K-Browser
  Applies PreferredColorScheme (Dark or Light) to a WebView2 control.
  </summary>
 </member>
+<member name="M:Advance_Webbrowser.TabLifecycleManager.OnTabSelectionChanged(System.Windows.Forms.TabControl)">
+ <summary>
+ Handles tab selection change events in Form1 to resume the active tab and suspend idle background tabs.
+ </summary>
+</member>
+<member name="M:Advance_Webbrowser.TabLifecycleManager.SuspendTab(Microsoft.Web.WebView2.WinForms.WebView2)">
+ <summary>
+ Suspends background tab JavaScript timers and rendering loop to conserve RAM and CPU.
+ </summary>
+</member>
+<member name="M:Advance_Webbrowser.TabLifecycleManager.ResumeTab(Microsoft.Web.WebView2.WinForms.WebView2)">
+ <summary>
+ Resumes a suspended tab when activated by the user.
+ </summary>
+</member>
+<member name="M:Advance_Webbrowser.TabLifecycleManager.OnTabClosed(Microsoft.Web.WebView2.WinForms.WebView2)">
+ <summary>
+ Cleans up tab reference from tracking collection on tab close.
+ </summary>
+</member>
+<member name="M:Advance_Webbrowser.UserScriptManager.Initialize">
+ <summary>
+ Initializes UserScript directory and loads all local .user.js scripts.
+ </summary>
+</member>
+<member name="M:Advance_Webbrowser.UserScriptManager.RegisterScriptsForTabAsync(Microsoft.Web.WebView2.WinForms.WebView2)">
+ <summary>
+ Registers all loaded UserScripts to automatically execute when documents are created inside WebView2.
+ </summary>
+</member>
+<member name="T:Advance_Webbrowser.AdBlockTrie">
+ <summary>
+ High-performance Prefix Tree (Trie) data structure for O(K) host-anchored ad rule lookups.
+ </summary>
+</member>
+<member name="M:Advance_Webbrowser.AdBlockTrie.AddDomain(System.String)">
+ <summary>
+ Adds a domain rule (e.g. "doubleclick.net" or "adservice.google.com") into the host Trie.
+ </summary>
+</member>
+<member name="M:Advance_Webbrowser.AdBlockTrie.IsHostBlocked(System.String)">
+ <summary>
+ Evaluates whether a host (e.g. "sub.adservice.google.com") matches any blocked host rule in O(K) time.
+ </summary>
+</member>
 <member name="P:Advance_Webbrowser.Bookmarks.BookmarkNodeData.Title">
  <summary>
  The clean page title, used for serialization.

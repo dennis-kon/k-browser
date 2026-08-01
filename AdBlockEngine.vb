@@ -8,6 +8,7 @@ Public Class AdBlockEngine
     Private Shared ReadOnly LockObj As New Object()
     Private Shared ReadOnly AllowRules As New HashSet(Of String)(StringComparer.OrdinalIgnoreCase)
     Private Shared ReadOnly DomainAnchors As New HashSet(Of String)(StringComparer.OrdinalIgnoreCase)
+    Private Shared ReadOnly HostTrie As New AdBlockTrie()
     Private Shared ReadOnly AdPathSubstrings As New HashSet(Of String)(StringComparer.OrdinalIgnoreCase)
 
     ' Reserved generic keywords that MUST NEVER be treated as ad blocking rules
@@ -42,6 +43,7 @@ Public Class AdBlockEngine
         SyncLock LockObj
             AllowRules.Clear()
             DomainAnchors.Clear()
+            HostTrie.Clear()
             AdPathSubstrings.Clear()
         End SyncLock
 
@@ -61,15 +63,11 @@ Public Class AdBlockEngine
         ' Add default fallback ad domains if no rules are downloaded yet
         If totalRulesCount = 0 Then
             SyncLock LockObj
-                DomainAnchors.Add("doubleclick.net")
-                DomainAnchors.Add("adservice.google.com")
-                DomainAnchors.Add("adnxs.com")
-                DomainAnchors.Add("googlesyndication.com")
-                DomainAnchors.Add("taboola.com")
-                DomainAnchors.Add("outbrain.com")
-                DomainAnchors.Add("adform.net")
-                DomainAnchors.Add("scorecardresearch.com")
-                DomainAnchors.Add("amazon-adsystem.com")
+                Dim defaults = New String() {"doubleclick.net", "adservice.google.com", "adnxs.com", "googlesyndication.com", "taboola.com", "outbrain.com", "adform.net", "scorecardresearch.com", "amazon-adsystem.com"}
+                For Each d In defaults
+                    DomainAnchors.Add(d)
+                    HostTrie.AddDomain(d)
+                Next
             End SyncLock
             totalRulesCount = 9
         End If
@@ -147,6 +145,7 @@ Public Class AdBlockEngine
                         Dim parts As String() = domain.Split("."c)
                         If parts.Length >= 2 AndAlso parts(0).Length >= 2 Then
                             DomainAnchors.Add(domain)
+                            HostTrie.AddDomain(domain)
                             count += 1
                         End If
                     End If
@@ -175,11 +174,9 @@ Public Class AdBlockEngine
             Try
                 Dim uri As New Uri(url)
                 Dim host As String = uri.Host.ToLowerInvariant()
-                For Each anchor As String In DomainAnchors
-                    If host = anchor OrElse host.EndsWith("." & anchor) Then
-                        Return True
-                    End If
-                Next
+                If HostTrie.IsHostBlocked(host) Then
+                    Return True
+                End If
             Catch
             End Try
         End SyncLock
@@ -202,15 +199,13 @@ Public Class AdBlockEngine
                 End If
             Next
 
-            ' 2. Domain Anchors (Host matching)
+            ' 2. Domain Anchors (O(K) Host Trie matching)
             Try
                 Dim uri As New Uri(url)
                 Dim host As String = uri.Host.ToLowerInvariant()
-                For Each anchor As String In DomainAnchors
-                    If host = anchor OrElse host.EndsWith("." & anchor) Then
-                        Return True
-                    End If
-                Next
+                If HostTrie.IsHostBlocked(host) Then
+                    Return True
+                End If
             Catch
             End Try
 

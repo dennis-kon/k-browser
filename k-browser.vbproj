@@ -116,6 +116,9 @@
     <Compile Include="AdBlockEngine.vb" />
     <Compile Include="TabProcessManager.vb" />
     <Compile Include="ThemeManager.vb" />
+    <Compile Include="TabLifecycleManager.vb" />
+    <Compile Include="UserScriptManager.vb" />
+    <Compile Include="AdBlockTrie.vb" />
     <Compile Include="AdBlockerSettings.Designer.vb">
       <DependentUpon>AdBlockerSettings.vb</DependentUpon>
     </Compile>

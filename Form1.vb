@@ -118,6 +118,7 @@ Public Class Form1
         Try
             ThemeManager.ApplyTheme(Me)
             UpdateDarkModeMenuCheckedState()
+            UserScriptManager.Initialize()
             If My.Settings.FullScreenOnStartup Then
                 FullScreen()
                 full = True
@@ -178,6 +179,7 @@ Public Class Form1
                         RemoveHandler browserControl.CoreWebView2.NewWindowRequested, AddressOf WebView2_NewWindowRequested
                         RemoveHandler browserControl.CoreWebView2.WebResourceRequested, AddressOf WebView2_WebResourceRequested
                     End If
+                    TabLifecycleManager.OnTabClosed(browserControl)
                     browserControl.Dispose()
                 End If
             End If
@@ -623,6 +625,7 @@ Public Class Form1
 
         If brws.CoreWebView2 IsNot Nothing Then
             ThemeManager.ApplyWebView2Theme(brws)
+            Await UserScriptManager.RegisterScriptsForTabAsync(brws)
             brws.CoreWebView2.Settings.IsStatusBarEnabled = True
             brws.CoreWebView2.Settings.AreDefaultScriptDialogsEnabled = True
             brws.CoreWebView2.Settings.IsScriptEnabled = True
@@ -1027,20 +1030,8 @@ Public Class Form1
             wb = Nothing
         End If
 
-        ' Memory Saver: Suspend background inactive tabs
-        If My.Settings.MemorySaverEnabled Then
-            For Each page As TabPage In TabControl1.TabPages
-                If page IsNot TabControl1.SelectedTab AndAlso page.Controls.Count > 0 Then
-                    Dim view = TryCast(page.Controls(0), WebView2)
-                    If view IsNot Nothing AndAlso view.CoreWebView2 IsNot Nothing Then
-                        Try
-                            view.CoreWebView2.TrySuspendAsync()
-                        Catch ex As Exception
-                        End Try
-                    End If
-                End If
-            Next
-        End If
+        ' Memory & Resource Saver: Use TabLifecycleManager to suspend background tabs and resume active tab
+        TabLifecycleManager.OnTabSelectionChanged(Me.TabControl1)
     End Sub
 
 
