@@ -44,9 +44,9 @@ Partial Class AboutBox
         Me.Label2.ForeColor = System.Drawing.Color.Gray
         Me.Label2.Location = New System.Drawing.Point(14, 264)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(92, 16)
+        Me.Label2.Size = New System.Drawing.Size(104, 16)
         Me.Label2.TabIndex = 3
-        Me.Label2.Text = "Version 5.01"
+        Me.Label2.Text = "Version 5.0.02"
         '
         'Button1
         '
