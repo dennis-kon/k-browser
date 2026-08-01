@@ -39,6 +39,10 @@ Public Class task_manager
     End Sub
 
     Private Sub KillSelectedProcesses()
+        If ListView1.SelectedItems.Count = 0 Then Return
+        If MessageBox.Show("Are you sure you want to terminate the selected process(es)?", "Confirm Termination", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) <> DialogResult.Yes Then
+            Return
+        End If
         For Each item As ListViewItem In ListView1.SelectedItems
             If item.SubItems.Count > 4 Then
                 Dim pidText As String = item.SubItems(4).Text

@@ -10,8 +10,6 @@ Public Class Form1
     Dim isUserAgentSet As Boolean
     Dim MyUserAgent As String = "Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.1; Trident/6.0; K-Browser 4.8.1)"
     Dim rightNow As DateTime = DateTime.Now
-    Dim tab As New TabPage
-    Dim brws As New WebBrowser
     Public full As Boolean = False
     Public Event FileDownload As EventHandler
     Public WithEvents oDoc As HtmlDocument
@@ -21,7 +19,8 @@ Public Class Form1
     Public Sub New()
         SetBrowserFeatureControl()
         InitializeComponent()
-        wb = New WebBrowser
+        wb = New WebBrowser()
+        wb.ScriptErrorsSuppressed = True
         isUserAgentSet = False
     End Sub
 
@@ -36,14 +35,40 @@ Public Class Form1
         Me.TopMost = True
     End Sub
 
+    Public Sub NavigateActiveTab(ByVal url As String)
+        If String.IsNullOrWhiteSpace(url) Then Return
+        Dim target As String = AppManager.FixURL(url)
+        If wb IsNot Nothing Then
+            wb.Navigate(target)
+        Else
+            CreateNewTab(target)
+        End If
+    End Sub
+
     Private Sub SetBrowserFeatureControl()
         Try
             Dim exeName As String = System.IO.Path.GetFileName(System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName)
-            Using key As RegistryKey = Registry.CurrentUser.CreateSubKey("Software\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_BROWSER_EMULATION")
-                If key IsNot Nothing Then
-                    key.SetValue(exeName, 11001, RegistryValueKind.DWord)
-                End If
-            End Using
+            Dim targetExes As String() = {exeName, "K-Browser.exe", "K-Browser.vshost.exe", "devenv.exe"}
+            
+            Dim featureKeys As New Dictionary(Of String, Integer) From {
+                {"FEATURE_BROWSER_EMULATION", 11001},
+                {"FEATURE_GPU_RENDERING", 1},
+                {"FEATURE_NATIVE_DOCUMENT_MODE", 1},
+                {"FEATURE_SCRIPT_URL_MITIGATION", 1}
+            }
+
+            For Each featureKey As String In featureKeys.Keys
+                Dim featureValue As Integer = featureKeys(featureKey)
+                Using key As RegistryKey = Registry.CurrentUser.CreateSubKey("Software\Microsoft\Internet Explorer\Main\FeatureControl\" & featureKey)
+                    If key IsNot Nothing Then
+                        For Each targetExe As String In targetExes
+                            If Not String.IsNullOrEmpty(targetExe) Then
+                                key.SetValue(targetExe, featureValue, RegistryValueKind.DWord)
+                            End If
+                        Next
+                    End If
+                End Using
+            Next
         Catch ex As Exception
             System.Diagnostics.Debug.WriteLine("Failed to set browser emulation registry key: " & ex.Message)
         End Try
@@ -71,7 +96,10 @@ Public Class Form1
         Try
             ProgressBar1.Maximum = e.MaximumProgress
             ProgressBar1.Value = e.CurrentProgress
-            Label1.Text = brws.StatusText
+            Dim currentBrowser = TryCast(sender, WebBrowser)
+            If currentBrowser IsNot Nothing Then
+                Label1.Text = currentBrowser.StatusText
+            End If
         Catch ex As Exception
         End Try
     End Sub
@@ -80,8 +108,6 @@ Public Class Form1
 
     Private Sub NewWindowToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles NewWindowToolStripMenuItem.Click
         Dim newform As New Form1
-        ' remember that form1 not form
-        newform = New Form1
         newform.Show()
     End Sub
 
@@ -112,12 +138,27 @@ Public Class Form1
         End If
     End Sub
 
-    Private Sub Browser_DocumentCompleted(sender As Object, e As WebBrowserDocumentCompletedEventArgs)
-        Throw New NotImplementedException()
+
+
+    Private Sub CloseCurrentTab()
+        If TabControl1.SelectedTab IsNot Nothing Then
+            Dim selectedTab As TabPage = TabControl1.SelectedTab
+            If selectedTab.Controls.Count > 0 Then
+                Dim browserControl As WebBrowser = TryCast(selectedTab.Controls(0), WebBrowser)
+                If browserControl IsNot Nothing Then
+                    RemoveHandler browserControl.ProgressChanged, AddressOf Loading
+                    RemoveHandler browserControl.Navigating, AddressOf WebBrowser_Navigating
+                    RemoveHandler browserControl.DocumentCompleted, AddressOf WebBrowser_DocumentCompleted_SuppressErrors
+                    browserControl.Dispose()
+                End If
+            End If
+            TabControl1.TabPages.Remove(selectedTab)
+            selectedTab.Dispose()
+        End If
     End Sub
 
     Private Sub DeleteTabToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles DeleteTabToolStripMenuItem.Click
-        TabControl1.Controls.Remove(TabControl1.SelectedTab)
+        CloseCurrentTab()
     End Sub
 
     Private Sub OpenFileToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OpenFileToolStripMenuItem.Click
@@ -138,15 +179,15 @@ Public Class Form1
     End Sub
 
     Private Sub SaveFileToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles SaveFileToolStripMenuItem.Click
-        wb.ShowSaveAsDialog()
+        If wb IsNot Nothing Then wb.ShowSaveAsDialog()
     End Sub
 
     Private Sub PrintToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PrintToolStripMenuItem.Click
-        wb.ShowPrintDialog()
+        If wb IsNot Nothing Then wb.ShowPrintDialog()
     End Sub
 
     Private Sub PrintPreviewToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PrintPreviewToolStripMenuItem.Click
-        wb.ShowPrintPreviewDialog()
+        If wb IsNot Nothing Then wb.ShowPrintPreviewDialog()
     End Sub
 
     Private Sub ExitToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ExitToolStripMenuItem.Click
@@ -168,12 +209,14 @@ Public Class Form1
     End Sub
 
     Private Sub SourceToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles SourceToolStripMenuItem.Click
-        Source.Show()
-        Source.RichTextBox1.Text = Me.wb.DocumentText
+        If wb IsNot Nothing AndAlso wb.Document IsNot Nothing Then
+            Source.Show()
+            Source.RichTextBox1.Text = Me.wb.DocumentText
+        End If
     End Sub
 
     Private Sub PropertiesToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PropertiesToolStripMenuItem.Click
-        wb.ShowPropertiesDialog()
+        If wb IsNot Nothing Then wb.ShowPropertiesDialog()
     End Sub
 
     Private Sub Button5_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
@@ -206,19 +249,19 @@ Public Class Form1
     End Sub
 
     Private Sub ToolStripButton1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Back.Click
-        wb.GoBack()
+        If wb IsNot Nothing AndAlso wb.CanGoBack Then wb.GoBack()
     End Sub
 
     Private Sub ToolStripButton2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton2.Click
-        wb.GoForward()
+        If wb IsNot Nothing AndAlso wb.CanGoForward Then wb.GoForward()
     End Sub
 
     Private Sub ToolStripButton3_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton3.Click
-        wb.Refresh()
+        If wb IsNot Nothing Then wb.Refresh()
     End Sub
 
     Private Sub ToolStripButton4_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton4.Click
-        wb.GoHome()
+        If wb IsNot Nothing Then wb.GoHome()
     End Sub
 
     Private Sub ToolStripButton5_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton5.Click
@@ -242,33 +285,30 @@ Public Class Form1
     End Sub
 
     Private Sub ToolStripButton6_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton6.Click
-        TabControl1.Controls.Remove(TabControl1.SelectedTab)
+        CloseCurrentTab()
     End Sub
 
     Private Sub CutToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CutToolStripMenuItem.Click
-        wb.Document.ExecCommand("Cut", False, vbNull)
+        If wb IsNot Nothing AndAlso wb.Document IsNot Nothing Then wb.Document.ExecCommand("Cut", False, vbNull)
     End Sub
 
     Private Sub CopyToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CopyToolStripMenuItem.Click
-        'WebBrowser1.Document.ExecCommand("copy", False, vbNull)
-        wb.Document.ExecCommand("copy", False, vbNull)
+        If wb IsNot Nothing AndAlso wb.Document IsNot Nothing Then wb.Document.ExecCommand("copy", False, vbNull)
     End Sub
 
     Private Sub PasteToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PasteToolStripMenuItem.Click
-        'WebBrowser1.Document.ExecCommand("paste", False, vbNull)
-        wb.Document.ExecCommand("paste", False, vbNull)
+        If wb IsNot Nothing AndAlso wb.Document IsNot Nothing Then wb.Document.ExecCommand("paste", False, vbNull)
     End Sub
 
     Private Sub SelectAllToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles SelectAllToolStripMenuItem.Click
-        'WebBrowser1.Document.ExecCommand("SelectAll", False, vbNull)
-        wb.Document.ExecCommand("SelectAll", False, vbNull)
+        If wb IsNot Nothing AndAlso wb.Document IsNot Nothing Then wb.Document.ExecCommand("SelectAll", False, vbNull)
     End Sub
 
     Private Sub SeToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles SeToolStripMenuItem.Click
-        ' WebBrowser1.Focus()
-        ' SendKeys.Send("^f")
-        wb.Focus()
-        SendKeys.Send("^f")
+        If wb IsNot Nothing Then
+            wb.Focus()
+            SendKeys.Send("^f")
+        End If
     End Sub
 
     Private Enum Exec
@@ -349,7 +389,7 @@ Public Class Form1
     End Sub
 
     Private Sub SetHomePageToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles SetHomePageToolStripMenuItem.Click
-        Rss.ShowDialog()
+        If wb IsNot Nothing Then wb.GoHome()
     End Sub
 
     Private Sub NewTabToolStripMenuItem1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles NewTabToolStripMenuItem1.Click
@@ -371,7 +411,7 @@ Public Class Form1
     End Sub
 
     Private Sub CloseTabToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CloseTabToolStripMenuItem.Click
-        TabControl1.Controls.Remove(TabControl1.SelectedTab)
+        CloseCurrentTab()
     End Sub
 
     Private Sub ExitToolStripMenuItem1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ExitToolStripMenuItem1.Click
@@ -390,9 +430,12 @@ Public Class Form1
     End Sub
 
     Private Sub ToolStripButton1_Click_1(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton1.Click
-        Me.brws.Navigate(My.Settings.sem)
-        wb.Navigate("http://www.google.com./search?hl=en&q=" & searchTextBox2.Text)
-        History.ListBox1.Items.Add(searchTextBox2.Text)
+        If wb IsNot Nothing Then
+            wb.Navigate("http://www.google.com/search?hl=en&q=" & Uri.EscapeDataString(searchTextBox2.Text))
+            My.Settings.History.Add(searchTextBox2.Text)
+            My.Settings.Save()
+            History.ListBox1.Items.Add(searchTextBox2.Text)
+        End If
     End Sub
 
     Private Sub searchTextBox2_KeyDown(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles searchTextBox2.KeyDown
@@ -564,6 +607,7 @@ Public Class Form1
         
         AddHandler brws.ProgressChanged, AddressOf Loading
         AddHandler brws.Navigating, AddressOf WebBrowser_Navigating
+        AddHandler brws.DocumentCompleted, AddressOf WebBrowser_DocumentCompleted_SuppressErrors
         
         Me.TabControl1.TabPages.Add(tab)
         Me.TabControl1.SelectedTab = tab
@@ -574,6 +618,17 @@ Public Class Form1
         
         Return brws
     End Function
+
+    Private Sub WebBrowser_DocumentCompleted_SuppressErrors(ByVal sender As Object, ByVal e As WebBrowserDocumentCompletedEventArgs)
+        Try
+            Dim currentBrowser As WebBrowser = TryCast(sender, WebBrowser)
+            If currentBrowser IsNot Nothing AndAlso currentBrowser.Document IsNot Nothing AndAlso currentBrowser.Document.Window IsNot Nothing Then
+                RemoveHandler currentBrowser.Document.Window.Error, AddressOf Window_Error
+                AddHandler currentBrowser.Document.Window.Error, AddressOf Window_Error
+            End If
+        Catch ex As Exception
+        End Try
+    End Sub
 
     Private Sub WebBrowser_Navigating(ByVal sender As Object, ByVal e As WebBrowserNavigatingEventArgs)
         Dim currentBrowser As WebBrowser = TryCast(sender, WebBrowser)
@@ -765,7 +820,7 @@ Public Class Form1
     End Sub
 
     Private Sub CPUStatsToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CPUStatsToolStripMenuItem.Click
-        wb.ShowPageSetupDialog()
+        task_manager.ShowDialog()
     End Sub
 
     Private Sub Form1_MouseDoubleClick(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles Me.MouseDoubleClick
@@ -812,8 +867,6 @@ Public Class Form1
 
     Private Sub ToolStripMenuItem2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem2.Click
         Dim newform As New Form1
-        ' remember that form1 not form
-        newform = New Form1
         newform.Show()
     End Sub
 
@@ -904,11 +957,6 @@ Public Class Form1
             My.Settings.Save()
         Catch ex As Exception
         End Try
-        
-        e.Cancel = True ' This line cancels the form closing
-
-        ' Optionally, you can hide the form instead of closing it
-        Me.Hide()
     End Sub
 
     Private Sub largestToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles largestToolStripMenuItem.Click
@@ -917,7 +965,9 @@ Public Class Form1
         mediumToolStripMenuItem.Checked = False
         largerToolStripMenuItem.Checked = False
         largestToolStripMenuItem.Checked = False
-        wb().Document.ExecCommand("FontSize", True, "4")
+        If wb IsNot Nothing AndAlso wb.Document IsNot Nothing Then
+            wb.Document.ExecCommand("FontSize", True, "4")
+        End If
         largestToolStripMenuItem.Checked = True
     End Sub
 
@@ -927,7 +977,9 @@ Public Class Form1
         mediumToolStripMenuItem.Checked = False
         largerToolStripMenuItem.Checked = False
         largestToolStripMenuItem.Checked = False
-        wb().Document.ExecCommand("FontSize", True, "0")
+        If wb IsNot Nothing AndAlso wb.Document IsNot Nothing Then
+            wb.Document.ExecCommand("FontSize", True, "0")
+        End If
         smallestToolStripMenuItem.Checked = True
     End Sub
 
@@ -937,7 +989,9 @@ Public Class Form1
         mediumToolStripMenuItem.Checked = False
         largerToolStripMenuItem.Checked = False
         largestToolStripMenuItem.Checked = False
-        wb().Document.ExecCommand("FontSize", True, "3")
+        If wb IsNot Nothing AndAlso wb.Document IsNot Nothing Then
+            wb.Document.ExecCommand("FontSize", True, "3")
+        End If
         largerToolStripMenuItem.Checked = True
     End Sub
 
@@ -947,7 +1001,9 @@ Public Class Form1
         mediumToolStripMenuItem.Checked = False
         largerToolStripMenuItem.Checked = False
         largestToolStripMenuItem.Checked = False
-        wb().Document.ExecCommand("FontSize", True, "2")
+        If wb IsNot Nothing AndAlso wb.Document IsNot Nothing Then
+            wb.Document.ExecCommand("FontSize", True, "2")
+        End If
         mediumToolStripMenuItem.Checked = True
     End Sub
 
@@ -957,7 +1013,9 @@ Public Class Form1
         mediumToolStripMenuItem.Checked = False
         largerToolStripMenuItem.Checked = False
         largestToolStripMenuItem.Checked = False
-        wb().Document.ExecCommand("FontSize", True, "1")
+        If wb IsNot Nothing AndAlso wb.Document IsNot Nothing Then
+            wb.Document.ExecCommand("FontSize", True, "1")
+        End If
         smallerToolStripMenuItem.Checked = True
     End Sub
 
@@ -1018,7 +1076,7 @@ Public Class Form1
             mg_enable = False '// Stop mouse gesture.
             Select Case mg_direction '// Execute gesture.
                 Case "DR" '// Exit
-                    End
+                    Me.Close()
                 Case "RU" '// Maximize window / Restore Window Size
                     If Me.WindowState = FormWindowState.Normal Then
                         Me.WindowState = FormWindowState.Maximized
@@ -1049,19 +1107,24 @@ Public Class Form1
     End Sub
     Public Function PopulateUrlList() As List(Of String)
         Dim regKey As String = "Software\Microsoft\Internet Explorer\TypedURLs"
-        Dim subKey As RegistryKey = Registry.CurrentUser.OpenSubKey(regKey)
-        Dim url As String
         Dim urlList As New List(Of String)()
-        Dim counter As Integer = 1
-        While True
-            Dim sValName As String = "url" + counter.ToString()
-            url = DirectCast(subKey.GetValue(sValName), String)
-            If DirectCast(url, Object) Is Nothing Then
-                Exit While
-            End If
-            urlList.Add(url)
-            counter += 1
-        End While
+        Try
+            Using subKey As RegistryKey = Registry.CurrentUser.OpenSubKey(regKey)
+                If subKey IsNot Nothing Then
+                    Dim counter As Integer = 1
+                    While True
+                        Dim sValName As String = "url" + counter.ToString()
+                        Dim url As String = TryCast(subKey.GetValue(sValName), String)
+                        If String.IsNullOrEmpty(url) Then
+                            Exit While
+                        End If
+                        urlList.Add(url)
+                        counter += 1
+                    End While
+                End If
+            End Using
+        Catch ex As Exception
+        End Try
         Return urlList
     End Function
 

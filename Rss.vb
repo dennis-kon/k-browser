@@ -38,7 +38,8 @@ Public Class Rss
 
             Try
 
-                ' load the xml doc
+                ' load the xml doc securely (disable DTD/XXE)
+                doc.XmlResolver = Nothing
                 doc.Load(mRssUrl)
 
                 ' return the cursor

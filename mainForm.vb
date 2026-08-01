@@ -54,104 +54,85 @@ Public Class downman
     End Sub
 
     Private Sub btnDownload_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnDownload.Click
+        Dim urlText As String = Me.txtFileName.Text.Trim()
+        If Not String.IsNullOrEmpty(urlText) AndAlso (urlText.StartsWith("http://", StringComparison.OrdinalIgnoreCase) OrElse urlText.StartsWith("https://", StringComparison.OrdinalIgnoreCase)) Then
+            Dim urlUri As Uri = Nothing
+            If Uri.TryCreate(urlText, UriKind.Absolute, urlUri) Then
+                Me.SaveFileDialog1.FileName = System.IO.Path.GetFileName(urlUri.LocalPath)
+            Else
+                Me.SaveFileDialog1.FileName = "downloaded_file"
+            End If
 
-        If Me.txtFileName.Text <> "" AndAlso Me.txtFileName.Text.StartsWith("http://") Then
-
-
-            Me.SaveFileDialog1.FileName = Me.txtFileName.Text.Split("/"c)(Me.txtFileName.Text.Split("/"c).Length - 1)
-
-            If Me.SaveFileDialog1.ShowDialog = Windows.Forms.DialogResult.OK Then
-
+            If Me.SaveFileDialog1.ShowDialog() = Windows.Forms.DialogResult.OK Then
                 Me.whereToSave = Me.SaveFileDialog1.FileName
-
                 Me.SaveFileDialog1.FileName = ""
-
                 Me.Label6.Text = "Save to: " & Me.whereToSave
-
                 Me.txtFileName.Enabled = False
                 Me.btnDownload.Enabled = False
                 Me.btnCancel.Enabled = True
-
                 Me.BackgroundWorker1.RunWorkerAsync()
-
             End If
-
         Else
-
-            MessageBox.Show("Insert a valid URL for download", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning)
-
+            MessageBox.Show("Insert a valid http:// or https:// URL for download", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning)
         End If
-
     End Sub
 
     Private Sub BackgroundWorker1_DoWork(ByVal sender As System.Object, ByVal e As System.ComponentModel.DoWorkEventArgs) Handles BackgroundWorker1.DoWork
-
-
-        Dim theResponse As HttpWebResponse
-        Dim theRequest As HttpWebRequest
+        Dim theResponse As HttpWebResponse = Nothing
+        Dim theRequest As HttpWebRequest = Nothing
         Try
-
-            theRequest = WebRequest.Create(Me.txtFileName.Text)
-            theResponse = theRequest.GetResponse
+            theRequest = CType(WebRequest.Create(Me.txtFileName.Text.Trim()), HttpWebRequest)
+            theResponse = CType(theRequest.GetResponse(), HttpWebResponse)
         Catch ex As Exception
-
             MessageBox.Show("An error occurred while downloading this file." & ControlChars.CrLf & _
                             "1) The File doesn't exist" & ControlChars.CrLf & _
-                            "2) Remote server error", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                            "2) Remote server error: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
 
             Dim cancelDelegate As New DownloadCompleteSafe(AddressOf DownloadComplete)
-
             Me.Invoke(cancelDelegate, True)
-
             Exit Sub
         End Try
-        Dim length As Long = theResponse.ContentLength
 
+        Dim length As Long = theResponse.ContentLength
         Dim safedelegate As New ChangeTextsSafe(AddressOf ChangeTexts)
         Me.Invoke(safedelegate, length, 0, 0, 0)
 
         Dim writeStream As New IO.FileStream(Me.whereToSave, IO.FileMode.Create)
-
-
-        Dim nRead As Integer
-
-
+        Dim nRead As Long = 0
+        Dim bytesInSample As Long = 0
         Dim speedtimer As New Stopwatch
         Dim currentspeed As Double = -1
-        Dim readings As Integer = 0
+
+        speedtimer.Start()
 
         Do
-
             If BackgroundWorker1.CancellationPending Then
                 Exit Do
             End If
 
-            speedtimer.Start()
-
             Dim readBytes(4095) As Byte
-            Dim bytesread As Integer = theResponse.GetResponseStream.Read(readBytes, 0, 4096)
-
-            nRead += bytesread
-            Dim percent As Short = (nRead * 100) / length
-
-            Me.Invoke(safedelegate, length, nRead, percent, currentspeed)
-
+            Dim bytesread As Integer = theResponse.GetResponseStream().Read(readBytes, 0, 4096)
             If bytesread = 0 Then Exit Do
 
+            nRead += bytesread
+            bytesInSample += bytesread
             writeStream.Write(readBytes, 0, bytesread)
 
-            speedtimer.Stop()
-
-            readings += 1
-            If readings >= 5 Then
-                currentspeed = 20480 / (speedtimer.ElapsedMilliseconds / 1000)
-                speedtimer.Reset()
-                readings = 0
+            If speedtimer.ElapsedMilliseconds >= 1000 Then
+                currentspeed = (bytesInSample / (speedtimer.ElapsedMilliseconds / 1000.0))
+                speedtimer.Restart()
+                bytesInSample = 0
             End If
+
+            Dim percent As Integer = 0
+            If length > 0 Then
+                percent = CInt(Math.Min(100L, Math.Max(0L, (nRead * 100L) \ length)))
+            End If
+
+            Me.Invoke(safedelegate, length, CInt(Math.Min(Integer.MaxValue, nRead)), percent, currentspeed)
         Loop
 
-
-        theResponse.GetResponseStream.Close()
+        theResponse.GetResponseStream().Close()
         writeStream.Close()
 
         If Me.BackgroundWorker1.CancellationPending Then

@@ -1,4 +1,4 @@
-﻿Public Class Bookmarks
+Public Class Bookmarks
 
     Private Sub Bookmarks_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
         Try
@@ -18,18 +18,22 @@
     End Sub
 
     Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button1.Click
-        CType(Form1.TabControl1.SelectedTab.Controls.Item(0), WebBrowser).Navigate(ListBox1.SelectedItem)
+        If ListBox1.SelectedItem IsNot Nothing Then
+            Form1.NavigateActiveTab(ListBox1.SelectedItem.ToString())
+        End If
     End Sub
 
     Private Sub Button2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button2.Click
         Try
-            Dim item As Integer = My.Settings.Bookmarks.IndexOf(ListBox1.SelectedItem)
-            My.Settings.Bookmarks.RemoveAt(item)
-            ListBox1.Items.Remove(ListBox1.SelectedItem)
-            My.Settings.Save()
+            If ListBox1.SelectedItem IsNot Nothing Then
+                Dim item As Integer = My.Settings.Bookmarks.IndexOf(ListBox1.SelectedItem.ToString())
+                If item >= 0 Then
+                    My.Settings.Bookmarks.RemoveAt(item)
+                    ListBox1.Items.Remove(ListBox1.SelectedItem)
+                    My.Settings.Save()
+                End If
+            End If
         Catch ex As Exception
-
         End Try
-
     End Sub
 End Class

@@ -16,7 +16,7 @@ Public Class Settings
         LoadPhishingSites()
         LoadPopUpSettings()
         LoadPopAllowed()
-
+        LoadAdditional()
     End Sub
 
 #Region " Popup Blocker Settings "
@@ -185,27 +185,50 @@ Public Class Settings
         TextBox2.Text = ip(0).ToString()
     End Sub
 
-    Private Sub Timer1_Tick(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Timer1.Tick
-        counter = counter + 1
-        TextBox3.Text = counter
-        host = TextBox1.Text
-        port = TextBox3.Text
+    Private Async Sub Timer1_Tick(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Timer1.Tick
+        Timer1.Stop()
+        counter += 1
+        TextBox3.Text = counter.ToString()
+        Dim targetHost As String = TextBox1.Text.Trim()
+        Dim targetPort As Integer = counter
 
-        Dim hostadd As System.Net.IPAddress = System.Net.Dns.GetHostEntry(host).AddressList(0)
-        Dim EPhost As New System.Net.IPEndPoint(hostadd, port)
-        Dim s As New System.Net.Sockets.Socket(System.Net.Sockets.AddressFamily.InterNetwork, System.Net.Sockets.SocketType.Stream, System.Net.Sockets.ProtocolType.Tcp)
-        Try
-            s.Connect(EPhost)
-        Catch
-        End Try
-        If Not s.Connected Then
-            ListBox1.Items.Add("Port " + port.ToString + " is not open")
-        Else
-            ListBox1.Items.Add("Port " + port.ToString + " is open")
-            ListBox2.Items.Add(port.ToString)
+        If String.IsNullOrEmpty(targetHost) Then
+            Timer1.Start()
+            Return
         End If
-        Label3.Text = "Open Ports: " + ListBox2.Items.Count.ToString
 
+        Dim isOpen As Boolean = False
+        Await System.Threading.Tasks.Task.Run(Sub()
+                                                  Try
+                                                      Dim addresses = System.Net.Dns.GetHostAddresses(targetHost)
+                                                      If addresses IsNot Nothing AndAlso addresses.Length > 0 Then
+                                                          Using s As New System.Net.Sockets.Socket(System.Net.Sockets.AddressFamily.InterNetwork, System.Net.Sockets.SocketType.Stream, System.Net.Sockets.ProtocolType.Tcp)
+                                                              Dim result = s.BeginConnect(addresses(0), targetPort, Nothing, Nothing)
+                                                              Dim success = result.AsyncWaitHandle.WaitOne(500, False)
+                                                              If success AndAlso s.Connected Then
+                                                                  isOpen = True
+                                                                  s.EndConnect(result)
+                                                                  s.Close()
+                                                              End If
+                                                          End Using
+                                                      End If
+                                                  Catch ex As Exception
+                                                      isOpen = False
+                                                  End Try
+                                              End Sub)
+
+        If isOpen Then
+            ListBox1.Items.Add("Port " & targetPort & " is open")
+            ListBox2.Items.Add(targetPort.ToString())
+        Else
+            ListBox1.Items.Add("Port " & targetPort & " is not open")
+        End If
+
+        Label3.Text = "Open Ports: " & ListBox2.Items.Count.ToString()
+
+        If Timer1.Enabled Then
+            Timer1.Start()
+        End If
     End Sub
 
     Private Sub Button3_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button3.Click
@@ -223,7 +246,4 @@ Public Class Settings
         Button1.Enabled = True
         Button2.Enabled = False
     End Sub
-
-
-
 End Class

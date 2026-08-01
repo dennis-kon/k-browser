@@ -29,4 +29,3 @@ C:\Users\dennis\Documents\GitHub\k-browser\obj\Debug\k-browser.vbproj.CoreCompil
 C:\Users\dennis\Documents\GitHub\k-browser\obj\Debug\K-Browser.exe
 C:\Users\dennis\Documents\GitHub\k-browser\obj\Debug\K-Browser.xml
 C:\Users\dennis\Documents\GitHub\k-browser\obj\Debug\K-Browser.pdb
-C:\Users\dennis\Documents\GitHub\k-browser\obj\Debug\K-Browser.exe.config

@@ -9,12 +9,8 @@ Public Class Source
     End Sub
 
     Private Sub PrintToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PrintToolStripMenuItem.Click
-        PrintDialog1.ShowDialog()
-
-        If PrintDialog1.ShowDialog = Windows.Forms.DialogResult.OK Then
-
+        If PrintDialog1.ShowDialog() = Windows.Forms.DialogResult.OK Then
             PrintDocument1.Print()
-
         End If
     End Sub
 
