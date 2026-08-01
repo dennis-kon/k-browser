@@ -97,6 +97,7 @@ Partial Class Form1
         Me.ToolStripSeparator13 = New System.Windows.Forms.ToolStripSeparator()
         Me.SourceToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.PropertiesToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.DarkModeToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator14 = New System.Windows.Forms.ToolStripSeparator()
         Me.FullScreenToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.CookieToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -546,7 +547,7 @@ Partial Class Form1
         '
         'ViewToolStripMenuItem
         '
-        Me.ViewToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.HistoryToolStripMenuItem, Me.ToolbarToolStripMenuItem, Me.NavigateToolStripMenuItem, Me.ToolStripSeparator13, Me.SourceToolStripMenuItem, Me.PropertiesToolStripMenuItem, Me.ToolStripSeparator14, Me.FullScreenToolStripMenuItem})
+        Me.ViewToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.HistoryToolStripMenuItem, Me.ToolbarToolStripMenuItem, Me.NavigateToolStripMenuItem, Me.ToolStripSeparator13, Me.SourceToolStripMenuItem, Me.PropertiesToolStripMenuItem, Me.DarkModeToolStripMenuItem, Me.ToolStripSeparator14, Me.FullScreenToolStripMenuItem})
         Me.ViewToolStripMenuItem.Name = "ViewToolStripMenuItem"
         Me.ViewToolStripMenuItem.Size = New System.Drawing.Size(46, 20)
         Me.ViewToolStripMenuItem.Text = "&View"
@@ -666,6 +667,12 @@ Partial Class Form1
         Me.PropertiesToolStripMenuItem.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.P), System.Windows.Forms.Keys)
         Me.PropertiesToolStripMenuItem.Size = New System.Drawing.Size(169, 22)
         Me.PropertiesToolStripMenuItem.Text = "Properties"
+        '
+        'DarkModeToolStripMenuItem
+        '
+        Me.DarkModeToolStripMenuItem.Name = "DarkModeToolStripMenuItem"
+        Me.DarkModeToolStripMenuItem.Size = New System.Drawing.Size(169, 22)
+        Me.DarkModeToolStripMenuItem.Text = "🌙 Dark Mode"
         '
         'ToolStripSeparator14
         '
@@ -1270,6 +1277,7 @@ Partial Class Form1
     Friend WithEvents ToolStripSeparator13 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents SourceToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents PropertiesToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents DarkModeToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolStripSeparator14 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents FullScreenToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents CookieToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem

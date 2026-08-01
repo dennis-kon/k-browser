@@ -114,6 +114,8 @@
     <Compile Include="ApplicationEvents.vb" />
     <Compile Include="AppManager.vb" />
     <Compile Include="AdBlockEngine.vb" />
+    <Compile Include="TabProcessManager.vb" />
+    <Compile Include="ThemeManager.vb" />
     <Compile Include="AdBlockerSettings.Designer.vb">
       <DependentUpon>AdBlockerSettings.vb</DependentUpon>
     </Compile>

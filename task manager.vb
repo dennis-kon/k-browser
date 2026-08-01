@@ -1,9 +1,16 @@
 Public Class task_manager
 
     Private Sub task_manager_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
+        ThemeManager.ApplyTheme(Me)
         ListView1.Items.Clear()
         For Each p As Process In Process.GetProcesses()
-            Dim item As New ListViewItem(p.ProcessName)
+            Dim displayName As String = p.ProcessName
+            If p.ProcessName.Equals("msedgewebview2", StringComparison.OrdinalIgnoreCase) Then
+                displayName = "🌐 WebView2 Process (" & p.ProcessName & ")"
+            ElseIf p.ProcessName.Equals("K-Browser", StringComparison.OrdinalIgnoreCase) Then
+                displayName = "🖥️ K-Browser Main Process"
+            End If
+            Dim item As New ListViewItem(displayName)
             
             Dim memSize As String = "N/A"
             Try

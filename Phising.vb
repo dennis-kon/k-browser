@@ -11,6 +11,6 @@ Public Class Phising
     End Sub
 
     Private Sub frmPhising_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
-        '
+        ThemeManager.ApplyTheme(Me)
     End Sub
 End Class

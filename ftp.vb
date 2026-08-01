@@ -154,6 +154,7 @@ Public Class ftp
 
 
     Private Sub ftp_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
+        ThemeManager.ApplyTheme(Me)
         txt_pw.TextBox.PasswordChar = "*"c
     End Sub
 End Class

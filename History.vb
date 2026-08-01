@@ -7,6 +7,7 @@ Public Class History
     Private ReadOnly _entryMap As New Dictionary(Of String, String)()
 
     Private Sub History_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
+        ThemeManager.ApplyTheme(Me)
         cboDateFilter.SelectedIndex = 0 ' "All Time"
         LoadHistoryData()
     End Sub

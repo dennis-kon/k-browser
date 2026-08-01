@@ -13,6 +13,7 @@ Public Class Bookmarks
     End Class
 
     Private Sub Bookmarks_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
+        ThemeManager.ApplyTheme(Me)
         LoadTreeFromSettings()
     End Sub
 

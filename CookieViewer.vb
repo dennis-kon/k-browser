@@ -4,6 +4,7 @@ Public Class CookieViewer
     Private SelNode As TreeNode
 
     Private Sub frmCookieViewer_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
+        ThemeManager.ApplyTheme(Me)
         LoadCookies()
     End Sub
 

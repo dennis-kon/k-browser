@@ -116,6 +116,8 @@ Public Class Form1
 
     Private Async Sub Form1_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
         Try
+            ThemeManager.ApplyTheme(Me)
+            UpdateDarkModeMenuCheckedState()
             If My.Settings.FullScreenOnStartup Then
                 FullScreen()
                 full = True
@@ -170,6 +172,10 @@ Public Class Form1
                         RemoveHandler browserControl.CoreWebView2.SourceChanged, AddressOf WebView2_SourceChanged
                         RemoveHandler browserControl.CoreWebView2.DocumentTitleChanged, AddressOf WebView2_DocumentTitleChanged
                         RemoveHandler browserControl.CoreWebView2.HistoryChanged, AddressOf WebView2_HistoryChanged
+                        RemoveHandler browserControl.CoreWebView2.PermissionRequested, AddressOf WebView2_PermissionRequested
+                        RemoveHandler browserControl.CoreWebView2.DownloadStarting, AddressOf WebView2_DownloadStarting
+                        RemoveHandler browserControl.CoreWebView2.ProcessFailed, AddressOf WebView2_ProcessFailed
+                        RemoveHandler browserControl.CoreWebView2.WebResourceRequested, AddressOf WebView2_WebResourceRequested
                     End If
                     browserControl.Dispose()
                 End If
@@ -606,12 +612,14 @@ Public Class Form1
         Me.TabControl1.SelectedTab = tab
 
         Try
-            Await brws.EnsureCoreWebView2Async(Nothing)
+            Dim env = Await TabProcessManager.GetSharedEnvironmentAsync()
+            Await brws.EnsureCoreWebView2Async(env)
         Catch ex As Exception
             System.Diagnostics.Debug.WriteLine("EnsureCoreWebView2Async failed: " & ex.Message)
         End Try
 
         If brws.CoreWebView2 IsNot Nothing Then
+            ThemeManager.ApplyWebView2Theme(brws)
             brws.CoreWebView2.Settings.IsStatusBarEnabled = True
             brws.CoreWebView2.Settings.AreDefaultScriptDialogsEnabled = True
             brws.CoreWebView2.Settings.IsScriptEnabled = True
@@ -634,6 +642,7 @@ Public Class Form1
             AddHandler brws.CoreWebView2.HistoryChanged, AddressOf WebView2_HistoryChanged
             AddHandler brws.CoreWebView2.PermissionRequested, AddressOf WebView2_PermissionRequested
             AddHandler brws.CoreWebView2.DownloadStarting, AddressOf WebView2_DownloadStarting
+            AddHandler brws.CoreWebView2.ProcessFailed, AddressOf WebView2_ProcessFailed
 
             Try
                 brws.CoreWebView2.AddWebResourceRequestedFilter("*", CoreWebView2WebResourceContext.All)
@@ -682,6 +691,47 @@ Public Class Form1
             Case CoreWebView2PermissionKind.Notifications
                 If Not My.Settings.PermissionNotifications Then e.State = CoreWebView2PermissionState.Deny
         End Select
+    End Sub
+
+    Private Sub WebView2_ProcessFailed(ByVal sender As Object, ByVal e As CoreWebView2ProcessFailedEventArgs)
+        Dim core = TryCast(sender, CoreWebView2)
+        If core Is Nothing Then Return
+
+        System.Diagnostics.Debug.WriteLine("WebView2 ProcessFailed: Kind=" & e.ProcessFailedKind.ToString() & ", Reason=" & e.Reason.ToString())
+
+        ' Handle render process crashes/freezes gracefully without crashing the main application
+        If e.ProcessFailedKind = CoreWebView2ProcessFailedKind.RenderProcessExited OrElse
+           e.ProcessFailedKind = CoreWebView2ProcessFailedKind.RenderProcessUnresponsive OrElse
+           e.ProcessFailedKind = CoreWebView2ProcessFailedKind.FrameRenderProcessExited Then
+
+            For Each page As TabPage In TabControl1.TabPages
+                If page.Controls.Count > 0 Then
+                    Dim browserControl = TryCast(page.Controls(0), WebView2)
+                    If browserControl IsNot Nothing AndAlso browserControl.CoreWebView2 Is core Then
+                        page.Text = "⚠️ Tab Crashed"
+
+                        If e.ProcessFailedKind = CoreWebView2ProcessFailedKind.RenderProcessExited Then
+                            Dim result = MessageBox.Show("A web page process on '" & page.Text & "' has crashed unexpectedly." & vbCrLf & vbCrLf & "Would you like to reload this tab?", "Tab Crashed - K-Browser", MessageBoxButtons.YesNo, MessageBoxIcon.Warning)
+                            If result = DialogResult.Yes Then
+                                Try
+                                    browserControl.CoreWebView2.Reload()
+                                Catch
+                                End Try
+                            End If
+                        ElseIf e.ProcessFailedKind = CoreWebView2ProcessFailedKind.RenderProcessUnresponsive Then
+                            Dim result = MessageBox.Show("The page on '" & page.Text & "' has become unresponsive." & vbCrLf & vbCrLf & "Would you like to force reload it?", "Page Unresponsive - K-Browser", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+                            If result = DialogResult.Yes Then
+                                Try
+                                    browserControl.CoreWebView2.Reload()
+                                Catch
+                                End Try
+                            End If
+                        End If
+                        Exit For
+                    End If
+                End If
+            Next
+        End If
     End Sub
 
     Private Sub WebView2_WebResourceRequested(ByVal sender As Object, ByVal e As CoreWebView2WebResourceRequestedEventArgs)
@@ -1242,11 +1292,25 @@ Public Class Form1
         NavigateActiveTab("https://k-browser.com/")
     End Sub
 
-    Private Sub SToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles SToolStripMenuItem.Click
-        Try
-            System.Diagnostics.Process.Start(New System.Diagnostics.ProcessStartInfo("mailto:denkon24@yahoo.com") With {.UseShellExecute = True})
-        Catch ex As Exception
-            MessageBox.Show("Unable to open email client.", "K-Browser", MessageBoxButtons.OK, MessageBoxIcon.Error)
-        End Try
+    Private Sub DarkModeToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles DarkModeToolStripMenuItem.Click
+        ThemeManager.IsDarkMode = Not ThemeManager.IsDarkMode
+        UpdateDarkModeMenuCheckedState()
+
+        ' Apply theme to Form1 and all open tabs
+        ThemeManager.ApplyTheme(Me)
+        For Each page As TabPage In TabControl1.TabPages
+            If page.Controls.Count > 0 Then
+                Dim brws = TryCast(page.Controls(0), WebView2)
+                If brws IsNot Nothing Then
+                    ThemeManager.ApplyWebView2Theme(brws)
+                End If
+            End If
+        Next
+    End Sub
+
+    Private Sub UpdateDarkModeMenuCheckedState()
+        If DarkModeToolStripMenuItem IsNot Nothing Then
+            DarkModeToolStripMenuItem.Checked = ThemeManager.IsDarkMode
+        End If
     End Sub
 End Class

@@ -22,6 +22,41 @@ K-Browser
   resource lookups using this strongly typed resource class.
 </summary>
 </member>
+<member name="M:Advance_Webbrowser.TabProcessManager.GetSharedEnvironmentAsync">
+ <summary>
+ Gets or creates the primary shared CoreWebView2Environment configured with Chromium site isolation switches.
+ </summary>
+</member>
+<member name="M:Advance_Webbrowser.TabProcessManager.CreateIsolatedEnvironmentAsync(System.String)">
+ <summary>
+ Creates a custom isolated environment for private or isolated partition tabs.
+ </summary>
+</member>
+<member name="M:Advance_Webbrowser.TabProcessManager.GetProcessKindName(Microsoft.Web.WebView2.Core.CoreWebView2ProcessKind)">
+ <summary>
+ Retrieves human-readable process role description for WebView2 process kinds.
+ </summary>
+</member>
+<member name="M:Advance_Webbrowser.ThemeManager.ApplyTheme(System.Windows.Forms.Form)">
+ <summary>
+ Applies the current Dark or Light theme to the target Form, window title bar, and all child controls.
+ </summary>
+</member>
+<member name="M:Advance_Webbrowser.ThemeManager.ApplyControlsTheme(System.Windows.Forms.Control.ControlCollection)">
+ <summary>
+ Recursively styles a collection of Windows Forms controls based on current theme state.
+ </summary>
+</member>
+<member name="M:Advance_Webbrowser.ThemeManager.ApplyToolStripItemsTheme(System.Windows.Forms.ToolStripItemCollection)">
+ <summary>
+ Recursively styles ToolStrip/MenuStrip items and sub-menus.
+ </summary>
+</member>
+<member name="M:Advance_Webbrowser.ThemeManager.ApplyWebView2Theme(Microsoft.Web.WebView2.WinForms.WebView2)">
+ <summary>
+ Applies PreferredColorScheme (Dark or Light) to a WebView2 control.
+ </summary>
+</member>
 <member name="P:Advance_Webbrowser.Bookmarks.BookmarkNodeData.Title">
  <summary>
  The clean page title, used for serialization.

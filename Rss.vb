@@ -11,6 +11,7 @@ Public Class Rss
     Private Sub Form1_Load(ByVal sender As System.Object, _
                            ByVal e As System.EventArgs) Handles MyBase.Load
 
+        ThemeManager.ApplyTheme(Me)
         ' Clear path to RSS Feed
         mRssUrl = String.Empty
 

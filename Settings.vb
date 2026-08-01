@@ -4,6 +4,7 @@ Imports System.Windows.Forms
 Public Class Settings
 
     Private Sub Settings_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
+        ThemeManager.ApplyTheme(Me)
         Try
             If Form1.ActiveForm IsNot Nothing AndAlso Form1.ActiveForm.Icon IsNot Nothing Then
                 Me.Icon = Form1.ActiveForm.Icon
