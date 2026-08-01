@@ -373,14 +373,16 @@ Public Class Form1
         OLECMDEXECOPT_SHOWHELP = 3
     End Enum
     Private Sub ZoomInToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ZoomInToolStripMenuItem.Click
-        If wb IsNot Nothing Then
-            wb.ZoomFactor += 0.15
+        Dim brws = GetActiveWebView()
+        If brws IsNot Nothing AndAlso brws.CoreWebView2 IsNot Nothing Then
+            brws.ZoomFactor += 0.15
         End If
     End Sub
 
     Private Sub ZoomOutToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ZoomOutToolStripMenuItem.Click
-        If wb IsNot Nothing AndAlso wb.ZoomFactor > 0.3 Then
-            wb.ZoomFactor -= 0.15
+        Dim brws = GetActiveWebView()
+        If brws IsNot Nothing AndAlso brws.CoreWebView2 IsNot Nothing AndAlso brws.ZoomFactor > 0.3 Then
+            brws.ZoomFactor -= 0.15
         End If
     End Sub
 
@@ -1050,8 +1052,9 @@ Public Class Form1
 
     Private Async Sub mnuLeftToRight_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles mnuLeftToRight.Click
         Try
-            If wb IsNot Nothing AndAlso wb.CoreWebView2 IsNot Nothing Then
-                Await wb.CoreWebView2.ExecuteScriptAsync("document.body.dir = 'ltr'")
+            Dim brws = GetActiveWebView()
+            If brws IsNot Nothing AndAlso brws.CoreWebView2 IsNot Nothing Then
+                Await brws.CoreWebView2.ExecuteScriptAsync("document.body.dir = 'ltr'")
             End If
             mnuLeftToRight.Checked = True
             If mnuRightToLeft IsNot Nothing Then mnuRightToLeft.Checked = False
@@ -1061,8 +1064,9 @@ Public Class Form1
 
     Private Async Sub mnuRightToLeft_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles mnuRightToLeft.Click
         Try
-            If wb IsNot Nothing AndAlso wb.CoreWebView2 IsNot Nothing Then
-                Await wb.CoreWebView2.ExecuteScriptAsync("document.body.dir = 'rtl'")
+            Dim brws = GetActiveWebView()
+            If brws IsNot Nothing AndAlso brws.CoreWebView2 IsNot Nothing Then
+                Await brws.CoreWebView2.ExecuteScriptAsync("document.body.dir = 'rtl'")
             End If
             mnuLeftToRight.Checked = False
             If mnuRightToLeft IsNot Nothing Then mnuRightToLeft.Checked = True
@@ -1098,7 +1102,10 @@ Public Class Form1
         ToolStripTextBox1.SelectAll()
     End Sub
     Private Sub ReloadToolStripMenuItem1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ReloadToolStripMenuItem1.Click
-        If wb IsNot Nothing Then wb.Reload()
+        Dim brws = GetActiveWebView()
+        If brws IsNot Nothing AndAlso brws.CoreWebView2 IsNot Nothing Then
+            brws.Reload()
+        End If
     End Sub
 
     Private Sub AutoToolStripMenuItem_CheckedChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles AutoToolStripMenuItem.CheckedChanged
@@ -1112,7 +1119,10 @@ Public Class Form1
     End Sub
 
     Private Sub Timer1_Tick(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Timer1.Tick
-        If wb IsNot Nothing Then wb.Reload()
+        Dim brws = GetActiveWebView()
+        If brws IsNot Nothing AndAlso brws.CoreWebView2 IsNot Nothing Then
+            brws.Reload()
+        End If
     End Sub
 
     Private Async Sub NewTabToolStripMenuItem2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles NewTabToolStripMenuItem2.Click
@@ -1157,7 +1167,8 @@ Public Class Form1
         mediumToolStripMenuItem.Checked = False
         largerToolStripMenuItem.Checked = False
         largestToolStripMenuItem.Checked = False
-        If wb IsNot Nothing Then wb.ZoomFactor = 1.5
+        Dim brws = GetActiveWebView()
+        If brws IsNot Nothing AndAlso brws.CoreWebView2 IsNot Nothing Then brws.ZoomFactor = 1.5
         largestToolStripMenuItem.Checked = True
     End Sub
 
@@ -1167,7 +1178,8 @@ Public Class Form1
         mediumToolStripMenuItem.Checked = False
         largerToolStripMenuItem.Checked = False
         largestToolStripMenuItem.Checked = False
-        If wb IsNot Nothing Then wb.ZoomFactor = 0.7
+        Dim brws = GetActiveWebView()
+        If brws IsNot Nothing AndAlso brws.CoreWebView2 IsNot Nothing Then brws.ZoomFactor = 0.7
         smallestToolStripMenuItem.Checked = True
     End Sub
 
@@ -1177,7 +1189,8 @@ Public Class Form1
         mediumToolStripMenuItem.Checked = False
         largerToolStripMenuItem.Checked = False
         largestToolStripMenuItem.Checked = False
-        If wb IsNot Nothing Then wb.ZoomFactor = 1.25
+        Dim brws = GetActiveWebView()
+        If brws IsNot Nothing AndAlso brws.CoreWebView2 IsNot Nothing Then brws.ZoomFactor = 1.25
         largerToolStripMenuItem.Checked = True
     End Sub
 
@@ -1187,7 +1200,8 @@ Public Class Form1
         mediumToolStripMenuItem.Checked = False
         largerToolStripMenuItem.Checked = False
         largestToolStripMenuItem.Checked = False
-        If wb IsNot Nothing Then wb.ZoomFactor = 1.0
+        Dim brws = GetActiveWebView()
+        If brws IsNot Nothing AndAlso brws.CoreWebView2 IsNot Nothing Then brws.ZoomFactor = 1.0
         mediumToolStripMenuItem.Checked = True
     End Sub
 
@@ -1197,7 +1211,8 @@ Public Class Form1
         mediumToolStripMenuItem.Checked = False
         largerToolStripMenuItem.Checked = False
         largestToolStripMenuItem.Checked = False
-        If wb IsNot Nothing Then wb.ZoomFactor = 0.85
+        Dim brws = GetActiveWebView()
+        If brws IsNot Nothing AndAlso brws.CoreWebView2 IsNot Nothing Then brws.ZoomFactor = 0.85
         smallerToolStripMenuItem.Checked = True
     End Sub
 
