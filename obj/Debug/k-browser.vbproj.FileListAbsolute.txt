@@ -29,3 +29,11 @@ C:\Users\dennis\Documents\GitHub\k-browser\obj\Debug\k-browser.vbproj.CoreCompil
 C:\Users\dennis\Documents\GitHub\k-browser\obj\Debug\K-Browser.exe
 C:\Users\dennis\Documents\GitHub\k-browser\obj\Debug\K-Browser.xml
 C:\Users\dennis\Documents\GitHub\k-browser\obj\Debug\K-Browser.pdb
+C:\Users\dennis\Documents\GitHub\k-browser\bin\Debug\runtimes\win-x86\native\WebView2Loader.dll
+C:\Users\dennis\Documents\GitHub\k-browser\bin\Debug\runtimes\win-x64\native\WebView2Loader.dll
+C:\Users\dennis\Documents\GitHub\k-browser\bin\Debug\runtimes\win-arm64\native\WebView2Loader.dll
+C:\Users\dennis\Documents\GitHub\k-browser\bin\Debug\Microsoft.Web.WebView2.Core.dll
+C:\Users\dennis\Documents\GitHub\k-browser\bin\Debug\Microsoft.Web.WebView2.WinForms.dll
+C:\Users\dennis\Documents\GitHub\k-browser\bin\Debug\Microsoft.Web.WebView2.Wpf.dll
+C:\Users\dennis\Documents\GitHub\k-browser\obj\Debug\k-browser.vbproj.Up2Date
+C:\Users\dennis\Documents\GitHub\k-browser\obj\Debug\K-Browser.exe.config

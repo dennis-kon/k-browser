@@ -1,26 +1,24 @@
 Imports System.IO
 Imports System.Net
 Imports Microsoft.Win32
+Imports Microsoft.Web.WebView2.WinForms
+Imports Microsoft.Web.WebView2.Core
 
 Public Class Form1
 
     Private faviconCache As New Dictionary(Of String, Image)()
     Private Const MAX_FAVICON_CACHE As Integer = 100
-    Public WithEvents wb As WebBrowser
+    Public WithEvents wb As WebView2
     Dim isUserAgentSet As Boolean
-    Dim MyUserAgent As String = "Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.1; Trident/6.0; K-Browser 4.8.1)"
+    Dim MyUserAgent As String = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36 Edg/120.0.0.0"
     Dim rightNow As DateTime = DateTime.Now
     Public full As Boolean = False
     Public Event FileDownload As EventHandler
-    Public WithEvents oDoc As HtmlDocument
-    Private Declare Function SetWindowPos Lib "user32.dll" Alias "SetWindowPos" (ByVal hWnd As IntPtr, ByVal hWndIntertAfter As IntPtr, ByVal X As Integer, ByVal Y As Integer, ByVal cx As Integer, ByVal cy As Integer, ByVal uFlags As Integer) As Boolean
-    Private Declare Function GetSystemMetrics Lib "user32.dll" Alias "GetSystemMetrics" (ByVal Which As Integer) As Integer
 
     Public Sub New()
         SetBrowserFeatureControl()
         InitializeComponent()
-        wb = New WebBrowser()
-        wb.ScriptErrorsSuppressed = True
+        wb = New WebView2()
         isUserAgentSet = False
     End Sub
 
@@ -35,13 +33,23 @@ Public Class Form1
         Me.TopMost = True
     End Sub
 
-    Public Sub NavigateActiveTab(ByVal url As String)
+    Public Async Sub NavigateActiveTab(ByVal url As String)
         If String.IsNullOrWhiteSpace(url) Then Return
         Dim target As String = AppManager.FixURL(url)
         If wb IsNot Nothing Then
-            wb.Navigate(target)
+            If wb.CoreWebView2 IsNot Nothing Then
+                wb.CoreWebView2.Navigate(target)
+            Else
+                wb.Source = New Uri(target)
+            End If
         Else
-            CreateNewTab(target)
+            Await CreateNewTab(target)
+        End If
+    End Sub
+
+    Public Sub OpenDevTools()
+        If wb IsNot Nothing AndAlso wb.CoreWebView2 IsNot Nothing Then
+            wb.CoreWebView2.OpenDevToolsWindow()
         End If
     End Sub
 
@@ -74,38 +82,6 @@ Public Class Form1
         End Try
     End Sub
 
-    Private Function IsPopupWindow() As Boolean
-        ' Safely determine whether the active element is a popup (BODY/IFRAME)
-        Try
-            If wb Is Nothing OrElse wb.Document Is Nothing Then
-                Return False
-            End If
-            Dim el As HtmlElement = wb.Document.ActiveElement
-            If el Is Nothing Then
-                Return False
-            End If
-            Dim tag As String = If(el.TagName, "").ToUpperInvariant()
-            Return (tag = "BODY" Or tag = "IFRAME")
-        Catch ex As Exception
-            ' On error, treat as not a popup
-            Return False
-        End Try
-    End Function
-
-    Private Sub Loading(ByVal sender As Object, ByVal e As Windows.Forms.WebBrowserProgressChangedEventArgs)
-        Try
-            ProgressBar1.Maximum = e.MaximumProgress
-            ProgressBar1.Value = e.CurrentProgress
-            Dim currentBrowser = TryCast(sender, WebBrowser)
-            If currentBrowser IsNot Nothing Then
-                Label1.Text = currentBrowser.StatusText
-            End If
-        Catch ex As Exception
-        End Try
-    End Sub
-
-
-
     Private Sub NewWindowToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles NewWindowToolStripMenuItem.Click
         Dim newform As New Form1
         newform.Show()
@@ -117,25 +93,16 @@ Public Class Form1
         End If
     End Sub
 
-    Private Sub Form1_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
-        Dim brws As WebBrowser = Nothing
+    Private Async Sub Form1_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
         Try
-            brws = CreateNewTab(Path.Combine(Application.StartupPath, "homepage", "index.html"))
-            brws.Name = "k-Browser"
-            Me.TabControl1.SelectedTab.Text = "Loading..."
+            Dim brws = Await CreateNewTab(Path.Combine(Application.StartupPath, "homepage", "index.html"))
             Me.Size = My.Settings.MainSize
             Me.Location = My.Settings.MainLocation
         Catch ex As Exception
         End Try
         CalendarToolStripMenuItem.Text = DateTime.Now.ToLongDateString()
-        If brws IsNot Nothing Then
-            Label1.Text = brws.StatusText
-        End If
         Me.SetStyle(System.Windows.Forms.ControlStyles.SupportsTransparentBackColor, True)
         Me.BackColor = System.Drawing.Color.Transparent
-        If wb IsNot Nothing Then
-            wb.IsWebBrowserContextMenuEnabled = True
-        End If
     End Sub
 
 
@@ -144,11 +111,15 @@ Public Class Form1
         If TabControl1.SelectedTab IsNot Nothing Then
             Dim selectedTab As TabPage = TabControl1.SelectedTab
             If selectedTab.Controls.Count > 0 Then
-                Dim browserControl As WebBrowser = TryCast(selectedTab.Controls(0), WebBrowser)
+                Dim browserControl As WebView2 = TryCast(selectedTab.Controls(0), WebView2)
                 If browserControl IsNot Nothing Then
-                    RemoveHandler browserControl.ProgressChanged, AddressOf Loading
-                    RemoveHandler browserControl.Navigating, AddressOf WebBrowser_Navigating
-                    RemoveHandler browserControl.DocumentCompleted, AddressOf WebBrowser_DocumentCompleted_SuppressErrors
+                    If browserControl.CoreWebView2 IsNot Nothing Then
+                        RemoveHandler browserControl.CoreWebView2.NavigationStarting, AddressOf WebView2_NavigationStarting
+                        RemoveHandler browserControl.CoreWebView2.NavigationCompleted, AddressOf WebView2_NavigationCompleted
+                        RemoveHandler browserControl.CoreWebView2.SourceChanged, AddressOf WebView2_SourceChanged
+                        RemoveHandler browserControl.CoreWebView2.DocumentTitleChanged, AddressOf WebView2_DocumentTitleChanged
+                        RemoveHandler browserControl.CoreWebView2.HistoryChanged, AddressOf WebView2_HistoryChanged
+                    End If
                     browserControl.Dispose()
                 End If
             End If
@@ -170,24 +141,26 @@ Public Class Form1
                 "AIFF Files (*.aif|*.aiff|XBM Files (*.xbm)|*.xbm|All Files (*.*)|*.*"
             cdlOpen.Title = " Open File "
             cdlOpen.ShowDialog()
-            If cdlOpen.FileName > Nothing Then
-                wb.Navigate(cdlOpen.FileName)
+            If Not String.IsNullOrEmpty(cdlOpen.FileName) Then
+                NavigateActiveTab(cdlOpen.FileName)
             End If
         Catch ex As Exception
             Throw New Exception(ex.Message.ToString)
         End Try
     End Sub
 
-    Private Sub SaveFileToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles SaveFileToolStripMenuItem.Click
-        If wb IsNot Nothing Then wb.ShowSaveAsDialog()
+    Private Async Sub SaveFileToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles SaveFileToolStripMenuItem.Click
+        If wb IsNot Nothing AndAlso wb.CoreWebView2 IsNot Nothing Then
+            Await wb.CoreWebView2.ExecuteScriptAsync("window.print()")
+        End If
     End Sub
 
     Private Sub PrintToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PrintToolStripMenuItem.Click
-        If wb IsNot Nothing Then wb.ShowPrintDialog()
+        If wb IsNot Nothing AndAlso wb.CoreWebView2 IsNot Nothing Then wb.CoreWebView2.ShowPrintUI(CoreWebView2PrintDialogKind.Browser)
     End Sub
 
     Private Sub PrintPreviewToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PrintPreviewToolStripMenuItem.Click
-        If wb IsNot Nothing Then wb.ShowPrintPreviewDialog()
+        If wb IsNot Nothing AndAlso wb.CoreWebView2 IsNot Nothing Then wb.CoreWebView2.ShowPrintUI(CoreWebView2PrintDialogKind.Browser)
     End Sub
 
     Private Sub ExitToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ExitToolStripMenuItem.Click
@@ -208,34 +181,38 @@ Public Class Form1
         End If
     End Sub
 
-    Private Sub SourceToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles SourceToolStripMenuItem.Click
-        If wb IsNot Nothing AndAlso wb.Document IsNot Nothing Then
-            Source.Show()
-            Source.RichTextBox1.Text = Me.wb.DocumentText
+    Private Async Sub SourceToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles SourceToolStripMenuItem.Click
+        If wb IsNot Nothing AndAlso wb.CoreWebView2 IsNot Nothing Then
+            Try
+                Dim htmlJson As String = Await wb.CoreWebView2.ExecuteScriptAsync("document.documentElement.outerHTML")
+                Dim htmlText As String = htmlJson
+                If htmlText.StartsWith("""") AndAlso htmlText.EndsWith("""") Then
+                    htmlText = System.Text.RegularExpressions.Regex.Unescape(htmlText.Substring(1, htmlText.Length - 2))
+                End If
+                Source.Show()
+                Source.RichTextBox1.Text = htmlText
+            Catch ex As Exception
+                System.Diagnostics.Debug.WriteLine("Error getting HTML source: " & ex.Message)
+            End Try
         End If
     End Sub
 
     Private Sub PropertiesToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PropertiesToolStripMenuItem.Click
-        If wb IsNot Nothing Then wb.ShowPropertiesDialog()
+        OpenDevTools()
     End Sub
 
     Private Sub Button5_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
-        Try
-            wb.Navigate(ToolStripTextBox1.Text)
-            My.Settings.History.Add(wb.Url.ToString)
-            My.Settings.Save()
-            AddHandler wb.ProgressChanged, AddressOf Loading
-
-            History.ListBox1.Items.Add(ToolStripTextBox1.Text)
-        Catch ex As Exception
-        End Try
+        NavigateActiveTab(ToolStripTextBox1.Text)
     End Sub
 
     Private Sub BookmarkThisPageToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles BookmarkThisPageToolStripMenuItem.Click
         Try
-            My.Settings.Bookmarks.Add(wb.Url.ToString)
-            My.Settings.Save()
-            MsgBox(wb.Url.ToString & " Has Been Bookmarked!", MsgBoxStyle.OkOnly, "K-Browser")
+            If wb IsNot Nothing AndAlso wb.CoreWebView2 IsNot Nothing Then
+                Dim bmUrl As String = wb.CoreWebView2.Source
+                My.Settings.Bookmarks.Add(bmUrl)
+                My.Settings.Save()
+                MsgBox(bmUrl & " Has Been Bookmarked!", MsgBoxStyle.OkOnly, "K-Browser")
+            End If
         Catch ex As Exception
         End Try
     End Sub
@@ -257,29 +234,22 @@ Public Class Form1
     End Sub
 
     Private Sub ToolStripButton3_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton3.Click
-        If wb IsNot Nothing Then wb.Refresh()
+        If wb IsNot Nothing Then wb.Reload()
     End Sub
 
     Private Sub ToolStripButton4_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton4.Click
-        If wb IsNot Nothing Then wb.GoHome()
+        NavigateActiveTab(Path.Combine(Application.StartupPath, "homepage", "index.html"))
     End Sub
 
     Private Sub ToolStripButton5_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton5.Click
-        Try
-            wb.Navigate(ToolStripTextBox1.Text)
-            My.Settings.History.Add(wb.Url.ToString)
-            My.Settings.Save()
-            AddHandler wb.ProgressChanged, AddressOf Loading
-            History.ListBox1.Items.Add(ToolStripTextBox1.Text)
-            wb.ScriptErrorsSuppressed = True
-        Catch ex As Exception
-        End Try
-        img.BackgroundImage = Nothing
+        If Not String.IsNullOrWhiteSpace(ToolStripTextBox1.Text) Then
+            NavigateActiveTab(ToolStripTextBox1.Text)
+        End If
     End Sub
 
-    Private Sub ToolStripButton7_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton7.Click
+    Private Async Sub ToolStripButton7_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton7.Click
         Try
-            CreateNewTab()
+            Await CreateNewTab()
         Catch ex As Exception
         End Try
     End Sub
@@ -288,20 +258,20 @@ Public Class Form1
         CloseCurrentTab()
     End Sub
 
-    Private Sub CutToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CutToolStripMenuItem.Click
-        If wb IsNot Nothing AndAlso wb.Document IsNot Nothing Then wb.Document.ExecCommand("Cut", False, vbNull)
+    Private Async Sub CutToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CutToolStripMenuItem.Click
+        If wb IsNot Nothing AndAlso wb.CoreWebView2 IsNot Nothing Then Await wb.CoreWebView2.ExecuteScriptAsync("document.execCommand('cut')")
     End Sub
 
-    Private Sub CopyToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CopyToolStripMenuItem.Click
-        If wb IsNot Nothing AndAlso wb.Document IsNot Nothing Then wb.Document.ExecCommand("copy", False, vbNull)
+    Private Async Sub CopyToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CopyToolStripMenuItem.Click
+        If wb IsNot Nothing AndAlso wb.CoreWebView2 IsNot Nothing Then Await wb.CoreWebView2.ExecuteScriptAsync("document.execCommand('copy')")
     End Sub
 
-    Private Sub PasteToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PasteToolStripMenuItem.Click
-        If wb IsNot Nothing AndAlso wb.Document IsNot Nothing Then wb.Document.ExecCommand("paste", False, vbNull)
+    Private Async Sub PasteToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PasteToolStripMenuItem.Click
+        If wb IsNot Nothing AndAlso wb.CoreWebView2 IsNot Nothing Then Await wb.CoreWebView2.ExecuteScriptAsync("document.execCommand('paste')")
     End Sub
 
-    Private Sub SelectAllToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles SelectAllToolStripMenuItem.Click
-        If wb IsNot Nothing AndAlso wb.Document IsNot Nothing Then wb.Document.ExecCommand("SelectAll", False, vbNull)
+    Private Async Sub SelectAllToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles SelectAllToolStripMenuItem.Click
+        If wb IsNot Nothing AndAlso wb.CoreWebView2 IsNot Nothing Then Await wb.CoreWebView2.ExecuteScriptAsync("document.execCommand('selectAll')")
     End Sub
 
     Private Sub SeToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles SeToolStripMenuItem.Click
@@ -322,31 +292,15 @@ Public Class Form1
         OLECMDEXECOPT_SHOWHELP = 3
     End Enum
     Private Sub ZoomInToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ZoomInToolStripMenuItem.Click
-        Try
-            Dim Res As Object = Nothing
-            Dim MyWeb As Object
-            MyWeb = wb.ActiveXInstance
-            MyWeb.ExecWB(Exec.OLECMDID_OPTICAL_ZOOM,
-                  ExecOpt.OLECMDEXECOPT_DONTPROMPTUSER, 150, IntPtr.Zero)
-        Catch ex As Exception
-            '  MsgBox("Error:" & ex.Message)
-        End Try
-        My.Settings.zoom = 150
-        My.Settings.Save()
+        If wb IsNot Nothing Then
+            wb.ZoomFactor += 0.15
+        End If
     End Sub
 
     Private Sub ZoomOutToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ZoomOutToolStripMenuItem.Click
-        Try
-            Dim Res As Object = Nothing
-            Dim MyWeb As Object
-            MyWeb = wb.ActiveXInstance
-            MyWeb.ExecWB(Exec.OLECMDID_OPTICAL_ZOOM,
-                  ExecOpt.OLECMDEXECOPT_DONTPROMPTUSER, 100, IntPtr.Zero)
-        Catch ex As Exception
-            '  MsgBox("Error:" & ex.Message)
-        End Try
-        My.Settings.zoom = 100
-        My.Settings.Save()
+        If wb IsNot Nothing AndAlso wb.ZoomFactor > 0.3 Then
+            wb.ZoomFactor -= 0.15
+        End If
     End Sub
 
     Private Sub FullScreenToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles FullScreenToolStripMenuItem.Click
@@ -381,20 +335,23 @@ Public Class Form1
 
     Private Sub ToolStripButton9_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton9.Click
         Try
-            My.Settings.Bookmarks.Add(wb.Url.ToString)
-            My.Settings.Save()
-            MsgBox(wb.Url.ToString & "Has Been Bookmarked!", MsgBoxStyle.OkOnly, "K-Browser")
+            If wb IsNot Nothing AndAlso wb.CoreWebView2 IsNot Nothing Then
+                Dim url As String = wb.CoreWebView2.Source
+                My.Settings.Bookmarks.Add(url)
+                My.Settings.Save()
+                MsgBox(url & " Has Been Bookmarked!", MsgBoxStyle.OkOnly, "K-Browser")
+            End If
         Catch ex As Exception
         End Try
     End Sub
 
     Private Sub SetHomePageToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles SetHomePageToolStripMenuItem.Click
-        If wb IsNot Nothing Then wb.GoHome()
+        NavigateActiveTab(Path.Combine(Application.StartupPath, "homepage", "index.html"))
     End Sub
 
-    Private Sub NewTabToolStripMenuItem1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles NewTabToolStripMenuItem1.Click
+    Private Async Sub NewTabToolStripMenuItem1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles NewTabToolStripMenuItem1.Click
         Try
-            CreateNewTab()
+            Await CreateNewTab()
         Catch ex As Exception
         End Try
     End Sub
@@ -406,7 +363,7 @@ Public Class Form1
 
     Private Sub ToolStripTextBox1_KeyDown(ByVal sender As Object, ByVal e As KeyEventArgs) Handles ToolStripTextBox1.KeyDown
         If e.KeyCode = Keys.Enter Then
-            wb.Navigate(ToolStripTextBox1.Text)
+            NavigateActiveTab(ToolStripTextBox1.Text)
         End If
     End Sub
 
@@ -425,13 +382,13 @@ Public Class Form1
         lOpen.Filter = "PDF Files(*.pdf)|*.pdf|All Files(*.*)|*.*"
         lOpen.ShowDialog()
         If lOpen.FileName <> "" Then
-            wb.Navigate(lOpen.FileName)
+            NavigateActiveTab(lOpen.FileName)
         End If
     End Sub
 
     Private Sub ToolStripButton1_Click_1(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton1.Click
-        If wb IsNot Nothing Then
-            wb.Navigate("http://www.google.com/search?hl=en&q=" & Uri.EscapeDataString(searchTextBox2.Text))
+        If Not String.IsNullOrWhiteSpace(searchTextBox2.Text) Then
+            NavigateActiveTab("http://www.google.com/search?hl=en&q=" & Uri.EscapeDataString(searchTextBox2.Text))
             My.Settings.History.Add(searchTextBox2.Text)
             My.Settings.Save()
             History.ListBox1.Items.Add(searchTextBox2.Text)
@@ -439,8 +396,8 @@ Public Class Form1
     End Sub
 
     Private Sub searchTextBox2_KeyDown(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles searchTextBox2.KeyDown
-        If e.KeyCode = Keys.Enter Then
-            wb.Navigate("http://www.google.com/search?hl=en&q=" & searchTextBox2.Text)
+        If e.KeyCode = Keys.Enter AndAlso Not String.IsNullOrWhiteSpace(searchTextBox2.Text) Then
+            NavigateActiveTab("http://www.google.com/search?hl=en&q=" & Uri.EscapeDataString(searchTextBox2.Text))
             History.ListBox1.Items.Add(searchTextBox2.Text)
         End If
     End Sub
@@ -470,7 +427,7 @@ Public Class Form1
     End Sub
 
     Private Sub SubmitFeedbackToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles SubmitFeedbackToolStripMenuItem.Click
-        wb.Navigate("https://www.k-browser.com/")
+        NavigateActiveTab("https://www.k-browser.com/")
     End Sub
 
     Private Sub ShareThisOnToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ShareThisOnToolStripMenuItem.Click
@@ -478,12 +435,12 @@ Public Class Form1
     End Sub
 
     Private Sub ToolStripSplitButton1_ButtonClick(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripSplitButton1.ButtonClick
-        wb.Navigate("https://www.facebook.com/login.php")
+        NavigateActiveTab("https://www.facebook.com/login.php")
         History.ListBox1.Items.Add(searchTextBox2.Text)
     End Sub
 
     Private Sub ToolStripSplitButton2_ButtonClick(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripSplitButton2.ButtonClick
-        wb.Navigate("https://twitter.com/login")
+        NavigateActiveTab("https://twitter.com/login")
         History.ListBox1.Items.Add(searchTextBox2.Text)
     End Sub
 
@@ -544,51 +501,51 @@ Public Class Form1
     End Sub
 
     Private Sub BingToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles BingToolStripMenuItem.Click
-        wb.Navigate("http://www.bing.com/")
+        NavigateActiveTab("http://www.bing.com/")
     End Sub
 
     Private Sub GoogleToolStripMenuItem1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles GoogleToolStripMenuItem1.Click
-        wb.Navigate("http://www.google.com/")
+        NavigateActiveTab("http://www.google.com/")
     End Sub
 
     Private Sub YahooToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles YahooToolStripMenuItem.Click
-        wb.Navigate("http://www.yahoo.com/")
+        NavigateActiveTab("http://www.yahoo.com/")
     End Sub
 
     Private Sub EBayToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles EBayToolStripMenuItem.Click
-        wb.Navigate("http://www.ebay.com/")
+        NavigateActiveTab("http://www.ebay.com/")
     End Sub
 
     Private Sub MSNToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MSNToolStripMenuItem.Click
-        wb.Navigate("http://www.msn.com/?st=1")
+        NavigateActiveTab("http://www.msn.com/?st=1")
     End Sub
 
     Private Sub DuckDuckGoToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles DuckDuckGoToolStripMenuItem.Click
-        wb.Navigate("https://duckduckgo.com/")
+        NavigateActiveTab("https://duckduckgo.com/")
     End Sub
 
     Private Sub DogpileToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles DogpileToolStripMenuItem.Click
-        wb.Navigate("http://www.dogpile.com/")
+        NavigateActiveTab("http://www.dogpile.com/")
     End Sub
 
     Private Sub WebCrawlerToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles WebCrawlerToolStripMenuItem.Click
-        wb.Navigate("http://www.webcrawler.com/")
+        NavigateActiveTab("http://www.webcrawler.com/")
     End Sub
 
-    Private Sub GopherToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
-        wb.Navigate("http://wt.gopherite.org/")
+    Private Sub GopherToolStripMenuItem_Click(ByVal sender As System.Object)
+        NavigateActiveTab("http://wt.gopherite.org/")
     End Sub
 
     Private Sub LycosToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles LycosToolStripMenuItem.Click
-        wb.Navigate("http://www.lycos.com/")
+        NavigateActiveTab("http://www.lycos.com/")
     End Sub
 
     Private Sub AccuWeatherToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles AccuWeatherToolStripMenuItem.Click
-        wb.Navigate("http://www.accuweather.com")
+        NavigateActiveTab("http://www.accuweather.com")
     End Sub
 
     Private Sub VimeoToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles VimeoToolStripMenuItem.Click
-        wb.Navigate("https://vimeo.com/")
+        NavigateActiveTab("https://vimeo.com/")
     End Sub
 
 
@@ -596,45 +553,51 @@ Public Class Form1
 
     Private Shared ReadOnly IgnoredUrls As New System.Collections.Generic.HashSet(Of String)()
 
-    Private Function CreateNewTab(Optional ByVal targetUrl As String = "") As WebBrowser
+    Public Async Function CreateNewTab(Optional ByVal targetUrl As String = "") As System.Threading.Tasks.Task(Of WebView2)
         Dim tab As New TabPage()
-        Dim brws As New WebBrowser()
-        brws.Name = "WebBrowser"
+        Dim brws As New WebView2()
+        brws.Name = "WebView2"
         brws.Dock = DockStyle.Fill
-        brws.ScriptErrorsSuppressed = True
-        tab.Text = "New Tab"
+        tab.Text = "Loading..."
         tab.Controls.Add(brws)
-        
-        AddHandler brws.ProgressChanged, AddressOf Loading
-        AddHandler brws.Navigating, AddressOf WebBrowser_Navigating
-        AddHandler brws.DocumentCompleted, AddressOf WebBrowser_DocumentCompleted_SuppressErrors
         
         Me.TabControl1.TabPages.Add(tab)
         Me.TabControl1.SelectedTab = tab
         
-        If Not String.IsNullOrEmpty(targetUrl) Then
-            brws.Navigate(targetUrl)
+        Try
+            Await brws.EnsureCoreWebView2Async(Nothing)
+        Catch ex As Exception
+            System.Diagnostics.Debug.WriteLine("EnsureCoreWebView2Async failed: " & ex.Message)
+        End Try
+
+        If brws.CoreWebView2 IsNot Nothing Then
+            brws.CoreWebView2.Settings.IsStatusBarEnabled = True
+            brws.CoreWebView2.Settings.AreDefaultScriptDialogsEnabled = True
+            brws.CoreWebView2.Settings.IsScriptEnabled = True
+            brws.CoreWebView2.Settings.IsWebMessageEnabled = True
+            brws.CoreWebView2.Settings.AreDevToolsEnabled = True
+
+            AddHandler brws.CoreWebView2.NavigationStarting, AddressOf WebView2_NavigationStarting
+            AddHandler brws.CoreWebView2.NavigationCompleted, AddressOf WebView2_NavigationCompleted
+            AddHandler brws.CoreWebView2.SourceChanged, AddressOf WebView2_SourceChanged
+            AddHandler brws.CoreWebView2.DocumentTitleChanged, AddressOf WebView2_DocumentTitleChanged
+            AddHandler brws.CoreWebView2.HistoryChanged, AddressOf WebView2_HistoryChanged
         End If
-        
+
+        If Not String.IsNullOrEmpty(targetUrl) Then
+            Dim targetFix As String = AppManager.FixURL(targetUrl)
+            If brws.CoreWebView2 IsNot Nothing Then
+                brws.CoreWebView2.Navigate(targetFix)
+            Else
+                brws.Source = New Uri(targetFix)
+            End If
+        End If
+
         Return brws
     End Function
 
-    Private Sub WebBrowser_DocumentCompleted_SuppressErrors(ByVal sender As Object, ByVal e As WebBrowserDocumentCompletedEventArgs)
-        Try
-            Dim currentBrowser As WebBrowser = TryCast(sender, WebBrowser)
-            If currentBrowser IsNot Nothing AndAlso currentBrowser.Document IsNot Nothing AndAlso currentBrowser.Document.Window IsNot Nothing Then
-                RemoveHandler currentBrowser.Document.Window.Error, AddressOf Window_Error
-                AddHandler currentBrowser.Document.Window.Error, AddressOf Window_Error
-            End If
-        Catch ex As Exception
-        End Try
-    End Sub
-
-    Private Sub WebBrowser_Navigating(ByVal sender As Object, ByVal e As WebBrowserNavigatingEventArgs)
-        Dim currentBrowser As WebBrowser = TryCast(sender, WebBrowser)
-        If currentBrowser Is Nothing Then Return
-        
-        Dim url As String = e.Url.ToString()
+    Private Sub WebView2_NavigationStarting(ByVal sender As Object, ByVal e As CoreWebView2NavigationStartingEventArgs)
+        Dim url As String = e.Uri
         If String.IsNullOrEmpty(url) OrElse url = "about:blank" Then Return
         
         ' 1. Blocked Sites Check
@@ -667,7 +630,8 @@ Public Class Form1
                         Dim result As DialogResult = warningForm.ShowDialog()
                         If result = DialogResult.Ignore Then
                             IgnoredUrls.Add(url)
-                            currentBrowser.Navigate(url)
+                            Dim core = TryCast(sender, CoreWebView2)
+                            If core IsNot Nothing Then core.Navigate(url)
                         End If
                         Return
                     End If
@@ -676,147 +640,64 @@ Public Class Form1
         End If
     End Sub
 
+    Private Sub WebView2_NavigationCompleted(ByVal sender As Object, ByVal e As CoreWebView2NavigationCompletedEventArgs)
+        If wb IsNot Nothing AndAlso wb.CoreWebView2 IsNot Nothing Then
+            Dim currentUri As String = wb.CoreWebView2.Source
+            ToolStripTextBox1.Text = currentUri
+            If e.IsSuccess Then
+                Try
+                    My.Settings.History.Add(currentUri)
+                    My.Settings.Save()
+                    History.ListBox1.Items.Add(currentUri)
+                Catch ex As Exception
+                End Try
+            End If
+        End If
+    End Sub
+
+    Private Sub WebView2_SourceChanged(ByVal sender As Object, ByVal e As CoreWebView2SourceChangedEventArgs)
+        If wb IsNot Nothing AndAlso wb.CoreWebView2 IsNot Nothing Then
+            ToolStripTextBox1.Text = wb.CoreWebView2.Source
+        End If
+    End Sub
+
+    Private Sub WebView2_DocumentTitleChanged(ByVal sender As Object, ByVal e As Object)
+        Dim core = TryCast(sender, CoreWebView2)
+        If core IsNot Nothing Then
+            Label1.Text = core.DocumentTitle
+            If TabControl1.SelectedTab IsNot Nothing AndAlso Not String.IsNullOrEmpty(core.DocumentTitle) Then
+                TabControl1.SelectedTab.Text = If(core.DocumentTitle.Length > 20, core.DocumentTitle.Substring(0, 17) & "...", core.DocumentTitle)
+            End If
+        End If
+    End Sub
+
+    Private Sub WebView2_HistoryChanged(ByVal sender As Object, ByVal e As Object)
+        If wb IsNot Nothing Then
+            Back.Enabled = wb.CanGoBack
+            ToolStripButton2.Enabled = wb.CanGoForward
+        End If
+    End Sub
+
     Private Sub TabControl1_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles TabControl1.SelectedIndexChanged
         If Me.TabControl1.SelectedTab IsNot Nothing AndAlso Me.TabControl1.SelectedTab.Controls.Count > 0 Then
-            wb = TryCast(Me.TabControl1.SelectedTab.Controls(0), WebBrowser)
+            wb = TryCast(Me.TabControl1.SelectedTab.Controls(0), WebView2)
+            If wb IsNot Nothing Then
+                Back.Enabled = wb.CanGoBack
+                ToolStripButton2.Enabled = wb.CanGoForward
+                If wb.CoreWebView2 IsNot Nothing Then
+                    ToolStripTextBox1.Text = wb.CoreWebView2.Source
+                    Label1.Text = wb.CoreWebView2.DocumentTitle
+                End If
+            End If
         Else
             wb = Nothing
         End If
     End Sub
 
-    Private Sub wb_DocumentCompleted(ByVal sender As Object, ByVal e As WebBrowserDocumentCompletedEventArgs) Handles wb.DocumentCompleted
-        Dim pageUrl As Uri = wb.Url
-        If pageUrl Is Nothing OrElse pageUrl.HostNameType <> UriHostNameType.Dns Then
-            img.BackgroundImage = Nothing
-            Return
-        End If
-        Dim hostKey As String = pageUrl.Host.ToLowerInvariant()
-        If faviconCache.ContainsKey(hostKey) Then
-            img.BackgroundImage = faviconCache(hostKey)
-            Return
-        End If
-        Dim iconUrl As String = Nothing
-        Try
-            Dim doc As HtmlDocument = wb.Document
-            If doc IsNot Nothing Then
-                For Each link As HtmlElement In doc.GetElementsByTagName("link")
-                    Dim rel As String = link.GetAttribute("rel")
-                    If rel IsNot Nothing AndAlso rel.ToLowerInvariant().Contains("icon") Then
-                        iconUrl = link.GetAttribute("href")
-                        Exit For
-                    End If
-                Next
-            End If
-        Catch ex As Exception
-            iconUrl = Nothing
-        End Try
-        Dim faviconUri As Uri = Nothing
-        If Not String.IsNullOrEmpty(iconUrl) Then
-            Try
-                faviconUri = New Uri(pageUrl, iconUrl)
-            Catch ex As Exception
-                faviconUri = Nothing
-            End Try
-        End If
-        If faviconUri Is Nothing Then
-            faviconUri = New Uri(pageUrl.Scheme & "://" & pageUrl.Host & "/favicon.ico")
-        End If
-        System.Diagnostics.Debug.WriteLine("Fetching favicon: " & faviconUri.ToString())
-        System.Threading.Tasks.Task.Run(Function()
-                                            Try
-                                                Dim req As HttpWebRequest = CType(WebRequest.Create(faviconUri), HttpWebRequest)
-                                                req.AllowAutoRedirect = True
-                                                req.Timeout = 5000
-                                                req.UserAgent = MyUserAgent
-                                                Using res As HttpWebResponse = CType(req.GetResponse(), HttpWebResponse)
-                                                    If res.StatusCode = HttpStatusCode.OK Then
-                                                        Using ms As New IO.MemoryStream()
-                                                            Using rspStream As IO.Stream = res.GetResponseStream()
-                                                                If rspStream Is Nothing Then Return Nothing
-                                                                rspStream.CopyTo(ms)
-                                                            End Using
-                                                            ms.Position = 0
-                                                            Try
-                                                                Using favImg As Image = Image.FromStream(ms)
-                                                                    Return New Bitmap(favImg) ' Clone to release MemoryStream
-                                                                End Using
-                                                            Catch exImg As Exception
-                                                                System.Diagnostics.Debug.WriteLine("Image.FromStream failed: " & exImg.ToString())
-                                                                Return Nothing
-                                                            End Try
-                                                        End Using
-
-                                                    Else
-                                                        System.Diagnostics.Debug.WriteLine("Favicon returned status: " & res.StatusCode.ToString())
-                                                        Return Nothing
-                                                    End If
-                                                End Using
-                                            Catch wex As WebException
-                                                Dim resp = TryCast(wex.Response, HttpWebResponse)
-                                                If resp IsNot Nothing Then
-                                                    System.Diagnostics.Debug.WriteLine("WebException fetching favicon: " & resp.StatusCode.ToString())
-                                                Else
-                                                    System.Diagnostics.Debug.WriteLine("WebException fetching favicon: " & wex.Message)
-                                                End If
-                                                Return Nothing
-                                            Catch ex As Exception
-                                                System.Diagnostics.Debug.WriteLine("Exception fetching favicon: " & ex.ToString())
-                                                Return Nothing
-                                            End Try
-                                        End Function).ContinueWith(Sub(t)
-                                                                       Dim resultImg As Image = Nothing
-                                                                       If t.Status = System.Threading.Tasks.TaskStatus.RanToCompletion Then
-                                                                           resultImg = t.Result
-                                                                       End If
-                                                                       If Me.IsHandleCreated Then
-                                                                           Me.Invoke(Sub()
-                                                                                         If resultImg IsNot Nothing Then
-                                                                                             If faviconCache.Count >= MAX_FAVICON_CACHE Then
-                                                                                                 For Each kvp In faviconCache.Values.ToList()
-                                                                                                     kvp.Dispose()
-                                                                                                 Next
-                                                                                                 faviconCache.Clear()
-                                                                                             End If
-                                                                                             img.BackgroundImage = resultImg
-                                                                                             faviconCache(hostKey) = resultImg
-                                                                                         Else
-                                                                                             img.BackgroundImage = Nothing
-                                                                                         End If
-                                                                                     End Sub)
-                                                                       End If
-                                                                   End Sub, System.Threading.Tasks.TaskScheduler.Default)
-    End Sub
-
-    Private Sub wb_Navigated(ByVal sender As Object, ByVal e As System.Windows.Forms.WebBrowserNavigatedEventArgs) Handles wb.Navigated
-        Dim pageUrl As Uri = wb.Url
-        If pageUrl IsNot Nothing Then
-            ToolStripTextBox1.Text = pageUrl.ToString()
-        Else
-            ToolStripTextBox1.Text = String.Empty
-            img.BackgroundImage = Nothing
-            Return
-        End If
-        If pageUrl.HostNameType <> UriHostNameType.Dns Then
-            img.BackgroundImage = Nothing
-            Return
-        End If
-        Dim hostKey As String = pageUrl.Host.ToLowerInvariant()
-        If faviconCache.ContainsKey(hostKey) Then
-            img.BackgroundImage = faviconCache(hostKey)
-            Return
-        End If
-        ' Try to get favicon from <link rel="icon"> in DocumentCompleted
-        img.BackgroundImage = Nothing
-    End Sub
-
-    Private Sub Window_Error(ByVal sender As Object, ByVal e As HtmlElementErrorEventArgs)
-        ' Ignore the error and suppress the error dialog box. 
-        e.Handled = True
-    End Sub
 
 
     Private Sub CheckForUpdatesToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckForUpdatesToolStripMenuItem.Click
-        wb.Navigate("k-browser.com")
+        NavigateActiveTab("https://www.k-browser.com/")
     End Sub
 
     Private Sub CPUStatsToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CPUStatsToolStripMenuItem.Click
@@ -831,27 +712,26 @@ Public Class Form1
         End If
     End Sub
 
-    Private Sub mnuLeftToRight_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles mnuLeftToRight.Click
+    Private Async Sub mnuLeftToRight_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles mnuLeftToRight.Click
         Try
-            Dim cur As WebBrowser = TryCast(Me.TabControl1.SelectedTab?.Controls(0), WebBrowser)
-            If cur IsNot Nothing AndAlso cur.Document IsNot Nothing Then
-                cur.Document.RightToLeft = False
-            Else
-                System.Diagnostics.Debug.WriteLine("mnuLeftToRight_Click: browser or document is not ready.")
+            If wb IsNot Nothing AndAlso wb.CoreWebView2 IsNot Nothing Then
+                Await wb.CoreWebView2.ExecuteScriptAsync("document.body.dir = 'ltr'")
             End If
-
-            ' Keep menu checks consistent
             mnuLeftToRight.Checked = True
             If mnuRightToLeft IsNot Nothing Then mnuRightToLeft.Checked = False
         Catch ex As Exception
-            System.Diagnostics.Debug.WriteLine("mnuLeftToRight_Click exception: " & ex.ToString())
-            Throw
         End Try
     End Sub
 
-    Private Sub mnuRightToLeft_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles mnuRightToLeft.Click
-        wb.Document.RightToLeft = True
-        mnuLeftToRight.Checked = False
+    Private Async Sub mnuRightToLeft_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles mnuRightToLeft.Click
+        Try
+            If wb IsNot Nothing AndAlso wb.CoreWebView2 IsNot Nothing Then
+                Await wb.CoreWebView2.ExecuteScriptAsync("document.body.dir = 'rtl'")
+            End If
+            mnuLeftToRight.Checked = False
+            If mnuRightToLeft IsNot Nothing Then mnuRightToLeft.Checked = True
+        Catch ex As Exception
+        End Try
     End Sub
 
     Private Sub CalendarToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CalendarToolStripMenuItem.Click
@@ -878,40 +758,16 @@ Public Class Form1
         ToolStripTextBox1.BackColor = Color.Snow
     End Sub
 
-    Private Sub wb_StatusTextChanged(ByVal sender As Object, ByVal e As EventArgs) Handles wb.StatusTextChanged
-        Label1.Text = wb.StatusText
-    End Sub
-    Private Sub wb_Navigate(ByVal address As String)
-
-        If String.IsNullOrEmpty(address) Then Return
-        If address.Equals("about:blank") Then Return
-        If Not address.StartsWith("http://") And
-            Not address.StartsWith("https://") Then
-            address = "http://" & address
-        End If
-
-    End Sub
-
     Private Sub ToolStripTextBox1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripTextBox1.Click
         ToolStripTextBox1.SelectAll()
     End Sub
-    Private Sub wb_CanGoBackChanged(ByVal sender As Object, ByVal e As EventArgs) Handles wb.CanGoBackChanged
-        ToolStripButton1.Enabled = wb.CanGoBack
-    End Sub
-
-    Private Sub wb_CanGoForwardChanged(ByVal sender As Object, ByVal e As EventArgs) Handles wb.CanGoForwardChanged
-        ToolStripButton2.Enabled = wb.CanGoForward
-    End Sub
-
     Private Sub ReloadToolStripMenuItem1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ReloadToolStripMenuItem1.Click
-        wb.Refresh()
+        If wb IsNot Nothing Then wb.Reload()
     End Sub
 
     Private Sub AutoToolStripMenuItem_CheckedChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles AutoToolStripMenuItem.CheckedChanged
         Select Case AutoToolStripMenuItem.Checked
             Case True
-                'enable timer to refresh every 10000 milliseconds or 10 Seconds 
-                '(Interval property)
                 Timer1.Interval = 10000
                 Timer1.Enabled = True
             Case Else
@@ -920,26 +776,26 @@ Public Class Form1
     End Sub
 
     Private Sub Timer1_Tick(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Timer1.Tick
-        wb.Refresh(WebBrowserRefreshOption.Completely)
+        If wb IsNot Nothing Then wb.Reload()
     End Sub
 
-    Private Sub NewTabToolStripMenuItem2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles NewTabToolStripMenuItem2.Click
+    Private Async Sub NewTabToolStripMenuItem2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles NewTabToolStripMenuItem2.Click
         Try
-            CreateNewTab()
+            Await CreateNewTab()
         Catch ex As Exception
         End Try
     End Sub
 
     Private Sub DefualtToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles DefualtToolStripMenuItem.Click
-        wb.Navigate("file://" & My.Application.Info.DirectoryPath & "/homepage/index.html")
+        NavigateActiveTab(Path.Combine(Application.StartupPath, "homepage", "index.html"))
     End Sub
 
     Private Sub HomeToolStripMenuItem1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles HomeToolStripMenuItem1.Click
-        wb.GoHome()
+        NavigateActiveTab(Path.Combine(Application.StartupPath, "homepage", "index.html"))
     End Sub
 
     Private Sub BlancPageToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles BlancPageToolStripMenuItem.Click
-        wb.Navigate("about:blank")
+        NavigateActiveTab("about:blank")
     End Sub
 
     Private Sub ToolStripSplitButton1_DoubleClick(ByVal sender As Object, ByVal e As System.EventArgs) Handles ToolStripSplitButton1.DoubleClick
@@ -947,7 +803,7 @@ Public Class Form1
     End Sub
 
     Private Sub ToolStripMenuItem3_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem3.Click
-        wb.GoHome()
+        NavigateActiveTab(Path.Combine(Application.StartupPath, "homepage", "index.html"))
     End Sub
 
     Private Sub Form1_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
@@ -965,9 +821,7 @@ Public Class Form1
         mediumToolStripMenuItem.Checked = False
         largerToolStripMenuItem.Checked = False
         largestToolStripMenuItem.Checked = False
-        If wb IsNot Nothing AndAlso wb.Document IsNot Nothing Then
-            wb.Document.ExecCommand("FontSize", True, "4")
-        End If
+        If wb IsNot Nothing Then wb.ZoomFactor = 1.5
         largestToolStripMenuItem.Checked = True
     End Sub
 
@@ -977,9 +831,7 @@ Public Class Form1
         mediumToolStripMenuItem.Checked = False
         largerToolStripMenuItem.Checked = False
         largestToolStripMenuItem.Checked = False
-        If wb IsNot Nothing AndAlso wb.Document IsNot Nothing Then
-            wb.Document.ExecCommand("FontSize", True, "0")
-        End If
+        If wb IsNot Nothing Then wb.ZoomFactor = 0.7
         smallestToolStripMenuItem.Checked = True
     End Sub
 
@@ -989,9 +841,7 @@ Public Class Form1
         mediumToolStripMenuItem.Checked = False
         largerToolStripMenuItem.Checked = False
         largestToolStripMenuItem.Checked = False
-        If wb IsNot Nothing AndAlso wb.Document IsNot Nothing Then
-            wb.Document.ExecCommand("FontSize", True, "3")
-        End If
+        If wb IsNot Nothing Then wb.ZoomFactor = 1.25
         largerToolStripMenuItem.Checked = True
     End Sub
 
@@ -1001,9 +851,7 @@ Public Class Form1
         mediumToolStripMenuItem.Checked = False
         largerToolStripMenuItem.Checked = False
         largestToolStripMenuItem.Checked = False
-        If wb IsNot Nothing AndAlso wb.Document IsNot Nothing Then
-            wb.Document.ExecCommand("FontSize", True, "2")
-        End If
+        If wb IsNot Nothing Then wb.ZoomFactor = 1.0
         mediumToolStripMenuItem.Checked = True
     End Sub
 
@@ -1013,9 +861,7 @@ Public Class Form1
         mediumToolStripMenuItem.Checked = False
         largerToolStripMenuItem.Checked = False
         largestToolStripMenuItem.Checked = False
-        If wb IsNot Nothing AndAlso wb.Document IsNot Nothing Then
-            wb.Document.ExecCommand("FontSize", True, "1")
-        End If
+        If wb IsNot Nothing Then wb.ZoomFactor = 0.85
         smallerToolStripMenuItem.Checked = True
     End Sub
 
@@ -1102,42 +948,8 @@ Public Class Form1
         End Try
     End Sub
 
-    Private Sub wb_DocumentTitleChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles wb.DocumentTitleChanged
-        Label1.Text = wb.DocumentTitle
-    End Sub
-    Public Function PopulateUrlList() As List(Of String)
-        Dim regKey As String = "Software\Microsoft\Internet Explorer\TypedURLs"
-        Dim urlList As New List(Of String)()
-        Try
-            Using subKey As RegistryKey = Registry.CurrentUser.OpenSubKey(regKey)
-                If subKey IsNot Nothing Then
-                    Dim counter As Integer = 1
-                    While True
-                        Dim sValName As String = "url" + counter.ToString()
-                        Dim url As String = TryCast(subKey.GetValue(sValName), String)
-                        If String.IsNullOrEmpty(url) Then
-                            Exit While
-                        End If
-                        urlList.Add(url)
-                        counter += 1
-                    End While
-                End If
-            End Using
-        Catch ex As Exception
-        End Try
-        Return urlList
-    End Function
-
-
-    Private Sub ToolStripMenuItem5_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem5.Click
-        On Error Resume Next
-        Dim psi As New System.Diagnostics.ProcessStartInfo("iexplore")
-        psi.Arguments = ToolStripTextBox1.Text
-        System.Diagnostics.Process.Start(psi)
-    End Sub
-
     Private Sub KBrowserToolStripMenuItem_Click_1(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles KBrowserToolStripMenuItem.Click
-        wb.Navigate("http://k-browser.com")
+        NavigateActiveTab("https://www.k-browser.com/")
     End Sub
 
     Private Sub SToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles SToolStripMenuItem.Click

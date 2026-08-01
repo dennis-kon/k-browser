@@ -45,9 +45,7 @@ Public Class Form3
     Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button1.Click
         If Not String.IsNullOrWhiteSpace(TextBox1.Text) AndAlso Not String.IsNullOrWhiteSpace(TextBox2.Text) Then
             UseProxy(TextBox1.Text.Trim() & ":" & TextBox2.Text.Trim())
-            If Form1.wb IsNot Nothing Then
-                Form1.wb.Navigate("http://ipchicken.com")
-            End If
+            Form1.NavigateActiveTab("http://ipchicken.com")
         End If
     End Sub
 
@@ -59,9 +57,7 @@ Public Class Form3
         TextBox1.Text = ""
         TextBox2.Text = ""
         UseProxy(String.Empty)
-        If Form1.wb IsNot Nothing Then
-            Form1.wb.Navigate("http://ipchicken.com")
-        End If
+        Form1.NavigateActiveTab("http://ipchicken.com")
         Try
             Using proxy As RegistryKey = Registry.CurrentUser.OpenSubKey("Software\Microsoft\Windows\CurrentVersion\Internet Settings", True)
                 If proxy IsNot Nothing Then
