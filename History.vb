@@ -50,6 +50,38 @@ Public Class History
     End Function
 
     ''' <summary>
+    ''' Extracts the domain from a URL (e.g., "https://www.google.com/search?q=test" → "google.com").
+    ''' Returns the URL itself if parsing fails.
+    ''' </summary>
+    Private Shared Function GetDomainFromUrl(url As String) As String
+        Try
+            Dim uri As New Uri(url)
+            Dim host As String = uri.Host
+            ' Strip "www." prefix for cleaner display
+            If host.StartsWith("www.", StringComparison.OrdinalIgnoreCase) Then
+                host = host.Substring(4)
+            End If
+            Return host
+        Catch
+            Return url
+        End Try
+    End Function
+
+    ''' <summary>
+    ''' Formats the display text as "domain — title".
+    ''' If the title matches the domain or URL, shows just the domain.
+    ''' </summary>
+    Private Shared Function FormatDisplayText(title As String, url As String) As String
+        Dim domain As String = GetDomainFromUrl(url)
+        If String.IsNullOrWhiteSpace(title) OrElse
+           title.Equals(url, StringComparison.OrdinalIgnoreCase) OrElse
+           title.Equals(domain, StringComparison.OrdinalIgnoreCase) Then
+            Return domain
+        End If
+        Return domain & " — " & title
+    End Function
+
+    ''' <summary>
     ''' Resolves the URL for the currently selected ListBox item.
     ''' Returns Nothing if no item is selected.
     ''' </summary>
@@ -115,10 +147,11 @@ Public Class History
                             Continue For
                         End If
 
-                        ' Ensure unique display text (append URL hint if titles collide)
-                        Dim displayText As String = title
+                        ' Format as "domain — title" for display
+                        Dim displayText As String = FormatDisplayText(title, url)
+                        ' Ensure unique display text if entries collide
                         If _entryMap.ContainsKey(displayText) Then
-                            displayText = title & "  (" & url & ")"
+                            displayText = displayText & "  (" & url & ")"
                         End If
 
                         _entryMap(displayText) = item

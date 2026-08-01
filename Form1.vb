@@ -996,7 +996,7 @@ Public Class Form1
 
 
     Private Sub CheckForUpdatesToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckForUpdatesToolStripMenuItem.Click
-        NavigateActiveTab("https://www.k-browser.com/")
+        NavigateActiveTab("https://k-browser.com/")
     End Sub
 
     Private Sub CPUStatsToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CPUStatsToolStripMenuItem.Click

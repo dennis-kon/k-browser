@@ -80,6 +80,18 @@ K-Browser
  Returns Nothing if the entry has no timestamp (legacy format).
  </summary>
 </member>
+<member name="M:Advance_Webbrowser.History.GetDomainFromUrl(System.String)">
+ <summary>
+ Extracts the domain from a URL (e.g., "https://www.google.com/search?q=test" → "google.com").
+ Returns the URL itself if parsing fails.
+ </summary>
+</member>
+<member name="M:Advance_Webbrowser.History.FormatDisplayText(System.String,System.String)">
+ <summary>
+ Formats the display text as "domain — title".
+ If the title matches the domain or URL, shows just the domain.
+ </summary>
+</member>
 <member name="M:Advance_Webbrowser.History.GetSelectedUrl">
  <summary>
  Resolves the URL for the currently selected ListBox item.

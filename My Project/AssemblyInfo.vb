@@ -12,7 +12,7 @@ Imports System.Runtime.InteropServices
 <Assembly: AssemblyDescription("K-Browser is made for reliability, safe browsing with an easy usage it's based on Microsoft Internet Explorer engine. This software is under the General Public License version 3.")>
 <Assembly: AssemblyCompany("Author : Dennis Kon | denkon24@yahoo.com")>
 <Assembly: AssemblyProduct("K-Browser")>
-<Assembly: AssemblyCopyright("Copyright 2008 - 2013")>
+<Assembly: AssemblyCopyright("Copyright 2008 - 2026")>
 <Assembly: AssemblyTrademark("")>
 
 <Assembly: ComVisible(False)>
@@ -31,7 +31,7 @@ Imports System.Runtime.InteropServices
 ' by using the '*' as shown below:
 ' <Assembly: AssemblyVersion("1.0.*")> 
 
-<Assembly: AssemblyVersion("4.8.1.1")>
-<Assembly: AssemblyFileVersion("4.8.1.1")>
+<Assembly: AssemblyVersion("5.0.0.0")>
+<Assembly: AssemblyFileVersion("5.0.0.0")>
 
 <Assembly: NeutralResourcesLanguageAttribute("en")>
