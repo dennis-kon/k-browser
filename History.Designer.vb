@@ -21,6 +21,8 @@ Partial Class History
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(History))
         Me.pnlHeader = New System.Windows.Forms.Panel()
         Me.lblCount = New System.Windows.Forms.Label()
+        Me.cboDateFilter = New System.Windows.Forms.ComboBox()
+        Me.lblDateFilter = New System.Windows.Forms.Label()
         Me.txtSearch = New System.Windows.Forms.TextBox()
         Me.lblSearch = New System.Windows.Forms.Label()
         Me.lblTitle = New System.Windows.Forms.Label()
@@ -46,6 +48,8 @@ Partial Class History
         'pnlHeader
         '
         Me.pnlHeader.BackColor = System.Drawing.Color.FromArgb(CType(CType(245, Byte), Integer), CType(CType(247, Byte), Integer), CType(CType(250, Byte), Integer))
+        Me.pnlHeader.Controls.Add(Me.cboDateFilter)
+        Me.pnlHeader.Controls.Add(Me.lblDateFilter)
         Me.pnlHeader.Controls.Add(Me.lblCount)
         Me.pnlHeader.Controls.Add(Me.txtSearch)
         Me.pnlHeader.Controls.Add(Me.lblSearch)
@@ -53,7 +57,7 @@ Partial Class History
         Me.pnlHeader.Dock = System.Windows.Forms.DockStyle.Top
         Me.pnlHeader.Location = New System.Drawing.Point(0, 0)
         Me.pnlHeader.Name = "pnlHeader"
-        Me.pnlHeader.Size = New System.Drawing.Size(484, 75)
+        Me.pnlHeader.Size = New System.Drawing.Size(484, 105)
         Me.pnlHeader.TabIndex = 0
         '
         'lblCount
@@ -98,6 +102,30 @@ Partial Class History
         Me.lblTitle.Size = New System.Drawing.Size(133, 21)
         Me.lblTitle.TabIndex = 0
         Me.lblTitle.Text = "Browsing History"
+        '
+        'lblDateFilter
+        '
+        Me.lblDateFilter.AutoSize = True
+        Me.lblDateFilter.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblDateFilter.Location = New System.Drawing.Point(12, 72)
+        Me.lblDateFilter.Name = "lblDateFilter"
+        Me.lblDateFilter.Size = New System.Drawing.Size(33, 15)
+        Me.lblDateFilter.TabIndex = 4
+        Me.lblDateFilter.Text = "Date:"
+        '
+        'cboDateFilter
+        '
+        Me.cboDateFilter.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.cboDateFilter.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.cboDateFilter.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cboDateFilter.FormattingEnabled = True
+        Me.cboDateFilter.Items.AddRange(New Object() {"All Time", "Today", "Yesterday", "Last 7 Days", "Last 30 Days"})
+        Me.cboDateFilter.Location = New System.Drawing.Point(65, 68)
+        Me.cboDateFilter.Name = "cboDateFilter"
+        Me.cboDateFilter.Size = New System.Drawing.Size(407, 23)
+        Me.cboDateFilter.TabIndex = 5
+
         '
         'Panel1
         '
@@ -172,9 +200,9 @@ Partial Class History
         Me.ListBox1.FormattingEnabled = True
         Me.ListBox1.IntegralHeight = False
         Me.ListBox1.ItemHeight = 17
-        Me.ListBox1.Location = New System.Drawing.Point(0, 75)
+        Me.ListBox1.Location = New System.Drawing.Point(0, 105)
         Me.ListBox1.Name = "ListBox1"
-        Me.ListBox1.Size = New System.Drawing.Size(484, 406)
+        Me.ListBox1.Size = New System.Drawing.Size(484, 376)
         Me.ListBox1.TabIndex = 1
         '
         'cmsHistory
@@ -257,5 +285,7 @@ Partial Class History
     Friend WithEvents ToolStripSeparator1 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents tsmDelete As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents tsmClearAll As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents lblDateFilter As System.Windows.Forms.Label
+    Friend WithEvents cboDateFilter As System.Windows.Forms.ComboBox
 
 End Class

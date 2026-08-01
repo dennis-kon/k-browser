@@ -126,7 +126,14 @@ Public Class Form1
                     initialUrl = "about:blank"
                 Case 2
                     If My.Settings.History IsNot Nothing AndAlso My.Settings.History.Count > 0 Then
-                        initialUrl = My.Settings.History(My.Settings.History.Count - 1)
+                        Dim lastEntry As String = My.Settings.History(My.Settings.History.Count - 1)
+                        ' History entries are stored as "Title|URL|DateTime" — extract the URL portion
+                        Dim parts() As String = lastEntry.Split("|"c)
+                        If parts.Length >= 2 Then
+                            initialUrl = parts(1)
+                        Else
+                            initialUrl = lastEntry
+                        End If
                     End If
                 Case 3
                     initialUrl = GetHomePageUrl()
@@ -400,10 +407,15 @@ Public Class Form1
         Try
             If wb IsNot Nothing AndAlso wb.CoreWebView2 IsNot Nothing Then
                 Dim url As String = wb.CoreWebView2.Source
-                If My.Settings.Bookmarks Is Nothing Then My.Settings.Bookmarks = New System.Collections.Specialized.StringCollection()
-                My.Settings.Bookmarks.Add(url)
-                My.Settings.Save()
-                MsgBox(url & " Has Been Bookmarked!", MsgBoxStyle.OkOnly, "K-Browser")
+                Dim title As String = If(String.IsNullOrWhiteSpace(wb.CoreWebView2.DocumentTitle), url, wb.CoreWebView2.DocumentTitle)
+                If Not String.IsNullOrWhiteSpace(url) AndAlso url <> "about:blank" Then
+                    If My.Settings.BookmarksTreeData Is Nothing Then
+                        My.Settings.BookmarksTreeData = New System.Collections.Specialized.StringCollection()
+                    End If
+                    My.Settings.BookmarksTreeData.Add("URL:0:" & title & ":" & url)
+                    My.Settings.Save()
+                    MsgBox(title & " Has Been Bookmarked!", MsgBoxStyle.OkOnly, "K-Browser")
+                End If
             End If
         Catch ex As Exception
             System.Diagnostics.Debug.WriteLine("Error bookmarking page: " & ex.Message)
@@ -872,15 +884,7 @@ Public Class Form1
             If activeBrws IsNot Nothing AndAlso activeBrws.CoreWebView2 Is core Then
                 ToolStripTextBox1.Text = currentUri
             End If
-            Try
-                If My.Settings.History Is Nothing Then My.Settings.History = New System.Collections.Specialized.StringCollection()
-                If Not My.Settings.History.Contains(currentUri) Then
-                    My.Settings.History.Add(currentUri)
-                    My.Settings.Save()
-                End If
-            Catch ex As Exception
-                System.Diagnostics.Debug.WriteLine("Error recording history: " & ex.Message)
-            End Try
+            ' History is now recorded in DocumentTitleChanged where the page title is available
         End If
     End Sub
 
@@ -909,6 +913,41 @@ Public Class Form1
                 End If
             End If
         Next
+
+        ' Record history as "Title|URL" so the History form can display the page title
+        Try
+            Dim currentUri As String = core.Source
+            Dim title As String = core.DocumentTitle
+            If Not String.IsNullOrWhiteSpace(currentUri) AndAlso
+               Not currentUri.Equals("about:blank", StringComparison.OrdinalIgnoreCase) Then
+
+                If My.Settings.History Is Nothing Then My.Settings.History = New System.Collections.Specialized.StringCollection()
+
+                ' Remove any existing entry for this URL (could be URL-only from old format or a previous title)
+                Dim existingIndex As Integer = -1
+                For i As Integer = 0 To My.Settings.History.Count - 1
+                    Dim entry As String = My.Settings.History(i)
+                    Dim entryParts() As String = entry.Split("|"c)
+                    Dim entryUrl As String = If(entryParts.Length >= 2, entryParts(1), entry)
+                    If entryUrl.Equals(currentUri, StringComparison.OrdinalIgnoreCase) Then
+                        existingIndex = i
+                        Exit For
+                    End If
+                Next
+
+                If existingIndex >= 0 Then
+                    My.Settings.History.RemoveAt(existingIndex)
+                End If
+
+                ' Store as "Title|URL|DateTime" — use the URL as fallback display if no title
+                Dim displayTitle As String = If(String.IsNullOrWhiteSpace(title), currentUri, title)
+                Dim timestamp As String = DateTime.Now.ToString("o") ' ISO 8601 format
+                My.Settings.History.Add(displayTitle & "|" & currentUri & "|" & timestamp)
+                My.Settings.Save()
+            End If
+        Catch ex As Exception
+            System.Diagnostics.Debug.WriteLine("Error recording history: " & ex.Message)
+        End Try
     End Sub
 
     Private Sub WebView2_HistoryChanged(ByVal sender As Object, ByVal e As Object)

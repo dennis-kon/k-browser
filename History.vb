@@ -1,20 +1,129 @@
 Public Class History
 
+    ''' <summary>
+    ''' Maps the display text (page title) shown in the ListBox to the raw
+    ''' history entry stored in My.Settings.History ("Title|URL|DateTime" or legacy formats).
+    ''' </summary>
+    Private ReadOnly _entryMap As New Dictionary(Of String, String)()
+
     Private Sub History_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
+        cboDateFilter.SelectedIndex = 0 ' "All Time"
         LoadHistoryData()
     End Sub
+
+    ' ── helpers ──────────────────────────────────────────────────────────────
+
+    ''' <summary>
+    ''' Extracts the URL portion from a history entry.
+    ''' Supports "Title|URL|DateTime", "Title|URL", and legacy URL-only formats.
+    ''' </summary>
+    Private Shared Function GetUrlFromEntry(entry As String) As String
+        Dim parts() As String = entry.Split("|"c)
+        If parts.Length >= 2 Then Return parts(1)
+        Return entry ' legacy URL-only entry
+    End Function
+
+    ''' <summary>
+    ''' Extracts the display title from a history entry.
+    ''' </summary>
+    Private Shared Function GetTitleFromEntry(entry As String) As String
+        Dim parts() As String = entry.Split("|"c)
+        If parts.Length >= 1 AndAlso Not String.IsNullOrWhiteSpace(parts(0)) Then
+            Return parts(0)
+        End If
+        Return entry ' legacy URL-only entry
+    End Function
+
+    ''' <summary>
+    ''' Extracts the DateTime from a history entry.
+    ''' Returns Nothing if the entry has no timestamp (legacy format).
+    ''' </summary>
+    Private Shared Function GetDateFromEntry(entry As String) As DateTime?
+        Dim parts() As String = entry.Split("|"c)
+        If parts.Length >= 3 Then
+            Dim dt As DateTime
+            If DateTime.TryParse(parts(2), dt) Then
+                Return dt
+            End If
+        End If
+        Return Nothing ' no timestamp available
+    End Function
+
+    ''' <summary>
+    ''' Resolves the URL for the currently selected ListBox item.
+    ''' Returns Nothing if no item is selected.
+    ''' </summary>
+    Private Function GetSelectedUrl() As String
+        If ListBox1.SelectedItem Is Nothing Then Return Nothing
+        Dim displayText As String = ListBox1.SelectedItem.ToString()
+        If _entryMap.ContainsKey(displayText) Then
+            Return GetUrlFromEntry(_entryMap(displayText))
+        End If
+        Return displayText ' fallback
+    End Function
+
+    ''' <summary>
+    ''' Returns True if the entry date falls within the currently selected date range.
+    ''' Entries without a timestamp are included only when "All Time" is selected.
+    ''' </summary>
+    Private Function MatchesDateFilter(entryDate As DateTime?) As Boolean
+        Dim filterIndex As Integer = If(cboDateFilter.SelectedIndex, 0)
+
+        ' "All Time" — show everything
+        If filterIndex = 0 Then Return True
+
+        ' If no date is stored, we can't filter — hide from date-specific views
+        If Not entryDate.HasValue Then Return False
+
+        Dim today As DateTime = DateTime.Today
+        Select Case filterIndex
+            Case 1 ' Today
+                Return entryDate.Value.Date = today
+            Case 2 ' Yesterday
+                Return entryDate.Value.Date = today.AddDays(-1)
+            Case 3 ' Last 7 Days
+                Return entryDate.Value.Date >= today.AddDays(-6)
+            Case 4 ' Last 30 Days
+                Return entryDate.Value.Date >= today.AddDays(-29)
+            Case Else
+                Return True
+        End Select
+    End Function
+
+    ' ── data loading ─────────────────────────────────────────────────────────
 
     Private Sub LoadHistoryData(Optional ByVal filterText As String = "")
         Try
             ListBox1.Items.Clear()
+            _entryMap.Clear()
+
             If My.Settings.History IsNot Nothing Then
                 Dim count As Integer = 0
                 For Each item As String In My.Settings.History
                     If Not String.IsNullOrWhiteSpace(item) Then
-                        If String.IsNullOrWhiteSpace(filterText) OrElse item.ToLower().Contains(filterText.ToLower()) Then
-                            ListBox1.Items.Add(item)
-                            count += 1
+                        Dim title As String = GetTitleFromEntry(item)
+                        Dim url As String = GetUrlFromEntry(item)
+                        Dim entryDate As DateTime? = GetDateFromEntry(item)
+
+                        ' Apply date filter
+                        If Not MatchesDateFilter(entryDate) Then Continue For
+
+                        ' Apply text search filter against both title and URL
+                        If Not String.IsNullOrWhiteSpace(filterText) AndAlso
+                           Not title.ToLower().Contains(filterText.ToLower()) AndAlso
+                           Not url.ToLower().Contains(filterText.ToLower()) Then
+                            Continue For
                         End If
+
+                        ' Ensure unique display text (append URL hint if titles collide)
+                        Dim displayText As String = title
+                        If _entryMap.ContainsKey(displayText) Then
+                            displayText = title & "  (" & url & ")"
+                        End If
+
+                        _entryMap(displayText) = item
+                        ListBox1.Items.Add(displayText)
+                        count += 1
                     End If
                 Next
                 lblCount.Text = count & " item" & If(count = 1, "", "s")
@@ -30,6 +139,12 @@ Public Class History
         LoadHistoryData(txtSearch.Text.Trim())
     End Sub
 
+    Private Sub cboDateFilter_SelectedIndexChanged(ByVal sender As Object, ByVal e As EventArgs) Handles cboDateFilter.SelectedIndexChanged
+        LoadHistoryData(txtSearch.Text.Trim())
+    End Sub
+
+    ' ── actions ──────────────────────────────────────────────────────────────
+
     Private Sub ListBox1_DoubleClick(ByVal sender As Object, ByVal e As EventArgs) Handles ListBox1.DoubleClick
         OpenSelectedInActiveTab()
     End Sub
@@ -39,25 +154,29 @@ Public Class History
     End Sub
 
     Private Async Sub btnOpenNewTab_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnOpenNewTab.Click, tsmOpenNewTab.Click
-        If ListBox1.SelectedItem IsNot Nothing Then
-            Dim url As String = ListBox1.SelectedItem.ToString()
+        Dim url As String = GetSelectedUrl()
+        If url IsNot Nothing Then
             Await Form1.CreateNewTab(url)
         End If
     End Sub
 
     Private Sub btnCopy_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnCopy.Click, tsmCopy.Click
-        If ListBox1.SelectedItem IsNot Nothing Then
-            Clipboard.SetText(ListBox1.SelectedItem.ToString())
+        Dim url As String = GetSelectedUrl()
+        If url IsNot Nothing Then
+            Clipboard.SetText(url)
         End If
     End Sub
 
     Private Sub btnDelete_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnDelete.Click, tsmDelete.Click
         Try
             If ListBox1.SelectedItem IsNot Nothing Then
-                Dim selectedUrl As String = ListBox1.SelectedItem.ToString()
-                If My.Settings.History IsNot Nothing AndAlso My.Settings.History.Contains(selectedUrl) Then
-                    My.Settings.History.Remove(selectedUrl)
-                    My.Settings.Save()
+                Dim displayText As String = ListBox1.SelectedItem.ToString()
+                If _entryMap.ContainsKey(displayText) Then
+                    Dim rawEntry As String = _entryMap(displayText)
+                    If My.Settings.History IsNot Nothing AndAlso My.Settings.History.Contains(rawEntry) Then
+                        My.Settings.History.Remove(rawEntry)
+                        My.Settings.Save()
+                    End If
                 End If
                 LoadHistoryData(txtSearch.Text.Trim())
             End If
@@ -81,8 +200,8 @@ Public Class History
     End Sub
 
     Private Sub OpenSelectedInActiveTab()
-        If ListBox1.SelectedItem IsNot Nothing Then
-            Dim url As String = ListBox1.SelectedItem.ToString()
+        Dim url As String = GetSelectedUrl()
+        If url IsNot Nothing Then
             Form1.NavigateActiveTab(url)
         End If
     End Sub
