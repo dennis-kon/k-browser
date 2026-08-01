@@ -175,6 +175,7 @@ Public Class Form1
                         RemoveHandler browserControl.CoreWebView2.PermissionRequested, AddressOf WebView2_PermissionRequested
                         RemoveHandler browserControl.CoreWebView2.DownloadStarting, AddressOf WebView2_DownloadStarting
                         RemoveHandler browserControl.CoreWebView2.ProcessFailed, AddressOf WebView2_ProcessFailed
+                        RemoveHandler browserControl.CoreWebView2.NewWindowRequested, AddressOf WebView2_NewWindowRequested
                         RemoveHandler browserControl.CoreWebView2.WebResourceRequested, AddressOf WebView2_WebResourceRequested
                     End If
                     browserControl.Dispose()
@@ -251,8 +252,10 @@ Public Class Form1
                         htmlText = htmlJson.Substring(1, htmlJson.Length - 2).Replace("\""", """").Replace("\n", vbCrLf).Replace("\r", "").Replace("\\", "\")
                     End Try
                 End If
+                Dim pageUrl As String = brws.CoreWebView2.Source
+                Dim pageTitle As String = brws.CoreWebView2.DocumentTitle
+                Source.SetSourceData(htmlText, pageUrl, pageTitle)
                 Source.Show()
-                Source.RichTextBox1.Text = htmlText
             Catch ex As Exception
                 System.Diagnostics.Debug.WriteLine("Error getting HTML source: " & ex.Message)
             End Try
@@ -643,6 +646,7 @@ Public Class Form1
             AddHandler brws.CoreWebView2.PermissionRequested, AddressOf WebView2_PermissionRequested
             AddHandler brws.CoreWebView2.DownloadStarting, AddressOf WebView2_DownloadStarting
             AddHandler brws.CoreWebView2.ProcessFailed, AddressOf WebView2_ProcessFailed
+            AddHandler brws.CoreWebView2.NewWindowRequested, AddressOf WebView2_NewWindowRequested
 
             Try
                 brws.CoreWebView2.AddWebResourceRequestedFilter("*", CoreWebView2WebResourceContext.All)
@@ -731,6 +735,13 @@ Public Class Form1
                     End If
                 End If
             Next
+        End If
+    End Sub
+
+    Private Async Sub WebView2_NewWindowRequested(ByVal sender As Object, ByVal e As CoreWebView2NewWindowRequestedEventArgs)
+        e.Handled = True
+        If Not String.IsNullOrWhiteSpace(e.Uri) Then
+            Await CreateNewTab(e.Uri)
         End If
     End Sub
 
