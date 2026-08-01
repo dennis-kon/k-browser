@@ -15,8 +15,17 @@ Public Class AdBlockEngine
         "http", "https", "file", "about", "html", "htm", "json", "xml", "text", "css", "javascript",
         "com", "org", "net", "edu", "gov", "mil", "int", "biz", "info", "name", "pro", "co", "io", "me", "tv", "cc", "us", "uk", "ca", "de", "fr", "gr", "eu", "au", "jp", "cn", "in", "ru", "br", "app", "dev", "site", "online", "store", "tech", "xyz", "website", "link", "click", "top",
         "co.uk", "com.ar", "co.th", "net.au", "org.uk", "com.br", "com.au", "co.jp", "co.kr", "co.nz", "com.mx", "com.tw",
-        "www", "www1", "www2", "api", "cdn", "static", "assets", "media", "images", "img", "js", "style",
-        "index", "main", "home", "default", "page", "document", "script", "font", "vendor", "app", "k-browser", "k-browser.com"
+        "www", "www1", "www2", "api", "cdn", "static", "assets", "media", "images", "img", "js", "style", "styles", "stylesheet", "css",
+        "index", "main", "home", "default", "page", "document", "script", "scripts", "font", "fonts", "vendor", "app", "k-browser", "k-browser.com",
+        "google", "gstatic", "googleapis", "github", "microsoft", "cloudflare", "amazonaws", "search", "intl", "about"
+    }
+
+    Private Shared ReadOnly GenericWebPaths As New HashSet(Of String)(StringComparer.OrdinalIgnoreCase) From {
+        "css", "style", "styles", "stylesheet", "assets", "static", "images", "image", "img", "fonts", "font",
+        "js", "javascript", "script", "scripts", "media", "public", "dist", "build", "vendor", "node_modules",
+        "includes", "content", "main", "common", "bundle", "theme", "themes", "core", "lib", "libs", "component",
+        "components", "template", "templates", "min", "app", "site", "page", "pages", "about", "intl", "search",
+        "en", "en_us", "code", "json", "xml", "html", "htm", "svg", "png", "jpg", "jpeg", "gif", "webp", "woff", "woff2"
     }
 
     Public Shared Property TotalBlockedCount As Long = 0
@@ -68,6 +77,20 @@ Public Class AdBlockEngine
         Return totalRulesCount
     End Function
 
+    Private Shared Function IsAdKeywordPattern(ByVal path As String) As Boolean
+        Dim p As String = path.ToLowerInvariant()
+        Return p.Contains("ad_") OrElse p.Contains("_ad") OrElse p.Contains("/ad/") OrElse p.Contains("/ads/") OrElse
+               p.Contains("adserver") OrElse p.Contains("adservice") OrElse p.Contains("adsystem") OrElse
+               p.Contains("doubleclick") OrElse p.Contains("pagead") OrElse p.Contains("popunder") OrElse
+               p.Contains("adbanner") OrElse p.Contains("telemetry") OrElse p.Contains("tracker") OrElse
+               p.Contains("analytics") OrElse p.Contains("sponsor") OrElse p.Contains("syndication") OrElse
+               p.Contains("taboola") OrElse p.Contains("outbrain") OrElse p.Contains("adform") OrElse
+               p.Contains("scorecard") OrElse p.Contains("adnxs") OrElse p.Contains("adking") OrElse
+               p.Contains("adbox") OrElse p.Contains("adcontainer") OrElse p.Contains("adframe") OrElse
+               p.Contains("adslot") OrElse p.Contains("adwrapper") OrElse p.Contains("advert") OrElse
+               p.Contains("affiliate")
+    End Function
+
     Public Shared Function ParseRulesLines(ByVal lines As String()) As Integer
         Dim count As Integer = 0
 
@@ -80,10 +103,16 @@ Public Class AdBlockEngine
                 Continue For
             End If
 
-            ' 2. Strip rule options starting with $ (e.g. ||example.com/ad^$third-party)
+            ' 2. Handle rule options starting with $ (e.g. ||example.com/ad^$third-party)
             Dim dollarIdx As Integer = line.IndexOf("$"c)
             If dollarIdx > 0 Then
+                Dim options As String = line.Substring(dollarIdx + 1).ToLowerInvariant()
                 line = line.Substring(0, dollarIdx).Trim()
+
+                ' Skip domain-restricted rules or stylesheet/font options from becoming global path blocks
+                If options.Contains("domain=") OrElse options.Contains("stylesheet") OrElse options.Contains("font") OrElse options.Contains("css") Then
+                    Continue For
+                End If
             End If
 
             If String.IsNullOrWhiteSpace(line) Then Continue For
@@ -126,9 +155,10 @@ Public Class AdBlockEngine
 
                 ' 5. Path / URL Substring rules (e.g. /ad_banner/, /adserver/, &ad_box=)
                 Dim cleanPath As String = line.Replace("^", "").Replace("*", "").Trim()
-                If cleanPath.Length >= 5 AndAlso Not ReservedGenericKeywords.Contains(cleanPath) Then
-                    ' Require path separator or ad keyword signature to prevent over-blocking
-                    If cleanPath.StartsWith("/") OrElse cleanPath.StartsWith("&") OrElse cleanPath.Contains("ad") OrElse cleanPath.Contains("banner") OrElse cleanPath.Contains("tracker") OrElse cleanPath.Contains("pop") OrElse cleanPath.Contains("telemetry") Then
+                Dim trimmedPath As String = cleanPath.Trim("/"c, "\"c, "."c, " "c, "?"c, "&"c, "="c)
+
+                If cleanPath.Length >= 5 AndAlso Not ReservedGenericKeywords.Contains(cleanPath) AndAlso Not ReservedGenericKeywords.Contains(trimmedPath) AndAlso Not GenericWebPaths.Contains(trimmedPath) Then
+                    If IsAdKeywordPattern(cleanPath) Then
                         AdPathSubstrings.Add(cleanPath)
                         count += 1
                     End If
@@ -139,17 +169,9 @@ Public Class AdBlockEngine
         Return count
     End Function
 
-    Public Shared Function ShouldBlockDocument(ByVal url As String) As Boolean
+    Public Shared Function ShouldBlockDomainOnly(ByVal url As String) As Boolean
         If String.IsNullOrWhiteSpace(url) OrElse url = "about:blank" Then Return False
-        Dim lowerUrl As String = url.ToLowerInvariant()
-
         SyncLock LockObj
-            ' Whitelist check
-            For Each allow As String In AllowRules
-                If lowerUrl.Contains(allow.ToLowerInvariant()) Then Return False
-            Next
-
-            ' Main document navigation only matches Domain Anchors (explicit ad/tracker domains)
             Try
                 Dim uri As New Uri(url)
                 Dim host As String = uri.Host.ToLowerInvariant()
@@ -161,8 +183,11 @@ Public Class AdBlockEngine
             Catch
             End Try
         End SyncLock
-
         Return False
+    End Function
+
+    Public Shared Function ShouldBlockDocument(ByVal url As String) As Boolean
+        Return ShouldBlockDomainOnly(url)
     End Function
 
     Public Shared Function ShouldBlock(ByVal url As String) As Boolean
@@ -220,3 +245,4 @@ Public Class AdBlockEngine
     End Function
 
 End Class
+

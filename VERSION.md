@@ -2,8 +2,8 @@
 
 **Application Title:** K-Browser  
 **Executable / Assembly Name:** `K-Browser.exe`  
-**Current Version:** `4.8.1.1` (`AssemblyVersion` / `AssemblyFileVersion`)  
-**Git Release Tag:** `Version_4.8.1`  
+**Current Version:** `5.0.0.0` (`AssemblyVersion` / `AssemblyFileVersion`)  
+**Git Release Tag:** `Version_5.0.0.0`  
 **License:** GNU General Public License v3.0 (GPL-3.0)  
 **Target Framework:** .NET Framework 4.8 / Windows Forms  
 **Author:** Dennis Kon  
@@ -16,7 +16,7 @@
 
 ---
 
-## 📌 Current Version Breakdown: v5.0.0.0
+## 📌 Current Version Breakdown: v4.8.1.1
 
 ### 1. 🌐 Web Rendering Engine Modernization
 * **WebView2 Integration:** Uses `Microsoft.Web.WebView2.WinForms` as the primary web rendering engine, providing Chromium-speed performance, modern Web standard support, and DevTools integration (`CoreWebView2.OpenDevToolsWindow()`).
@@ -29,30 +29,39 @@
   1. **Whitelist / Allow Rules (`@@`):** Evaluated first to ensure user-whitelisted domains/URLs are never blocked.
   2. **Domain Anchors (`||`):** High-efficiency host-matching rules (`doubleclick.net`, `adservice.google.com`, `googlesyndication.com`, etc.) used for document and sub-resource blocking.
   3. **Ad Path Substrings:** Sub-resource filter matching for ad paths, scripts, banners, and telemetry endpoints.
-* **Reserved Generic Keyword Protection:** Guard list preventing over-blocking of standard top-level domains (`.com`, `.org`, `.io`), web protocols (`http`, `https`), and asset paths (`/assets/`, `/js/`, `/css/`).
+* **Layout & CSS Protection:**
+  * **Resource Context Guard:** Protects page stylesheets (`CoreWebView2WebResourceContext.Stylesheet`) and fonts (`CoreWebView2WebResourceContext.Font`) from generic path substring blocks so sites (e.g. Google Search / How Search Works) never lose styling or typography.
+  * **Domain-Only Sub-resource Filtering:** `ShouldBlockDomainOnly()` restricts stylesheet/font blocking strictly to host matches against known ad servers.
+  * **Option Filtering (`$`):** Ignores domain-restricted (`$domain=`), `$stylesheet`, and `$font` options during global parsing so site-specific rules do not leak into global path blocks.
+  * **Generic Web Path Protection:** `GenericWebPaths` set (`css`, `style`, `styles`, `assets`, `static`, `images`, `fonts`, `search`, `intl`, `about`, etc.) prevents standard asset paths from being blocked.
+  * **Precise Signature Detection:** `IsAdKeywordPattern` requires explicit ad signatures (`ad_`, `_ad`, `/ad/`, `/ads/`, `adserver`, `pagead`, `doubleclick`, `banner`, `tracker`, `telemetry`, `analytics`, etc.) rather than loose substring matches.
 * **Online Filter List Subscriptions:** Asynchronous downloading (`UpdateFilterListAsync`) and local disk caching of standard blocklists (**EasyList**, **EasyPrivacy**, **Fanboy's Annoyance**).
 * **Live Counter:** Global thread-safe blocked request counter (`TotalBlockedCount`) surfaced in the UI.
 
-### 3. 🔍 Browsing History & Filtering (`History.vb`)
-* **Date-Range Filtering:** Added `DateTimePicker` range controls to filter visited URLs by specific start and end dates.
-* **Live Query Search:** Instant substring search across `My.Settings.History` records.
-* **Single-Click Navigation & Clearing:** Quick navigation back to historical URLs and one-click history purge.
+### 3. 🔍 Browsing History & Date Filtering (`History.vb`, `History.Designer.vb`)
+* **Timestamped Storage Format:** History records are saved in `My.Settings.History` as `"Title|URL|DateTime"` (ISO 8601 timestamp), maintaining backward compatibility with legacy 2-part (`Title|URL`) and 1-part (`URL`) entries.
+* **Formatted Display:** Lists items as `"domain — Page Title"` (e.g., `google.com — Google Search Results`), stripping the `www.` prefix for clean readability.
+* **Date Range Filtering (`cboDateFilter`):** Quick drop-down filter supporting *All Time*, *Today*, *Yesterday*, *Last 7 Days*, and *Last 30 Days*.
+* **Live Query Search:** Instant substring search matching against raw title, URL, and formatted display text.
 
-### 4. 🔖 Bookmarks Management (`Bookmarks.vb`)
-* **Enhanced DataGrid Display:** Improved layout, category organization, and URL launching from the Bookmarks form.
-* **Search & Edit Capabilities:** Live filtering of saved bookmarks and persistent storage in `My.Settings.Bookmarks`.
+### 4. 🔖 Hierarchical Bookmarks Management (`Bookmarks.vb`)
+* **TreeView Node Display:** Formats bookmark nodes as `"domain — Page Title"` (e.g., `google.com — Google Search Results`) with `www.` stripped, while storing clean titles in `BookmarkNodeData.Title` for tree serialization (`URL:depth:Title:URL`).
+* **Unified Quick Bookmarking:** Integrated `ToolStripButton9` with `BookmarkThisPageToolStripMenuItem` to capture active page titles and URLs via WebView2 into `BookmarksTreeData`.
+* **Search & Edit Capabilities:** Live filtering of tree nodes by title/URL and full Drag-and-Drop tree reordering.
 
 ### 5. 🔐 Security & Navigation Guards (`Settings.vb`, `Phising.vb`)
 * **Phishing URL Guard:** Intercepts navigating events against known phishing domain lists (`My.Settings.PhishingSites`).
-* **Modal Alert Dialog:** Shows a warnings dialog (`Phising.vb`) offering immediate navigation cancellation or session-level URL ignoring (`IgnoredUrls` cache).
+* **Modal Alert Dialog:** Shows a warning dialog (`Phising.vb`) offering immediate navigation cancellation or session-level URL ignoring (`IgnoredUrls` cache).
 * **Pop-Up & Domain Blocklist:** Configurable domain blocker with exception whitelisting (`My.Settings.AllowedPopSites`).
 * **TCP Port Scanner:** Embedded multi-threaded network diagnostic utility inside `Settings.vb` to scan host ports for active listeners.
 
-### 6. 🛠️ Desktop Utility Suite
+### 6. 🛠️ Desktop Utility Suite & UI Cleanups
 * **FTP Client (`ftp.vb`):** Full-featured client for FTP server connections, directory browsing, file uploads, file downloads, and remote file deletion.
 * **Task Manager (`task manager.vb`):** Live Windows process list with memory usage display (KB/MB) and process kill capability (`Process.Kill()`).
 * **RSS Reader (`Rss.vb`):** XML parser converting RSS feeds into interactive hierarchical TreeView headline lists.
 * **Cookie Viewer (`CookieViewer.vb`):** Inspects local browser cookies and enables selective or bulk deletion.
+* **Menu Streamlining:** Removed deprecated `CPUStatsToolStripMenuItem` entry from the View menu.
+* **Repository Build Configuration:** Updated `.gitignore` to ignore `bin/Debug`, `bin/Release`, `obj/Debug`, and `obj/Release`.
 
 ---
 
@@ -60,7 +69,7 @@
 
 | Version Tag | Release Date | Summary & Major Features Introduced | Key Architectural Changes |
 | :--- | :--- | :--- | :--- |
-| **v4.8.1.1** | *Current* | EasyList AdBlocker engine, Date Range History Filter, Bookmark UI overhaul, Reserved keyword security guards. | Introduced `AdBlockEngine.vb`, async filter downloader, and reserved keyword safety checks. |
+| **v4.8.1.1** | *Current* | EasyList AdBlocker engine overhaul (CSS protection, option filtering), Date-filtered History, `"domain — Title"` display formatting, unified quick bookmarking, `.gitignore` updates. | Introduced `ShouldBlockDomainOnly()`, `GenericWebPaths`, `IsAdKeywordPattern`, `"Title|URL|DateTime"` history storage, and `cboDateFilter`. |
 | **v4.8.1** | *Previous Tag* | Engine stabilization, Visual Studio project setup, URL validation, process termination safety, tab disposal cleanup. | Migrated core browser runtime towards WebView2 integration with IE emulation fallback. |
 | **v4.8.0** | 2023 / 2024 | Multi-tab UI overhaul, initial phishing filter dialog, enhanced `My.Settings` storage schemas. | TabControl event architecture, `Form1.Designer.vb` restructuring. |
 | **v4.5.0** | Legacy | Integrated Task Manager form, RSS XML parsing engine, and Cookie Viewer utility. | Extended WinForms desktop utility suite beyond standard web browser boundaries. |

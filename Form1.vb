@@ -692,6 +692,13 @@ Public Class Form1
             Return
         End If
 
+        ' Protect stylesheets & fonts from substring path blocking so pages never lose CSS or typography
+        If e.ResourceContext = CoreWebView2WebResourceContext.Stylesheet OrElse e.ResourceContext = CoreWebView2WebResourceContext.Font Then
+            If Not AdBlockEngine.ShouldBlockDomainOnly(e.Request.Uri) Then
+                Return
+            End If
+        End If
+
         If AdBlockEngine.ShouldBlock(e.Request.Uri) Then
             Dim core = TryCast(sender, CoreWebView2)
             If core IsNot Nothing Then
