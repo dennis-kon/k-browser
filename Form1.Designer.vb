@@ -99,8 +99,8 @@ Partial Class Form1
         Me.CPUStatsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.PropertiesToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator14 = New System.Windows.Forms.ToolStripSeparator()
-        Me.CookieToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.FullScreenToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.CookieToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.BookmarksToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ViewToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
@@ -129,12 +129,12 @@ Partial Class Form1
         Me.FormspringToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.KeekToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.DownloadManagerToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.SetHomePageToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.FtpClientToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.MediaToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.TaskToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.SettingsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.DownloadManagerToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.FtpClientToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.TaskToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.SetHomePageToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.MediaToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.CookieViewerToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.SendALinkToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator9 = New System.Windows.Forms.ToolStripSeparator()
@@ -147,7 +147,6 @@ Partial Class Form1
         Me.CheckForUpdatesToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator10 = New System.Windows.Forms.ToolStripSeparator()
         Me.KBrowserToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.SubmitFeedbackToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.SToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator16 = New System.Windows.Forms.ToolStripSeparator()
         Me.CalendarToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -558,14 +557,14 @@ Partial Class Form1
         Me.HistoryToolStripMenuItem.Image = CType(resources.GetObject("HistoryToolStripMenuItem.Image"), System.Drawing.Image)
         Me.HistoryToolStripMenuItem.Name = "HistoryToolStripMenuItem"
         Me.HistoryToolStripMenuItem.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.H), System.Windows.Forms.Keys)
-        Me.HistoryToolStripMenuItem.Size = New System.Drawing.Size(169, 22)
+        Me.HistoryToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
         Me.HistoryToolStripMenuItem.Text = "History"
         '
         'ToolbarToolStripMenuItem
         '
         Me.ToolbarToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.HideMainMenuToolStripMenuItem, Me.ShowToolStripMenuItem, Me.HideBarToolStripMenuItem})
         Me.ToolbarToolStripMenuItem.Name = "ToolbarToolStripMenuItem"
-        Me.ToolbarToolStripMenuItem.Size = New System.Drawing.Size(169, 22)
+        Me.ToolbarToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
         Me.ToolbarToolStripMenuItem.Text = "Toolbars"
         '
         'HideMainMenuToolStripMenuItem
@@ -590,7 +589,7 @@ Partial Class Form1
         '
         Me.NavigateToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.BackToolStripMenuItem, Me.ForwardToolStripMenuItem, Me.ReloadToolStripMenuItem, Me.StopToolStripMenuItem1, Me.ToolStripSeparator17, Me.ToolStripMenuItem3})
         Me.NavigateToolStripMenuItem.Name = "NavigateToolStripMenuItem"
-        Me.NavigateToolStripMenuItem.Size = New System.Drawing.Size(169, 22)
+        Me.NavigateToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
         Me.NavigateToolStripMenuItem.Text = "Navigate"
         '
         'BackToolStripMenuItem
@@ -653,32 +652,39 @@ Partial Class Form1
         'ToolStripSeparator13
         '
         Me.ToolStripSeparator13.Name = "ToolStripSeparator13"
-        Me.ToolStripSeparator13.Size = New System.Drawing.Size(166, 6)
+        Me.ToolStripSeparator13.Size = New System.Drawing.Size(177, 6)
         '
         'SourceToolStripMenuItem
         '
         Me.SourceToolStripMenuItem.Name = "SourceToolStripMenuItem"
         Me.SourceToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F4
-        Me.SourceToolStripMenuItem.Size = New System.Drawing.Size(169, 22)
+        Me.SourceToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
         Me.SourceToolStripMenuItem.Text = "Source"
         '
         'CPUStatsToolStripMenuItem
         '
         Me.CPUStatsToolStripMenuItem.Name = "CPUStatsToolStripMenuItem"
-        Me.CPUStatsToolStripMenuItem.Size = New System.Drawing.Size(169, 22)
+        Me.CPUStatsToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
         Me.CPUStatsToolStripMenuItem.Text = "Page Setup"
         '
         'PropertiesToolStripMenuItem
         '
         Me.PropertiesToolStripMenuItem.Name = "PropertiesToolStripMenuItem"
         Me.PropertiesToolStripMenuItem.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.P), System.Windows.Forms.Keys)
-        Me.PropertiesToolStripMenuItem.Size = New System.Drawing.Size(169, 22)
+        Me.PropertiesToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
         Me.PropertiesToolStripMenuItem.Text = "Properties"
         '
         'ToolStripSeparator14
         '
         Me.ToolStripSeparator14.Name = "ToolStripSeparator14"
-        Me.ToolStripSeparator14.Size = New System.Drawing.Size(166, 6)
+        Me.ToolStripSeparator14.Size = New System.Drawing.Size(177, 6)
+        '
+        'FullScreenToolStripMenuItem
+        '
+        Me.FullScreenToolStripMenuItem.Name = "FullScreenToolStripMenuItem"
+        Me.FullScreenToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F11
+        Me.FullScreenToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.FullScreenToolStripMenuItem.Text = "Full Screen"
         '
         'CookieToolStripMenuItem
         '
@@ -686,13 +692,6 @@ Partial Class Form1
         Me.CookieToolStripMenuItem.Name = "CookieToolStripMenuItem"
         Me.CookieToolStripMenuItem.Size = New System.Drawing.Size(169, 22)
         Me.CookieToolStripMenuItem.Text = "Cookie Viewer"
-        '
-        'FullScreenToolStripMenuItem
-        '
-        Me.FullScreenToolStripMenuItem.Name = "FullScreenToolStripMenuItem"
-        Me.FullScreenToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F11
-        Me.FullScreenToolStripMenuItem.Size = New System.Drawing.Size(169, 22)
-        Me.FullScreenToolStripMenuItem.Text = "Full Screen"
         '
         'BookmarksToolStripMenuItem
         '
@@ -905,6 +904,13 @@ Partial Class Form1
         Me.ToolsToolStripMenuItem.Size = New System.Drawing.Size(48, 20)
         Me.ToolsToolStripMenuItem.Text = "&Tools"
         '
+        'SettingsToolStripMenuItem
+        '
+        Me.SettingsToolStripMenuItem.Image = CType(resources.GetObject("SettingsToolStripMenuItem.Image"), System.Drawing.Image)
+        Me.SettingsToolStripMenuItem.Name = "SettingsToolStripMenuItem"
+        Me.SettingsToolStripMenuItem.Size = New System.Drawing.Size(219, 22)
+        Me.SettingsToolStripMenuItem.Text = "Browser &Settings"
+        '
         'DownloadManagerToolStripMenuItem
         '
         Me.DownloadManagerToolStripMenuItem.Image = CType(resources.GetObject("DownloadManagerToolStripMenuItem.Image"), System.Drawing.Image)
@@ -913,26 +919,12 @@ Partial Class Form1
         Me.DownloadManagerToolStripMenuItem.Size = New System.Drawing.Size(219, 22)
         Me.DownloadManagerToolStripMenuItem.Text = "Download Manager"
         '
-        'SetHomePageToolStripMenuItem
-        '
-        Me.SetHomePageToolStripMenuItem.Image = CType(resources.GetObject("SetHomePageToolStripMenuItem.Image"), System.Drawing.Image)
-        Me.SetHomePageToolStripMenuItem.Name = "SetHomePageToolStripMenuItem"
-        Me.SetHomePageToolStripMenuItem.Size = New System.Drawing.Size(219, 22)
-        Me.SetHomePageToolStripMenuItem.Text = "Rss Reader"
-        '
         'FtpClientToolStripMenuItem
         '
         Me.FtpClientToolStripMenuItem.Image = CType(resources.GetObject("FtpClientToolStripMenuItem.Image"), System.Drawing.Image)
         Me.FtpClientToolStripMenuItem.Name = "FtpClientToolStripMenuItem"
         Me.FtpClientToolStripMenuItem.Size = New System.Drawing.Size(219, 22)
         Me.FtpClientToolStripMenuItem.Text = "Ftp Client"
-        '
-        'MediaToolStripMenuItem
-        '
-        Me.MediaToolStripMenuItem.Image = CType(resources.GetObject("MediaToolStripMenuItem.Image"), System.Drawing.Image)
-        Me.MediaToolStripMenuItem.Name = "MediaToolStripMenuItem"
-        Me.MediaToolStripMenuItem.Size = New System.Drawing.Size(219, 22)
-        Me.MediaToolStripMenuItem.Text = "Media player"
         '
         'TaskToolStripMenuItem
         '
@@ -941,12 +933,19 @@ Partial Class Form1
         Me.TaskToolStripMenuItem.Size = New System.Drawing.Size(219, 22)
         Me.TaskToolStripMenuItem.Text = "Cpu Task"
         '
-        'SettingsToolStripMenuItem
+        'SetHomePageToolStripMenuItem
         '
-        Me.SettingsToolStripMenuItem.Image = CType(resources.GetObject("SettingsToolStripMenuItem.Image"), System.Drawing.Image)
-        Me.SettingsToolStripMenuItem.Name = "SettingsToolStripMenuItem"
-        Me.SettingsToolStripMenuItem.Size = New System.Drawing.Size(219, 22)
-        Me.SettingsToolStripMenuItem.Text = "Browser &Settings"
+        Me.SetHomePageToolStripMenuItem.Image = CType(resources.GetObject("SetHomePageToolStripMenuItem.Image"), System.Drawing.Image)
+        Me.SetHomePageToolStripMenuItem.Name = "SetHomePageToolStripMenuItem"
+        Me.SetHomePageToolStripMenuItem.Size = New System.Drawing.Size(219, 22)
+        Me.SetHomePageToolStripMenuItem.Text = "Rss Reader"
+        '
+        'MediaToolStripMenuItem
+        '
+        Me.MediaToolStripMenuItem.Image = CType(resources.GetObject("MediaToolStripMenuItem.Image"), System.Drawing.Image)
+        Me.MediaToolStripMenuItem.Name = "MediaToolStripMenuItem"
+        Me.MediaToolStripMenuItem.Size = New System.Drawing.Size(219, 22)
+        Me.MediaToolStripMenuItem.Text = "Media player"
         '
         'CookieViewerToolStripMenuItem
         '
@@ -995,7 +994,7 @@ Partial Class Form1
         '
         'HelpToolStripMenuItem
         '
-        Me.HelpToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.AboutToolStripMenuItem, Me.CheckForUpdatesToolStripMenuItem, Me.ToolStripSeparator10, Me.KBrowserToolStripMenuItem, Me.SubmitFeedbackToolStripMenuItem, Me.SToolStripMenuItem, Me.ToolStripSeparator16, Me.CalendarToolStripMenuItem})
+        Me.HelpToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.AboutToolStripMenuItem, Me.CheckForUpdatesToolStripMenuItem, Me.ToolStripSeparator10, Me.KBrowserToolStripMenuItem, Me.SToolStripMenuItem, Me.ToolStripSeparator16, Me.CalendarToolStripMenuItem})
         Me.HelpToolStripMenuItem.Name = "HelpToolStripMenuItem"
         Me.HelpToolStripMenuItem.Size = New System.Drawing.Size(43, 20)
         Me.HelpToolStripMenuItem.Text = "&Help"
@@ -1024,12 +1023,6 @@ Partial Class Form1
         Me.KBrowserToolStripMenuItem.Name = "KBrowserToolStripMenuItem"
         Me.KBrowserToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
         Me.KBrowserToolStripMenuItem.Text = "&Visit Home Page"
-        '
-        'SubmitFeedbackToolStripMenuItem
-        '
-        Me.SubmitFeedbackToolStripMenuItem.Name = "SubmitFeedbackToolStripMenuItem"
-        Me.SubmitFeedbackToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
-        Me.SubmitFeedbackToolStripMenuItem.Text = "Submit  Feedback"
         '
         'SToolStripMenuItem
         '
@@ -1331,7 +1324,6 @@ Partial Class Form1
     Friend WithEvents AboutToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents CheckForUpdatesToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolStripSeparator10 As System.Windows.Forms.ToolStripSeparator
-    Friend WithEvents SubmitFeedbackToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents CalendarToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents MenuStrip1 As System.Windows.Forms.MenuStrip
     Friend WithEvents ToolStripTextBox2 As System.Windows.Forms.ToolStripTextBox

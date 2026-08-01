@@ -42,16 +42,16 @@ Partial Class AboutBox
         Me.Label2.AutoSize = True
         Me.Label2.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label2.ForeColor = System.Drawing.Color.Gray
-        Me.Label2.Location = New System.Drawing.Point(12, 155)
+        Me.Label2.Location = New System.Drawing.Point(14, 264)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(97, 16)
+        Me.Label2.Size = New System.Drawing.Size(92, 16)
         Me.Label2.TabIndex = 3
-        Me.Label2.Text = "Version 4.8.1"
+        Me.Label2.Text = "Version 5.01"
         '
         'Button1
         '
         Me.Button1.BackColor = System.Drawing.Color.Transparent
-        Me.Button1.Location = New System.Drawing.Point(502, 182)
+        Me.Button1.Location = New System.Drawing.Point(504, 291)
         Me.Button1.Name = "Button1"
         Me.Button1.Size = New System.Drawing.Size(73, 24)
         Me.Button1.TabIndex = 6
@@ -89,7 +89,7 @@ Partial Class AboutBox
         Me.LinkLabel2.AutoSize = True
         Me.LinkLabel2.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
         Me.LinkLabel2.LinkColor = System.Drawing.SystemColors.HotTrack
-        Me.LinkLabel2.Location = New System.Drawing.Point(459, 154)
+        Me.LinkLabel2.Location = New System.Drawing.Point(461, 263)
         Me.LinkLabel2.Name = "LinkLabel2"
         Me.LinkLabel2.Size = New System.Drawing.Size(116, 13)
         Me.LinkLabel2.TabIndex = 13
@@ -101,7 +101,7 @@ Partial Class AboutBox
         Me.Label4.AutoSize = True
         Me.Label4.Font = New System.Drawing.Font("Tahoma", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(161, Byte))
         Me.Label4.ForeColor = System.Drawing.SystemColors.ControlDarkDark
-        Me.Label4.Location = New System.Drawing.Point(170, 176)
+        Me.Label4.Location = New System.Drawing.Point(172, 285)
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(263, 14)
         Me.Label4.TabIndex = 16
@@ -120,7 +120,7 @@ Partial Class AboutBox
         Me.Label6.AutoSize = True
         Me.Label6.Font = New System.Drawing.Font("Tahoma", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(161, Byte))
         Me.Label6.ForeColor = System.Drawing.SystemColors.ControlDarkDark
-        Me.Label6.Location = New System.Drawing.Point(185, 200)
+        Me.Label6.Location = New System.Drawing.Point(187, 309)
         Me.Label6.Name = "Label6"
         Me.Label6.Size = New System.Drawing.Size(222, 14)
         Me.Label6.TabIndex = 18
@@ -130,11 +130,11 @@ Partial Class AboutBox
         '
         Me.Label7.AutoSize = True
         Me.Label7.ForeColor = System.Drawing.SystemColors.ActiveCaption
-        Me.Label7.Location = New System.Drawing.Point(12, 182)
+        Me.Label7.Location = New System.Drawing.Point(14, 291)
         Me.Label7.Name = "Label7"
         Me.Label7.Size = New System.Drawing.Size(120, 13)
         Me.Label7.TabIndex = 19
-        Me.Label7.Text = "Copyright ©  2008-2013"
+        Me.Label7.Text = "Copyright ©  2008-2026"
         '
         'Label8
         '
@@ -152,7 +152,7 @@ Partial Class AboutBox
         Me.RichTextBox1.ImeMode = System.Windows.Forms.ImeMode.[On]
         Me.RichTextBox1.Location = New System.Drawing.Point(175, 51)
         Me.RichTextBox1.Name = "RichTextBox1"
-        Me.RichTextBox1.Size = New System.Drawing.Size(400, 92)
+        Me.RichTextBox1.Size = New System.Drawing.Size(400, 187)
         Me.RichTextBox1.TabIndex = 27
         Me.RichTextBox1.Text = resources.GetString("RichTextBox1.Text")
         '
@@ -161,7 +161,7 @@ Partial Class AboutBox
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.AliceBlue
-        Me.ClientSize = New System.Drawing.Size(601, 227)
+        Me.ClientSize = New System.Drawing.Size(645, 379)
         Me.Controls.Add(Me.RichTextBox1)
         Me.Controls.Add(Me.Label8)
         Me.Controls.Add(Me.Label7)

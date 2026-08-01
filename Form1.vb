@@ -483,7 +483,7 @@ Public Class Form1
         CookieViewer.ShowDialog()
     End Sub
 
-    Private Sub SubmitFeedbackToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles SubmitFeedbackToolStripMenuItem.Click
+    Private Sub SubmitFeedbackToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
         NavigateActiveTab("https://www.k-browser.com/")
     End Sub
 
@@ -1215,7 +1215,7 @@ Public Class Form1
     End Sub
 
     Private Sub KBrowserToolStripMenuItem_Click_1(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles KBrowserToolStripMenuItem.Click
-        NavigateActiveTab("https://www.k-browser.com/")
+        NavigateActiveTab("https://k-browser.com/")
     End Sub
 
     Private Sub SToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles SToolStripMenuItem.Click
