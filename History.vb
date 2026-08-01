@@ -67,7 +67,7 @@ Public Class History
     ''' Entries without a timestamp are included only when "All Time" is selected.
     ''' </summary>
     Private Function MatchesDateFilter(entryDate As DateTime?) As Boolean
-        Dim filterIndex As Integer = If(cboDateFilter.SelectedIndex, 0)
+        Dim filterIndex As Integer = If(cboDateFilter.SelectedIndex >= 0, cboDateFilter.SelectedIndex, 0)
 
         ' "All Time" — show everything
         If filterIndex = 0 Then Return True

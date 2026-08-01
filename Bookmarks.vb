@@ -5,11 +5,52 @@ Public Class Bookmarks
     Public Class BookmarkNodeData
         Public Property IsFolder As Boolean
         Public Property Url As String = ""
+        ''' <summary>
+        ''' The clean page title, used for serialization.
+        ''' node.Text holds the formatted display ("domain — title").
+        ''' </summary>
+        Public Property Title As String = ""
     End Class
 
     Private Sub Bookmarks_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
         LoadTreeFromSettings()
     End Sub
+
+    ' ── helpers ──────────────────────────────────────────────────────────────
+
+    ''' <summary>
+    ''' Extracts the domain from a URL (e.g., "https://www.google.com/search?q=test" → "google.com").
+    ''' Returns the URL itself if parsing fails.
+    ''' </summary>
+    Private Shared Function GetDomainFromUrl(url As String) As String
+        Try
+            Dim uri As New Uri(url)
+            Dim host As String = uri.Host
+            ' Strip "www." prefix for cleaner display
+            If host.StartsWith("www.", StringComparison.OrdinalIgnoreCase) Then
+                host = host.Substring(4)
+            End If
+            Return host
+        Catch
+            Return url
+        End Try
+    End Function
+
+    ''' <summary>
+    ''' Formats the display text for a bookmark node as "domain — title".
+    ''' If the title matches the domain or is empty, shows just the domain.
+    ''' </summary>
+    Private Shared Function FormatDisplayText(title As String, url As String) As String
+        Dim domain As String = GetDomainFromUrl(url)
+        If String.IsNullOrWhiteSpace(title) OrElse
+           title.Equals(url, StringComparison.OrdinalIgnoreCase) OrElse
+           title.Equals(domain, StringComparison.OrdinalIgnoreCase) Then
+            Return domain
+        End If
+        Return domain & " — " & title
+    End Function
+
+    ' ── data loading ─────────────────────────────────────────────────────────
 
     Public Sub LoadTreeFromSettings()
         tvBookmarks.Nodes.Clear()
@@ -42,7 +83,7 @@ Public Class Bookmarks
             If typeStr = "FOLDER" Then
                 Dim folderName As String = parts(2)
                 Dim folderNode As New TreeNode(folderName)
-                folderNode.Tag = New BookmarkNodeData With {.IsFolder = True}
+                folderNode.Tag = New BookmarkNodeData With {.IsFolder = True, .Title = folderName}
 
                 If depth = 0 OrElse Not stack.ContainsKey(depth - 1) Then
                     tvBookmarks.Nodes.Add(folderNode)
@@ -54,9 +95,10 @@ Public Class Bookmarks
             ElseIf typeStr = "URL" AndAlso parts.Length >= 4 Then
                 Dim title As String = parts(2)
                 Dim url As String = parts(3)
-                Dim urlNode As New TreeNode(title)
+                Dim displayText As String = FormatDisplayText(title, url)
+                Dim urlNode As New TreeNode(displayText)
                 urlNode.ToolTipText = url
-                urlNode.Tag = New BookmarkNodeData With {.IsFolder = False, .Url = url}
+                urlNode.Tag = New BookmarkNodeData With {.IsFolder = False, .Url = url, .Title = title}
 
                 If depth = 0 OrElse Not stack.ContainsKey(depth - 1) Then
                     tvBookmarks.Nodes.Add(urlNode)
@@ -87,6 +129,8 @@ Public Class Bookmarks
         Return count
     End Function
 
+    ' ── serialization ────────────────────────────────────────────────────────
+
     Public Sub SaveTreeToSettings()
         If My.Settings.BookmarksTreeData Is Nothing Then
             My.Settings.BookmarksTreeData = New System.Collections.Specialized.StringCollection()
@@ -106,14 +150,16 @@ Public Class Bookmarks
         If data Is Nothing Then Return
 
         If data.IsFolder Then
-            My.Settings.BookmarksTreeData.Add("FOLDER:" & depth.ToString() & ":" & node.Text)
+            My.Settings.BookmarksTreeData.Add("FOLDER:" & depth.ToString() & ":" & data.Title)
             For Each child As TreeNode In node.Nodes
                 SerializeNode(child, depth + 1)
             Next
         Else
-            My.Settings.BookmarksTreeData.Add("URL:" & depth.ToString() & ":" & node.Text & ":" & data.Url)
+            My.Settings.BookmarksTreeData.Add("URL:" & depth.ToString() & ":" & data.Title & ":" & data.Url)
         End If
     End Sub
+
+    ' ── search / filter ──────────────────────────────────────────────────────
 
     Private Sub txtSearch_TextChanged(ByVal sender As Object, ByVal e As EventArgs) Handles txtSearch.TextChanged
         Dim filter As String = txtSearch.Text.Trim().ToLower()
@@ -129,7 +175,9 @@ Public Class Bookmarks
 
     Private Function FilterNode(ByVal node As TreeNode, ByVal filter As String) As Boolean
         Dim data = TryCast(node.Tag, BookmarkNodeData)
-        Dim isMatch As Boolean = node.Text.ToLower().Contains(filter) OrElse (data IsNot Nothing AndAlso data.Url.ToLower().Contains(filter))
+        Dim isMatch As Boolean = node.Text.ToLower().Contains(filter) OrElse
+                                 (data IsNot Nothing AndAlso data.Url.ToLower().Contains(filter)) OrElse
+                                 (data IsNot Nothing AndAlso data.Title.ToLower().Contains(filter))
         Dim hasMatchingChild As Boolean = False
 
         For Each child As TreeNode In node.Nodes
@@ -148,12 +196,14 @@ Public Class Bookmarks
         End If
     End Function
 
+    ' ── actions ──────────────────────────────────────────────────────────────
+
     Private Sub btnAddFolder_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnAddFolder.Click, tsmAddFolder.Click
         Dim folderName As String = InputBox("Enter folder name:", "New Folder", "New Folder")
         If String.IsNullOrWhiteSpace(folderName) Then Return
 
         Dim folderNode As New TreeNode(folderName)
-        folderNode.Tag = New BookmarkNodeData With {.IsFolder = True}
+        folderNode.Tag = New BookmarkNodeData With {.IsFolder = True, .Title = folderName}
 
         Dim selectedNode = tvBookmarks.SelectedNode
         If selectedNode IsNot Nothing Then
@@ -181,9 +231,10 @@ Public Class Bookmarks
         If String.IsNullOrWhiteSpace(url) Then Return
 
         Dim fixedUrl As String = AppManager.FixURL(url)
-        Dim urlNode As New TreeNode(title)
+        Dim displayText As String = FormatDisplayText(title, fixedUrl)
+        Dim urlNode As New TreeNode(displayText)
         urlNode.ToolTipText = fixedUrl
-        urlNode.Tag = New BookmarkNodeData With {.IsFolder = False, .Url = fixedUrl}
+        urlNode.Tag = New BookmarkNodeData With {.IsFolder = False, .Url = fixedUrl, .Title = title}
 
         Dim selectedNode = tvBookmarks.SelectedNode
         If selectedNode IsNot Nothing Then
@@ -248,21 +299,23 @@ Public Class Bookmarks
         If data Is Nothing Then Return
 
         If data.IsFolder Then
-            Dim newName As String = InputBox("Edit Folder Name:", "Edit Folder", selectedNode.Text)
+            Dim newName As String = InputBox("Edit Folder Name:", "Edit Folder", data.Title)
             If Not String.IsNullOrWhiteSpace(newName) Then
+                data.Title = newName
                 selectedNode.Text = newName
                 SaveTreeToSettings()
             End If
         Else
-            Dim newTitle As String = InputBox("Edit Bookmark Title:", "Edit Bookmark", selectedNode.Text)
+            Dim newTitle As String = InputBox("Edit Bookmark Title:", "Edit Bookmark", data.Title)
             If String.IsNullOrWhiteSpace(newTitle) Then Return
             Dim newUrl As String = InputBox("Edit Bookmark URL:", "Edit Bookmark", data.Url)
             If String.IsNullOrWhiteSpace(newUrl) Then Return
 
             Dim fixedUrl As String = AppManager.FixURL(newUrl)
-            selectedNode.Text = newTitle
-            selectedNode.ToolTipText = fixedUrl
+            data.Title = newTitle
             data.Url = fixedUrl
+            selectedNode.Text = FormatDisplayText(newTitle, fixedUrl)
+            selectedNode.ToolTipText = fixedUrl
             SaveTreeToSettings()
         End If
     End Sub
@@ -270,12 +323,16 @@ Public Class Bookmarks
     Private Sub btnDelete_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnDelete.Click, tsmDelete.Click
         Dim selectedNode = tvBookmarks.SelectedNode
         If selectedNode IsNot Nothing Then
-            If MessageBox.Show("Are you sure you want to delete '" & selectedNode.Text & "'?", "Delete Bookmark", MessageBoxButtons.YesNo, MessageBoxIcon.Question) = DialogResult.Yes Then
+            Dim data = TryCast(selectedNode.Tag, BookmarkNodeData)
+            Dim displayName As String = If(data IsNot Nothing, data.Title, selectedNode.Text)
+            If MessageBox.Show("Are you sure you want to delete '" & displayName & "'?", "Delete Bookmark", MessageBoxButtons.YesNo, MessageBoxIcon.Question) = DialogResult.Yes Then
                 selectedNode.Remove()
                 SaveTreeToSettings()
             End If
         End If
     End Sub
+
+    ' ── drag & drop ──────────────────────────────────────────────────────────
 
     Private Sub tvBookmarks_ItemDrag(ByVal sender As Object, ByVal e As ItemDragEventArgs) Handles tvBookmarks.ItemDrag
         DoDragDrop(e.Item, DragDropEffects.Move)

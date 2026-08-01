@@ -22,6 +22,24 @@ K-Browser
   resource lookups using this strongly typed resource class.
 </summary>
 </member>
+<member name="P:Advance_Webbrowser.Bookmarks.BookmarkNodeData.Title">
+ <summary>
+ The clean page title, used for serialization.
+ node.Text holds the formatted display ("domain — title").
+ </summary>
+</member>
+<member name="M:Advance_Webbrowser.Bookmarks.GetDomainFromUrl(System.String)">
+ <summary>
+ Extracts the domain from a URL (e.g., "https://www.google.com/search?q=test" → "google.com").
+ Returns the URL itself if parsing fails.
+ </summary>
+</member>
+<member name="M:Advance_Webbrowser.Bookmarks.FormatDisplayText(System.String,System.String)">
+ <summary>
+ Formats the display text for a bookmark node as "domain — title".
+ If the title matches the domain or is empty, shows just the domain.
+ </summary>
+</member>
 <member name="M:Advance_Webbrowser.Rss.tvwRss_AfterSelect(System.Object,System.Windows.Forms.TreeViewEventArgs)">
  <summary>
  Upon selection of a node, open the link
@@ -38,6 +56,41 @@ K-Browser
  <param name="sender"></param>
  <param name="e"></param>
  <remarks></remarks>
+</member>
+<member name="F:Advance_Webbrowser.History._entryMap">
+ <summary>
+ Maps the display text (page title) shown in the ListBox to the raw
+ history entry stored in My.Settings.History ("Title|URL|DateTime" or legacy formats).
+ </summary>
+</member>
+<member name="M:Advance_Webbrowser.History.GetUrlFromEntry(System.String)">
+ <summary>
+ Extracts the URL portion from a history entry.
+ Supports "Title|URL|DateTime", "Title|URL", and legacy URL-only formats.
+ </summary>
+</member>
+<member name="M:Advance_Webbrowser.History.GetTitleFromEntry(System.String)">
+ <summary>
+ Extracts the display title from a history entry.
+ </summary>
+</member>
+<member name="M:Advance_Webbrowser.History.GetDateFromEntry(System.String)">
+ <summary>
+ Extracts the DateTime from a history entry.
+ Returns Nothing if the entry has no timestamp (legacy format).
+ </summary>
+</member>
+<member name="M:Advance_Webbrowser.History.GetSelectedUrl">
+ <summary>
+ Resolves the URL for the currently selected ListBox item.
+ Returns Nothing if no item is selected.
+ </summary>
+</member>
+<member name="M:Advance_Webbrowser.History.MatchesDateFilter(System.Nullable{System.DateTime})">
+ <summary>
+ Returns True if the entry date falls within the currently selected date range.
+ Entries without a timestamp are included only when "All Time" is selected.
+ </summary>
 </member>
 </members>
 </doc>
