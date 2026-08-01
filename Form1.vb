@@ -693,14 +693,12 @@ Public Class Form1
     Private Sub WebView2_WebResourceRequested(ByVal sender As Object, ByVal e As CoreWebView2WebResourceRequestedEventArgs)
         If Not My.Settings.AdBlockerEnabled Then Return
 
-        Dim isBlocked As Boolean = False
+        ' NEVER block top-level document navigations (main page itself)
         If e.ResourceContext = CoreWebView2WebResourceContext.Document Then
-            isBlocked = AdBlockEngine.ShouldBlockDocument(e.Request.Uri)
-        Else
-            isBlocked = AdBlockEngine.ShouldBlock(e.Request.Uri)
+            Return
         End If
 
-        If isBlocked Then
+        If AdBlockEngine.ShouldBlock(e.Request.Uri) Then
             Dim core = TryCast(sender, CoreWebView2)
             If core IsNot Nothing Then
                 Try

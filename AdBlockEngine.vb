@@ -13,9 +13,10 @@ Public Class AdBlockEngine
     ' Reserved generic keywords that MUST NEVER be treated as ad blocking rules
     Private Shared ReadOnly ReservedGenericKeywords As New HashSet(Of String)(StringComparer.OrdinalIgnoreCase) From {
         "http", "https", "file", "about", "html", "htm", "json", "xml", "text", "css", "javascript",
-        "com", "org", "net", "edu", "gov", "io", "co", "uk", "us", "de", "fr", "gr", "ru", "cn", "jp",
+        "com", "org", "net", "edu", "gov", "mil", "int", "biz", "info", "name", "pro", "co", "io", "me", "tv", "cc", "us", "uk", "ca", "de", "fr", "gr", "eu", "au", "jp", "cn", "in", "ru", "br", "app", "dev", "site", "online", "store", "tech", "xyz", "website", "link", "click", "top",
+        "co.uk", "com.ar", "co.th", "net.au", "org.uk", "com.br", "com.au", "co.jp", "co.kr", "co.nz", "com.mx", "com.tw",
         "www", "www1", "www2", "api", "cdn", "static", "assets", "media", "images", "img", "js", "style",
-        "index", "main", "home", "default", "page", "document", "script", "font", "vendor", "app"
+        "index", "main", "home", "default", "page", "document", "script", "font", "vendor", "app", "k-browser", "k-browser.com"
     }
 
     Public Shared Property TotalBlockedCount As Long = 0
@@ -109,11 +110,16 @@ Public Class AdBlockEngine
                     If slashIdx >= 0 Then domain = domain.Substring(0, slashIdx)
                     Dim questionIdx As Integer = domain.IndexOf("?"c)
                     If questionIdx >= 0 Then domain = domain.Substring(0, questionIdx)
+                    Dim colonIdx As Integer = domain.IndexOf(":"c)
+                    If colonIdx >= 0 Then domain = domain.Substring(0, colonIdx)
                     domain = domain.Replace("*", "").Trim().ToLowerInvariant()
 
                     If domain.Length >= 4 AndAlso domain.Contains(".") AndAlso Not ReservedGenericKeywords.Contains(domain) Then
-                        DomainAnchors.Add(domain)
-                        count += 1
+                        Dim parts As String() = domain.Split("."c)
+                        If parts.Length >= 2 AndAlso parts(0).Length >= 2 Then
+                            DomainAnchors.Add(domain)
+                            count += 1
+                        End If
                     End If
                     Continue For
                 End If
