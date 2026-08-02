@@ -27,6 +27,7 @@ Public Class AdBlockerSettings
         End Try
         chkEnableAdBlocker.Checked = My.Settings.AdBlockerEnabled
         chkShowBlockedCount.Checked = My.Settings.ShowBlockedCount
+        cmbUpdateSchedule.SelectedIndex = Math.Max(0, Math.Min(3, My.Settings.AdBlockUpdateSchedule))
 
         PopulateGrid()
     End Sub
@@ -67,6 +68,7 @@ Public Class AdBlockerSettings
     Private Sub SaveConfig()
         My.Settings.AdBlockerEnabled = chkEnableAdBlocker.Checked
         My.Settings.ShowBlockedCount = chkShowBlockedCount.Checked
+        My.Settings.AdBlockUpdateSchedule = cmbUpdateSchedule.SelectedIndex
 
         Dim entries As New List(Of String)()
         For Each row As DataGridViewRow In dgvFilterLists.Rows
@@ -103,6 +105,7 @@ Public Class AdBlockerSettings
         Next
 
         Dim totalRules As Integer = AdBlockEngine.LoadAllRules()
+        My.Settings.AdBlockLastUpdateCheck = DateTime.Now.ToString("yyyy-MM-dd HH:mm")
         SaveConfig()
 
         lblStatus.Text = "Updated " & successCount & " list(s). Active rules: " & totalRules

@@ -191,7 +191,7 @@ Partial Class Settings
         'rbStartupBlank
         '
         Me.rbStartupBlank.AutoSize = True
-        Me.rbStartupBlank.Location = New System.Drawing.Point(150, 22)
+        Me.rbStartupBlank.Location = New System.Drawing.Point(163, 22)
         Me.rbStartupBlank.Name = "rbStartupBlank"
         Me.rbStartupBlank.Size = New System.Drawing.Size(106, 17)
         Me.rbStartupBlank.TabIndex = 1
@@ -211,7 +211,7 @@ Partial Class Settings
         'rbStartupSpecific
         '
         Me.rbStartupSpecific.AutoSize = True
-        Me.rbStartupSpecific.Location = New System.Drawing.Point(150, 45)
+        Me.rbStartupSpecific.Location = New System.Drawing.Point(163, 45)
         Me.rbStartupSpecific.Name = "rbStartupSpecific"
         Me.rbStartupSpecific.Size = New System.Drawing.Size(116, 17)
         Me.rbStartupSpecific.TabIndex = 3
@@ -676,7 +676,7 @@ Partial Class Settings
         '
         'txtCustomDns
         '
-        Me.txtCustomDns.Location = New System.Drawing.Point(135, 27)
+        Me.txtCustomDns.Location = New System.Drawing.Point(138, 27)
         Me.txtCustomDns.Name = "txtCustomDns"
         Me.txtCustomDns.Size = New System.Drawing.Size(250, 21)
         Me.txtCustomDns.TabIndex = 1

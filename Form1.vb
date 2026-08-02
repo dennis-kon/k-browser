@@ -143,10 +143,13 @@ Public Class Form1
             End Select
             Dim brws = Await CreateNewTab(initialUrl)
             AdBlockEngine.LoadAllRules()
+            Dim unusedTask = System.Threading.Tasks.Task.Run(Function() AdBlockEngine.CheckAndAutoUpdateListsAsync())
             If tsbAdBlockBadge IsNot Nothing Then
                 tsbAdBlockBadge.Visible = My.Settings.ShowBlockedCount AndAlso My.Settings.AdBlockerEnabled
                 tsbAdBlockBadge.Text = "🛡️ " & AdBlockEngine.TotalBlockedCount
             End If
+
+            AddHandler SettingsManager.SettingsChanged, AddressOf OnSettingsChanged
 
             If My.Settings.MainSize.Width > 200 AndAlso My.Settings.MainSize.Height > 200 Then
                 Me.Size = My.Settings.MainSize
@@ -157,6 +160,32 @@ Public Class Form1
         Catch ex As Exception
             System.Diagnostics.Debug.WriteLine("Form1_Load error: " & ex.Message)
         End Try
+    End Sub
+
+    Private Sub OnSettingsChanged(ByVal sender As Object, ByVal e As EventArgs)
+        If Me.InvokeRequired Then
+            Me.BeginInvoke(Sub() OnSettingsChanged(sender, e))
+            Return
+        End If
+
+        If tsbAdBlockBadge IsNot Nothing Then
+            tsbAdBlockBadge.Visible = My.Settings.ShowBlockedCount AndAlso My.Settings.AdBlockerEnabled
+            tsbAdBlockBadge.Text = "🛡️ " & AdBlockEngine.TotalBlockedCount
+        End If
+
+        For Each page As TabPage In TabControl1.TabPages
+            If page.Controls.Count > 0 Then
+                Dim brws = TryCast(page.Controls(0), WebView2)
+                If brws IsNot Nothing Then
+                    Select Case My.Settings.FontSize
+                        Case 0 : brws.ZoomFactor = 0.85
+                        Case 2 : brws.ZoomFactor = 1.25
+                        Case 3 : brws.ZoomFactor = 1.5
+                        Case Else : brws.ZoomFactor = 1.0
+                    End Select
+                End If
+            End If
+        Next
     End Sub
 
 
@@ -180,6 +209,7 @@ Public Class Form1
                         RemoveHandler browserControl.CoreWebView2.WebResourceRequested, AddressOf WebView2_WebResourceRequested
                     End If
                     TabLifecycleManager.OnTabClosed(browserControl)
+                    AdBlockEngine.RemoveTab(browserControl)
                     browserControl.Dispose()
                 End If
             End If
@@ -750,12 +780,32 @@ Public Class Form1
         End If
     End Sub
 
+    Private Function GetWebView2FromCore(ByVal core As CoreWebView2) As WebView2
+        If core Is Nothing Then Return Nothing
+        For Each page As TabPage In TabControl1.TabPages
+            If page.Controls.Count > 0 Then
+                Dim brws = TryCast(page.Controls(0), WebView2)
+                If brws IsNot Nothing AndAlso brws.CoreWebView2 Is core Then
+                    Return brws
+                End If
+            End If
+        Next
+        Return Nothing
+    End Function
+
     Private Sub WebView2_WebResourceRequested(ByVal sender As Object, ByVal e As CoreWebView2WebResourceRequestedEventArgs)
         If Not My.Settings.AdBlockerEnabled Then Return
 
         ' NEVER block top-level document navigations (main page itself)
         If e.ResourceContext = CoreWebView2WebResourceContext.Document Then
             Return
+        End If
+
+        Dim core = TryCast(sender, CoreWebView2)
+        If core IsNot Nothing Then
+            If AdBlockEngine.IsSiteDisabled(core.Source) Then
+                Return
+            End If
         End If
 
         ' Protect stylesheets & fonts from substring path blocking so pages never lose CSS or typography
@@ -766,12 +816,18 @@ Public Class Form1
         End If
 
         If AdBlockEngine.ShouldBlock(e.Request.Uri) Then
-            Dim core = TryCast(sender, CoreWebView2)
             If core IsNot Nothing Then
                 Try
                     e.Response = core.Environment.CreateWebResourceResponse(Nothing, 403, "Blocked by AdBlocker", "Content-Type: text/plain")
                 Catch
                 End Try
+            End If
+
+            Dim brws = GetWebView2FromCore(core)
+            If brws IsNot Nothing Then
+                AdBlockEngine.RecordBlockedItem(brws, e.Request.Uri)
+            Else
+                AdBlockEngine.TotalBlockedCount += 1
             End If
             IncrementBlockedAdCount()
         End If
@@ -782,7 +838,6 @@ Public Class Form1
             Me.BeginInvoke(Sub() IncrementBlockedAdCount())
             Return
         End If
-        AdBlockEngine.TotalBlockedCount += 1
         If tsbAdBlockBadge IsNot Nothing Then
             tsbAdBlockBadge.Text = "🛡️ " & AdBlockEngine.TotalBlockedCount
             tsbAdBlockBadge.Visible = My.Settings.ShowBlockedCount AndAlso My.Settings.AdBlockerEnabled
@@ -790,7 +845,16 @@ Public Class Form1
     End Sub
 
     Private Sub tsbAdBlockBadge_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles tsbAdBlockBadge.Click
-        AdBlockerSettings.ShowDialog()
+        Dim activeBrws = GetActiveWebView()
+        Dim currentUrl As String = ""
+        If activeBrws IsNot Nothing AndAlso activeBrws.CoreWebView2 IsNot Nothing Then
+            currentUrl = activeBrws.CoreWebView2.Source
+        End If
+
+        Using popup As New AdBlockPopup(activeBrws, currentUrl)
+            popup.ShowDialog(Me)
+        End Using
+
         If tsbAdBlockBadge IsNot Nothing Then
             tsbAdBlockBadge.Visible = My.Settings.ShowBlockedCount AndAlso My.Settings.AdBlockerEnabled
             tsbAdBlockBadge.Text = "🛡️ " & AdBlockEngine.TotalBlockedCount
@@ -822,6 +886,13 @@ Public Class Form1
 
     Private Sub WebView2_NavigationStarting(ByVal sender As Object, ByVal e As CoreWebView2NavigationStartingEventArgs)
         Dim coreSender = TryCast(sender, CoreWebView2)
+        If coreSender IsNot Nothing Then
+            Dim navBrws = GetWebView2FromCore(coreSender)
+            If navBrws IsNot Nothing Then
+                AdBlockEngine.ClearTabBlockedItems(navBrws)
+            End If
+        End If
+
         If IsActiveTabWebView(coreSender) Then
             ProgressBar1.Visible = True
             ProgressBar1.Value = 25
@@ -1320,6 +1391,12 @@ Public Class Form1
                 Dim brws = TryCast(page.Controls(0), WebView2)
                 If brws IsNot Nothing Then
                     ThemeManager.ApplyWebView2Theme(brws)
+                    If brws.CoreWebView2 IsNot Nothing Then
+                        Try
+                            brws.CoreWebView2.Reload()
+                        Catch
+                        End Try
+                    End If
                 End If
             End If
         Next

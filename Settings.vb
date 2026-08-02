@@ -1,7 +1,12 @@
+Imports System.Collections.Generic
 Imports System.IO
 Imports System.Windows.Forms
 
 Public Class Settings
+
+    Private m_jsDisabledDraft As New List(Of String)()
+    Private m_blockedSitesDraft As New List(Of String)()
+    Private m_isSyncingDns As Boolean = False
 
     Private Sub Settings_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
         ThemeManager.ApplyTheme(Me)
@@ -43,17 +48,34 @@ Public Class Settings
         chkPhishing.Checked = My.Settings.UsePhishingFilter
         chkAllowPop.Checked = My.Settings.PopUpBlockerEnabled
 
+        ' Load collections into isolated draft buffers
+        m_jsDisabledDraft.Clear()
+        If My.Settings.JsDisabledSites IsNot Nothing Then
+            For Each s As String In My.Settings.JsDisabledSites
+                If Not String.IsNullOrWhiteSpace(s) Then m_jsDisabledDraft.Add(s)
+            Next
+        End If
         LoadJsDisabledSites()
+
+        m_blockedSitesDraft.Clear()
+        If My.Settings.BlockedSites IsNot Nothing Then
+            For Each s As String In My.Settings.BlockedSites
+                If Not String.IsNullOrWhiteSpace(s) Then m_blockedSitesDraft.Add(s)
+            Next
+        End If
         LoadBlockedSites()
 
         ' Performance
         chkMemorySaver.Checked = My.Settings.MemorySaverEnabled
         chkHardwareAccel.Checked = My.Settings.HardwareAcceleration
         cmbDoH.SelectedIndex = Math.Max(0, Math.Min(3, My.Settings.DnsOverHttpsProvider))
-        txtDoHCustom.Text = My.Settings.CustomDnsServer
+
+        m_isSyncingDns = True
+        txtDoHCustom.Text = If(My.Settings.CustomDnsServer IsNot Nothing, My.Settings.CustomDnsServer, "")
+        txtCustomDns.Text = txtDoHCustom.Text
+        m_isSyncingDns = False
 
         ' Advanced
-        txtCustomDns.Text = My.Settings.CustomDnsServer
         chkEnableProxy.Checked = My.Settings.CustomProxyEnabled
         txtProxyHost.Text = My.Settings.CustomProxyHost
         txtProxyPort.Text = My.Settings.CustomProxyPort.ToString()
@@ -61,7 +83,7 @@ Public Class Settings
 
     Private Sub SaveAllSettings()
         ' Browser Settings
-        My.Settings.HomePageUrl = txtHomePage.Text
+        My.Settings.HomePageUrl = txtHomePage.Text.Trim()
         If rbStartupBlank.Checked Then
             My.Settings.StartupBehavior = 1
         ElseIf rbStartupRestore.Checked Then
@@ -73,7 +95,7 @@ Public Class Settings
         End If
         My.Settings.NewTabPage = cmbNewTab.SelectedIndex
         My.Settings.SearchEngine = If(cmbSearchEngine.SelectedItem IsNot Nothing, cmbSearchEngine.SelectedItem.ToString(), "Google")
-        My.Settings.DownloadsFolder = txtDownloads.Text
+        My.Settings.DownloadsFolder = txtDownloads.Text.Trim()
         My.Settings.FontSize = cmbFontSize.SelectedIndex
         My.Settings.FullScreenOnStartup = chkFullScreen.Checked
 
@@ -88,6 +110,23 @@ Public Class Settings
         My.Settings.UsePhishingFilter = chkPhishing.Checked
         My.Settings.PopUpBlockerEnabled = chkAllowPop.Checked
 
+        ' Commit Draft Collections
+        If My.Settings.JsDisabledSites Is Nothing Then
+            My.Settings.JsDisabledSites = New System.Collections.Specialized.StringCollection()
+        End If
+        My.Settings.JsDisabledSites.Clear()
+        For Each s As String In m_jsDisabledDraft
+            My.Settings.JsDisabledSites.Add(s)
+        Next
+
+        If My.Settings.BlockedSites Is Nothing Then
+            My.Settings.BlockedSites = New System.Collections.Specialized.StringCollection()
+        End If
+        My.Settings.BlockedSites.Clear()
+        For Each s As String In m_blockedSitesDraft
+            My.Settings.BlockedSites.Add(s)
+        Next
+
         ' Performance
         My.Settings.MemorySaverEnabled = chkMemorySaver.Checked
         My.Settings.HardwareAcceleration = chkHardwareAccel.Checked
@@ -96,36 +135,38 @@ Public Class Settings
         ' Advanced
         My.Settings.CustomDnsServer = If(txtCustomDns.Text.Trim() <> "", txtCustomDns.Text.Trim(), txtDoHCustom.Text.Trim())
         My.Settings.CustomProxyEnabled = chkEnableProxy.Checked
-        My.Settings.CustomProxyHost = txtProxyHost.Text
+        My.Settings.CustomProxyHost = txtProxyHost.Text.Trim()
         Dim port As Integer = 8080
-        Integer.TryParse(txtProxyPort.Text, port)
+        If Integer.TryParse(txtProxyPort.Text.Trim(), port) Then
+            If port < 1 OrElse port > 65535 Then port = 8080
+        Else
+            port = 8080
+        End If
         My.Settings.CustomProxyPort = port
 
         My.Settings.Save()
+        SettingsManager.NotifySettingsChanged()
     End Sub
 
     Private Sub LoadJsDisabledSites()
         lbJsDisabled.Items.Clear()
-        If My.Settings.JsDisabledSites Is Nothing Then My.Settings.JsDisabledSites = New System.Collections.Specialized.StringCollection()
-        For Each s As String In My.Settings.JsDisabledSites
+        For Each s As String In m_jsDisabledDraft
             lbJsDisabled.Items.Add(s)
         Next
     End Sub
 
     Private Sub LoadBlockedSites()
         lbBlocked.Items.Clear()
-        If My.Settings.BlockedSites Is Nothing Then My.Settings.BlockedSites = New System.Collections.Specialized.StringCollection()
-        For Each s As String In My.Settings.BlockedSites
+        For Each s As String In m_blockedSitesDraft
             lbBlocked.Items.Add(s)
         Next
     End Sub
 
     Private Sub btnAddJsDomain_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnAddJsDomain.Click
         If Not String.IsNullOrWhiteSpace(txtJsDomain.Text) Then
-            If My.Settings.JsDisabledSites Is Nothing Then My.Settings.JsDisabledSites = New System.Collections.Specialized.StringCollection()
             Dim domain As String = txtJsDomain.Text.Trim().ToLower()
-            If Not My.Settings.JsDisabledSites.Contains(domain) Then
-                My.Settings.JsDisabledSites.Add(domain)
+            If Not m_jsDisabledDraft.Contains(domain) Then
+                m_jsDisabledDraft.Add(domain)
                 LoadJsDisabledSites()
             End If
             txtJsDomain.Text = String.Empty
@@ -134,24 +175,42 @@ Public Class Settings
 
     Private Sub btnRemoveJsDomain_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnRemoveJsDomain.Click
         If lbJsDisabled.SelectedItem IsNot Nothing Then
-            My.Settings.JsDisabledSites.Remove(lbJsDisabled.SelectedItem.ToString())
+            m_jsDisabledDraft.Remove(lbJsDisabled.SelectedItem.ToString())
             LoadJsDisabledSites()
         End If
     End Sub
 
     Private Sub btnAddBlock_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnAddBlock.Click
         If Not String.IsNullOrWhiteSpace(txtBlock.Text) Then
-            If My.Settings.BlockedSites Is Nothing Then My.Settings.BlockedSites = New System.Collections.Specialized.StringCollection()
-            My.Settings.BlockedSites.Add(AppManager.FixURL(txtBlock.Text))
-            LoadBlockedSites()
+            Dim urlToAdd As String = AppManager.FixURL(txtBlock.Text)
+            If Not m_blockedSitesDraft.Contains(urlToAdd) Then
+                m_blockedSitesDraft.Add(urlToAdd)
+                LoadBlockedSites()
+            End If
             txtBlock.Text = String.Empty
         End If
     End Sub
 
     Private Sub btnRemoveBlock_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnRemoveBlock.Click
         If lbBlocked.SelectedItem IsNot Nothing Then
-            My.Settings.BlockedSites.Remove(lbBlocked.SelectedItem.ToString())
+            m_blockedSitesDraft.Remove(lbBlocked.SelectedItem.ToString())
             LoadBlockedSites()
+        End If
+    End Sub
+
+    Private Sub txtDoHCustom_TextChanged(ByVal sender As Object, ByVal e As EventArgs) Handles txtDoHCustom.TextChanged
+        If Not m_isSyncingDns Then
+            m_isSyncingDns = True
+            txtCustomDns.Text = txtDoHCustom.Text
+            m_isSyncingDns = False
+        End If
+    End Sub
+
+    Private Sub txtCustomDns_TextChanged(ByVal sender As Object, ByVal e As EventArgs) Handles txtCustomDns.TextChanged
+        If Not m_isSyncingDns Then
+            m_isSyncingDns = True
+            txtDoHCustom.Text = txtCustomDns.Text
+            m_isSyncingDns = False
         End If
     End Sub
 

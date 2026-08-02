@@ -16,6 +16,8 @@ Partial Class AdBlockerSettings
     Private Sub InitializeComponent()
         Me.chkEnableAdBlocker = New System.Windows.Forms.CheckBox()
         Me.chkShowBlockedCount = New System.Windows.Forms.CheckBox()
+        Me.lblUpdateSchedule = New System.Windows.Forms.Label()
+        Me.cmbUpdateSchedule = New System.Windows.Forms.ComboBox()
         Me.grpFilterLists = New System.Windows.Forms.GroupBox()
         Me.dgvFilterLists = New System.Windows.Forms.DataGridView()
         Me.colEnabled = New System.Windows.Forms.DataGridViewCheckBoxColumn()
@@ -46,22 +48,41 @@ Partial Class AdBlockerSettings
         'chkShowBlockedCount
         '
         Me.chkShowBlockedCount.AutoSize = True
-        Me.chkShowBlockedCount.Location = New System.Drawing.Point(15, 42)
+        Me.chkShowBlockedCount.Location = New System.Drawing.Point(15, 38)
         Me.chkShowBlockedCount.Name = "chkShowBlockedCount"
         Me.chkShowBlockedCount.Size = New System.Drawing.Size(326, 17)
         Me.chkShowBlockedCount.TabIndex = 1
         Me.chkShowBlockedCount.Text = "Show number of ads blocked in icon on the navigation bar"
         Me.chkShowBlockedCount.UseVisualStyleBackColor = True
         '
+        'lblUpdateSchedule
+        '
+        Me.lblUpdateSchedule.AutoSize = True
+        Me.lblUpdateSchedule.Location = New System.Drawing.Point(15, 65)
+        Me.lblUpdateSchedule.Name = "lblUpdateSchedule"
+        Me.lblUpdateSchedule.Size = New System.Drawing.Size(122, 13)
+        Me.lblUpdateSchedule.TabIndex = 2
+        Me.lblUpdateSchedule.Text = "Auto-Update Schedule:"
+        '
+        'cmbUpdateSchedule
+        '
+        Me.cmbUpdateSchedule.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.cmbUpdateSchedule.FormattingEnabled = True
+        Me.cmbUpdateSchedule.Items.AddRange(New Object() {"Disabled (Manual)", "Every 24 Hours", "Every Week (7 Days)", "Every Month (30 Days)"})
+        Me.cmbUpdateSchedule.Location = New System.Drawing.Point(145, 62)
+        Me.cmbUpdateSchedule.Name = "cmbUpdateSchedule"
+        Me.cmbUpdateSchedule.Size = New System.Drawing.Size(195, 21)
+        Me.cmbUpdateSchedule.TabIndex = 3
+        '
         'grpFilterLists
         '
         Me.grpFilterLists.Controls.Add(Me.dgvFilterLists)
         Me.grpFilterLists.Controls.Add(Me.btnUpdateLists)
         Me.grpFilterLists.Controls.Add(Me.lblStatus)
-        Me.grpFilterLists.Location = New System.Drawing.Point(12, 70)
+        Me.grpFilterLists.Location = New System.Drawing.Point(12, 95)
         Me.grpFilterLists.Name = "grpFilterLists"
         Me.grpFilterLists.Size = New System.Drawing.Size(560, 280)
-        Me.grpFilterLists.TabIndex = 2
+        Me.grpFilterLists.TabIndex = 4
         Me.grpFilterLists.TabStop = False
         Me.grpFilterLists.Text = "Filter Lists"
         '
@@ -156,9 +177,11 @@ Partial Class AdBlockerSettings
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(584, 405)
+        Me.ClientSize = New System.Drawing.Size(584, 430)
         Me.Controls.Add(Me.chkEnableAdBlocker)
         Me.Controls.Add(Me.chkShowBlockedCount)
+        Me.Controls.Add(Me.lblUpdateSchedule)
+        Me.Controls.Add(Me.cmbUpdateSchedule)
         Me.Controls.Add(Me.grpFilterLists)
         Me.Controls.Add(Me.PanelBottom)
         Me.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -179,6 +202,8 @@ Partial Class AdBlockerSettings
 
     Friend WithEvents chkEnableAdBlocker As System.Windows.Forms.CheckBox
     Friend WithEvents chkShowBlockedCount As System.Windows.Forms.CheckBox
+    Friend WithEvents lblUpdateSchedule As System.Windows.Forms.Label
+    Friend WithEvents cmbUpdateSchedule As System.Windows.Forms.ComboBox
     Friend WithEvents grpFilterLists As System.Windows.Forms.GroupBox
     Friend WithEvents dgvFilterLists As System.Windows.Forms.DataGridView
     Friend WithEvents colEnabled As System.Windows.Forms.DataGridViewCheckBoxColumn

@@ -141,6 +141,10 @@ Public Class ThemeManager
                 cms.BackColor = If(IsDarkMode, DarkPanelBg, LightPanelBg)
                 cms.ForeColor = If(IsDarkMode, DarkText, LightText)
                 ApplyToolStripItemsTheme(cms.Items)
+
+            ElseIf TypeOf ctrl Is WebView2 Then
+                Dim brws = DirectCast(ctrl, WebView2)
+                ApplyWebView2Theme(brws)
             End If
 
             ' Recurse into child controls if container
@@ -172,12 +176,16 @@ Public Class ThemeManager
     End Sub
 
     ''' <summary>
-    ''' Applies PreferredColorScheme (Dark or Light) to a WebView2 control.
+    ''' Applies PreferredColorScheme (Dark or Light) and background color to a WebView2 control.
     ''' </summary>
     Public Shared Sub ApplyWebView2Theme(ByVal brws As WebView2)
-        If brws IsNot Nothing AndAlso brws.CoreWebView2 IsNot Nothing Then
+        If brws IsNot Nothing Then
             Try
-                brws.CoreWebView2.Profile.PreferredColorScheme = If(IsDarkMode, CoreWebView2PreferredColorScheme.Dark, CoreWebView2PreferredColorScheme.Light)
+                brws.DefaultBackgroundColor = If(IsDarkMode, DarkFormBg, Color.White)
+                brws.BackColor = If(IsDarkMode, DarkFormBg, LightFormBg)
+                If brws.CoreWebView2 IsNot Nothing Then
+                    brws.CoreWebView2.Profile.PreferredColorScheme = If(IsDarkMode, CoreWebView2PreferredColorScheme.Dark, CoreWebView2PreferredColorScheme.Light)
+                End If
             Catch ex As Exception
                 System.Diagnostics.Debug.WriteLine("Error setting WebView2 PreferredColorScheme: " & ex.Message)
             End Try

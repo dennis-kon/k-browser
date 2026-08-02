@@ -36,4 +36,10 @@ C:\Users\dennis\Documents\GitHub\k-browser\obj\Debug\k-browser.vbproj.Up2Date
 C:\Users\dennis\Documents\GitHub\k-browser\obj\Debug\K-Browser.exe
 C:\Users\dennis\Documents\GitHub\k-browser\obj\Debug\K-Browser.xml
 C:\Users\dennis\Documents\GitHub\k-browser\obj\Debug\K-Browser.pdb
+C:\Users\dennis\Documents\GitHub\k-browser\bin\Debug\K-Browser.exe.manifest
+C:\Users\dennis\Documents\GitHub\k-browser\bin\Debug\K-Browser.application
+C:\Users\dennis\Documents\GitHub\k-browser\obj\Debug\K-Browser.TrustInfo.xml
+C:\Users\dennis\Documents\GitHub\k-browser\obj\Debug\K-Browser.exe.manifest
+C:\Users\dennis\Documents\GitHub\k-browser\obj\Debug\K-Browser.application
 C:\Users\dennis\Documents\GitHub\k-browser\obj\Debug\K-Browser.exe.config
+C:\Users\dennis\Documents\GitHub\k-browser\obj\Debug\Advance_Webbrowser.AdBlockPopup.resources

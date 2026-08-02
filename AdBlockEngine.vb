@@ -3,6 +3,16 @@ Imports System.Net
 Imports System.Text.RegularExpressions
 Imports System.Threading.Tasks
 
+Public Class BlockedTrackerItem
+    Public Property Url As String
+    Public Property Timestamp As DateTime
+
+    Public Sub New(ByVal itemUrl As String, ByVal itemTime As DateTime)
+        Me.Url = itemUrl
+        Me.Timestamp = itemTime
+    End Sub
+End Class
+
 Public Class AdBlockEngine
 
     Private Shared ReadOnly LockObj As New Object()
@@ -30,6 +40,114 @@ Public Class AdBlockEngine
     }
 
     Public Shared Property TotalBlockedCount As Long = 0
+
+    Private Shared ReadOnly TabBlockedItems As New Dictionary(Of Microsoft.Web.WebView2.WinForms.WebView2, List(Of BlockedTrackerItem))()
+
+    Public Shared Sub RecordBlockedItem(ByVal brws As Microsoft.Web.WebView2.WinForms.WebView2, ByVal url As String)
+        SyncLock LockObj
+            TotalBlockedCount += 1
+            If brws IsNot Nothing Then
+                If Not TabBlockedItems.ContainsKey(brws) Then
+                    TabBlockedItems(brws) = New List(Of BlockedTrackerItem)()
+                End If
+                TabBlockedItems(brws).Add(New BlockedTrackerItem(url, DateTime.Now))
+            End If
+        End SyncLock
+    End Sub
+
+    Public Shared Function GetPageBlockedItems(ByVal brws As Microsoft.Web.WebView2.WinForms.WebView2) As List(Of BlockedTrackerItem)
+        SyncLock LockObj
+            If brws IsNot Nothing AndAlso TabBlockedItems.ContainsKey(brws) Then
+                Return New List(Of BlockedTrackerItem)(TabBlockedItems(brws))
+            End If
+            Return New List(Of BlockedTrackerItem)()
+        End SyncLock
+    End Function
+
+    Public Shared Function GetPageBlockedCount(ByVal brws As Microsoft.Web.WebView2.WinForms.WebView2) As Integer
+        SyncLock LockObj
+            If brws IsNot Nothing AndAlso TabBlockedItems.ContainsKey(brws) Then
+                Return TabBlockedItems(brws).Count
+            End If
+            Return 0
+        End SyncLock
+    End Function
+
+    Public Shared Sub ClearTabBlockedItems(ByVal brws As Microsoft.Web.WebView2.WinForms.WebView2)
+        SyncLock LockObj
+            If brws IsNot Nothing AndAlso TabBlockedItems.ContainsKey(brws) Then
+                TabBlockedItems(brws).Clear()
+            End If
+        End SyncLock
+    End Sub
+
+    Public Shared Sub RemoveTab(ByVal brws As Microsoft.Web.WebView2.WinForms.WebView2)
+        SyncLock LockObj
+            If brws IsNot Nothing AndAlso TabBlockedItems.ContainsKey(brws) Then
+                TabBlockedItems.Remove(brws)
+            End If
+        End SyncLock
+    End Sub
+
+    Public Shared Function GetDomain(ByVal url As String) As String
+        If String.IsNullOrWhiteSpace(url) OrElse url = "about:blank" Then Return ""
+        Try
+            Dim uri As New Uri(url)
+            Return uri.Host.ToLowerInvariant()
+        Catch
+            Return url.ToLowerInvariant()
+        End Try
+    End Function
+
+    Public Shared Function IsSiteDisabled(ByVal url As String) As Boolean
+        If String.IsNullOrWhiteSpace(url) OrElse url = "about:blank" Then Return False
+        If My.Settings.AdBlockDisabledSites Is Nothing Then Return False
+
+        Dim host As String = GetDomain(url)
+        If String.IsNullOrEmpty(host) Then Return False
+
+        SyncLock LockObj
+            For Each site As String In My.Settings.AdBlockDisabledSites
+                If Not String.IsNullOrWhiteSpace(site) Then
+                    Dim s As String = site.Trim().ToLowerInvariant()
+                    If host.Equals(s, StringComparison.OrdinalIgnoreCase) OrElse host.EndsWith("." & s, StringComparison.OrdinalIgnoreCase) Then
+                        Return True
+                    End If
+                End If
+            Next
+        End SyncLock
+        Return False
+    End Function
+
+    Public Shared Sub SetSiteDisabled(ByVal url As String, ByVal disabled As Boolean)
+        Dim host As String = GetDomain(url)
+        If String.IsNullOrEmpty(host) Then Return
+
+        If My.Settings.AdBlockDisabledSites Is Nothing Then
+            My.Settings.AdBlockDisabledSites = New System.Collections.Specialized.StringCollection()
+        End If
+
+        SyncLock LockObj
+            Dim existingEntry As String = Nothing
+            For Each site As String In My.Settings.AdBlockDisabledSites
+                If Not String.IsNullOrWhiteSpace(site) AndAlso (host.Equals(site.Trim(), StringComparison.OrdinalIgnoreCase) OrElse site.Trim().Equals(host, StringComparison.OrdinalIgnoreCase)) Then
+                    existingEntry = site
+                    Exit For
+                End If
+            Next
+
+            If disabled Then
+                If existingEntry Is Nothing Then
+                    My.Settings.AdBlockDisabledSites.Add(host)
+                End If
+            Else
+                If existingEntry IsNot Nothing Then
+                    My.Settings.AdBlockDisabledSites.Remove(existingEntry)
+                End If
+            End If
+            My.Settings.Save()
+        End SyncLock
+    End Sub
 
     Private Shared Function GetRulesDirectory() As String
         Dim dirPath As String = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "K-Browser", "AdBlockRules")
@@ -237,6 +355,72 @@ Public Class AdBlockEngine
             System.Diagnostics.Debug.WriteLine("Failed to update list " & listName & ": " & ex.Message)
         End Try
         Return False
+    End Function
+
+    Public Shared Async Function CheckAndAutoUpdateListsAsync() As Task
+        If Not My.Settings.AdBlockerEnabled Then Return
+
+        Dim scheduleOption As Integer = My.Settings.AdBlockUpdateSchedule
+        If scheduleOption <= 0 Then Return
+
+        Dim lastCheckStr As String = My.Settings.AdBlockLastUpdateCheck
+        Dim lastCheckTime As DateTime = DateTime.MinValue
+        If Not String.IsNullOrWhiteSpace(lastCheckStr) Then
+            DateTime.TryParse(lastCheckStr, lastCheckTime)
+        End If
+
+        Dim shouldUpdate As Boolean = False
+        Dim timeSinceLastCheck As TimeSpan = DateTime.Now - lastCheckTime
+
+        Select Case scheduleOption
+            Case 1 ' Every 24 Hours
+                If timeSinceLastCheck.TotalHours >= 24 Then shouldUpdate = True
+            Case 2 ' Every Week (7 Days)
+                If timeSinceLastCheck.TotalDays >= 7 Then shouldUpdate = True
+            Case 3 ' Every Month (30 Days)
+                If timeSinceLastCheck.TotalDays >= 30 Then shouldUpdate = True
+        End Select
+
+        If Not shouldUpdate Then Return
+
+        Try
+            Dim savedConfig As String = My.Settings.FilterListsConfig
+            Dim filterUrls As New Dictionary(Of String, String) From {
+                {"EasyList", "https://easylist.to/easylist/easylist.txt"},
+                {"EasyPrivacy", "https://easylist.to/easylist/easyprivacy.txt"},
+                {"Fanboy's Annoyance", "https://secure.fanboy.co.nz/fanboy-annoyance.txt"}
+            }
+
+            Dim enabledLists As New List(Of String)()
+            If Not String.IsNullOrWhiteSpace(savedConfig) Then
+                Dim entries As String() = savedConfig.Split(";"c)
+                For Each entry As String In entries
+                    Dim parts As String() = entry.Split("|"c)
+                    If parts.Length >= 2 AndAlso parts(1) = "1" Then
+                        enabledLists.Add(parts(0))
+                    End If
+                Next
+            Else
+                enabledLists.AddRange(filterUrls.Keys)
+            End If
+
+            Dim successAny As Boolean = False
+            For Each listName As String In enabledLists
+                If filterUrls.ContainsKey(listName) Then
+                    Dim success As Boolean = Await UpdateFilterListAsync(listName, filterUrls(listName))
+                    If success Then successAny = True
+                End If
+            Next
+
+            If successAny Then
+                LoadAllRules()
+            End If
+
+            My.Settings.AdBlockLastUpdateCheck = DateTime.Now.ToString("yyyy-MM-dd HH:mm")
+            My.Settings.Save()
+        Catch ex As Exception
+            System.Diagnostics.Debug.WriteLine("Background auto-update failed: " & ex.Message)
+        End Try
     End Function
 
 End Class

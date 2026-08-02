@@ -54,7 +54,7 @@ K-Browser
 </member>
 <member name="M:Advance_Webbrowser.ThemeManager.ApplyWebView2Theme(Microsoft.Web.WebView2.WinForms.WebView2)">
  <summary>
- Applies PreferredColorScheme (Dark or Light) to a WebView2 control.
+ Applies PreferredColorScheme (Dark or Light) and background color to a WebView2 control.
  </summary>
 </member>
 <member name="M:Advance_Webbrowser.TabLifecycleManager.OnTabSelectionChanged(System.Windows.Forms.TabControl)">
@@ -85,6 +85,21 @@ K-Browser
 <member name="M:Advance_Webbrowser.UserScriptManager.RegisterScriptsForTabAsync(Microsoft.Web.WebView2.WinForms.WebView2)">
  <summary>
  Registers all loaded UserScripts to automatically execute when documents are created inside WebView2.
+ </summary>
+</member>
+<member name="T:Advance_Webbrowser.SettingsManager">
+ <summary>
+ Provides a centralized event manager to notify forms and background services when browser settings are modified.
+ </summary>
+</member>
+<member name="E:Advance_Webbrowser.SettingsManager.SettingsChanged">
+ <summary>
+ Fired whenever application settings are updated and saved via the Settings dialog.
+ </summary>
+</member>
+<member name="M:Advance_Webbrowser.SettingsManager.NotifySettingsChanged">
+ <summary>
+ Raises the SettingsChanged event to notify active listeners.
  </summary>
 </member>
 <member name="T:Advance_Webbrowser.AdBlockTrie">
