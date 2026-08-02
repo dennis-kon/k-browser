@@ -22,6 +22,15 @@ K-Browser
   resource lookups using this strongly typed resource class.
 </summary>
 </member>
+<member name="M:Advance_Webbrowser.AppManager.CreateBookmarkIcon(System.Int32,System.Boolean,System.Drawing.Color)">
+ <summary>
+ Dynamically generates a high-DPI modern System.Drawing.Bitmap bookmark ribbon icon.
+ </summary>
+ <param name="size">Target width and height of the square bitmap (e.g. 16, 24, 32).</param>
+ <param name="isBookmarked">If true, fills with vibrant active bookmark color (Amber Gold); otherwise Cornflower Blue.</param>
+ <param name="accentColor">Optional custom color override.</param>
+ <returns>A new 32bpp transparent System.Drawing.Bitmap icon.</returns>
+</member>
 <member name="M:Advance_Webbrowser.TabProcessManager.GetSharedEnvironmentAsync">
  <summary>
  Gets or creates the primary shared CoreWebView2Environment configured with Chromium site isolation switches.
