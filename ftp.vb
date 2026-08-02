@@ -41,7 +41,7 @@ Public Class ftp
             resp = CType(requ.GetResponse(), FtpWebResponse)
             respStrm = resp.GetResponseStream()
             SaveFileDialog1.FileName = Path.GetFileName(requ.RequestUri.LocalPath)
-            If (SaveFileDialog1.ShowDialog() = Windows.Forms.DialogResult.OK) Then
+            If (SaveFileDialog1.ShowDialog() = DialogResult.OK) Then
                 fileStrm = File.Create(SaveFileDialog1.FileName)
                 Dim buff(1024) As Byte
                 Dim bytesRead As Integer = 0
@@ -132,13 +132,13 @@ Public Class ftp
     End Sub
 
     Private Sub Button3_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button3.Click
-        If (OpenFileDialog1.ShowDialog() = Windows.Forms.DialogResult.OK) Then
+        If (OpenFileDialog1.ShowDialog() = DialogResult.OK) Then
             uploadFTP(txt_server.Text + "/" + Path.GetFileName(OpenFileDialog1.FileName), OpenFileDialog1.FileName, txt_user.Text, txt_pw.Text)
         End If
     End Sub
 
     Private Sub Button4_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button4.Click
-        If (MessageBox.Show("Do you want realy to delete this file? ", " Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) = Windows.Forms.DialogResult.Yes) Then
+        If (MessageBox.Show("Do you want realy to delete this file? ", " Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) = DialogResult.Yes) Then
             deleteFTP(TextBox4.Text, txt_user.Text, txt_pw.Text)
         End If
     End Sub

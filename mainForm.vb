@@ -63,7 +63,7 @@ Public Class downman
                 Me.SaveFileDialog1.FileName = "downloaded_file"
             End If
 
-            If Me.SaveFileDialog1.ShowDialog() = Windows.Forms.DialogResult.OK Then
+            If Me.SaveFileDialog1.ShowDialog() = DialogResult.OK Then
                 Me.whereToSave = Me.SaveFileDialog1.FileName
                 Me.SaveFileDialog1.FileName = ""
                 Me.Label6.Text = "Save to: " & Me.whereToSave
@@ -84,9 +84,10 @@ Public Class downman
             theRequest = CType(WebRequest.Create(Me.txtFileName.Text.Trim()), HttpWebRequest)
             theResponse = CType(theRequest.GetResponse(), HttpWebResponse)
         Catch ex As Exception
-            MessageBox.Show("An error occurred while downloading this file." & ControlChars.CrLf & _
-                            "1) The File doesn't exist" & ControlChars.CrLf & _
-                            "2) Remote server error: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            Dim errMsg As String = "An error occurred while downloading this file." & vbCrLf &
+                                   "1) The File doesn't exist" & vbCrLf &
+                                   "2) Remote server error: " & ex.Message
+            MessageBox.Show(errMsg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
 
             Dim cancelDelegate As New DownloadCompleteSafe(AddressOf DownloadComplete)
             Me.Invoke(cancelDelegate, True)

@@ -511,7 +511,7 @@ Public Class Form1
     End Sub
 
     Private Sub Form1_MouseClick(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles Me.MouseClick
-        If e.Button = Windows.Forms.MouseButtons.Left Then
+        If e.Button = MouseButtons.Left Then
             ContextMenuStrip1.Show(CType(sender, Control), e.Location)
         End If
     End Sub
@@ -1292,7 +1292,7 @@ Public Class Form1
     Dim mg_direction As String '// Result of gestures
 
     Private Sub Form1_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles Me.MouseDown
-        If e.Button = Windows.Forms.MouseButtons.Right Then '// If it's right.
+        If e.Button = MouseButtons.Right Then '// If it's right.
             mg_enable = True '// Start mouse gesture!
             mg_direction = "" '// Init gestures
             mg_dist = 20 '// 1 gesture per 20 dot moving
@@ -1340,7 +1340,7 @@ Public Class Form1
     End Sub
 
     Private Sub Form1_MouseUp(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles Me.MouseUp
-        If e.Button = Windows.Forms.MouseButtons.Right Then '// If it's right.
+        If e.Button = MouseButtons.Right Then '// If it's right.
             mg_enable = False '// Stop mouse gesture.
             Select Case mg_direction '// Execute gesture.
                 Case "DR" '// Exit

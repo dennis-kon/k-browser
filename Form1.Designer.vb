@@ -22,1201 +22,1194 @@ Partial Class Form1
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-        Me.components = New System.ComponentModel.Container()
+        components = New ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Form1))
-        Me.StatusStrip1 = New System.Windows.Forms.StatusStrip()
-        Me.ProgressBar1 = New System.Windows.Forms.ToolStripProgressBar()
-        Me.Label1 = New System.Windows.Forms.ToolStripStatusLabel()
-        Me.TabControl1 = New System.Windows.Forms.TabControl()
-        Me.ContextMenuStrip1 = New System.Windows.Forms.ContextMenuStrip(Me.components)
-        Me.ShowNavigationToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ShowStatusBarToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ShowMainMenuToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ToolStripMenuItem5 = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ToolStripMenuItem2 = New System.Windows.Forms.ToolStripMenuItem()
-        Me.NewTabToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
-        Me.CloseTabToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ExitToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
-        Me.NotifyIcon1 = New System.Windows.Forms.NotifyIcon(Me.components)
-        Me.FileToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.NewWindowToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ToolStripMenuItem4 = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ToolStripSeparator6 = New System.Windows.Forms.ToolStripSeparator()
-        Me.NewTabToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.DefualtToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.BlancPageToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.HomeToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
-        Me.NewTabToolStripMenuItem2 = New System.Windows.Forms.ToolStripMenuItem()
-        Me.DeleteTabToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
-        Me.OpenFileToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.SaveFileToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ToolStripSeparator3 = New System.Windows.Forms.ToolStripSeparator()
-        Me.ToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ToolStripSeparator8 = New System.Windows.Forms.ToolStripSeparator()
-        Me.PrintToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.PrintPreviewToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ToolStripSeparator4 = New System.Windows.Forms.ToolStripSeparator()
-        Me.ExitToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.EditToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.CutToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.CopyToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.PasteToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.SelectAllToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ToolStripSeparator5 = New System.Windows.Forms.ToolStripSeparator()
-        Me.ZooomToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ZoomInToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ZoomOutToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.SeToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ToolStripSeparator7 = New System.Windows.Forms.ToolStripSeparator()
-        Me.ImageToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.TextReadingToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.mnuLeftToRight = New System.Windows.Forms.ToolStripMenuItem()
-        Me.mnuRightToLeft = New System.Windows.Forms.ToolStripMenuItem()
-        Me.textSizeToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.largestToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.largerToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.mediumToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.smallerToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.smallestToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ViewToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.HistoryToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ToolbarToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.HideMainMenuToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ShowToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.HideBarToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.NavigateToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.BackToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ForwardToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ReloadToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ReloadToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
-        Me.AutoToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.StopToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ToolStripSeparator17 = New System.Windows.Forms.ToolStripSeparator()
-        Me.ToolStripMenuItem3 = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ToolStripSeparator13 = New System.Windows.Forms.ToolStripSeparator()
-        Me.SourceToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.PropertiesToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.DarkModeToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ToolStripSeparator14 = New System.Windows.Forms.ToolStripSeparator()
-        Me.FullScreenToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.CookieToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.BookmarksToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ViewToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
-        Me.BookmarkThisPageToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.LinksToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.BingToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.GoogleToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
-        Me.YahooToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.EBayToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.MSNToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.DuckDuckGoToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.DogpileToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.WebCrawlerToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.LycosToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.VimeoToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.AccuWeatherToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.SocialNetworksToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.FacebookToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.TwitterToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.GoogleToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.LinkedinToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.InstagramToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.BadooToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.VkToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.PinterestToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.FormspringToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.KeekToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ToolsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.SettingsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.DownloadManagerToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.FtpClientToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.TaskToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.SetHomePageToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.MediaToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.CookieViewerToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.SendALinkToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ToolStripSeparator9 = New System.Windows.Forms.ToolStripSeparator()
-        Me.InternetSettingsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ProxySettingsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ToolStripSeparator15 = New System.Windows.Forms.ToolStripSeparator()
-        Me.OpePageInNToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.HelpToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.AboutToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.CheckForUpdatesToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ToolStripSeparator10 = New System.Windows.Forms.ToolStripSeparator()
-        Me.KBrowserToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.SToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ToolStripSeparator16 = New System.Windows.Forms.ToolStripSeparator()
-        Me.CalendarToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
-        Me.ToolStripTextBox2 = New System.Windows.Forms.ToolStripTextBox()
-        Me.Timer1 = New System.Windows.Forms.Timer(Me.components)
-        Me.Back = New System.Windows.Forms.ToolStripButton()
-        Me.ToolStripButton2 = New System.Windows.Forms.ToolStripButton()
-        Me.ToolStripButton3 = New System.Windows.Forms.ToolStripButton()
-        Me.ToolStripButton4 = New System.Windows.Forms.ToolStripButton()
-        Me.ToolStripButton7 = New System.Windows.Forms.ToolStripButton()
-        Me.ToolStripButton6 = New System.Windows.Forms.ToolStripButton()
-        Me.img = New System.Windows.Forms.ToolStripButton()
-        Me.ToolStripTextBox1 = New System.Windows.Forms.ToolStripTextBox()
-        Me.ToolStripButton5 = New System.Windows.Forms.ToolStripButton()
-        Me.ToolStripButton8 = New System.Windows.Forms.ToolStripButton()
-        Me.ToolStripButton9 = New System.Windows.Forms.ToolStripButton()
-        Me.tsbAdBlockBadge = New System.Windows.Forms.ToolStripButton()
-        Me.ToolStrip1 = New System.Windows.Forms.ToolStrip()
-        Me.StatusStrip1.SuspendLayout()
-        Me.ContextMenuStrip1.SuspendLayout()
-        Me.MenuStrip1.SuspendLayout()
-        Me.ToolStrip1.SuspendLayout()
-        Me.SuspendLayout()
-        '
-        'StatusStrip1
-        '
-        Me.StatusStrip1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
-        Me.StatusStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ProgressBar1, Me.Label1})
-        Me.StatusStrip1.Location = New System.Drawing.Point(0, 650)
-        Me.StatusStrip1.Name = "StatusStrip1"
-        Me.StatusStrip1.Size = New System.Drawing.Size(1234, 22)
-        Me.StatusStrip1.TabIndex = 0
-        Me.StatusStrip1.Text = "StatusStrip1"
-        '
-        'ProgressBar1
-        '
-        Me.ProgressBar1.Name = "ProgressBar1"
-        Me.ProgressBar1.Size = New System.Drawing.Size(100, 16)
-        '
-        'Label1
-        '
-        Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(59, 17)
-        Me.Label1.Text = "Loading..."
-        '
-        'TabControl1
-        '
-        Me.TabControl1.AllowDrop = True
-        Me.TabControl1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TabControl1.ContextMenuStrip = Me.ContextMenuStrip1
-        Me.TabControl1.Location = New System.Drawing.Point(0, 66)
-        Me.TabControl1.Multiline = True
-        Me.TabControl1.Name = "TabControl1"
-        Me.TabControl1.SelectedIndex = 0
-        Me.TabControl1.Size = New System.Drawing.Size(1235, 585)
-        Me.TabControl1.TabIndex = 3
-        '
-        'ContextMenuStrip1
-        '
-        Me.ContextMenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ShowNavigationToolStripMenuItem, Me.ShowStatusBarToolStripMenuItem, Me.ShowMainMenuToolStripMenuItem, Me.ToolStripMenuItem5, Me.ToolStripMenuItem2, Me.NewTabToolStripMenuItem1, Me.CloseTabToolStripMenuItem, Me.ExitToolStripMenuItem1})
-        Me.ContextMenuStrip1.Name = "ContextMenuStrip1"
-        Me.ContextMenuStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional
-        Me.ContextMenuStrip1.Size = New System.Drawing.Size(165, 180)
-        '
-        'ShowNavigationToolStripMenuItem
-        '
-        Me.ShowNavigationToolStripMenuItem.Name = "ShowNavigationToolStripMenuItem"
-        Me.ShowNavigationToolStripMenuItem.Size = New System.Drawing.Size(164, 22)
-        Me.ShowNavigationToolStripMenuItem.Text = "Show Navigation"
-        '
-        'ShowStatusBarToolStripMenuItem
-        '
-        Me.ShowStatusBarToolStripMenuItem.Name = "ShowStatusBarToolStripMenuItem"
-        Me.ShowStatusBarToolStripMenuItem.Size = New System.Drawing.Size(164, 22)
-        Me.ShowStatusBarToolStripMenuItem.Text = "Show Status Bar"
-        '
-        'ShowMainMenuToolStripMenuItem
-        '
-        Me.ShowMainMenuToolStripMenuItem.Name = "ShowMainMenuToolStripMenuItem"
-        Me.ShowMainMenuToolStripMenuItem.Size = New System.Drawing.Size(164, 22)
-        Me.ShowMainMenuToolStripMenuItem.Text = "Show Menu"
-        '
-        'ToolStripMenuItem5
-        '
-        Me.ToolStripMenuItem5.Image = CType(resources.GetObject("ToolStripMenuItem5.Image"), System.Drawing.Image)
-        Me.ToolStripMenuItem5.Name = "ToolStripMenuItem5"
-        Me.ToolStripMenuItem5.Size = New System.Drawing.Size(164, 22)
-        Me.ToolStripMenuItem5.Text = "Open page in IE"
-        '
-        'ToolStripMenuItem2
-        '
-        Me.ToolStripMenuItem2.Name = "ToolStripMenuItem2"
-        Me.ToolStripMenuItem2.Size = New System.Drawing.Size(164, 22)
-        Me.ToolStripMenuItem2.Text = "New Window"
-        '
-        'NewTabToolStripMenuItem1
-        '
-        Me.NewTabToolStripMenuItem1.Image = CType(resources.GetObject("NewTabToolStripMenuItem1.Image"), System.Drawing.Image)
-        Me.NewTabToolStripMenuItem1.Name = "NewTabToolStripMenuItem1"
-        Me.NewTabToolStripMenuItem1.Size = New System.Drawing.Size(164, 22)
-        Me.NewTabToolStripMenuItem1.Text = "New tab"
-        '
-        'CloseTabToolStripMenuItem
-        '
-        Me.CloseTabToolStripMenuItem.Image = CType(resources.GetObject("CloseTabToolStripMenuItem.Image"), System.Drawing.Image)
-        Me.CloseTabToolStripMenuItem.Name = "CloseTabToolStripMenuItem"
-        Me.CloseTabToolStripMenuItem.Size = New System.Drawing.Size(164, 22)
-        Me.CloseTabToolStripMenuItem.Text = "Close tab"
-        '
-        'ExitToolStripMenuItem1
-        '
-        Me.ExitToolStripMenuItem1.Name = "ExitToolStripMenuItem1"
-        Me.ExitToolStripMenuItem1.ShortcutKeys = CType((System.Windows.Forms.Keys.Alt Or System.Windows.Forms.Keys.F4), System.Windows.Forms.Keys)
-        Me.ExitToolStripMenuItem1.Size = New System.Drawing.Size(164, 22)
-        Me.ExitToolStripMenuItem1.Text = "Quit "
-        '
-        'NotifyIcon1
-        '
-        Me.NotifyIcon1.BalloonTipText = "Update 4.8.2 is here!"
-        Me.NotifyIcon1.Text = "NotifyIcon1"
-        Me.NotifyIcon1.Visible = True
-        '
-        'FileToolStripMenuItem
-        '
-        Me.FileToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.NewWindowToolStripMenuItem, Me.ToolStripMenuItem4, Me.ToolStripSeparator6, Me.NewTabToolStripMenuItem, Me.DeleteTabToolStripMenuItem, Me.ToolStripSeparator2, Me.OpenFileToolStripMenuItem, Me.SaveFileToolStripMenuItem, Me.ToolStripSeparator3, Me.ToolStripMenuItem1, Me.ToolStripSeparator8, Me.PrintToolStripMenuItem, Me.PrintPreviewToolStripMenuItem, Me.ToolStripSeparator4, Me.ExitToolStripMenuItem})
-        Me.FileToolStripMenuItem.Name = "FileToolStripMenuItem"
-        Me.FileToolStripMenuItem.Size = New System.Drawing.Size(41, 22)
-        Me.FileToolStripMenuItem.Text = "&File"
-        '
-        'NewWindowToolStripMenuItem
-        '
-        Me.NewWindowToolStripMenuItem.Image = CType(resources.GetObject("NewWindowToolStripMenuItem.Image"), System.Drawing.Image)
-        Me.NewWindowToolStripMenuItem.Name = "NewWindowToolStripMenuItem"
-        Me.NewWindowToolStripMenuItem.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.O), System.Windows.Forms.Keys)
-        Me.NewWindowToolStripMenuItem.Size = New System.Drawing.Size(206, 22)
-        Me.NewWindowToolStripMenuItem.Text = "New Window"
-        '
-        'ToolStripMenuItem4
-        '
-        Me.ToolStripMenuItem4.Name = "ToolStripMenuItem4"
-        Me.ToolStripMenuItem4.Size = New System.Drawing.Size(206, 22)
-        Me.ToolStripMenuItem4.Text = "Open Location"
-        '
-        'ToolStripSeparator6
-        '
-        Me.ToolStripSeparator6.Name = "ToolStripSeparator6"
-        Me.ToolStripSeparator6.Size = New System.Drawing.Size(203, 6)
-        '
-        'NewTabToolStripMenuItem
-        '
-        Me.NewTabToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.DefualtToolStripMenuItem, Me.BlancPageToolStripMenuItem, Me.HomeToolStripMenuItem1, Me.NewTabToolStripMenuItem2})
-        Me.NewTabToolStripMenuItem.Name = "NewTabToolStripMenuItem"
-        Me.NewTabToolStripMenuItem.Size = New System.Drawing.Size(206, 22)
-        Me.NewTabToolStripMenuItem.Text = "Add a New Tab "
-        '
-        'DefualtToolStripMenuItem
-        '
-        Me.DefualtToolStripMenuItem.Image = CType(resources.GetObject("DefualtToolStripMenuItem.Image"), System.Drawing.Image)
-        Me.DefualtToolStripMenuItem.Name = "DefualtToolStripMenuItem"
-        Me.DefualtToolStripMenuItem.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.D), System.Windows.Forms.Keys)
-        Me.DefualtToolStripMenuItem.Size = New System.Drawing.Size(221, 22)
-        Me.DefualtToolStripMenuItem.Text = "Default"
-        '
-        'BlancPageToolStripMenuItem
-        '
-        Me.BlancPageToolStripMenuItem.Name = "BlancPageToolStripMenuItem"
-        Me.BlancPageToolStripMenuItem.Size = New System.Drawing.Size(221, 22)
-        Me.BlancPageToolStripMenuItem.Text = "Blank page"
-        '
-        'HomeToolStripMenuItem1
-        '
-        Me.HomeToolStripMenuItem1.Name = "HomeToolStripMenuItem1"
-        Me.HomeToolStripMenuItem1.ShortcutKeys = CType(((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.Shift) _
-            Or System.Windows.Forms.Keys.H), System.Windows.Forms.Keys)
-        Me.HomeToolStripMenuItem1.Size = New System.Drawing.Size(221, 22)
-        Me.HomeToolStripMenuItem1.Text = "Home Page"
-        '
-        'NewTabToolStripMenuItem2
-        '
-        Me.NewTabToolStripMenuItem2.Name = "NewTabToolStripMenuItem2"
-        Me.NewTabToolStripMenuItem2.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.N), System.Windows.Forms.Keys)
-        Me.NewTabToolStripMenuItem2.Size = New System.Drawing.Size(221, 22)
-        Me.NewTabToolStripMenuItem2.Text = "New tab"
-        '
-        'DeleteTabToolStripMenuItem
-        '
-        Me.DeleteTabToolStripMenuItem.Name = "DeleteTabToolStripMenuItem"
-        Me.DeleteTabToolStripMenuItem.Size = New System.Drawing.Size(206, 22)
-        Me.DeleteTabToolStripMenuItem.Text = "Close Tab"
-        '
-        'ToolStripSeparator2
-        '
-        Me.ToolStripSeparator2.Name = "ToolStripSeparator2"
-        Me.ToolStripSeparator2.Size = New System.Drawing.Size(203, 6)
-        '
-        'OpenFileToolStripMenuItem
-        '
-        Me.OpenFileToolStripMenuItem.Name = "OpenFileToolStripMenuItem"
-        Me.OpenFileToolStripMenuItem.Size = New System.Drawing.Size(206, 22)
-        Me.OpenFileToolStripMenuItem.Text = "&Open File"
-        '
-        'SaveFileToolStripMenuItem
-        '
-        Me.SaveFileToolStripMenuItem.Image = CType(resources.GetObject("SaveFileToolStripMenuItem.Image"), System.Drawing.Image)
-        Me.SaveFileToolStripMenuItem.Name = "SaveFileToolStripMenuItem"
-        Me.SaveFileToolStripMenuItem.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.S), System.Windows.Forms.Keys)
-        Me.SaveFileToolStripMenuItem.Size = New System.Drawing.Size(206, 22)
-        Me.SaveFileToolStripMenuItem.Text = "&Save As.."
-        '
-        'ToolStripSeparator3
-        '
-        Me.ToolStripSeparator3.Name = "ToolStripSeparator3"
-        Me.ToolStripSeparator3.Size = New System.Drawing.Size(203, 6)
-        '
-        'ToolStripMenuItem1
-        '
-        Me.ToolStripMenuItem1.Name = "ToolStripMenuItem1"
-        Me.ToolStripMenuItem1.Size = New System.Drawing.Size(206, 22)
-        Me.ToolStripMenuItem1.Text = "Open a Pdf.."
-        '
-        'ToolStripSeparator8
-        '
-        Me.ToolStripSeparator8.Name = "ToolStripSeparator8"
-        Me.ToolStripSeparator8.Size = New System.Drawing.Size(203, 6)
-        '
-        'PrintToolStripMenuItem
-        '
-        Me.PrintToolStripMenuItem.Image = CType(resources.GetObject("PrintToolStripMenuItem.Image"), System.Drawing.Image)
-        Me.PrintToolStripMenuItem.Name = "PrintToolStripMenuItem"
-        Me.PrintToolStripMenuItem.Size = New System.Drawing.Size(206, 22)
-        Me.PrintToolStripMenuItem.Text = "Print"
-        '
-        'PrintPreviewToolStripMenuItem
-        '
-        Me.PrintPreviewToolStripMenuItem.Name = "PrintPreviewToolStripMenuItem"
-        Me.PrintPreviewToolStripMenuItem.Size = New System.Drawing.Size(206, 22)
-        Me.PrintPreviewToolStripMenuItem.Text = "Print Preview"
-        '
-        'ToolStripSeparator4
-        '
-        Me.ToolStripSeparator4.Name = "ToolStripSeparator4"
-        Me.ToolStripSeparator4.Size = New System.Drawing.Size(203, 6)
-        '
-        'ExitToolStripMenuItem
-        '
-        Me.ExitToolStripMenuItem.Image = CType(resources.GetObject("ExitToolStripMenuItem.Image"), System.Drawing.Image)
-        Me.ExitToolStripMenuItem.Name = "ExitToolStripMenuItem"
-        Me.ExitToolStripMenuItem.ShortcutKeys = CType((System.Windows.Forms.Keys.Alt Or System.Windows.Forms.Keys.F4), System.Windows.Forms.Keys)
-        Me.ExitToolStripMenuItem.Size = New System.Drawing.Size(206, 22)
-        Me.ExitToolStripMenuItem.Text = "&Exit K-Browser"
-        '
-        'EditToolStripMenuItem
-        '
-        Me.EditToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.CutToolStripMenuItem, Me.CopyToolStripMenuItem, Me.PasteToolStripMenuItem, Me.SelectAllToolStripMenuItem, Me.ToolStripSeparator5, Me.ZooomToolStripMenuItem, Me.SeToolStripMenuItem, Me.ToolStripSeparator7, Me.ImageToolStripMenuItem, Me.TextReadingToolStripMenuItem, Me.textSizeToolStripMenuItem})
-        Me.EditToolStripMenuItem.Font = New System.Drawing.Font("Tahoma", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(161, Byte))
-        Me.EditToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
-        Me.EditToolStripMenuItem.Name = "EditToolStripMenuItem"
-        Me.EditToolStripMenuItem.Size = New System.Drawing.Size(40, 22)
-        Me.EditToolStripMenuItem.Text = "&Edit"
-        '
-        'CutToolStripMenuItem
-        '
-        Me.CutToolStripMenuItem.Image = CType(resources.GetObject("CutToolStripMenuItem.Image"), System.Drawing.Image)
-        Me.CutToolStripMenuItem.Name = "CutToolStripMenuItem"
-        Me.CutToolStripMenuItem.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.X), System.Windows.Forms.Keys)
-        Me.CutToolStripMenuItem.Size = New System.Drawing.Size(177, 22)
-        Me.CutToolStripMenuItem.Text = "Cut"
-        '
-        'CopyToolStripMenuItem
-        '
-        Me.CopyToolStripMenuItem.Image = CType(resources.GetObject("CopyToolStripMenuItem.Image"), System.Drawing.Image)
-        Me.CopyToolStripMenuItem.Name = "CopyToolStripMenuItem"
-        Me.CopyToolStripMenuItem.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.C), System.Windows.Forms.Keys)
-        Me.CopyToolStripMenuItem.Size = New System.Drawing.Size(177, 22)
-        Me.CopyToolStripMenuItem.Text = "Copy"
-        '
-        'PasteToolStripMenuItem
-        '
-        Me.PasteToolStripMenuItem.Name = "PasteToolStripMenuItem"
-        Me.PasteToolStripMenuItem.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.V), System.Windows.Forms.Keys)
-        Me.PasteToolStripMenuItem.Size = New System.Drawing.Size(177, 22)
-        Me.PasteToolStripMenuItem.Text = "Paste"
-        '
-        'SelectAllToolStripMenuItem
-        '
-        Me.SelectAllToolStripMenuItem.Name = "SelectAllToolStripMenuItem"
-        Me.SelectAllToolStripMenuItem.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.A), System.Windows.Forms.Keys)
-        Me.SelectAllToolStripMenuItem.Size = New System.Drawing.Size(177, 22)
-        Me.SelectAllToolStripMenuItem.Text = "Select All"
-        '
-        'ToolStripSeparator5
-        '
-        Me.ToolStripSeparator5.Name = "ToolStripSeparator5"
-        Me.ToolStripSeparator5.Size = New System.Drawing.Size(174, 6)
-        '
-        'ZooomToolStripMenuItem
-        '
-        Me.ZooomToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ZoomInToolStripMenuItem, Me.ZoomOutToolStripMenuItem})
-        Me.ZooomToolStripMenuItem.Image = CType(resources.GetObject("ZooomToolStripMenuItem.Image"), System.Drawing.Image)
-        Me.ZooomToolStripMenuItem.Name = "ZooomToolStripMenuItem"
-        Me.ZooomToolStripMenuItem.Size = New System.Drawing.Size(177, 22)
-        Me.ZooomToolStripMenuItem.Text = "&Zoom"
-        '
-        'ZoomInToolStripMenuItem
-        '
-        Me.ZoomInToolStripMenuItem.Name = "ZoomInToolStripMenuItem"
-        Me.ZoomInToolStripMenuItem.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.OemMinus), System.Windows.Forms.Keys)
-        Me.ZoomInToolStripMenuItem.Size = New System.Drawing.Size(210, 22)
-        Me.ZoomInToolStripMenuItem.Text = "Zoom In"
-        '
-        'ZoomOutToolStripMenuItem
-        '
-        Me.ZoomOutToolStripMenuItem.Name = "ZoomOutToolStripMenuItem"
-        Me.ZoomOutToolStripMenuItem.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.Oemplus), System.Windows.Forms.Keys)
-        Me.ZoomOutToolStripMenuItem.Size = New System.Drawing.Size(210, 22)
-        Me.ZoomOutToolStripMenuItem.Text = "Zoom Out"
-        '
-        'SeToolStripMenuItem
-        '
-        Me.SeToolStripMenuItem.Name = "SeToolStripMenuItem"
-        Me.SeToolStripMenuItem.Size = New System.Drawing.Size(177, 22)
-        Me.SeToolStripMenuItem.Text = "&Search"
-        '
-        'ToolStripSeparator7
-        '
-        Me.ToolStripSeparator7.Name = "ToolStripSeparator7"
-        Me.ToolStripSeparator7.Size = New System.Drawing.Size(174, 6)
-        '
-        'ImageToolStripMenuItem
-        '
-        Me.ImageToolStripMenuItem.Image = CType(resources.GetObject("ImageToolStripMenuItem.Image"), System.Drawing.Image)
-        Me.ImageToolStripMenuItem.Name = "ImageToolStripMenuItem"
-        Me.ImageToolStripMenuItem.Size = New System.Drawing.Size(177, 22)
-        Me.ImageToolStripMenuItem.Text = "Take a Screenshot"
-        '
-        'TextReadingToolStripMenuItem
-        '
-        Me.TextReadingToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.mnuLeftToRight, Me.mnuRightToLeft})
-        Me.TextReadingToolStripMenuItem.Name = "TextReadingToolStripMenuItem"
-        Me.TextReadingToolStripMenuItem.Size = New System.Drawing.Size(177, 22)
-        Me.TextReadingToolStripMenuItem.Text = "Text Reading"
-        '
-        'mnuLeftToRight
-        '
-        Me.mnuLeftToRight.Checked = True
-        Me.mnuLeftToRight.CheckOnClick = True
-        Me.mnuLeftToRight.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.mnuLeftToRight.Name = "mnuLeftToRight"
-        Me.mnuLeftToRight.Size = New System.Drawing.Size(147, 22)
-        Me.mnuLeftToRight.Text = "Left To Right"
-        '
-        'mnuRightToLeft
-        '
-        Me.mnuRightToLeft.CheckOnClick = True
-        Me.mnuRightToLeft.Name = "mnuRightToLeft"
-        Me.mnuRightToLeft.Size = New System.Drawing.Size(147, 22)
-        Me.mnuRightToLeft.Text = "Right To Left"
-        '
-        'textSizeToolStripMenuItem
-        '
-        Me.textSizeToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.largestToolStripMenuItem, Me.largerToolStripMenuItem, Me.mediumToolStripMenuItem, Me.smallerToolStripMenuItem, Me.smallestToolStripMenuItem})
-        Me.textSizeToolStripMenuItem.Name = "textSizeToolStripMenuItem"
-        Me.textSizeToolStripMenuItem.Size = New System.Drawing.Size(177, 22)
-        Me.textSizeToolStripMenuItem.Text = "Selected Text Size"
-        '
-        'largestToolStripMenuItem
-        '
-        Me.largestToolStripMenuItem.Name = "largestToolStripMenuItem"
-        Me.largestToolStripMenuItem.Size = New System.Drawing.Size(118, 22)
-        Me.largestToolStripMenuItem.Text = "Largest"
-        '
-        'largerToolStripMenuItem
-        '
-        Me.largerToolStripMenuItem.Name = "largerToolStripMenuItem"
-        Me.largerToolStripMenuItem.Size = New System.Drawing.Size(118, 22)
-        Me.largerToolStripMenuItem.Text = "Larger"
-        '
-        'mediumToolStripMenuItem
-        '
-        Me.mediumToolStripMenuItem.Name = "mediumToolStripMenuItem"
-        Me.mediumToolStripMenuItem.Size = New System.Drawing.Size(118, 22)
-        Me.mediumToolStripMenuItem.Text = "Medium"
-        '
-        'smallerToolStripMenuItem
-        '
-        Me.smallerToolStripMenuItem.Name = "smallerToolStripMenuItem"
-        Me.smallerToolStripMenuItem.Size = New System.Drawing.Size(118, 22)
-        Me.smallerToolStripMenuItem.Text = "Smaller"
-        '
-        'smallestToolStripMenuItem
-        '
-        Me.smallestToolStripMenuItem.Name = "smallestToolStripMenuItem"
-        Me.smallestToolStripMenuItem.Size = New System.Drawing.Size(118, 22)
-        Me.smallestToolStripMenuItem.Text = "Smallest"
-        '
-        'ViewToolStripMenuItem
-        '
-        Me.ViewToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.HistoryToolStripMenuItem, Me.ToolbarToolStripMenuItem, Me.NavigateToolStripMenuItem, Me.ToolStripSeparator13, Me.SourceToolStripMenuItem, Me.PropertiesToolStripMenuItem, Me.DarkModeToolStripMenuItem, Me.ToolStripSeparator14, Me.FullScreenToolStripMenuItem})
-        Me.ViewToolStripMenuItem.Name = "ViewToolStripMenuItem"
-        Me.ViewToolStripMenuItem.Size = New System.Drawing.Size(47, 22)
-        Me.ViewToolStripMenuItem.Text = "&View"
-        '
-        'HistoryToolStripMenuItem
-        '
-        Me.HistoryToolStripMenuItem.Image = CType(resources.GetObject("HistoryToolStripMenuItem.Image"), System.Drawing.Image)
-        Me.HistoryToolStripMenuItem.Name = "HistoryToolStripMenuItem"
-        Me.HistoryToolStripMenuItem.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.H), System.Windows.Forms.Keys)
-        Me.HistoryToolStripMenuItem.Size = New System.Drawing.Size(178, 22)
-        Me.HistoryToolStripMenuItem.Text = "History"
-        '
-        'ToolbarToolStripMenuItem
-        '
-        Me.ToolbarToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.HideMainMenuToolStripMenuItem, Me.ShowToolStripMenuItem, Me.HideBarToolStripMenuItem})
-        Me.ToolbarToolStripMenuItem.Name = "ToolbarToolStripMenuItem"
-        Me.ToolbarToolStripMenuItem.Size = New System.Drawing.Size(178, 22)
-        Me.ToolbarToolStripMenuItem.Text = "Toolbars"
-        '
-        'HideMainMenuToolStripMenuItem
-        '
-        Me.HideMainMenuToolStripMenuItem.Name = "HideMainMenuToolStripMenuItem"
-        Me.HideMainMenuToolStripMenuItem.Size = New System.Drawing.Size(193, 22)
-        Me.HideMainMenuToolStripMenuItem.Text = "Hide Menu Bar"
-        '
-        'ShowToolStripMenuItem
-        '
-        Me.ShowToolStripMenuItem.Name = "ShowToolStripMenuItem"
-        Me.ShowToolStripMenuItem.Size = New System.Drawing.Size(193, 22)
-        Me.ShowToolStripMenuItem.Text = "Hide Navigation bar"
-        '
-        'HideBarToolStripMenuItem
-        '
-        Me.HideBarToolStripMenuItem.Name = "HideBarToolStripMenuItem"
-        Me.HideBarToolStripMenuItem.Size = New System.Drawing.Size(193, 22)
-        Me.HideBarToolStripMenuItem.Text = "Hide Status Bar"
-        '
-        'NavigateToolStripMenuItem
-        '
-        Me.NavigateToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.BackToolStripMenuItem, Me.ForwardToolStripMenuItem, Me.ReloadToolStripMenuItem, Me.StopToolStripMenuItem1, Me.ToolStripSeparator17, Me.ToolStripMenuItem3})
-        Me.NavigateToolStripMenuItem.Name = "NavigateToolStripMenuItem"
-        Me.NavigateToolStripMenuItem.Size = New System.Drawing.Size(178, 22)
-        Me.NavigateToolStripMenuItem.Text = "Navigate"
-        '
-        'BackToolStripMenuItem
-        '
-        Me.BackToolStripMenuItem.Image = CType(resources.GetObject("BackToolStripMenuItem.Image"), System.Drawing.Image)
-        Me.BackToolStripMenuItem.Name = "BackToolStripMenuItem"
-        Me.BackToolStripMenuItem.Size = New System.Drawing.Size(221, 22)
-        Me.BackToolStripMenuItem.Text = "Back"
-        '
-        'ForwardToolStripMenuItem
-        '
-        Me.ForwardToolStripMenuItem.Image = CType(resources.GetObject("ForwardToolStripMenuItem.Image"), System.Drawing.Image)
-        Me.ForwardToolStripMenuItem.Name = "ForwardToolStripMenuItem"
-        Me.ForwardToolStripMenuItem.Size = New System.Drawing.Size(221, 22)
-        Me.ForwardToolStripMenuItem.Text = "Forward"
-        '
-        'ReloadToolStripMenuItem
-        '
-        Me.ReloadToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ReloadToolStripMenuItem1, Me.AutoToolStripMenuItem})
-        Me.ReloadToolStripMenuItem.Name = "ReloadToolStripMenuItem"
-        Me.ReloadToolStripMenuItem.Size = New System.Drawing.Size(221, 22)
-        Me.ReloadToolStripMenuItem.Text = "Reload"
-        '
-        'ReloadToolStripMenuItem1
-        '
-        Me.ReloadToolStripMenuItem1.Image = CType(resources.GetObject("ReloadToolStripMenuItem1.Image"), System.Drawing.Image)
-        Me.ReloadToolStripMenuItem1.Name = "ReloadToolStripMenuItem1"
-        Me.ReloadToolStripMenuItem1.ShortcutKeys = System.Windows.Forms.Keys.F5
-        Me.ReloadToolStripMenuItem1.Size = New System.Drawing.Size(186, 22)
-        Me.ReloadToolStripMenuItem1.Text = "Reload"
-        '
-        'AutoToolStripMenuItem
-        '
-        Me.AutoToolStripMenuItem.CheckOnClick = True
-        Me.AutoToolStripMenuItem.Name = "AutoToolStripMenuItem"
-        Me.AutoToolStripMenuItem.Size = New System.Drawing.Size(186, 22)
-        Me.AutoToolStripMenuItem.Text = "Auto Reload  10sec"
-        '
-        'StopToolStripMenuItem1
-        '
-        Me.StopToolStripMenuItem1.Image = CType(resources.GetObject("StopToolStripMenuItem1.Image"), System.Drawing.Image)
-        Me.StopToolStripMenuItem1.Name = "StopToolStripMenuItem1"
-        Me.StopToolStripMenuItem1.Size = New System.Drawing.Size(221, 22)
-        Me.StopToolStripMenuItem1.Text = "Stop"
-        '
-        'ToolStripSeparator17
-        '
-        Me.ToolStripSeparator17.Name = "ToolStripSeparator17"
-        Me.ToolStripSeparator17.Size = New System.Drawing.Size(218, 6)
-        '
-        'ToolStripMenuItem3
-        '
-        Me.ToolStripMenuItem3.Image = CType(resources.GetObject("ToolStripMenuItem3.Image"), System.Drawing.Image)
-        Me.ToolStripMenuItem3.Name = "ToolStripMenuItem3"
-        Me.ToolStripMenuItem3.ShortcutKeys = CType(((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.Shift) _
-            Or System.Windows.Forms.Keys.H), System.Windows.Forms.Keys)
-        Me.ToolStripMenuItem3.Size = New System.Drawing.Size(221, 22)
-        Me.ToolStripMenuItem3.Text = "Home Page"
-        '
-        'ToolStripSeparator13
-        '
-        Me.ToolStripSeparator13.Name = "ToolStripSeparator13"
-        Me.ToolStripSeparator13.Size = New System.Drawing.Size(175, 6)
-        '
-        'SourceToolStripMenuItem
-        '
-        Me.SourceToolStripMenuItem.Name = "SourceToolStripMenuItem"
-        Me.SourceToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F4
-        Me.SourceToolStripMenuItem.Size = New System.Drawing.Size(178, 22)
-        Me.SourceToolStripMenuItem.Text = "Source"
-        '
-        'PropertiesToolStripMenuItem
-        '
-        Me.PropertiesToolStripMenuItem.Name = "PropertiesToolStripMenuItem"
-        Me.PropertiesToolStripMenuItem.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.P), System.Windows.Forms.Keys)
-        Me.PropertiesToolStripMenuItem.Size = New System.Drawing.Size(178, 22)
-        Me.PropertiesToolStripMenuItem.Text = "Properties"
-        '
-        'DarkModeToolStripMenuItem
-        '
-        Me.DarkModeToolStripMenuItem.Name = "DarkModeToolStripMenuItem"
-        Me.DarkModeToolStripMenuItem.Size = New System.Drawing.Size(178, 22)
-        Me.DarkModeToolStripMenuItem.Text = "🌙 Dark Mode"
-        '
-        'ToolStripSeparator14
-        '
-        Me.ToolStripSeparator14.Name = "ToolStripSeparator14"
-        Me.ToolStripSeparator14.Size = New System.Drawing.Size(175, 6)
-        '
-        'FullScreenToolStripMenuItem
-        '
-        Me.FullScreenToolStripMenuItem.Name = "FullScreenToolStripMenuItem"
-        Me.FullScreenToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F11
-        Me.FullScreenToolStripMenuItem.Size = New System.Drawing.Size(178, 22)
-        Me.FullScreenToolStripMenuItem.Text = "Full Screen"
-        '
-        'CookieToolStripMenuItem
-        '
-        Me.CookieToolStripMenuItem.Image = CType(resources.GetObject("CookieToolStripMenuItem.Image"), System.Drawing.Image)
-        Me.CookieToolStripMenuItem.Name = "CookieToolStripMenuItem"
-        Me.CookieToolStripMenuItem.Size = New System.Drawing.Size(169, 22)
-        Me.CookieToolStripMenuItem.Text = "Cookie Viewer"
-        '
-        'BookmarksToolStripMenuItem
-        '
-        Me.BookmarksToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ViewToolStripMenuItem1, Me.ToolStripSeparator1, Me.BookmarkThisPageToolStripMenuItem})
-        Me.BookmarksToolStripMenuItem.Name = "BookmarksToolStripMenuItem"
-        Me.BookmarksToolStripMenuItem.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.B), System.Windows.Forms.Keys)
-        Me.BookmarksToolStripMenuItem.Size = New System.Drawing.Size(84, 22)
-        Me.BookmarksToolStripMenuItem.Text = "&Bookmarks"
-        '
-        'ViewToolStripMenuItem1
-        '
-        Me.ViewToolStripMenuItem1.Image = CType(resources.GetObject("ViewToolStripMenuItem1.Image"), System.Drawing.Image)
-        Me.ViewToolStripMenuItem1.Name = "ViewToolStripMenuItem1"
-        Me.ViewToolStripMenuItem1.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.B), System.Windows.Forms.Keys)
-        Me.ViewToolStripMenuItem1.Size = New System.Drawing.Size(194, 22)
-        Me.ViewToolStripMenuItem1.Text = "View"
-        '
-        'ToolStripSeparator1
-        '
-        Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
-        Me.ToolStripSeparator1.Size = New System.Drawing.Size(191, 6)
-        '
-        'BookmarkThisPageToolStripMenuItem
-        '
-        Me.BookmarkThisPageToolStripMenuItem.Name = "BookmarkThisPageToolStripMenuItem"
-        Me.BookmarkThisPageToolStripMenuItem.Size = New System.Drawing.Size(194, 22)
-        Me.BookmarkThisPageToolStripMenuItem.Text = "Bookmark This Page"
-        '
-        'LinksToolStripMenuItem
-        '
-        Me.LinksToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.BingToolStripMenuItem, Me.GoogleToolStripMenuItem1, Me.YahooToolStripMenuItem, Me.EBayToolStripMenuItem, Me.MSNToolStripMenuItem, Me.DuckDuckGoToolStripMenuItem, Me.DogpileToolStripMenuItem, Me.WebCrawlerToolStripMenuItem, Me.LycosToolStripMenuItem, Me.VimeoToolStripMenuItem, Me.AccuWeatherToolStripMenuItem})
-        Me.LinksToolStripMenuItem.Image = CType(resources.GetObject("LinksToolStripMenuItem.Image"), System.Drawing.Image)
-        Me.LinksToolStripMenuItem.Name = "LinksToolStripMenuItem"
-        Me.LinksToolStripMenuItem.Size = New System.Drawing.Size(185, 22)
-        Me.LinksToolStripMenuItem.Text = "Web search engines"
-        '
-        'BingToolStripMenuItem
-        '
-        Me.BingToolStripMenuItem.Image = CType(resources.GetObject("BingToolStripMenuItem.Image"), System.Drawing.Image)
-        Me.BingToolStripMenuItem.Name = "BingToolStripMenuItem"
-        Me.BingToolStripMenuItem.Size = New System.Drawing.Size(145, 22)
-        Me.BingToolStripMenuItem.Text = "Bing"
-        '
-        'GoogleToolStripMenuItem1
-        '
-        Me.GoogleToolStripMenuItem1.Image = CType(resources.GetObject("GoogleToolStripMenuItem1.Image"), System.Drawing.Image)
-        Me.GoogleToolStripMenuItem1.Name = "GoogleToolStripMenuItem1"
-        Me.GoogleToolStripMenuItem1.Size = New System.Drawing.Size(145, 22)
-        Me.GoogleToolStripMenuItem1.Text = "Google"
-        '
-        'YahooToolStripMenuItem
-        '
-        Me.YahooToolStripMenuItem.Image = CType(resources.GetObject("YahooToolStripMenuItem.Image"), System.Drawing.Image)
-        Me.YahooToolStripMenuItem.Name = "YahooToolStripMenuItem"
-        Me.YahooToolStripMenuItem.Size = New System.Drawing.Size(145, 22)
-        Me.YahooToolStripMenuItem.Text = "Yahoo"
-        '
-        'EBayToolStripMenuItem
-        '
-        Me.EBayToolStripMenuItem.Image = CType(resources.GetObject("EBayToolStripMenuItem.Image"), System.Drawing.Image)
-        Me.EBayToolStripMenuItem.Name = "EBayToolStripMenuItem"
-        Me.EBayToolStripMenuItem.Size = New System.Drawing.Size(145, 22)
-        Me.EBayToolStripMenuItem.Text = "eBay"
-        '
-        'MSNToolStripMenuItem
-        '
-        Me.MSNToolStripMenuItem.Image = CType(resources.GetObject("MSNToolStripMenuItem.Image"), System.Drawing.Image)
-        Me.MSNToolStripMenuItem.Name = "MSNToolStripMenuItem"
-        Me.MSNToolStripMenuItem.Size = New System.Drawing.Size(145, 22)
-        Me.MSNToolStripMenuItem.Text = "MSN Search"
-        '
-        'DuckDuckGoToolStripMenuItem
-        '
-        Me.DuckDuckGoToolStripMenuItem.Image = CType(resources.GetObject("DuckDuckGoToolStripMenuItem.Image"), System.Drawing.Image)
-        Me.DuckDuckGoToolStripMenuItem.Name = "DuckDuckGoToolStripMenuItem"
-        Me.DuckDuckGoToolStripMenuItem.Size = New System.Drawing.Size(145, 22)
-        Me.DuckDuckGoToolStripMenuItem.Text = "DuckDuckGo"
-        '
-        'DogpileToolStripMenuItem
-        '
-        Me.DogpileToolStripMenuItem.Image = CType(resources.GetObject("DogpileToolStripMenuItem.Image"), System.Drawing.Image)
-        Me.DogpileToolStripMenuItem.Name = "DogpileToolStripMenuItem"
-        Me.DogpileToolStripMenuItem.Size = New System.Drawing.Size(145, 22)
-        Me.DogpileToolStripMenuItem.Text = "Dogpile"
-        '
-        'WebCrawlerToolStripMenuItem
-        '
-        Me.WebCrawlerToolStripMenuItem.Image = CType(resources.GetObject("WebCrawlerToolStripMenuItem.Image"), System.Drawing.Image)
-        Me.WebCrawlerToolStripMenuItem.Name = "WebCrawlerToolStripMenuItem"
-        Me.WebCrawlerToolStripMenuItem.Size = New System.Drawing.Size(145, 22)
-        Me.WebCrawlerToolStripMenuItem.Text = "WebCrawler"
-        '
-        'LycosToolStripMenuItem
-        '
-        Me.LycosToolStripMenuItem.Image = CType(resources.GetObject("LycosToolStripMenuItem.Image"), System.Drawing.Image)
-        Me.LycosToolStripMenuItem.Name = "LycosToolStripMenuItem"
-        Me.LycosToolStripMenuItem.Size = New System.Drawing.Size(145, 22)
-        Me.LycosToolStripMenuItem.Text = "Lycos"
-        '
-        'VimeoToolStripMenuItem
-        '
-        Me.VimeoToolStripMenuItem.Image = CType(resources.GetObject("VimeoToolStripMenuItem.Image"), System.Drawing.Image)
-        Me.VimeoToolStripMenuItem.Name = "VimeoToolStripMenuItem"
-        Me.VimeoToolStripMenuItem.Size = New System.Drawing.Size(145, 22)
-        Me.VimeoToolStripMenuItem.Text = "Vimeo"
-        '
-        'AccuWeatherToolStripMenuItem
-        '
-        Me.AccuWeatherToolStripMenuItem.Name = "AccuWeatherToolStripMenuItem"
-        Me.AccuWeatherToolStripMenuItem.Size = New System.Drawing.Size(145, 22)
-        Me.AccuWeatherToolStripMenuItem.Text = "AccuWeather"
-        '
-        'SocialNetworksToolStripMenuItem
-        '
-        Me.SocialNetworksToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.FacebookToolStripMenuItem, Me.TwitterToolStripMenuItem, Me.GoogleToolStripMenuItem, Me.LinkedinToolStripMenuItem, Me.InstagramToolStripMenuItem, Me.BadooToolStripMenuItem, Me.VkToolStripMenuItem, Me.PinterestToolStripMenuItem, Me.FormspringToolStripMenuItem, Me.KeekToolStripMenuItem})
-        Me.SocialNetworksToolStripMenuItem.Image = CType(resources.GetObject("SocialNetworksToolStripMenuItem.Image"), System.Drawing.Image)
-        Me.SocialNetworksToolStripMenuItem.Name = "SocialNetworksToolStripMenuItem"
-        Me.SocialNetworksToolStripMenuItem.Size = New System.Drawing.Size(185, 22)
-        Me.SocialNetworksToolStripMenuItem.Text = "Social Networks "
-        '
-        'FacebookToolStripMenuItem
-        '
-        Me.FacebookToolStripMenuItem.Image = CType(resources.GetObject("FacebookToolStripMenuItem.Image"), System.Drawing.Image)
-        Me.FacebookToolStripMenuItem.Name = "FacebookToolStripMenuItem"
-        Me.FacebookToolStripMenuItem.Size = New System.Drawing.Size(135, 22)
-        Me.FacebookToolStripMenuItem.Text = "Facebook"
-        Me.FacebookToolStripMenuItem.ToolTipText = "Facebook is a social utility that connects people with friends and others who wor" &
-    "k, study and live around them."
-        '
-        'TwitterToolStripMenuItem
-        '
-        Me.TwitterToolStripMenuItem.Image = CType(resources.GetObject("TwitterToolStripMenuItem.Image"), System.Drawing.Image)
-        Me.TwitterToolStripMenuItem.Name = "TwitterToolStripMenuItem"
-        Me.TwitterToolStripMenuItem.Size = New System.Drawing.Size(135, 22)
-        Me.TwitterToolStripMenuItem.Text = "Twitter"
-        Me.TwitterToolStripMenuItem.ToolTipText = "Instantly connect to what's most important to you. Follow your friends, experts, " &
-    "favorite celebrities, and breaking news."
-        '
-        'GoogleToolStripMenuItem
-        '
-        Me.GoogleToolStripMenuItem.Image = CType(resources.GetObject("GoogleToolStripMenuItem.Image"), System.Drawing.Image)
-        Me.GoogleToolStripMenuItem.Name = "GoogleToolStripMenuItem"
-        Me.GoogleToolStripMenuItem.Size = New System.Drawing.Size(135, 22)
-        Me.GoogleToolStripMenuItem.Text = "Google+"
-        Me.GoogleToolStripMenuItem.ToolTipText = "Connect with friends and family, explore your interests, and see how all of Googl" &
-    "e gets better."
-        '
-        'LinkedinToolStripMenuItem
-        '
-        Me.LinkedinToolStripMenuItem.Image = CType(resources.GetObject("LinkedinToolStripMenuItem.Image"), System.Drawing.Image)
-        Me.LinkedinToolStripMenuItem.Name = "LinkedinToolStripMenuItem"
-        Me.LinkedinToolStripMenuItem.Size = New System.Drawing.Size(135, 22)
-        Me.LinkedinToolStripMenuItem.Text = "LinkedIn"
-        Me.LinkedinToolStripMenuItem.ToolTipText = "Manage your professional identity. Build and engage with your professional networ" &
-    "k. Access knowledge, insights and opportunities."
-        '
-        'InstagramToolStripMenuItem
-        '
-        Me.InstagramToolStripMenuItem.Image = CType(resources.GetObject("InstagramToolStripMenuItem.Image"), System.Drawing.Image)
-        Me.InstagramToolStripMenuItem.Name = "InstagramToolStripMenuItem"
-        Me.InstagramToolStripMenuItem.Size = New System.Drawing.Size(135, 22)
-        Me.InstagramToolStripMenuItem.Text = "Instagram"
-        '
-        'BadooToolStripMenuItem
-        '
-        Me.BadooToolStripMenuItem.Image = CType(resources.GetObject("BadooToolStripMenuItem.Image"), System.Drawing.Image)
-        Me.BadooToolStripMenuItem.Name = "BadooToolStripMenuItem"
-        Me.BadooToolStripMenuItem.Size = New System.Drawing.Size(135, 22)
-        Me.BadooToolStripMenuItem.Text = "Badoo"
-        Me.BadooToolStripMenuItem.ToolTipText = "Meet People on Badoo, Make New Friends, Chat, Flirt"
-        '
-        'VkToolStripMenuItem
-        '
-        Me.VkToolStripMenuItem.Image = CType(resources.GetObject("VkToolStripMenuItem.Image"), System.Drawing.Image)
-        Me.VkToolStripMenuItem.Name = "VkToolStripMenuItem"
-        Me.VkToolStripMenuItem.Size = New System.Drawing.Size(135, 22)
-        Me.VkToolStripMenuItem.Text = "VK"
-        Me.VkToolStripMenuItem.ToolTipText = "VK is the largest European social network with over a 100 million active users, e" &
-    "specially in Russia, Ukraine, Kazakhstan, Moldova, Belarus and more.."
-        '
-        'PinterestToolStripMenuItem
-        '
-        Me.PinterestToolStripMenuItem.Image = CType(resources.GetObject("PinterestToolStripMenuItem.Image"), System.Drawing.Image)
-        Me.PinterestToolStripMenuItem.Name = "PinterestToolStripMenuItem"
-        Me.PinterestToolStripMenuItem.Size = New System.Drawing.Size(135, 22)
-        Me.PinterestToolStripMenuItem.Text = "Pinterest"
-        Me.PinterestToolStripMenuItem.ToolTipText = "A content sharing service that allows members to ""pin"" images, videos and other o" &
-    "bjects to their pinboard"
-        '
-        'FormspringToolStripMenuItem
-        '
-        Me.FormspringToolStripMenuItem.Image = CType(resources.GetObject("FormspringToolStripMenuItem.Image"), System.Drawing.Image)
-        Me.FormspringToolStripMenuItem.Name = "FormspringToolStripMenuItem"
-        Me.FormspringToolStripMenuItem.Size = New System.Drawing.Size(135, 22)
-        Me.FormspringToolStripMenuItem.Text = "Formspring"
-        Me.FormspringToolStripMenuItem.ToolTipText = "The place to share your perspective on anything"
-        '
-        'KeekToolStripMenuItem
-        '
-        Me.KeekToolStripMenuItem.Image = CType(resources.GetObject("KeekToolStripMenuItem.Image"), System.Drawing.Image)
-        Me.KeekToolStripMenuItem.Name = "KeekToolStripMenuItem"
-        Me.KeekToolStripMenuItem.Size = New System.Drawing.Size(135, 22)
-        Me.KeekToolStripMenuItem.Text = "Keek"
-        Me.KeekToolStripMenuItem.ToolTipText = "Share Quick Video Updates With Friends"
-        '
-        'ToolsToolStripMenuItem
-        '
-        Me.ToolsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.SettingsToolStripMenuItem, Me.DownloadManagerToolStripMenuItem, Me.FtpClientToolStripMenuItem, Me.TaskToolStripMenuItem})
-        Me.ToolsToolStripMenuItem.Name = "ToolsToolStripMenuItem"
-        Me.ToolsToolStripMenuItem.Size = New System.Drawing.Size(49, 22)
-        Me.ToolsToolStripMenuItem.Text = "&Tools"
-        '
-        'SettingsToolStripMenuItem
-        '
-        Me.SettingsToolStripMenuItem.Image = CType(resources.GetObject("SettingsToolStripMenuItem.Image"), System.Drawing.Image)
-        Me.SettingsToolStripMenuItem.Name = "SettingsToolStripMenuItem"
-        Me.SettingsToolStripMenuItem.Size = New System.Drawing.Size(229, 22)
-        Me.SettingsToolStripMenuItem.Text = "Browser &Settings"
-        '
-        'DownloadManagerToolStripMenuItem
-        '
-        Me.DownloadManagerToolStripMenuItem.Image = CType(resources.GetObject("DownloadManagerToolStripMenuItem.Image"), System.Drawing.Image)
-        Me.DownloadManagerToolStripMenuItem.Name = "DownloadManagerToolStripMenuItem"
-        Me.DownloadManagerToolStripMenuItem.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.D), System.Windows.Forms.Keys)
-        Me.DownloadManagerToolStripMenuItem.Size = New System.Drawing.Size(229, 22)
-        Me.DownloadManagerToolStripMenuItem.Text = "Download Manager"
-        '
-        'FtpClientToolStripMenuItem
-        '
-        Me.FtpClientToolStripMenuItem.Image = CType(resources.GetObject("FtpClientToolStripMenuItem.Image"), System.Drawing.Image)
-        Me.FtpClientToolStripMenuItem.Name = "FtpClientToolStripMenuItem"
-        Me.FtpClientToolStripMenuItem.Size = New System.Drawing.Size(229, 22)
-        Me.FtpClientToolStripMenuItem.Text = "Ftp Client"
-        '
-        'TaskToolStripMenuItem
-        '
-        Me.TaskToolStripMenuItem.Image = CType(resources.GetObject("TaskToolStripMenuItem.Image"), System.Drawing.Image)
-        Me.TaskToolStripMenuItem.Name = "TaskToolStripMenuItem"
-        Me.TaskToolStripMenuItem.Size = New System.Drawing.Size(229, 22)
-        Me.TaskToolStripMenuItem.Text = "Cpu Task"
-        '
-        'SetHomePageToolStripMenuItem
-        '
-        Me.SetHomePageToolStripMenuItem.Image = CType(resources.GetObject("SetHomePageToolStripMenuItem.Image"), System.Drawing.Image)
-        Me.SetHomePageToolStripMenuItem.Name = "SetHomePageToolStripMenuItem"
-        Me.SetHomePageToolStripMenuItem.Size = New System.Drawing.Size(219, 22)
-        Me.SetHomePageToolStripMenuItem.Text = "Rss Reader"
-        '
-        'MediaToolStripMenuItem
-        '
-        Me.MediaToolStripMenuItem.Image = CType(resources.GetObject("MediaToolStripMenuItem.Image"), System.Drawing.Image)
-        Me.MediaToolStripMenuItem.Name = "MediaToolStripMenuItem"
-        Me.MediaToolStripMenuItem.Size = New System.Drawing.Size(219, 22)
-        Me.MediaToolStripMenuItem.Text = "Media player"
-        '
-        'CookieViewerToolStripMenuItem
-        '
-        Me.CookieViewerToolStripMenuItem.Image = CType(resources.GetObject("CookieViewerToolStripMenuItem.Image"), System.Drawing.Image)
-        Me.CookieViewerToolStripMenuItem.Name = "CookieViewerToolStripMenuItem"
-        Me.CookieViewerToolStripMenuItem.Size = New System.Drawing.Size(219, 22)
-        Me.CookieViewerToolStripMenuItem.Text = "Clear All Recent Data"
-        '
-        'SendALinkToolStripMenuItem
-        '
-        Me.SendALinkToolStripMenuItem.Image = CType(resources.GetObject("SendALinkToolStripMenuItem.Image"), System.Drawing.Image)
-        Me.SendALinkToolStripMenuItem.Name = "SendALinkToolStripMenuItem"
-        Me.SendALinkToolStripMenuItem.Size = New System.Drawing.Size(219, 22)
-        Me.SendALinkToolStripMenuItem.Text = "Send Link.."
-        '
-        'ToolStripSeparator9
-        '
-        Me.ToolStripSeparator9.Name = "ToolStripSeparator9"
-        Me.ToolStripSeparator9.Size = New System.Drawing.Size(216, 6)
-        '
-        'InternetSettingsToolStripMenuItem
-        '
-        Me.InternetSettingsToolStripMenuItem.Image = CType(resources.GetObject("InternetSettingsToolStripMenuItem.Image"), System.Drawing.Image)
-        Me.InternetSettingsToolStripMenuItem.Name = "InternetSettingsToolStripMenuItem"
-        Me.InternetSettingsToolStripMenuItem.Size = New System.Drawing.Size(219, 22)
-        Me.InternetSettingsToolStripMenuItem.Text = "Internet Settings"
-        '
-        'ProxySettingsToolStripMenuItem
-        '
-        Me.ProxySettingsToolStripMenuItem.Image = CType(resources.GetObject("ProxySettingsToolStripMenuItem.Image"), System.Drawing.Image)
-        Me.ProxySettingsToolStripMenuItem.Name = "ProxySettingsToolStripMenuItem"
-        Me.ProxySettingsToolStripMenuItem.Size = New System.Drawing.Size(219, 22)
-        Me.ProxySettingsToolStripMenuItem.Text = "Proxy"
-        '
-        'ToolStripSeparator15
-        '
-        Me.ToolStripSeparator15.Name = "ToolStripSeparator15"
-        Me.ToolStripSeparator15.Size = New System.Drawing.Size(216, 6)
-        '
-        'OpePageInNToolStripMenuItem
-        '
-        Me.OpePageInNToolStripMenuItem.Image = CType(resources.GetObject("OpePageInNToolStripMenuItem.Image"), System.Drawing.Image)
-        Me.OpePageInNToolStripMenuItem.Name = "OpePageInNToolStripMenuItem"
-        Me.OpePageInNToolStripMenuItem.Size = New System.Drawing.Size(219, 22)
-        Me.OpePageInNToolStripMenuItem.Text = "Open page in IE"
-        '
-        'HelpToolStripMenuItem
-        '
-        Me.HelpToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.AboutToolStripMenuItem, Me.CheckForUpdatesToolStripMenuItem, Me.ToolStripSeparator10, Me.KBrowserToolStripMenuItem, Me.SToolStripMenuItem, Me.ToolStripSeparator16, Me.CalendarToolStripMenuItem})
-        Me.HelpToolStripMenuItem.Name = "HelpToolStripMenuItem"
-        Me.HelpToolStripMenuItem.Size = New System.Drawing.Size(46, 22)
-        Me.HelpToolStripMenuItem.Text = "&Help"
-        '
-        'AboutToolStripMenuItem
-        '
-        Me.AboutToolStripMenuItem.Image = CType(resources.GetObject("AboutToolStripMenuItem.Image"), System.Drawing.Image)
-        Me.AboutToolStripMenuItem.Name = "AboutToolStripMenuItem"
-        Me.AboutToolStripMenuItem.Size = New System.Drawing.Size(185, 22)
-        Me.AboutToolStripMenuItem.Text = "&About"
-        '
-        'CheckForUpdatesToolStripMenuItem
-        '
-        Me.CheckForUpdatesToolStripMenuItem.Image = CType(resources.GetObject("CheckForUpdatesToolStripMenuItem.Image"), System.Drawing.Image)
-        Me.CheckForUpdatesToolStripMenuItem.Name = "CheckForUpdatesToolStripMenuItem"
-        Me.CheckForUpdatesToolStripMenuItem.Size = New System.Drawing.Size(185, 22)
-        Me.CheckForUpdatesToolStripMenuItem.Text = "Check For Updates"
-        '
-        'ToolStripSeparator10
-        '
-        Me.ToolStripSeparator10.Name = "ToolStripSeparator10"
-        Me.ToolStripSeparator10.Size = New System.Drawing.Size(182, 6)
-        '
-        'KBrowserToolStripMenuItem
-        '
-        Me.KBrowserToolStripMenuItem.Name = "KBrowserToolStripMenuItem"
-        Me.KBrowserToolStripMenuItem.Size = New System.Drawing.Size(185, 22)
-        Me.KBrowserToolStripMenuItem.Text = "&Visit Home Page"
-        '
-        'SToolStripMenuItem
-        '
-        Me.SToolStripMenuItem.Name = "SToolStripMenuItem"
-        Me.SToolStripMenuItem.Size = New System.Drawing.Size(185, 22)
-        Me.SToolStripMenuItem.Text = "&Mail to Author"
-        '
-        'ToolStripSeparator16
-        '
-        Me.ToolStripSeparator16.Name = "ToolStripSeparator16"
-        Me.ToolStripSeparator16.Size = New System.Drawing.Size(182, 6)
-        '
-        'CalendarToolStripMenuItem
-        '
-        Me.CalendarToolStripMenuItem.Name = "CalendarToolStripMenuItem"
-        Me.CalendarToolStripMenuItem.Size = New System.Drawing.Size(185, 22)
-        Me.CalendarToolStripMenuItem.Text = "Calendar"
-        '
-        'MenuStrip1
-        '
-        Me.MenuStrip1.BackColor = System.Drawing.Color.Transparent
-        Me.MenuStrip1.Font = New System.Drawing.Font("Trebuchet MS", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.MenuStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Visible
-        Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.FileToolStripMenuItem, Me.EditToolStripMenuItem, Me.ViewToolStripMenuItem, Me.BookmarksToolStripMenuItem, Me.ToolsToolStripMenuItem, Me.HelpToolStripMenuItem})
-        Me.MenuStrip1.Location = New System.Drawing.Point(0, 0)
-        Me.MenuStrip1.Name = "MenuStrip1"
-        Me.MenuStrip1.Size = New System.Drawing.Size(1234, 26)
-        Me.MenuStrip1.TabIndex = 1
-        Me.MenuStrip1.Text = "MenuStrip1"
-        '
-        'ToolStripTextBox2
-        '
-        Me.ToolStripTextBox2.Font = New System.Drawing.Font("Segoe UI", 9.0!)
-        Me.ToolStripTextBox2.Name = "ToolStripTextBox2"
-        Me.ToolStripTextBox2.Size = New System.Drawing.Size(100, 22)
-        '
-        'Timer1
-        '
-        Me.Timer1.Interval = 10000
-        '
-        'Back
-        '
-        Me.Back.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.Back.Image = CType(resources.GetObject("Back.Image"), System.Drawing.Image)
-        Me.Back.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
-        Me.Back.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.Back.Name = "Back"
-        Me.Back.Size = New System.Drawing.Size(36, 36)
-        Me.Back.Text = "Back"
-        '
-        'ToolStripButton2
-        '
-        Me.ToolStripButton2.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.ToolStripButton2.Image = CType(resources.GetObject("ToolStripButton2.Image"), System.Drawing.Image)
-        Me.ToolStripButton2.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
-        Me.ToolStripButton2.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.ToolStripButton2.Name = "ToolStripButton2"
-        Me.ToolStripButton2.Size = New System.Drawing.Size(36, 36)
-        Me.ToolStripButton2.Text = "Forward"
-        '
-        'ToolStripButton3
-        '
-        Me.ToolStripButton3.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.ToolStripButton3.Image = CType(resources.GetObject("ToolStripButton3.Image"), System.Drawing.Image)
-        Me.ToolStripButton3.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
-        Me.ToolStripButton3.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.ToolStripButton3.Name = "ToolStripButton3"
-        Me.ToolStripButton3.Size = New System.Drawing.Size(36, 36)
-        Me.ToolStripButton3.Text = "Refresh"
-        '
-        'ToolStripButton4
-        '
-        Me.ToolStripButton4.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.ToolStripButton4.Image = CType(resources.GetObject("ToolStripButton4.Image"), System.Drawing.Image)
-        Me.ToolStripButton4.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
-        Me.ToolStripButton4.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.ToolStripButton4.Name = "ToolStripButton4"
-        Me.ToolStripButton4.Size = New System.Drawing.Size(36, 36)
-        Me.ToolStripButton4.Text = "Home"
-        '
-        'ToolStripButton7
-        '
-        Me.ToolStripButton7.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.ToolStripButton7.Image = CType(resources.GetObject("ToolStripButton7.Image"), System.Drawing.Image)
-        Me.ToolStripButton7.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
-        Me.ToolStripButton7.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.ToolStripButton7.Name = "ToolStripButton7"
-        Me.ToolStripButton7.Size = New System.Drawing.Size(36, 36)
-        Me.ToolStripButton7.Text = "New tab"
-        '
-        'ToolStripButton6
-        '
-        Me.ToolStripButton6.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.ToolStripButton6.Image = CType(resources.GetObject("ToolStripButton6.Image"), System.Drawing.Image)
-        Me.ToolStripButton6.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
-        Me.ToolStripButton6.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.ToolStripButton6.Name = "ToolStripButton6"
-        Me.ToolStripButton6.Size = New System.Drawing.Size(36, 36)
-        Me.ToolStripButton6.Text = "Close tab"
-        '
-        'img
-        '
-        Me.img.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center
-        Me.img.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.img.Font = New System.Drawing.Font("Segoe UI", 8.25!)
-        Me.img.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.img.Name = "img"
-        Me.img.Size = New System.Drawing.Size(23, 36)
-        '
-        'ToolStripTextBox1
-        '
-        Me.ToolStripTextBox1.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend
-        Me.ToolStripTextBox1.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.AllUrl
-        Me.ToolStripTextBox1.BackColor = System.Drawing.SystemColors.ControlLightLight
-        Me.ToolStripTextBox1.Font = New System.Drawing.Font("Segoe UI", 9.0!)
-        Me.ToolStripTextBox1.Name = "ToolStripTextBox1"
-        Me.ToolStripTextBox1.Size = New System.Drawing.Size(550, 39)
-        '
-        'ToolStripButton5
-        '
-        Me.ToolStripButton5.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.ToolStripButton5.Image = CType(resources.GetObject("ToolStripButton5.Image"), System.Drawing.Image)
-        Me.ToolStripButton5.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
-        Me.ToolStripButton5.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.ToolStripButton5.Name = "ToolStripButton5"
-        Me.ToolStripButton5.Size = New System.Drawing.Size(36, 36)
-        Me.ToolStripButton5.Text = "Go"
-        '
-        'ToolStripButton8
-        '
-        Me.ToolStripButton8.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.ToolStripButton8.Image = CType(resources.GetObject("ToolStripButton8.Image"), System.Drawing.Image)
-        Me.ToolStripButton8.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
-        Me.ToolStripButton8.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.ToolStripButton8.Name = "ToolStripButton8"
-        Me.ToolStripButton8.Size = New System.Drawing.Size(36, 36)
-        Me.ToolStripButton8.Text = "RSS"
-        '
-        'ToolStripButton9
-        '
-        Me.ToolStripButton9.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.ToolStripButton9.Image = CType(resources.GetObject("ToolStripButton9.Image"), System.Drawing.Image)
-        Me.ToolStripButton9.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
-        Me.ToolStripButton9.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.ToolStripButton9.Name = "ToolStripButton9"
-        Me.ToolStripButton9.Size = New System.Drawing.Size(36, 36)
-        Me.ToolStripButton9.Text = " Add Bookmark"
-        '
-        'tsbAdBlockBadge
-        '
-        Me.tsbAdBlockBadge.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text
-        Me.tsbAdBlockBadge.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold)
-        Me.tsbAdBlockBadge.ForeColor = System.Drawing.Color.DarkRed
-        Me.tsbAdBlockBadge.Name = "tsbAdBlockBadge"
-        Me.tsbAdBlockBadge.Size = New System.Drawing.Size(34, 36)
-        Me.tsbAdBlockBadge.Text = "🛡️ 0"
-        Me.tsbAdBlockBadge.ToolTipText = "Ads & Trackers Blocked"
-        '
-        'ToolStrip1
-        '
-        Me.ToolStrip1.BackColor = System.Drawing.Color.WhiteSmoke
-        Me.ToolStrip1.Font = New System.Drawing.Font("Segoe UI", 8.25!)
-        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.Back, Me.ToolStripButton2, Me.ToolStripButton3, Me.ToolStripButton4, Me.ToolStripButton7, Me.ToolStripButton6, Me.img, Me.ToolStripTextBox1, Me.ToolStripButton5, Me.ToolStripButton9, Me.tsbAdBlockBadge})
-        Me.ToolStrip1.Location = New System.Drawing.Point(0, 26)
-        Me.ToolStrip1.Name = "ToolStrip1"
-        Me.ToolStrip1.Size = New System.Drawing.Size(1234, 39)
-        Me.ToolStrip1.TabIndex = 4
-        Me.ToolStrip1.Text = "ToolStrip1"
-        '
-        'Form1
-        '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
-        Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(1234, 672)
-        Me.ContextMenuStrip = Me.ContextMenuStrip1
-        Me.Controls.Add(Me.ToolStrip1)
-        Me.Controls.Add(Me.StatusStrip1)
-        Me.Controls.Add(Me.TabControl1)
-        Me.Controls.Add(Me.MenuStrip1)
-        Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
-        Me.MainMenuStrip = Me.MenuStrip1
-        Me.Name = "Form1"
-        Me.Opacity = 0.99R
-        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
-        Me.Text = "K-Browser"
-        Me.StatusStrip1.ResumeLayout(False)
-        Me.StatusStrip1.PerformLayout()
-        Me.ContextMenuStrip1.ResumeLayout(False)
-        Me.MenuStrip1.ResumeLayout(False)
-        Me.MenuStrip1.PerformLayout()
-        Me.ToolStrip1.ResumeLayout(False)
-        Me.ToolStrip1.PerformLayout()
-        Me.ResumeLayout(False)
-        Me.PerformLayout()
+        StatusStrip1 = New StatusStrip()
+        ProgressBar1 = New ToolStripProgressBar()
+        Label1 = New ToolStripStatusLabel()
+        TabControl1 = New TabControl()
+        ContextMenuStrip1 = New ContextMenuStrip(components)
+        ShowNavigationToolStripMenuItem = New ToolStripMenuItem()
+        ShowStatusBarToolStripMenuItem = New ToolStripMenuItem()
+        ShowMainMenuToolStripMenuItem = New ToolStripMenuItem()
+        ToolStripMenuItem5 = New ToolStripMenuItem()
+        ToolStripMenuItem2 = New ToolStripMenuItem()
+        NewTabToolStripMenuItem1 = New ToolStripMenuItem()
+        CloseTabToolStripMenuItem = New ToolStripMenuItem()
+        ExitToolStripMenuItem1 = New ToolStripMenuItem()
+        NotifyIcon1 = New NotifyIcon(components)
+        FileToolStripMenuItem = New ToolStripMenuItem()
+        NewWindowToolStripMenuItem = New ToolStripMenuItem()
+        ToolStripMenuItem4 = New ToolStripMenuItem()
+        ToolStripSeparator6 = New ToolStripSeparator()
+        NewTabToolStripMenuItem = New ToolStripMenuItem()
+        DefualtToolStripMenuItem = New ToolStripMenuItem()
+        BlancPageToolStripMenuItem = New ToolStripMenuItem()
+        HomeToolStripMenuItem1 = New ToolStripMenuItem()
+        NewTabToolStripMenuItem2 = New ToolStripMenuItem()
+        DeleteTabToolStripMenuItem = New ToolStripMenuItem()
+        ToolStripSeparator2 = New ToolStripSeparator()
+        OpenFileToolStripMenuItem = New ToolStripMenuItem()
+        SaveFileToolStripMenuItem = New ToolStripMenuItem()
+        ToolStripSeparator3 = New ToolStripSeparator()
+        ToolStripMenuItem1 = New ToolStripMenuItem()
+        ToolStripSeparator8 = New ToolStripSeparator()
+        PrintToolStripMenuItem = New ToolStripMenuItem()
+        PrintPreviewToolStripMenuItem = New ToolStripMenuItem()
+        ToolStripSeparator4 = New ToolStripSeparator()
+        ExitToolStripMenuItem = New ToolStripMenuItem()
+        EditToolStripMenuItem = New ToolStripMenuItem()
+        CutToolStripMenuItem = New ToolStripMenuItem()
+        CopyToolStripMenuItem = New ToolStripMenuItem()
+        PasteToolStripMenuItem = New ToolStripMenuItem()
+        SelectAllToolStripMenuItem = New ToolStripMenuItem()
+        ToolStripSeparator5 = New ToolStripSeparator()
+        ZooomToolStripMenuItem = New ToolStripMenuItem()
+        ZoomInToolStripMenuItem = New ToolStripMenuItem()
+        ZoomOutToolStripMenuItem = New ToolStripMenuItem()
+        SeToolStripMenuItem = New ToolStripMenuItem()
+        ToolStripSeparator7 = New ToolStripSeparator()
+        ImageToolStripMenuItem = New ToolStripMenuItem()
+        TextReadingToolStripMenuItem = New ToolStripMenuItem()
+        mnuLeftToRight = New ToolStripMenuItem()
+        mnuRightToLeft = New ToolStripMenuItem()
+        textSizeToolStripMenuItem = New ToolStripMenuItem()
+        largestToolStripMenuItem = New ToolStripMenuItem()
+        largerToolStripMenuItem = New ToolStripMenuItem()
+        mediumToolStripMenuItem = New ToolStripMenuItem()
+        smallerToolStripMenuItem = New ToolStripMenuItem()
+        smallestToolStripMenuItem = New ToolStripMenuItem()
+        ViewToolStripMenuItem = New ToolStripMenuItem()
+        HistoryToolStripMenuItem = New ToolStripMenuItem()
+        ToolbarToolStripMenuItem = New ToolStripMenuItem()
+        HideMainMenuToolStripMenuItem = New ToolStripMenuItem()
+        ShowToolStripMenuItem = New ToolStripMenuItem()
+        HideBarToolStripMenuItem = New ToolStripMenuItem()
+        NavigateToolStripMenuItem = New ToolStripMenuItem()
+        BackToolStripMenuItem = New ToolStripMenuItem()
+        ForwardToolStripMenuItem = New ToolStripMenuItem()
+        ReloadToolStripMenuItem = New ToolStripMenuItem()
+        ReloadToolStripMenuItem1 = New ToolStripMenuItem()
+        AutoToolStripMenuItem = New ToolStripMenuItem()
+        StopToolStripMenuItem1 = New ToolStripMenuItem()
+        ToolStripSeparator17 = New ToolStripSeparator()
+        ToolStripMenuItem3 = New ToolStripMenuItem()
+        ToolStripSeparator13 = New ToolStripSeparator()
+        SourceToolStripMenuItem = New ToolStripMenuItem()
+        PropertiesToolStripMenuItem = New ToolStripMenuItem()
+        DarkModeToolStripMenuItem = New ToolStripMenuItem()
+        ToolStripSeparator14 = New ToolStripSeparator()
+        FullScreenToolStripMenuItem = New ToolStripMenuItem()
+        CookieToolStripMenuItem = New ToolStripMenuItem()
+        BookmarksToolStripMenuItem = New ToolStripMenuItem()
+        ViewToolStripMenuItem1 = New ToolStripMenuItem()
+        ToolStripSeparator1 = New ToolStripSeparator()
+        BookmarkThisPageToolStripMenuItem = New ToolStripMenuItem()
+        LinksToolStripMenuItem = New ToolStripMenuItem()
+        BingToolStripMenuItem = New ToolStripMenuItem()
+        GoogleToolStripMenuItem1 = New ToolStripMenuItem()
+        YahooToolStripMenuItem = New ToolStripMenuItem()
+        EBayToolStripMenuItem = New ToolStripMenuItem()
+        MSNToolStripMenuItem = New ToolStripMenuItem()
+        DuckDuckGoToolStripMenuItem = New ToolStripMenuItem()
+        DogpileToolStripMenuItem = New ToolStripMenuItem()
+        WebCrawlerToolStripMenuItem = New ToolStripMenuItem()
+        LycosToolStripMenuItem = New ToolStripMenuItem()
+        VimeoToolStripMenuItem = New ToolStripMenuItem()
+        AccuWeatherToolStripMenuItem = New ToolStripMenuItem()
+        SocialNetworksToolStripMenuItem = New ToolStripMenuItem()
+        FacebookToolStripMenuItem = New ToolStripMenuItem()
+        TwitterToolStripMenuItem = New ToolStripMenuItem()
+        GoogleToolStripMenuItem = New ToolStripMenuItem()
+        LinkedinToolStripMenuItem = New ToolStripMenuItem()
+        InstagramToolStripMenuItem = New ToolStripMenuItem()
+        BadooToolStripMenuItem = New ToolStripMenuItem()
+        VkToolStripMenuItem = New ToolStripMenuItem()
+        PinterestToolStripMenuItem = New ToolStripMenuItem()
+        FormspringToolStripMenuItem = New ToolStripMenuItem()
+        KeekToolStripMenuItem = New ToolStripMenuItem()
+        ToolsToolStripMenuItem = New ToolStripMenuItem()
+        SettingsToolStripMenuItem = New ToolStripMenuItem()
+        DownloadManagerToolStripMenuItem = New ToolStripMenuItem()
+        FtpClientToolStripMenuItem = New ToolStripMenuItem()
+        TaskToolStripMenuItem = New ToolStripMenuItem()
+        SetHomePageToolStripMenuItem = New ToolStripMenuItem()
+        MediaToolStripMenuItem = New ToolStripMenuItem()
+        CookieViewerToolStripMenuItem = New ToolStripMenuItem()
+        SendALinkToolStripMenuItem = New ToolStripMenuItem()
+        ToolStripSeparator9 = New ToolStripSeparator()
+        InternetSettingsToolStripMenuItem = New ToolStripMenuItem()
+        ProxySettingsToolStripMenuItem = New ToolStripMenuItem()
+        ToolStripSeparator15 = New ToolStripSeparator()
+        OpePageInNToolStripMenuItem = New ToolStripMenuItem()
+        HelpToolStripMenuItem = New ToolStripMenuItem()
+        AboutToolStripMenuItem = New ToolStripMenuItem()
+        CheckForUpdatesToolStripMenuItem = New ToolStripMenuItem()
+        ToolStripSeparator10 = New ToolStripSeparator()
+        KBrowserToolStripMenuItem = New ToolStripMenuItem()
+        SToolStripMenuItem = New ToolStripMenuItem()
+        ToolStripSeparator16 = New ToolStripSeparator()
+        CalendarToolStripMenuItem = New ToolStripMenuItem()
+        MenuStrip1 = New MenuStrip()
+        ToolStripTextBox2 = New ToolStripTextBox()
+        Timer1 = New Timer(components)
+        Back = New ToolStripButton()
+        ToolStripButton2 = New ToolStripButton()
+        ToolStripButton3 = New ToolStripButton()
+        ToolStripButton4 = New ToolStripButton()
+        ToolStripButton7 = New ToolStripButton()
+        ToolStripButton6 = New ToolStripButton()
+        img = New ToolStripButton()
+        ToolStripTextBox1 = New ToolStripTextBox()
+        ToolStripButton5 = New ToolStripButton()
+        ToolStripButton8 = New ToolStripButton()
+        ToolStripButton9 = New ToolStripButton()
+        tsbAdBlockBadge = New ToolStripButton()
+        ToolStrip1 = New ToolStrip()
+        StatusStrip1.SuspendLayout()
+        ContextMenuStrip1.SuspendLayout()
+        MenuStrip1.SuspendLayout()
+        ToolStrip1.SuspendLayout()
+        SuspendLayout()
+        ' 
+        ' StatusStrip1
+        ' 
+        StatusStrip1.BackgroundImageLayout = ImageLayout.Stretch
+        StatusStrip1.Items.AddRange(New ToolStripItem() {ProgressBar1, Label1})
+        StatusStrip1.Location = New Point(0, 751)
+        StatusStrip1.Name = "StatusStrip1"
+        StatusStrip1.Padding = New Padding(1, 0, 16, 0)
+        StatusStrip1.Size = New Size(1440, 24)
+        StatusStrip1.TabIndex = 0
+        StatusStrip1.Text = "StatusStrip1"
+        ' 
+        ' ProgressBar1
+        ' 
+        ProgressBar1.Name = "ProgressBar1"
+        ProgressBar1.Size = New Size(117, 18)
+        ' 
+        ' Label1
+        ' 
+        Label1.Name = "Label1"
+        Label1.Size = New Size(59, 19)
+        Label1.Text = "Loading..."
+        ' 
+        ' TabControl1
+        ' 
+        TabControl1.AllowDrop = True
+        TabControl1.Anchor = AnchorStyles.Top Or AnchorStyles.Bottom Or AnchorStyles.Left Or AnchorStyles.Right
+        TabControl1.ContextMenuStrip = ContextMenuStrip1
+        TabControl1.Font = New Font("Segoe UI", 10F)
+        TabControl1.Location = New Point(0, 76)
+        TabControl1.Margin = New Padding(4, 3, 4, 3)
+        TabControl1.Multiline = True
+        TabControl1.Name = "TabControl1"
+        TabControl1.SelectedIndex = 0
+        TabControl1.Size = New Size(1441, 675)
+        TabControl1.TabIndex = 3
+        ' 
+        ' ContextMenuStrip1
+        ' 
+        ContextMenuStrip1.Items.AddRange(New ToolStripItem() {ShowNavigationToolStripMenuItem, ShowStatusBarToolStripMenuItem, ShowMainMenuToolStripMenuItem, ToolStripMenuItem5, ToolStripMenuItem2, NewTabToolStripMenuItem1, CloseTabToolStripMenuItem, ExitToolStripMenuItem1})
+        ContextMenuStrip1.Name = "ContextMenuStrip1"
+        ContextMenuStrip1.RenderMode = ToolStripRenderMode.Professional
+        ContextMenuStrip1.Size = New Size(165, 180)
+        ' 
+        ' ShowNavigationToolStripMenuItem
+        ' 
+        ShowNavigationToolStripMenuItem.Name = "ShowNavigationToolStripMenuItem"
+        ShowNavigationToolStripMenuItem.Size = New Size(164, 22)
+        ShowNavigationToolStripMenuItem.Text = "Show Navigation"
+        ' 
+        ' ShowStatusBarToolStripMenuItem
+        ' 
+        ShowStatusBarToolStripMenuItem.Name = "ShowStatusBarToolStripMenuItem"
+        ShowStatusBarToolStripMenuItem.Size = New Size(164, 22)
+        ShowStatusBarToolStripMenuItem.Text = "Show Status Bar"
+        ' 
+        ' ShowMainMenuToolStripMenuItem
+        ' 
+        ShowMainMenuToolStripMenuItem.Name = "ShowMainMenuToolStripMenuItem"
+        ShowMainMenuToolStripMenuItem.Size = New Size(164, 22)
+        ShowMainMenuToolStripMenuItem.Text = "Show Menu"
+        ' 
+        ' ToolStripMenuItem5
+        ' 
+        ToolStripMenuItem5.Image = CType(resources.GetObject("ToolStripMenuItem5.Image"), Image)
+        ToolStripMenuItem5.Name = "ToolStripMenuItem5"
+        ToolStripMenuItem5.Size = New Size(164, 22)
+        ToolStripMenuItem5.Text = "Open page in IE"
+        ' 
+        ' ToolStripMenuItem2
+        ' 
+        ToolStripMenuItem2.Name = "ToolStripMenuItem2"
+        ToolStripMenuItem2.Size = New Size(164, 22)
+        ToolStripMenuItem2.Text = "New Window"
+        ' 
+        ' NewTabToolStripMenuItem1
+        ' 
+        NewTabToolStripMenuItem1.Image = CType(resources.GetObject("NewTabToolStripMenuItem1.Image"), Image)
+        NewTabToolStripMenuItem1.Name = "NewTabToolStripMenuItem1"
+        NewTabToolStripMenuItem1.Size = New Size(164, 22)
+        NewTabToolStripMenuItem1.Text = "New tab"
+        ' 
+        ' CloseTabToolStripMenuItem
+        ' 
+        CloseTabToolStripMenuItem.Image = CType(resources.GetObject("CloseTabToolStripMenuItem.Image"), Image)
+        CloseTabToolStripMenuItem.Name = "CloseTabToolStripMenuItem"
+        CloseTabToolStripMenuItem.Size = New Size(164, 22)
+        CloseTabToolStripMenuItem.Text = "Close tab"
+        ' 
+        ' ExitToolStripMenuItem1
+        ' 
+        ExitToolStripMenuItem1.Name = "ExitToolStripMenuItem1"
+        ExitToolStripMenuItem1.ShortcutKeys = Keys.Alt Or Keys.F4
+        ExitToolStripMenuItem1.Size = New Size(164, 22)
+        ExitToolStripMenuItem1.Text = "Quit "
+        ' 
+        ' NotifyIcon1
+        ' 
+        NotifyIcon1.BalloonTipText = "Update 4.8.2 is here!"
+        NotifyIcon1.Text = "NotifyIcon1"
+        NotifyIcon1.Visible = True
+        ' 
+        ' FileToolStripMenuItem
+        ' 
+        FileToolStripMenuItem.DropDownItems.AddRange(New ToolStripItem() {NewWindowToolStripMenuItem, ToolStripMenuItem4, ToolStripSeparator6, NewTabToolStripMenuItem, DeleteTabToolStripMenuItem, ToolStripSeparator2, OpenFileToolStripMenuItem, SaveFileToolStripMenuItem, ToolStripSeparator3, ToolStripMenuItem1, ToolStripSeparator8, PrintToolStripMenuItem, PrintPreviewToolStripMenuItem, ToolStripSeparator4, ExitToolStripMenuItem})
+        FileToolStripMenuItem.Name = "FileToolStripMenuItem"
+        FileToolStripMenuItem.Size = New Size(41, 22)
+        FileToolStripMenuItem.Text = "&File"
+        ' 
+        ' NewWindowToolStripMenuItem
+        ' 
+        NewWindowToolStripMenuItem.Image = CType(resources.GetObject("NewWindowToolStripMenuItem.Image"), Image)
+        NewWindowToolStripMenuItem.Name = "NewWindowToolStripMenuItem"
+        NewWindowToolStripMenuItem.ShortcutKeys = Keys.Control Or Keys.O
+        NewWindowToolStripMenuItem.Size = New Size(206, 22)
+        NewWindowToolStripMenuItem.Text = "New Window"
+        ' 
+        ' ToolStripMenuItem4
+        ' 
+        ToolStripMenuItem4.Name = "ToolStripMenuItem4"
+        ToolStripMenuItem4.Size = New Size(206, 22)
+        ToolStripMenuItem4.Text = "Open Location"
+        ' 
+        ' ToolStripSeparator6
+        ' 
+        ToolStripSeparator6.Name = "ToolStripSeparator6"
+        ToolStripSeparator6.Size = New Size(203, 6)
+        ' 
+        ' NewTabToolStripMenuItem
+        ' 
+        NewTabToolStripMenuItem.DropDownItems.AddRange(New ToolStripItem() {DefualtToolStripMenuItem, BlancPageToolStripMenuItem, HomeToolStripMenuItem1, NewTabToolStripMenuItem2})
+        NewTabToolStripMenuItem.Name = "NewTabToolStripMenuItem"
+        NewTabToolStripMenuItem.Size = New Size(206, 22)
+        NewTabToolStripMenuItem.Text = "Add a New Tab "
+        ' 
+        ' DefualtToolStripMenuItem
+        ' 
+        DefualtToolStripMenuItem.Image = CType(resources.GetObject("DefualtToolStripMenuItem.Image"), Image)
+        DefualtToolStripMenuItem.Name = "DefualtToolStripMenuItem"
+        DefualtToolStripMenuItem.ShortcutKeys = Keys.Control Or Keys.D
+        DefualtToolStripMenuItem.Size = New Size(221, 22)
+        DefualtToolStripMenuItem.Text = "Default"
+        ' 
+        ' BlancPageToolStripMenuItem
+        ' 
+        BlancPageToolStripMenuItem.Name = "BlancPageToolStripMenuItem"
+        BlancPageToolStripMenuItem.Size = New Size(221, 22)
+        BlancPageToolStripMenuItem.Text = "Blank page"
+        ' 
+        ' HomeToolStripMenuItem1
+        ' 
+        HomeToolStripMenuItem1.Name = "HomeToolStripMenuItem1"
+        HomeToolStripMenuItem1.ShortcutKeys = Keys.Control Or Keys.Shift Or Keys.H
+        HomeToolStripMenuItem1.Size = New Size(221, 22)
+        HomeToolStripMenuItem1.Text = "Home Page"
+        ' 
+        ' NewTabToolStripMenuItem2
+        ' 
+        NewTabToolStripMenuItem2.Name = "NewTabToolStripMenuItem2"
+        NewTabToolStripMenuItem2.ShortcutKeys = Keys.Control Or Keys.N
+        NewTabToolStripMenuItem2.Size = New Size(221, 22)
+        NewTabToolStripMenuItem2.Text = "New tab"
+        ' 
+        ' DeleteTabToolStripMenuItem
+        ' 
+        DeleteTabToolStripMenuItem.Name = "DeleteTabToolStripMenuItem"
+        DeleteTabToolStripMenuItem.Size = New Size(206, 22)
+        DeleteTabToolStripMenuItem.Text = "Close Tab"
+        ' 
+        ' ToolStripSeparator2
+        ' 
+        ToolStripSeparator2.Name = "ToolStripSeparator2"
+        ToolStripSeparator2.Size = New Size(203, 6)
+        ' 
+        ' OpenFileToolStripMenuItem
+        ' 
+        OpenFileToolStripMenuItem.Name = "OpenFileToolStripMenuItem"
+        OpenFileToolStripMenuItem.Size = New Size(206, 22)
+        OpenFileToolStripMenuItem.Text = "&Open File"
+        ' 
+        ' SaveFileToolStripMenuItem
+        ' 
+        SaveFileToolStripMenuItem.Image = CType(resources.GetObject("SaveFileToolStripMenuItem.Image"), Image)
+        SaveFileToolStripMenuItem.Name = "SaveFileToolStripMenuItem"
+        SaveFileToolStripMenuItem.ShortcutKeys = Keys.Control Or Keys.S
+        SaveFileToolStripMenuItem.Size = New Size(206, 22)
+        SaveFileToolStripMenuItem.Text = "&Save As.."
+        ' 
+        ' ToolStripSeparator3
+        ' 
+        ToolStripSeparator3.Name = "ToolStripSeparator3"
+        ToolStripSeparator3.Size = New Size(203, 6)
+        ' 
+        ' ToolStripMenuItem1
+        ' 
+        ToolStripMenuItem1.Name = "ToolStripMenuItem1"
+        ToolStripMenuItem1.Size = New Size(206, 22)
+        ToolStripMenuItem1.Text = "Open a Pdf.."
+        ' 
+        ' ToolStripSeparator8
+        ' 
+        ToolStripSeparator8.Name = "ToolStripSeparator8"
+        ToolStripSeparator8.Size = New Size(203, 6)
+        ' 
+        ' PrintToolStripMenuItem
+        ' 
+        PrintToolStripMenuItem.Image = CType(resources.GetObject("PrintToolStripMenuItem.Image"), Image)
+        PrintToolStripMenuItem.Name = "PrintToolStripMenuItem"
+        PrintToolStripMenuItem.Size = New Size(206, 22)
+        PrintToolStripMenuItem.Text = "Print"
+        ' 
+        ' PrintPreviewToolStripMenuItem
+        ' 
+        PrintPreviewToolStripMenuItem.Name = "PrintPreviewToolStripMenuItem"
+        PrintPreviewToolStripMenuItem.Size = New Size(206, 22)
+        PrintPreviewToolStripMenuItem.Text = "Print Preview"
+        ' 
+        ' ToolStripSeparator4
+        ' 
+        ToolStripSeparator4.Name = "ToolStripSeparator4"
+        ToolStripSeparator4.Size = New Size(203, 6)
+        ' 
+        ' ExitToolStripMenuItem
+        ' 
+        ExitToolStripMenuItem.Image = CType(resources.GetObject("ExitToolStripMenuItem.Image"), Image)
+        ExitToolStripMenuItem.Name = "ExitToolStripMenuItem"
+        ExitToolStripMenuItem.ShortcutKeys = Keys.Alt Or Keys.F4
+        ExitToolStripMenuItem.Size = New Size(206, 22)
+        ExitToolStripMenuItem.Text = "&Exit K-Browser"
+        ' 
+        ' EditToolStripMenuItem
+        ' 
+        EditToolStripMenuItem.DropDownItems.AddRange(New ToolStripItem() {CutToolStripMenuItem, CopyToolStripMenuItem, PasteToolStripMenuItem, SelectAllToolStripMenuItem, ToolStripSeparator5, ZooomToolStripMenuItem, SeToolStripMenuItem, ToolStripSeparator7, ImageToolStripMenuItem, TextReadingToolStripMenuItem, textSizeToolStripMenuItem})
+        EditToolStripMenuItem.Font = New Font("Tahoma", 9F, FontStyle.Regular, GraphicsUnit.Point, CByte(161))
+        EditToolStripMenuItem.ImageScaling = ToolStripItemImageScaling.None
+        EditToolStripMenuItem.Name = "EditToolStripMenuItem"
+        EditToolStripMenuItem.Size = New Size(40, 22)
+        EditToolStripMenuItem.Text = "&Edit"
+        ' 
+        ' CutToolStripMenuItem
+        ' 
+        CutToolStripMenuItem.Image = CType(resources.GetObject("CutToolStripMenuItem.Image"), Image)
+        CutToolStripMenuItem.Name = "CutToolStripMenuItem"
+        CutToolStripMenuItem.ShortcutKeys = Keys.Control Or Keys.X
+        CutToolStripMenuItem.Size = New Size(177, 22)
+        CutToolStripMenuItem.Text = "Cut"
+        ' 
+        ' CopyToolStripMenuItem
+        ' 
+        CopyToolStripMenuItem.Image = CType(resources.GetObject("CopyToolStripMenuItem.Image"), Image)
+        CopyToolStripMenuItem.Name = "CopyToolStripMenuItem"
+        CopyToolStripMenuItem.ShortcutKeys = Keys.Control Or Keys.C
+        CopyToolStripMenuItem.Size = New Size(177, 22)
+        CopyToolStripMenuItem.Text = "Copy"
+        ' 
+        ' PasteToolStripMenuItem
+        ' 
+        PasteToolStripMenuItem.Name = "PasteToolStripMenuItem"
+        PasteToolStripMenuItem.ShortcutKeys = Keys.Control Or Keys.V
+        PasteToolStripMenuItem.Size = New Size(177, 22)
+        PasteToolStripMenuItem.Text = "Paste"
+        ' 
+        ' SelectAllToolStripMenuItem
+        ' 
+        SelectAllToolStripMenuItem.Name = "SelectAllToolStripMenuItem"
+        SelectAllToolStripMenuItem.ShortcutKeys = Keys.Control Or Keys.A
+        SelectAllToolStripMenuItem.Size = New Size(177, 22)
+        SelectAllToolStripMenuItem.Text = "Select All"
+        ' 
+        ' ToolStripSeparator5
+        ' 
+        ToolStripSeparator5.Name = "ToolStripSeparator5"
+        ToolStripSeparator5.Size = New Size(174, 6)
+        ' 
+        ' ZooomToolStripMenuItem
+        ' 
+        ZooomToolStripMenuItem.DropDownItems.AddRange(New ToolStripItem() {ZoomInToolStripMenuItem, ZoomOutToolStripMenuItem})
+        ZooomToolStripMenuItem.Image = CType(resources.GetObject("ZooomToolStripMenuItem.Image"), Image)
+        ZooomToolStripMenuItem.Name = "ZooomToolStripMenuItem"
+        ZooomToolStripMenuItem.Size = New Size(177, 22)
+        ZooomToolStripMenuItem.Text = "&Zoom"
+        ' 
+        ' ZoomInToolStripMenuItem
+        ' 
+        ZoomInToolStripMenuItem.Name = "ZoomInToolStripMenuItem"
+        ZoomInToolStripMenuItem.ShortcutKeys = Keys.Control Or Keys.OemMinus
+        ZoomInToolStripMenuItem.Size = New Size(210, 22)
+        ZoomInToolStripMenuItem.Text = "Zoom In"
+        ' 
+        ' ZoomOutToolStripMenuItem
+        ' 
+        ZoomOutToolStripMenuItem.Name = "ZoomOutToolStripMenuItem"
+        ZoomOutToolStripMenuItem.ShortcutKeys = Keys.Control Or Keys.Oemplus
+        ZoomOutToolStripMenuItem.Size = New Size(210, 22)
+        ZoomOutToolStripMenuItem.Text = "Zoom Out"
+        ' 
+        ' SeToolStripMenuItem
+        ' 
+        SeToolStripMenuItem.Name = "SeToolStripMenuItem"
+        SeToolStripMenuItem.Size = New Size(177, 22)
+        SeToolStripMenuItem.Text = "&Search"
+        ' 
+        ' ToolStripSeparator7
+        ' 
+        ToolStripSeparator7.Name = "ToolStripSeparator7"
+        ToolStripSeparator7.Size = New Size(174, 6)
+        ' 
+        ' ImageToolStripMenuItem
+        ' 
+        ImageToolStripMenuItem.Image = CType(resources.GetObject("ImageToolStripMenuItem.Image"), Image)
+        ImageToolStripMenuItem.Name = "ImageToolStripMenuItem"
+        ImageToolStripMenuItem.Size = New Size(177, 22)
+        ImageToolStripMenuItem.Text = "Take a Screenshot"
+        ' 
+        ' TextReadingToolStripMenuItem
+        ' 
+        TextReadingToolStripMenuItem.DropDownItems.AddRange(New ToolStripItem() {mnuLeftToRight, mnuRightToLeft})
+        TextReadingToolStripMenuItem.Name = "TextReadingToolStripMenuItem"
+        TextReadingToolStripMenuItem.Size = New Size(177, 22)
+        TextReadingToolStripMenuItem.Text = "Text Reading"
+        ' 
+        ' mnuLeftToRight
+        ' 
+        mnuLeftToRight.Checked = True
+        mnuLeftToRight.CheckOnClick = True
+        mnuLeftToRight.CheckState = CheckState.Checked
+        mnuLeftToRight.Name = "mnuLeftToRight"
+        mnuLeftToRight.Size = New Size(147, 22)
+        mnuLeftToRight.Text = "Left To Right"
+        ' 
+        ' mnuRightToLeft
+        ' 
+        mnuRightToLeft.CheckOnClick = True
+        mnuRightToLeft.Name = "mnuRightToLeft"
+        mnuRightToLeft.Size = New Size(147, 22)
+        mnuRightToLeft.Text = "Right To Left"
+        ' 
+        ' textSizeToolStripMenuItem
+        ' 
+        textSizeToolStripMenuItem.DropDownItems.AddRange(New ToolStripItem() {largestToolStripMenuItem, largerToolStripMenuItem, mediumToolStripMenuItem, smallerToolStripMenuItem, smallestToolStripMenuItem})
+        textSizeToolStripMenuItem.Name = "textSizeToolStripMenuItem"
+        textSizeToolStripMenuItem.Size = New Size(177, 22)
+        textSizeToolStripMenuItem.Text = "Selected Text Size"
+        ' 
+        ' largestToolStripMenuItem
+        ' 
+        largestToolStripMenuItem.Name = "largestToolStripMenuItem"
+        largestToolStripMenuItem.Size = New Size(118, 22)
+        largestToolStripMenuItem.Text = "Largest"
+        ' 
+        ' largerToolStripMenuItem
+        ' 
+        largerToolStripMenuItem.Name = "largerToolStripMenuItem"
+        largerToolStripMenuItem.Size = New Size(118, 22)
+        largerToolStripMenuItem.Text = "Larger"
+        ' 
+        ' mediumToolStripMenuItem
+        ' 
+        mediumToolStripMenuItem.Name = "mediumToolStripMenuItem"
+        mediumToolStripMenuItem.Size = New Size(118, 22)
+        mediumToolStripMenuItem.Text = "Medium"
+        ' 
+        ' smallerToolStripMenuItem
+        ' 
+        smallerToolStripMenuItem.Name = "smallerToolStripMenuItem"
+        smallerToolStripMenuItem.Size = New Size(118, 22)
+        smallerToolStripMenuItem.Text = "Smaller"
+        ' 
+        ' smallestToolStripMenuItem
+        ' 
+        smallestToolStripMenuItem.Name = "smallestToolStripMenuItem"
+        smallestToolStripMenuItem.Size = New Size(118, 22)
+        smallestToolStripMenuItem.Text = "Smallest"
+        ' 
+        ' ViewToolStripMenuItem
+        ' 
+        ViewToolStripMenuItem.DropDownItems.AddRange(New ToolStripItem() {HistoryToolStripMenuItem, ToolbarToolStripMenuItem, NavigateToolStripMenuItem, ToolStripSeparator13, SourceToolStripMenuItem, PropertiesToolStripMenuItem, DarkModeToolStripMenuItem, ToolStripSeparator14, FullScreenToolStripMenuItem})
+        ViewToolStripMenuItem.Name = "ViewToolStripMenuItem"
+        ViewToolStripMenuItem.Size = New Size(47, 22)
+        ViewToolStripMenuItem.Text = "&View"
+        ' 
+        ' HistoryToolStripMenuItem
+        ' 
+        HistoryToolStripMenuItem.Image = CType(resources.GetObject("HistoryToolStripMenuItem.Image"), Image)
+        HistoryToolStripMenuItem.Name = "HistoryToolStripMenuItem"
+        HistoryToolStripMenuItem.ShortcutKeys = Keys.Control Or Keys.H
+        HistoryToolStripMenuItem.Size = New Size(180, 22)
+        HistoryToolStripMenuItem.Text = "History"
+        ' 
+        ' ToolbarToolStripMenuItem
+        ' 
+        ToolbarToolStripMenuItem.DropDownItems.AddRange(New ToolStripItem() {HideMainMenuToolStripMenuItem, ShowToolStripMenuItem, HideBarToolStripMenuItem})
+        ToolbarToolStripMenuItem.Name = "ToolbarToolStripMenuItem"
+        ToolbarToolStripMenuItem.Size = New Size(180, 22)
+        ToolbarToolStripMenuItem.Text = "Toolbars"
+        ' 
+        ' HideMainMenuToolStripMenuItem
+        ' 
+        HideMainMenuToolStripMenuItem.Name = "HideMainMenuToolStripMenuItem"
+        HideMainMenuToolStripMenuItem.Size = New Size(193, 22)
+        HideMainMenuToolStripMenuItem.Text = "Hide Menu Bar"
+        ' 
+        ' ShowToolStripMenuItem
+        ' 
+        ShowToolStripMenuItem.Name = "ShowToolStripMenuItem"
+        ShowToolStripMenuItem.Size = New Size(193, 22)
+        ShowToolStripMenuItem.Text = "Hide Navigation bar"
+        ' 
+        ' HideBarToolStripMenuItem
+        ' 
+        HideBarToolStripMenuItem.Name = "HideBarToolStripMenuItem"
+        HideBarToolStripMenuItem.Size = New Size(193, 22)
+        HideBarToolStripMenuItem.Text = "Hide Status Bar"
+        ' 
+        ' NavigateToolStripMenuItem
+        ' 
+        NavigateToolStripMenuItem.DropDownItems.AddRange(New ToolStripItem() {BackToolStripMenuItem, ForwardToolStripMenuItem, ReloadToolStripMenuItem, StopToolStripMenuItem1, ToolStripSeparator17, ToolStripMenuItem3})
+        NavigateToolStripMenuItem.Name = "NavigateToolStripMenuItem"
+        NavigateToolStripMenuItem.Size = New Size(180, 22)
+        NavigateToolStripMenuItem.Text = "Navigate"
+        ' 
+        ' BackToolStripMenuItem
+        ' 
+        BackToolStripMenuItem.Image = CType(resources.GetObject("BackToolStripMenuItem.Image"), Image)
+        BackToolStripMenuItem.Name = "BackToolStripMenuItem"
+        BackToolStripMenuItem.Size = New Size(221, 22)
+        BackToolStripMenuItem.Text = "Back"
+        ' 
+        ' ForwardToolStripMenuItem
+        ' 
+        ForwardToolStripMenuItem.Image = CType(resources.GetObject("ForwardToolStripMenuItem.Image"), Image)
+        ForwardToolStripMenuItem.Name = "ForwardToolStripMenuItem"
+        ForwardToolStripMenuItem.Size = New Size(221, 22)
+        ForwardToolStripMenuItem.Text = "Forward"
+        ' 
+        ' ReloadToolStripMenuItem
+        ' 
+        ReloadToolStripMenuItem.DropDownItems.AddRange(New ToolStripItem() {ReloadToolStripMenuItem1, AutoToolStripMenuItem})
+        ReloadToolStripMenuItem.Name = "ReloadToolStripMenuItem"
+        ReloadToolStripMenuItem.Size = New Size(221, 22)
+        ReloadToolStripMenuItem.Text = "Reload"
+        ' 
+        ' ReloadToolStripMenuItem1
+        ' 
+        ReloadToolStripMenuItem1.Image = CType(resources.GetObject("ReloadToolStripMenuItem1.Image"), Image)
+        ReloadToolStripMenuItem1.Name = "ReloadToolStripMenuItem1"
+        ReloadToolStripMenuItem1.ShortcutKeys = Keys.F5
+        ReloadToolStripMenuItem1.Size = New Size(186, 22)
+        ReloadToolStripMenuItem1.Text = "Reload"
+        ' 
+        ' AutoToolStripMenuItem
+        ' 
+        AutoToolStripMenuItem.CheckOnClick = True
+        AutoToolStripMenuItem.Name = "AutoToolStripMenuItem"
+        AutoToolStripMenuItem.Size = New Size(186, 22)
+        AutoToolStripMenuItem.Text = "Auto Reload  10sec"
+        ' 
+        ' StopToolStripMenuItem1
+        ' 
+        StopToolStripMenuItem1.Image = CType(resources.GetObject("StopToolStripMenuItem1.Image"), Image)
+        StopToolStripMenuItem1.Name = "StopToolStripMenuItem1"
+        StopToolStripMenuItem1.Size = New Size(221, 22)
+        StopToolStripMenuItem1.Text = "Stop"
+        ' 
+        ' ToolStripSeparator17
+        ' 
+        ToolStripSeparator17.Name = "ToolStripSeparator17"
+        ToolStripSeparator17.Size = New Size(218, 6)
+        ' 
+        ' ToolStripMenuItem3
+        ' 
+        ToolStripMenuItem3.Image = CType(resources.GetObject("ToolStripMenuItem3.Image"), Image)
+        ToolStripMenuItem3.Name = "ToolStripMenuItem3"
+        ToolStripMenuItem3.ShortcutKeys = Keys.Control Or Keys.Shift Or Keys.H
+        ToolStripMenuItem3.Size = New Size(221, 22)
+        ToolStripMenuItem3.Text = "Home Page"
+        ' 
+        ' ToolStripSeparator13
+        ' 
+        ToolStripSeparator13.Name = "ToolStripSeparator13"
+        ToolStripSeparator13.Size = New Size(177, 6)
+        ' 
+        ' SourceToolStripMenuItem
+        ' 
+        SourceToolStripMenuItem.Name = "SourceToolStripMenuItem"
+        SourceToolStripMenuItem.ShortcutKeys = Keys.F4
+        SourceToolStripMenuItem.Size = New Size(180, 22)
+        SourceToolStripMenuItem.Text = "Source"
+        ' 
+        ' PropertiesToolStripMenuItem
+        ' 
+        PropertiesToolStripMenuItem.Name = "PropertiesToolStripMenuItem"
+        PropertiesToolStripMenuItem.ShortcutKeys = Keys.Control Or Keys.P
+        PropertiesToolStripMenuItem.Size = New Size(180, 22)
+        PropertiesToolStripMenuItem.Text = "Properties"
+        ' 
+        ' DarkModeToolStripMenuItem
+        ' 
+        DarkModeToolStripMenuItem.Name = "DarkModeToolStripMenuItem"
+        DarkModeToolStripMenuItem.Size = New Size(180, 22)
+        DarkModeToolStripMenuItem.Text = "🌙 Dark Mode"
+        ' 
+        ' ToolStripSeparator14
+        ' 
+        ToolStripSeparator14.Name = "ToolStripSeparator14"
+        ToolStripSeparator14.Size = New Size(177, 6)
+        ' 
+        ' FullScreenToolStripMenuItem
+        ' 
+        FullScreenToolStripMenuItem.Name = "FullScreenToolStripMenuItem"
+        FullScreenToolStripMenuItem.ShortcutKeys = Keys.F11
+        FullScreenToolStripMenuItem.Size = New Size(180, 22)
+        FullScreenToolStripMenuItem.Text = "Full Screen"
+        ' 
+        ' CookieToolStripMenuItem
+        ' 
+        CookieToolStripMenuItem.Image = CType(resources.GetObject("CookieToolStripMenuItem.Image"), Image)
+        CookieToolStripMenuItem.Name = "CookieToolStripMenuItem"
+        CookieToolStripMenuItem.Size = New Size(169, 22)
+        CookieToolStripMenuItem.Text = "Cookie Viewer"
+        ' 
+        ' BookmarksToolStripMenuItem
+        ' 
+        BookmarksToolStripMenuItem.DropDownItems.AddRange(New ToolStripItem() {ViewToolStripMenuItem1, ToolStripSeparator1, BookmarkThisPageToolStripMenuItem})
+        BookmarksToolStripMenuItem.Name = "BookmarksToolStripMenuItem"
+        BookmarksToolStripMenuItem.ShortcutKeys = Keys.Control Or Keys.B
+        BookmarksToolStripMenuItem.Size = New Size(84, 22)
+        BookmarksToolStripMenuItem.Text = "&Bookmarks"
+        ' 
+        ' ViewToolStripMenuItem1
+        ' 
+        ViewToolStripMenuItem1.Image = CType(resources.GetObject("ViewToolStripMenuItem1.Image"), Image)
+        ViewToolStripMenuItem1.Name = "ViewToolStripMenuItem1"
+        ViewToolStripMenuItem1.ShortcutKeys = Keys.Control Or Keys.B
+        ViewToolStripMenuItem1.Size = New Size(194, 22)
+        ViewToolStripMenuItem1.Text = "View"
+        ' 
+        ' ToolStripSeparator1
+        ' 
+        ToolStripSeparator1.Name = "ToolStripSeparator1"
+        ToolStripSeparator1.Size = New Size(191, 6)
+        ' 
+        ' BookmarkThisPageToolStripMenuItem
+        ' 
+        BookmarkThisPageToolStripMenuItem.Name = "BookmarkThisPageToolStripMenuItem"
+        BookmarkThisPageToolStripMenuItem.Size = New Size(194, 22)
+        BookmarkThisPageToolStripMenuItem.Text = "Bookmark This Page"
+        ' 
+        ' LinksToolStripMenuItem
+        ' 
+        LinksToolStripMenuItem.DropDownItems.AddRange(New ToolStripItem() {BingToolStripMenuItem, GoogleToolStripMenuItem1, YahooToolStripMenuItem, EBayToolStripMenuItem, MSNToolStripMenuItem, DuckDuckGoToolStripMenuItem, DogpileToolStripMenuItem, WebCrawlerToolStripMenuItem, LycosToolStripMenuItem, VimeoToolStripMenuItem, AccuWeatherToolStripMenuItem})
+        LinksToolStripMenuItem.Image = CType(resources.GetObject("LinksToolStripMenuItem.Image"), Image)
+        LinksToolStripMenuItem.Name = "LinksToolStripMenuItem"
+        LinksToolStripMenuItem.Size = New Size(185, 22)
+        LinksToolStripMenuItem.Text = "Web search engines"
+        ' 
+        ' BingToolStripMenuItem
+        ' 
+        BingToolStripMenuItem.Image = CType(resources.GetObject("BingToolStripMenuItem.Image"), Image)
+        BingToolStripMenuItem.Name = "BingToolStripMenuItem"
+        BingToolStripMenuItem.Size = New Size(145, 22)
+        BingToolStripMenuItem.Text = "Bing"
+        ' 
+        ' GoogleToolStripMenuItem1
+        ' 
+        GoogleToolStripMenuItem1.Image = CType(resources.GetObject("GoogleToolStripMenuItem1.Image"), Image)
+        GoogleToolStripMenuItem1.Name = "GoogleToolStripMenuItem1"
+        GoogleToolStripMenuItem1.Size = New Size(145, 22)
+        GoogleToolStripMenuItem1.Text = "Google"
+        ' 
+        ' YahooToolStripMenuItem
+        ' 
+        YahooToolStripMenuItem.Image = CType(resources.GetObject("YahooToolStripMenuItem.Image"), Image)
+        YahooToolStripMenuItem.Name = "YahooToolStripMenuItem"
+        YahooToolStripMenuItem.Size = New Size(145, 22)
+        YahooToolStripMenuItem.Text = "Yahoo"
+        ' 
+        ' EBayToolStripMenuItem
+        ' 
+        EBayToolStripMenuItem.Image = CType(resources.GetObject("EBayToolStripMenuItem.Image"), Image)
+        EBayToolStripMenuItem.Name = "EBayToolStripMenuItem"
+        EBayToolStripMenuItem.Size = New Size(145, 22)
+        EBayToolStripMenuItem.Text = "eBay"
+        ' 
+        ' MSNToolStripMenuItem
+        ' 
+        MSNToolStripMenuItem.Image = CType(resources.GetObject("MSNToolStripMenuItem.Image"), Image)
+        MSNToolStripMenuItem.Name = "MSNToolStripMenuItem"
+        MSNToolStripMenuItem.Size = New Size(145, 22)
+        MSNToolStripMenuItem.Text = "MSN Search"
+        ' 
+        ' DuckDuckGoToolStripMenuItem
+        ' 
+        DuckDuckGoToolStripMenuItem.Image = CType(resources.GetObject("DuckDuckGoToolStripMenuItem.Image"), Image)
+        DuckDuckGoToolStripMenuItem.Name = "DuckDuckGoToolStripMenuItem"
+        DuckDuckGoToolStripMenuItem.Size = New Size(145, 22)
+        DuckDuckGoToolStripMenuItem.Text = "DuckDuckGo"
+        ' 
+        ' DogpileToolStripMenuItem
+        ' 
+        DogpileToolStripMenuItem.Image = CType(resources.GetObject("DogpileToolStripMenuItem.Image"), Image)
+        DogpileToolStripMenuItem.Name = "DogpileToolStripMenuItem"
+        DogpileToolStripMenuItem.Size = New Size(145, 22)
+        DogpileToolStripMenuItem.Text = "Dogpile"
+        ' 
+        ' WebCrawlerToolStripMenuItem
+        ' 
+        WebCrawlerToolStripMenuItem.Image = CType(resources.GetObject("WebCrawlerToolStripMenuItem.Image"), Image)
+        WebCrawlerToolStripMenuItem.Name = "WebCrawlerToolStripMenuItem"
+        WebCrawlerToolStripMenuItem.Size = New Size(145, 22)
+        WebCrawlerToolStripMenuItem.Text = "WebCrawler"
+        ' 
+        ' LycosToolStripMenuItem
+        ' 
+        LycosToolStripMenuItem.Image = CType(resources.GetObject("LycosToolStripMenuItem.Image"), Image)
+        LycosToolStripMenuItem.Name = "LycosToolStripMenuItem"
+        LycosToolStripMenuItem.Size = New Size(145, 22)
+        LycosToolStripMenuItem.Text = "Lycos"
+        ' 
+        ' VimeoToolStripMenuItem
+        ' 
+        VimeoToolStripMenuItem.Image = CType(resources.GetObject("VimeoToolStripMenuItem.Image"), Image)
+        VimeoToolStripMenuItem.Name = "VimeoToolStripMenuItem"
+        VimeoToolStripMenuItem.Size = New Size(145, 22)
+        VimeoToolStripMenuItem.Text = "Vimeo"
+        ' 
+        ' AccuWeatherToolStripMenuItem
+        ' 
+        AccuWeatherToolStripMenuItem.Name = "AccuWeatherToolStripMenuItem"
+        AccuWeatherToolStripMenuItem.Size = New Size(145, 22)
+        AccuWeatherToolStripMenuItem.Text = "AccuWeather"
+        ' 
+        ' SocialNetworksToolStripMenuItem
+        ' 
+        SocialNetworksToolStripMenuItem.DropDownItems.AddRange(New ToolStripItem() {FacebookToolStripMenuItem, TwitterToolStripMenuItem, GoogleToolStripMenuItem, LinkedinToolStripMenuItem, InstagramToolStripMenuItem, BadooToolStripMenuItem, VkToolStripMenuItem, PinterestToolStripMenuItem, FormspringToolStripMenuItem, KeekToolStripMenuItem})
+        SocialNetworksToolStripMenuItem.Image = CType(resources.GetObject("SocialNetworksToolStripMenuItem.Image"), Image)
+        SocialNetworksToolStripMenuItem.Name = "SocialNetworksToolStripMenuItem"
+        SocialNetworksToolStripMenuItem.Size = New Size(185, 22)
+        SocialNetworksToolStripMenuItem.Text = "Social Networks "
+        ' 
+        ' FacebookToolStripMenuItem
+        ' 
+        FacebookToolStripMenuItem.Image = CType(resources.GetObject("FacebookToolStripMenuItem.Image"), Image)
+        FacebookToolStripMenuItem.Name = "FacebookToolStripMenuItem"
+        FacebookToolStripMenuItem.Size = New Size(135, 22)
+        FacebookToolStripMenuItem.Text = "Facebook"
+        FacebookToolStripMenuItem.ToolTipText = "Facebook is a social utility that connects people with friends and others who work, study and live around them."
+        ' 
+        ' TwitterToolStripMenuItem
+        ' 
+        TwitterToolStripMenuItem.Image = CType(resources.GetObject("TwitterToolStripMenuItem.Image"), Image)
+        TwitterToolStripMenuItem.Name = "TwitterToolStripMenuItem"
+        TwitterToolStripMenuItem.Size = New Size(135, 22)
+        TwitterToolStripMenuItem.Text = "Twitter"
+        TwitterToolStripMenuItem.ToolTipText = "Instantly connect to what's most important to you. Follow your friends, experts, favorite celebrities, and breaking news."
+        ' 
+        ' GoogleToolStripMenuItem
+        ' 
+        GoogleToolStripMenuItem.Image = CType(resources.GetObject("GoogleToolStripMenuItem.Image"), Image)
+        GoogleToolStripMenuItem.Name = "GoogleToolStripMenuItem"
+        GoogleToolStripMenuItem.Size = New Size(135, 22)
+        GoogleToolStripMenuItem.Text = "Google+"
+        GoogleToolStripMenuItem.ToolTipText = "Connect with friends and family, explore your interests, and see how all of Google gets better."
+        ' 
+        ' LinkedinToolStripMenuItem
+        ' 
+        LinkedinToolStripMenuItem.Image = CType(resources.GetObject("LinkedinToolStripMenuItem.Image"), Image)
+        LinkedinToolStripMenuItem.Name = "LinkedinToolStripMenuItem"
+        LinkedinToolStripMenuItem.Size = New Size(135, 22)
+        LinkedinToolStripMenuItem.Text = "LinkedIn"
+        LinkedinToolStripMenuItem.ToolTipText = "Manage your professional identity. Build and engage with your professional network. Access knowledge, insights and opportunities."
+        ' 
+        ' InstagramToolStripMenuItem
+        ' 
+        InstagramToolStripMenuItem.Image = CType(resources.GetObject("InstagramToolStripMenuItem.Image"), Image)
+        InstagramToolStripMenuItem.Name = "InstagramToolStripMenuItem"
+        InstagramToolStripMenuItem.Size = New Size(135, 22)
+        InstagramToolStripMenuItem.Text = "Instagram"
+        ' 
+        ' BadooToolStripMenuItem
+        ' 
+        BadooToolStripMenuItem.Image = CType(resources.GetObject("BadooToolStripMenuItem.Image"), Image)
+        BadooToolStripMenuItem.Name = "BadooToolStripMenuItem"
+        BadooToolStripMenuItem.Size = New Size(135, 22)
+        BadooToolStripMenuItem.Text = "Badoo"
+        BadooToolStripMenuItem.ToolTipText = "Meet People on Badoo, Make New Friends, Chat, Flirt"
+        ' 
+        ' VkToolStripMenuItem
+        ' 
+        VkToolStripMenuItem.Image = CType(resources.GetObject("VkToolStripMenuItem.Image"), Image)
+        VkToolStripMenuItem.Name = "VkToolStripMenuItem"
+        VkToolStripMenuItem.Size = New Size(135, 22)
+        VkToolStripMenuItem.Text = "VK"
+        VkToolStripMenuItem.ToolTipText = "VK is the largest European social network with over a 100 million active users, especially in Russia, Ukraine, Kazakhstan, Moldova, Belarus and more.."
+        ' 
+        ' PinterestToolStripMenuItem
+        ' 
+        PinterestToolStripMenuItem.Image = CType(resources.GetObject("PinterestToolStripMenuItem.Image"), Image)
+        PinterestToolStripMenuItem.Name = "PinterestToolStripMenuItem"
+        PinterestToolStripMenuItem.Size = New Size(135, 22)
+        PinterestToolStripMenuItem.Text = "Pinterest"
+        PinterestToolStripMenuItem.ToolTipText = "A content sharing service that allows members to ""pin"" images, videos and other objects to their pinboard"
+        ' 
+        ' FormspringToolStripMenuItem
+        ' 
+        FormspringToolStripMenuItem.Image = CType(resources.GetObject("FormspringToolStripMenuItem.Image"), Image)
+        FormspringToolStripMenuItem.Name = "FormspringToolStripMenuItem"
+        FormspringToolStripMenuItem.Size = New Size(135, 22)
+        FormspringToolStripMenuItem.Text = "Formspring"
+        FormspringToolStripMenuItem.ToolTipText = "The place to share your perspective on anything"
+        ' 
+        ' KeekToolStripMenuItem
+        ' 
+        KeekToolStripMenuItem.Image = CType(resources.GetObject("KeekToolStripMenuItem.Image"), Image)
+        KeekToolStripMenuItem.Name = "KeekToolStripMenuItem"
+        KeekToolStripMenuItem.Size = New Size(135, 22)
+        KeekToolStripMenuItem.Text = "Keek"
+        KeekToolStripMenuItem.ToolTipText = "Share Quick Video Updates With Friends"
+        ' 
+        ' ToolsToolStripMenuItem
+        ' 
+        ToolsToolStripMenuItem.DropDownItems.AddRange(New ToolStripItem() {SettingsToolStripMenuItem, DownloadManagerToolStripMenuItem, FtpClientToolStripMenuItem, TaskToolStripMenuItem})
+        ToolsToolStripMenuItem.Name = "ToolsToolStripMenuItem"
+        ToolsToolStripMenuItem.Size = New Size(49, 22)
+        ToolsToolStripMenuItem.Text = "&Tools"
+        ' 
+        ' SettingsToolStripMenuItem
+        ' 
+        SettingsToolStripMenuItem.Image = CType(resources.GetObject("SettingsToolStripMenuItem.Image"), Image)
+        SettingsToolStripMenuItem.Name = "SettingsToolStripMenuItem"
+        SettingsToolStripMenuItem.Size = New Size(229, 22)
+        SettingsToolStripMenuItem.Text = "Browser &Settings"
+        ' 
+        ' DownloadManagerToolStripMenuItem
+        ' 
+        DownloadManagerToolStripMenuItem.Image = CType(resources.GetObject("DownloadManagerToolStripMenuItem.Image"), Image)
+        DownloadManagerToolStripMenuItem.Name = "DownloadManagerToolStripMenuItem"
+        DownloadManagerToolStripMenuItem.ShortcutKeys = Keys.Control Or Keys.D
+        DownloadManagerToolStripMenuItem.Size = New Size(229, 22)
+        DownloadManagerToolStripMenuItem.Text = "Download Manager"
+        ' 
+        ' FtpClientToolStripMenuItem
+        ' 
+        FtpClientToolStripMenuItem.Image = CType(resources.GetObject("FtpClientToolStripMenuItem.Image"), Image)
+        FtpClientToolStripMenuItem.Name = "FtpClientToolStripMenuItem"
+        FtpClientToolStripMenuItem.Size = New Size(229, 22)
+        FtpClientToolStripMenuItem.Text = "Ftp Client"
+        ' 
+        ' TaskToolStripMenuItem
+        ' 
+        TaskToolStripMenuItem.Image = CType(resources.GetObject("TaskToolStripMenuItem.Image"), Image)
+        TaskToolStripMenuItem.Name = "TaskToolStripMenuItem"
+        TaskToolStripMenuItem.Size = New Size(229, 22)
+        TaskToolStripMenuItem.Text = "Cpu Task"
+        ' 
+        ' SetHomePageToolStripMenuItem
+        ' 
+        SetHomePageToolStripMenuItem.Image = CType(resources.GetObject("SetHomePageToolStripMenuItem.Image"), Image)
+        SetHomePageToolStripMenuItem.Name = "SetHomePageToolStripMenuItem"
+        SetHomePageToolStripMenuItem.Size = New Size(219, 22)
+        SetHomePageToolStripMenuItem.Text = "Rss Reader"
+        ' 
+        ' MediaToolStripMenuItem
+        ' 
+        MediaToolStripMenuItem.Image = CType(resources.GetObject("MediaToolStripMenuItem.Image"), Image)
+        MediaToolStripMenuItem.Name = "MediaToolStripMenuItem"
+        MediaToolStripMenuItem.Size = New Size(219, 22)
+        MediaToolStripMenuItem.Text = "Media player"
+        ' 
+        ' CookieViewerToolStripMenuItem
+        ' 
+        CookieViewerToolStripMenuItem.Image = CType(resources.GetObject("CookieViewerToolStripMenuItem.Image"), Image)
+        CookieViewerToolStripMenuItem.Name = "CookieViewerToolStripMenuItem"
+        CookieViewerToolStripMenuItem.Size = New Size(219, 22)
+        CookieViewerToolStripMenuItem.Text = "Clear All Recent Data"
+        ' 
+        ' SendALinkToolStripMenuItem
+        ' 
+        SendALinkToolStripMenuItem.Image = CType(resources.GetObject("SendALinkToolStripMenuItem.Image"), Image)
+        SendALinkToolStripMenuItem.Name = "SendALinkToolStripMenuItem"
+        SendALinkToolStripMenuItem.Size = New Size(219, 22)
+        SendALinkToolStripMenuItem.Text = "Send Link.."
+        ' 
+        ' ToolStripSeparator9
+        ' 
+        ToolStripSeparator9.Name = "ToolStripSeparator9"
+        ToolStripSeparator9.Size = New Size(216, 6)
+        ' 
+        ' InternetSettingsToolStripMenuItem
+        ' 
+        InternetSettingsToolStripMenuItem.Image = CType(resources.GetObject("InternetSettingsToolStripMenuItem.Image"), Image)
+        InternetSettingsToolStripMenuItem.Name = "InternetSettingsToolStripMenuItem"
+        InternetSettingsToolStripMenuItem.Size = New Size(219, 22)
+        InternetSettingsToolStripMenuItem.Text = "Internet Settings"
+        ' 
+        ' ProxySettingsToolStripMenuItem
+        ' 
+        ProxySettingsToolStripMenuItem.Image = CType(resources.GetObject("ProxySettingsToolStripMenuItem.Image"), Image)
+        ProxySettingsToolStripMenuItem.Name = "ProxySettingsToolStripMenuItem"
+        ProxySettingsToolStripMenuItem.Size = New Size(219, 22)
+        ProxySettingsToolStripMenuItem.Text = "Proxy"
+        ' 
+        ' ToolStripSeparator15
+        ' 
+        ToolStripSeparator15.Name = "ToolStripSeparator15"
+        ToolStripSeparator15.Size = New Size(216, 6)
+        ' 
+        ' OpePageInNToolStripMenuItem
+        ' 
+        OpePageInNToolStripMenuItem.Image = CType(resources.GetObject("OpePageInNToolStripMenuItem.Image"), Image)
+        OpePageInNToolStripMenuItem.Name = "OpePageInNToolStripMenuItem"
+        OpePageInNToolStripMenuItem.Size = New Size(219, 22)
+        OpePageInNToolStripMenuItem.Text = "Open page in IE"
+        ' 
+        ' HelpToolStripMenuItem
+        ' 
+        HelpToolStripMenuItem.DropDownItems.AddRange(New ToolStripItem() {AboutToolStripMenuItem, CheckForUpdatesToolStripMenuItem, ToolStripSeparator10, KBrowserToolStripMenuItem, SToolStripMenuItem, ToolStripSeparator16, CalendarToolStripMenuItem})
+        HelpToolStripMenuItem.Name = "HelpToolStripMenuItem"
+        HelpToolStripMenuItem.Size = New Size(46, 22)
+        HelpToolStripMenuItem.Text = "&Help"
+        ' 
+        ' AboutToolStripMenuItem
+        ' 
+        AboutToolStripMenuItem.Image = CType(resources.GetObject("AboutToolStripMenuItem.Image"), Image)
+        AboutToolStripMenuItem.Name = "AboutToolStripMenuItem"
+        AboutToolStripMenuItem.Size = New Size(185, 22)
+        AboutToolStripMenuItem.Text = "&About"
+        ' 
+        ' CheckForUpdatesToolStripMenuItem
+        ' 
+        CheckForUpdatesToolStripMenuItem.Image = CType(resources.GetObject("CheckForUpdatesToolStripMenuItem.Image"), Image)
+        CheckForUpdatesToolStripMenuItem.Name = "CheckForUpdatesToolStripMenuItem"
+        CheckForUpdatesToolStripMenuItem.Size = New Size(185, 22)
+        CheckForUpdatesToolStripMenuItem.Text = "Check For Updates"
+        ' 
+        ' ToolStripSeparator10
+        ' 
+        ToolStripSeparator10.Name = "ToolStripSeparator10"
+        ToolStripSeparator10.Size = New Size(182, 6)
+        ' 
+        ' KBrowserToolStripMenuItem
+        ' 
+        KBrowserToolStripMenuItem.Name = "KBrowserToolStripMenuItem"
+        KBrowserToolStripMenuItem.Size = New Size(185, 22)
+        KBrowserToolStripMenuItem.Text = "&Visit Home Page"
+        ' 
+        ' SToolStripMenuItem
+        ' 
+        SToolStripMenuItem.Name = "SToolStripMenuItem"
+        SToolStripMenuItem.Size = New Size(185, 22)
+        SToolStripMenuItem.Text = "&Mail to Author"
+        ' 
+        ' ToolStripSeparator16
+        ' 
+        ToolStripSeparator16.Name = "ToolStripSeparator16"
+        ToolStripSeparator16.Size = New Size(182, 6)
+        ' 
+        ' CalendarToolStripMenuItem
+        ' 
+        CalendarToolStripMenuItem.Name = "CalendarToolStripMenuItem"
+        CalendarToolStripMenuItem.Size = New Size(185, 22)
+        CalendarToolStripMenuItem.Text = "Calendar"
+        ' 
+        ' MenuStrip1
+        ' 
+        MenuStrip1.BackColor = Color.Transparent
+        MenuStrip1.Font = New Font("Trebuchet MS", 9.75F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        MenuStrip1.GripStyle = ToolStripGripStyle.Visible
+        MenuStrip1.Items.AddRange(New ToolStripItem() {FileToolStripMenuItem, EditToolStripMenuItem, ViewToolStripMenuItem, BookmarksToolStripMenuItem, ToolsToolStripMenuItem, HelpToolStripMenuItem})
+        MenuStrip1.Location = New Point(0, 0)
+        MenuStrip1.Name = "MenuStrip1"
+        MenuStrip1.Padding = New Padding(4, 2, 0, 2)
+        MenuStrip1.Size = New Size(1440, 26)
+        MenuStrip1.TabIndex = 1
+        MenuStrip1.Text = "MenuStrip1"
+        ' 
+        ' ToolStripTextBox2
+        ' 
+        ToolStripTextBox2.Name = "ToolStripTextBox2"
+        ToolStripTextBox2.Size = New Size(100, 22)
+        ' 
+        ' Timer1
+        ' 
+        Timer1.Interval = 10000
+        ' 
+        ' Back
+        ' 
+        Back.DisplayStyle = ToolStripItemDisplayStyle.Image
+        Back.Image = CType(resources.GetObject("Back.Image"), Image)
+        Back.ImageScaling = ToolStripItemImageScaling.None
+        Back.ImageTransparentColor = Color.Magenta
+        Back.Name = "Back"
+        Back.Size = New Size(36, 36)
+        Back.Text = "Back"
+        ' 
+        ' ToolStripButton2
+        ' 
+        ToolStripButton2.DisplayStyle = ToolStripItemDisplayStyle.Image
+        ToolStripButton2.Image = CType(resources.GetObject("ToolStripButton2.Image"), Image)
+        ToolStripButton2.ImageScaling = ToolStripItemImageScaling.None
+        ToolStripButton2.ImageTransparentColor = Color.Magenta
+        ToolStripButton2.Name = "ToolStripButton2"
+        ToolStripButton2.Size = New Size(36, 36)
+        ToolStripButton2.Text = "Forward"
+        ' 
+        ' ToolStripButton3
+        ' 
+        ToolStripButton3.DisplayStyle = ToolStripItemDisplayStyle.Image
+        ToolStripButton3.Image = CType(resources.GetObject("ToolStripButton3.Image"), Image)
+        ToolStripButton3.ImageScaling = ToolStripItemImageScaling.None
+        ToolStripButton3.ImageTransparentColor = Color.Magenta
+        ToolStripButton3.Name = "ToolStripButton3"
+        ToolStripButton3.Size = New Size(36, 36)
+        ToolStripButton3.Text = "Refresh"
+        ' 
+        ' ToolStripButton4
+        ' 
+        ToolStripButton4.DisplayStyle = ToolStripItemDisplayStyle.Image
+        ToolStripButton4.Image = CType(resources.GetObject("ToolStripButton4.Image"), Image)
+        ToolStripButton4.ImageScaling = ToolStripItemImageScaling.None
+        ToolStripButton4.ImageTransparentColor = Color.Magenta
+        ToolStripButton4.Name = "ToolStripButton4"
+        ToolStripButton4.Size = New Size(36, 36)
+        ToolStripButton4.Text = "Home"
+        ' 
+        ' ToolStripButton7
+        ' 
+        ToolStripButton7.DisplayStyle = ToolStripItemDisplayStyle.Image
+        ToolStripButton7.Image = CType(resources.GetObject("ToolStripButton7.Image"), Image)
+        ToolStripButton7.ImageScaling = ToolStripItemImageScaling.None
+        ToolStripButton7.ImageTransparentColor = Color.Magenta
+        ToolStripButton7.Name = "ToolStripButton7"
+        ToolStripButton7.Size = New Size(36, 36)
+        ToolStripButton7.Text = "New tab"
+        ' 
+        ' ToolStripButton6
+        ' 
+        ToolStripButton6.DisplayStyle = ToolStripItemDisplayStyle.Image
+        ToolStripButton6.Image = CType(resources.GetObject("ToolStripButton6.Image"), Image)
+        ToolStripButton6.ImageScaling = ToolStripItemImageScaling.None
+        ToolStripButton6.ImageTransparentColor = Color.Magenta
+        ToolStripButton6.Name = "ToolStripButton6"
+        ToolStripButton6.Size = New Size(36, 36)
+        ToolStripButton6.Text = "Close tab"
+        ' 
+        ' img
+        ' 
+        img.BackgroundImageLayout = ImageLayout.Center
+        img.DisplayStyle = ToolStripItemDisplayStyle.Image
+        img.Font = New Font("Segoe UI", 8.25F)
+        img.ImageTransparentColor = Color.Magenta
+        img.Name = "img"
+        img.Size = New Size(23, 36)
+        ' 
+        ' ToolStripTextBox1
+        ' 
+        ToolStripTextBox1.AutoCompleteMode = AutoCompleteMode.SuggestAppend
+        ToolStripTextBox1.AutoCompleteSource = AutoCompleteSource.AllUrl
+        ToolStripTextBox1.BackColor = SystemColors.ControlLightLight
+        ToolStripTextBox1.Name = "ToolStripTextBox1"
+        ToolStripTextBox1.Size = New Size(641, 39)
+        ' 
+        ' ToolStripButton5
+        ' 
+        ToolStripButton5.DisplayStyle = ToolStripItemDisplayStyle.Image
+        ToolStripButton5.Image = CType(resources.GetObject("ToolStripButton5.Image"), Image)
+        ToolStripButton5.ImageScaling = ToolStripItemImageScaling.None
+        ToolStripButton5.ImageTransparentColor = Color.Magenta
+        ToolStripButton5.Name = "ToolStripButton5"
+        ToolStripButton5.Size = New Size(36, 36)
+        ToolStripButton5.Text = "Go"
+        ' 
+        ' ToolStripButton8
+        ' 
+        ToolStripButton8.DisplayStyle = ToolStripItemDisplayStyle.Image
+        ToolStripButton8.Image = CType(resources.GetObject("ToolStripButton8.Image"), Image)
+        ToolStripButton8.ImageScaling = ToolStripItemImageScaling.None
+        ToolStripButton8.ImageTransparentColor = Color.Magenta
+        ToolStripButton8.Name = "ToolStripButton8"
+        ToolStripButton8.Size = New Size(36, 36)
+        ToolStripButton8.Text = "RSS"
+        ' 
+        ' ToolStripButton9
+        ' 
+        ToolStripButton9.DisplayStyle = ToolStripItemDisplayStyle.Image
+        ToolStripButton9.Image = CType(resources.GetObject("ToolStripButton9.Image"), Image)
+        ToolStripButton9.ImageScaling = ToolStripItemImageScaling.None
+        ToolStripButton9.ImageTransparentColor = Color.Magenta
+        ToolStripButton9.Name = "ToolStripButton9"
+        ToolStripButton9.Size = New Size(36, 36)
+        ToolStripButton9.Text = "Add Bookmark"
+        ' 
+        ' tsbAdBlockBadge
+        ' 
+        tsbAdBlockBadge.DisplayStyle = ToolStripItemDisplayStyle.Text
+        tsbAdBlockBadge.Font = New Font("Segoe UI", 9F, FontStyle.Bold)
+        tsbAdBlockBadge.ForeColor = Color.DarkRed
+        tsbAdBlockBadge.Name = "tsbAdBlockBadge"
+        tsbAdBlockBadge.Size = New Size(34, 36)
+        tsbAdBlockBadge.Text = "🛡️ 0"
+        tsbAdBlockBadge.ToolTipText = "Ads & Trackers Blocked"
+        ' 
+        ' ToolStrip1
+        ' 
+        ToolStrip1.BackColor = Color.WhiteSmoke
+        ToolStrip1.Font = New Font("Segoe UI", 8.25F)
+        ToolStrip1.Items.AddRange(New ToolStripItem() {Back, ToolStripButton2, ToolStripButton3, ToolStripButton4, ToolStripButton7, ToolStripButton6, img, ToolStripTextBox1, ToolStripButton5, ToolStripButton9, tsbAdBlockBadge})
+        ToolStrip1.Location = New Point(0, 26)
+        ToolStrip1.Name = "ToolStrip1"
+        ToolStrip1.Size = New Size(1440, 39)
+        ToolStrip1.TabIndex = 4
+        ToolStrip1.Text = "ToolStrip1"
+        ' 
+        ' Form1
+        ' 
+        AutoScaleDimensions = New SizeF(7F, 15F)
+        AutoScaleMode = AutoScaleMode.Font
+        ClientSize = New Size(1440, 775)
+        ContextMenuStrip = ContextMenuStrip1
+        Controls.Add(ToolStrip1)
+        Controls.Add(StatusStrip1)
+        Controls.Add(TabControl1)
+        Controls.Add(MenuStrip1)
+        Icon = CType(resources.GetObject("$this.Icon"), Icon)
+        MainMenuStrip = MenuStrip1
+        Margin = New Padding(4, 3, 4, 3)
+        Name = "Form1"
+        Opacity = 0.99R
+        StartPosition = FormStartPosition.CenterScreen
+        Text = "K-Browser"
+        StatusStrip1.ResumeLayout(False)
+        StatusStrip1.PerformLayout()
+        ContextMenuStrip1.ResumeLayout(False)
+        MenuStrip1.ResumeLayout(False)
+        MenuStrip1.PerformLayout()
+        ToolStrip1.ResumeLayout(False)
+        ToolStrip1.PerformLayout()
+        ResumeLayout(False)
+        PerformLayout()
 
     End Sub
     Friend WithEvents StatusStrip1 As System.Windows.Forms.StatusStrip

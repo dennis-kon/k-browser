@@ -51,7 +51,7 @@ Public Class CookieViewer
     End Sub
 
     Private Sub tvCookies_NodeMouseClick(ByVal sender As Object, ByVal e As System.Windows.Forms.TreeNodeMouseClickEventArgs) Handles tvCookies.NodeMouseClick
-        If e.Button = Windows.Forms.MouseButtons.Left Then
+        If e.Button = MouseButtons.Left Then
             ViewCookie(e.Node)
         Else
             tvCookies.SelectedNode = e.Node
@@ -65,7 +65,7 @@ Public Class CookieViewer
     Private Sub DeleteCookie()
         Try
             If Not IsNothing(SelNode) Then
-                If MessageBox.Show("Are you sure you want to delete cookie" & tvCookies.SelectedNode.Text & "?", "Confirm Delete", MessageBoxButtons.YesNoCancel) = Windows.Forms.DialogResult.Yes Then
+                If MessageBox.Show("Are you sure you want to delete cookie" & tvCookies.SelectedNode.Text & "?", "Confirm Delete", MessageBoxButtons.YesNoCancel) = DialogResult.Yes Then
                     File.Delete(SelNode.Tag)
                     tvCookies.SelectedNode.Remove()
                 End If
@@ -76,7 +76,7 @@ Public Class CookieViewer
     End Sub
 
     Private Sub btnDeleteALL_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnDeleteALL.Click
-        If MessageBox.Show("Are you sure you want to delete all cookies?", "Confirm Delete", MessageBoxButtons.YesNoCancel) = Windows.Forms.DialogResult.Yes Then
+        If MessageBox.Show("Are you sure you want to delete all cookies?", "Confirm Delete", MessageBoxButtons.YesNoCancel) = DialogResult.Yes Then
             Try
                 Dim cookiesDir As String = Environment.GetFolderPath(Environment.SpecialFolder.Cookies)
                 If Directory.Exists(cookiesDir) Then
