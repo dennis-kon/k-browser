@@ -91,6 +91,13 @@ Public Class Settings
                     End If
                 Next
             End If
+
+            ' Restore Performance settings
+            If _privacyModel.Performance IsNot Nothing Then
+                chkUseHardwareAcceleration.Checked = _privacyModel.Performance.UseHardwareAcceleration
+                chkFadeInactiveTabs.Checked = _privacyModel.Performance.FadeInactiveTabs
+                chkPreloadPages.Checked = _privacyModel.Performance.PreloadPages
+            End If
         Catch ex As Exception
             System.Diagnostics.Debug.WriteLine("Settings: Error loading Privacy Tab Settings: " & ex.Message)
         End Try
@@ -133,15 +140,9 @@ Public Class Settings
         End If
         LoadBlockedSites()
 
-        ' Performance
-        chkMemorySaver.Checked = My.Settings.MemorySaverEnabled
-        chkHardwareAccel.Checked = My.Settings.HardwareAcceleration
-        cmbDoH.SelectedIndex = Math.Max(0, Math.Min(3, My.Settings.DnsOverHttpsProvider))
+        ' Performance settings are loaded asynchronously from Settings.json via LoadPrivacyTabSettingsAsync()
 
-        m_isSyncingDns = True
-        txtDoHCustom.Text = If(My.Settings.CustomDnsServer IsNot Nothing, My.Settings.CustomDnsServer, "")
-        txtCustomDns.Text = txtDoHCustom.Text
-        m_isSyncingDns = False
+        txtCustomDns.Text = If(My.Settings.CustomDnsServer IsNot Nothing, My.Settings.CustomDnsServer, "")
 
         ' Advanced
         chkEnableProxy.Checked = My.Settings.CustomProxyEnabled
@@ -153,10 +154,18 @@ Public Class Settings
         ' Save standard WinForms settings
         SaveAllSettings()
 
-        ' Save Privacy & Startup Settings to Settings.json
+        ' Save Privacy, Startup & Performance Settings to Settings.json
         If _privacyModel Is Nothing Then _privacyModel = New PrivacySettingsModel()
         _privacyModel.BlockThirdPartyCookies = chkBlockThirdPartyCookies.Checked
         _privacyModel.StartupMode = If(rbContinueWhereLeftOff.Checked, "RestoreSession", "NewTab")
+
+        If _privacyModel.Performance Is Nothing Then _privacyModel.Performance = New PerformanceSettingsModel()
+        _privacyModel.Performance.UseHardwareAcceleration = chkUseHardwareAcceleration.Checked
+        _privacyModel.Performance.FadeInactiveTabs = chkFadeInactiveTabs.Checked
+        _privacyModel.Performance.PreloadPages = chkPreloadPages.Checked
+
+        ' Apply live preferences
+        TabLifecycleManager.FadeInactiveTabsEnabled = chkFadeInactiveTabs.Checked
 
         ' Preserve column widths
         If _privacyModel.ColumnWidths Is Nothing Then _privacyModel.ColumnWidths = New Dictionary(Of String, Integer)()
@@ -213,13 +222,10 @@ Public Class Settings
             My.Settings.BlockedSites.Add(s)
         Next
 
-        ' Performance
-        My.Settings.MemorySaverEnabled = chkMemorySaver.Checked
-        My.Settings.HardwareAcceleration = chkHardwareAccel.Checked
-        My.Settings.DnsOverHttpsProvider = cmbDoH.SelectedIndex
+
 
         ' Advanced
-        My.Settings.CustomDnsServer = If(txtCustomDns.Text.Trim() <> "", txtCustomDns.Text.Trim(), txtDoHCustom.Text.Trim())
+        My.Settings.CustomDnsServer = txtCustomDns.Text.Trim()
         My.Settings.CustomProxyEnabled = chkEnableProxy.Checked
         My.Settings.CustomProxyHost = txtProxyHost.Text.Trim()
         Dim port As Integer = 8080
@@ -518,21 +524,7 @@ Public Class Settings
         End If
     End Sub
 
-    Private Sub txtDoHCustom_TextChanged(ByVal sender As Object, ByVal e As EventArgs) Handles txtDoHCustom.TextChanged
-        If Not m_isSyncingDns Then
-            m_isSyncingDns = True
-            txtCustomDns.Text = txtDoHCustom.Text
-            m_isSyncingDns = False
-        End If
-    End Sub
 
-    Private Sub txtCustomDns_TextChanged(ByVal sender As Object, ByVal e As EventArgs) Handles txtCustomDns.TextChanged
-        If Not m_isSyncingDns Then
-            m_isSyncingDns = True
-            txtDoHCustom.Text = txtCustomDns.Text
-            m_isSyncingDns = False
-        End If
-    End Sub
 
     Private Sub btnBrowseDownloads_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnBrowseDownloads.Click
         Using fbd As New FolderBrowserDialog()

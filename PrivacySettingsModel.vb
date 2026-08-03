@@ -24,6 +24,11 @@ Public Class PrivacySettingsModel
     ''' Timestamp of the last successful backup. Formatted as ISO-8601 string.
     ''' </summary>
     Public Property LastBackup As Nullable(Of DateTime) = Nothing
+
+    ''' <summary>
+    ''' Performance configuration section (Graphics, Tabs, Page Loading).
+    ''' </summary>
+    Public Property Performance As PerformanceSettingsModel = New PerformanceSettingsModel()
 End Class
 
 ''' <summary>

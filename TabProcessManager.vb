@@ -3,13 +3,18 @@ Imports System.Threading.Tasks
 Imports Microsoft.Web.WebView2.Core
 Imports Microsoft.Web.WebView2.WinForms
 
+''' <summary>
+''' Primary manager for WebView2 environment creation and process configuration.
+''' Connects performance options (Graphics Acceleration, Page Preloading) and Privacy options.
+''' </summary>
 Public Class TabProcessManager
 
     Private Shared ReadOnly LockObj As New Object()
     Private Shared SharedEnvironment As CoreWebView2Environment
 
     ''' <summary>
-    ''' Gets or creates the primary shared CoreWebView2Environment configured with Chromium site isolation switches.
+    ''' Gets or creates the primary shared CoreWebView2Environment configured with Chromium site isolation,
+    ''' GPU acceleration policies, preloading options, and privacy switches.
     ''' </summary>
     Public Shared Async Function GetSharedEnvironmentAsync() As Task(Of CoreWebView2Environment)
         If SharedEnvironment IsNot Nothing Then
@@ -22,15 +27,19 @@ Public Class TabProcessManager
                 Directory.CreateDirectory(userDataDir)
             End If
 
-            Dim options As New CoreWebView2EnvironmentOptions()
-            ' Enforce Chromium process isolation per origin and disable single-process flags
-            options.AdditionalBrowserArguments = "--enable-features=IsolateOrigins,site-per-process --disable-features=SingleProcess"
-
-            ' Automatically load privacy preference from Settings.json on startup
+            ' Automatically load settings from Settings.json on startup
             Dim settingsSvc As New SettingsService()
-            Dim privacySvc As New PrivacySettingsService(settingsSvc)
-            Dim privacyModel As PrivacySettingsModel = Await settingsSvc.LoadSettingsAsync()
-            privacySvc.ConfigureEnvironmentOptions(options, privacyModel.BlockThirdPartyCookies)
+            Dim settingsModel As PrivacySettingsModel = Await settingsSvc.LoadSettingsAsync()
+
+            Dim perfSettings As PerformanceSettingsModel = If(settingsModel.Performance, New PerformanceSettingsModel())
+            Dim options As CoreWebView2EnvironmentOptions = BrowserInitializationService.CreateEnvironmentOptions(perfSettings, settingsModel.BlockThirdPartyCookies)
+
+            ' Append process isolation switches
+            Dim curArgs As String = If(options.AdditionalBrowserArguments, "")
+            options.AdditionalBrowserArguments = (curArgs & " --enable-features=IsolateOrigins,site-per-process --disable-features=SingleProcess").Trim()
+
+            ' Configure live TabLifecycleManager options
+            TabLifecycleManager.FadeInactiveTabsEnabled = perfSettings.FadeInactiveTabs
 
             SharedEnvironment = Await CoreWebView2Environment.CreateAsync(Nothing, userDataDir, options)
             Return SharedEnvironment
@@ -52,13 +61,13 @@ Public Class TabProcessManager
                 Directory.CreateDirectory(userDataDir)
             End If
 
-            Dim options As New CoreWebView2EnvironmentOptions()
-            options.AdditionalBrowserArguments = "--enable-features=IsolateOrigins,site-per-process --disable-features=SingleProcess"
-
             Dim settingsSvc As New SettingsService()
-            Dim privacySvc As New PrivacySettingsService(settingsSvc)
-            Dim privacyModel As PrivacySettingsModel = Await settingsSvc.LoadSettingsAsync()
-            privacySvc.ConfigureEnvironmentOptions(options, privacyModel.BlockThirdPartyCookies)
+            Dim settingsModel As PrivacySettingsModel = Await settingsSvc.LoadSettingsAsync()
+            Dim perfSettings As PerformanceSettingsModel = If(settingsModel.Performance, New PerformanceSettingsModel())
+
+            Dim options As CoreWebView2EnvironmentOptions = BrowserInitializationService.CreateEnvironmentOptions(perfSettings, settingsModel.BlockThirdPartyCookies)
+            Dim curArgs As String = If(options.AdditionalBrowserArguments, "")
+            options.AdditionalBrowserArguments = (curArgs & " --enable-features=IsolateOrigins,site-per-process --disable-features=SingleProcess").Trim()
 
             env = Await CoreWebView2Environment.CreateAsync(Nothing, userDataDir, options)
         Catch ex As Exception

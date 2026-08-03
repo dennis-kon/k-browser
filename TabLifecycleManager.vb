@@ -3,9 +3,14 @@ Imports System.Windows.Forms
 Imports Microsoft.Web.WebView2.Core
 Imports Microsoft.Web.WebView2.WinForms
 
+''' <summary>
+''' Dedicated service managing tab lifecycle (sleeping background tabs, tab fading, memory saving).
+''' Extensible architecture supporting Sleeping Tabs, Memory Saver, and Tab Hibernation.
+''' </summary>
 Public Class TabLifecycleManager
 
     Private Shared ReadOnly SuspendedTabs As New HashSet(Of WebView2)()
+    Public Shared Property FadeInactiveTabsEnabled As Boolean = True
 
     ''' <summary>
     ''' Handles tab selection change events in Form1 to resume the active tab and suspend idle background tabs.
@@ -36,7 +41,8 @@ Public Class TabLifecycleManager
     End Sub
 
     ''' <summary>
-    ''' Suspends background tab JavaScript timers and rendering loop to conserve RAM and CPU.
+    ''' Suspends background tab JavaScript timers and rendering loop to conserve RAM and CPU,
+    ''' and applies visual fading to inactive tab headers when FadeInactiveTabs is enabled.
     ''' </summary>
     Public Shared Async Sub SuspendTab(ByVal brws As WebView2)
         If brws IsNot Nothing AndAlso brws.CoreWebView2 IsNot Nothing Then
@@ -45,6 +51,7 @@ Public Class TabLifecycleManager
                     Dim success As Boolean = Await brws.CoreWebView2.TrySuspendAsync()
                     If success Then
                         SuspendedTabs.Add(brws)
+                        ApplyTabFadeState(brws, True)
                         System.Diagnostics.Debug.WriteLine("Tab suspended successfully to free memory.")
                     End If
                 End If
@@ -55,7 +62,7 @@ Public Class TabLifecycleManager
     End Sub
 
     ''' <summary>
-    ''' Resumes a suspended tab when activated by the user.
+    ''' Resumes a suspended tab when activated by the user and restores normal tab header appearance.
     ''' </summary>
     Public Shared Sub ResumeTab(ByVal brws As WebView2)
         If brws IsNot Nothing AndAlso brws.CoreWebView2 IsNot Nothing Then
@@ -63,11 +70,30 @@ Public Class TabLifecycleManager
                 If SuspendedTabs.Contains(brws) Then
                     brws.CoreWebView2.Resume()
                     SuspendedTabs.Remove(brws)
+                    ApplyTabFadeState(brws, False)
                     System.Diagnostics.Debug.WriteLine("Tab resumed from suspension.")
                 End If
             Catch ex As Exception
                 System.Diagnostics.Debug.WriteLine("Resume tab error: " & ex.Message)
             End Try
+        End If
+    End Sub
+
+    ''' <summary>
+    ''' Applies visual fading state to a tab page header.
+    ''' </summary>
+    Private Shared Sub ApplyTabFadeState(ByVal brws As WebView2, ByVal isSuspended As Boolean)
+        If brws IsNot Nothing AndAlso brws.Parent IsNot Nothing AndAlso TypeOf brws.Parent Is TabPage Then
+            Dim page As TabPage = DirectCast(brws.Parent, TabPage)
+            If FadeInactiveTabsEnabled AndAlso isSuspended Then
+                If Not page.Text.StartsWith("💤 ") Then
+                    page.Text = "💤 " & page.Text
+                End If
+            Else
+                If page.Text.StartsWith("💤 ") Then
+                    page.Text = page.Text.Substring(3)
+                End If
+            End If
         End If
     End Sub
 

@@ -43,6 +43,19 @@ Partial Class Settings
         btnResetSettings = New Button()
         lblLastBackup = New Label()
         ToolTip1 = New ToolTip()
+        grpGraphics = New GroupBox()
+        chkUseHardwareAcceleration = New CheckBox()
+        lblGraphicsDesc = New Label()
+        lblGraphicsStatus = New Label()
+        grpTabs = New GroupBox()
+        chkFadeInactiveTabs = New CheckBox()
+        lblTabsDesc = New Label()
+        lblTabsStatus = New Label()
+        grpPageLoading = New GroupBox()
+        chkPreloadPages = New CheckBox()
+        lblPageLoadingDesc = New Label()
+        lblPageLoadingInfo = New Label()
+        lblPageLoadingStatus = New Label()
         tpPrivacyTab = New TabPage()
         grpCookies = New GroupBox()
         chkBlockThirdPartyCookies = New CheckBox()
@@ -86,14 +99,19 @@ Partial Class Settings
         btnAddBlock = New Button()
         btnRemoveBlock = New Button()
         tpPerformance = New TabPage()
-        grpPerfGeneral = New GroupBox()
-        chkMemorySaver = New CheckBox()
-        chkHardwareAccel = New CheckBox()
-        grpDoH = New GroupBox()
-        lblDoH = New Label()
-        cmbDoH = New ComboBox()
-        lblDoHCustom = New Label()
-        txtDoHCustom = New TextBox()
+        grpGraphics = New GroupBox()
+        chkUseHardwareAcceleration = New CheckBox()
+        lblGraphicsDesc = New Label()
+        lblGraphicsStatus = New Label()
+        grpTabs = New GroupBox()
+        chkFadeInactiveTabs = New CheckBox()
+        lblTabsDesc = New Label()
+        lblTabsStatus = New Label()
+        grpPageLoading = New GroupBox()
+        chkPreloadPages = New CheckBox()
+        lblPageLoadingDesc = New Label()
+        lblPageLoadingInfo = New Label()
+        lblPageLoadingStatus = New Label()
         tpAdvanced = New TabPage()
         grpDns = New GroupBox()
         lblCustomDns = New Label()
@@ -113,6 +131,9 @@ Partial Class Settings
         tpBrowser.SuspendLayout()
         grpStartupSection.SuspendLayout()
         grpBackupRestore.SuspendLayout()
+        grpGraphics.SuspendLayout()
+        grpTabs.SuspendLayout()
+        grpPageLoading.SuspendLayout()
         tpPrivacyTab.SuspendLayout()
         grpCookies.SuspendLayout()
         grpCookieManager.SuspendLayout()
@@ -122,8 +143,9 @@ Partial Class Settings
         grpJsSites.SuspendLayout()
         grpBlocked.SuspendLayout()
         tpPerformance.SuspendLayout()
-        grpPerfGeneral.SuspendLayout()
-        grpDoH.SuspendLayout()
+        grpGraphics.SuspendLayout()
+        grpTabs.SuspendLayout()
+        grpPageLoading.SuspendLayout()
         tpAdvanced.SuspendLayout()
         grpDns.SuspendLayout()
         grpProxy.SuspendLayout()
@@ -792,16 +814,12 @@ Partial Class Settings
         ' btnRemoveBlock
         ' 
         btnRemoveBlock.Location = New Point(135, 204)
-        btnRemoveBlock.Name = "btnRemoveBlock"
-        btnRemoveBlock.Size = New Size(105, 25)
-        btnRemoveBlock.TabIndex = 3
-        btnRemoveBlock.Text = "Remove"
-        btnRemoveBlock.UseVisualStyleBackColor = True
         ' 
         ' tpPerformance
         ' 
-        tpPerformance.Controls.Add(grpPerfGeneral)
-        tpPerformance.Controls.Add(grpDoH)
+        tpPerformance.Controls.Add(grpGraphics)
+        tpPerformance.Controls.Add(grpTabs)
+        tpPerformance.Controls.Add(grpPageLoading)
         tpPerformance.Location = New Point(4, 22)
         tpPerformance.Name = "tpPerformance"
         tpPerformance.Padding = New Padding(10)
@@ -810,93 +828,151 @@ Partial Class Settings
         tpPerformance.Text = "Performance"
         tpPerformance.UseVisualStyleBackColor = True
         ' 
-        ' grpPerfGeneral
+        ' grpGraphics
         ' 
-        grpPerfGeneral.Controls.Add(chkMemorySaver)
-        grpPerfGeneral.Controls.Add(chkHardwareAccel)
-        grpPerfGeneral.Location = New Point(13, 10)
-        grpPerfGeneral.Name = "grpPerfGeneral"
-        grpPerfGeneral.Size = New Size(557, 94)
-        grpPerfGeneral.TabIndex = 0
-        grpPerfGeneral.TabStop = False
-        grpPerfGeneral.Text = "Resource Management"
+        grpGraphics.Controls.Add(chkUseHardwareAcceleration)
+        grpGraphics.Controls.Add(lblGraphicsDesc)
+        grpGraphics.Controls.Add(lblGraphicsStatus)
+        grpGraphics.Location = New Point(10, 10)
+        grpGraphics.Name = "grpGraphics"
+        grpGraphics.Size = New Size(578, 95)
+        grpGraphics.TabIndex = 0
+        grpGraphics.TabStop = False
+        grpGraphics.Text = "🖥️ Graphics"
         ' 
-        ' chkMemorySaver
+        ' chkUseHardwareAcceleration
         ' 
-        chkMemorySaver.AutoSize = True
-        chkMemorySaver.Checked = True
-        chkMemorySaver.CheckState = CheckState.Checked
-        chkMemorySaver.Location = New Point(15, 25)
-        chkMemorySaver.Name = "chkMemorySaver"
-        chkMemorySaver.Size = New Size(289, 17)
-        chkMemorySaver.TabIndex = 0
-        chkMemorySaver.Text = "Enable Memory Saver (sleep inactive background tabs)"
-        chkMemorySaver.UseVisualStyleBackColor = True
+        chkUseHardwareAcceleration.AutoSize = True
+        chkUseHardwareAcceleration.Font = New Font("Tahoma", 8.25F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
+        chkUseHardwareAcceleration.Location = New Point(15, 20)
+        chkUseHardwareAcceleration.Name = "chkUseHardwareAcceleration"
+        chkUseHardwareAcceleration.Size = New Size(265, 17)
+        chkUseHardwareAcceleration.TabIndex = 0
+        chkUseHardwareAcceleration.Text = "Use graphics acceleration when available"
+        ToolTip1.SetToolTip(chkUseHardwareAcceleration, "Improves browser performance by using the GPU for rendering when supported by your hardware.")
+        chkUseHardwareAcceleration.UseVisualStyleBackColor = True
         ' 
-        ' chkHardwareAccel
+        ' lblGraphicsDesc
         ' 
-        chkHardwareAccel.AutoSize = True
-        chkHardwareAccel.Checked = True
-        chkHardwareAccel.CheckState = CheckState.Checked
-        chkHardwareAccel.Location = New Point(15, 55)
-        chkHardwareAccel.Name = "chkHardwareAccel"
-        chkHardwareAccel.Size = New Size(244, 17)
-        chkHardwareAccel.TabIndex = 1
-        chkHardwareAccel.Text = "Enable Hardware Acceleration when available"
-        chkHardwareAccel.UseVisualStyleBackColor = True
+        lblGraphicsDesc.AutoSize = True
+        lblGraphicsDesc.ForeColor = Color.DimGray
+        lblGraphicsDesc.Location = New Point(34, 40)
+        lblGraphicsDesc.Name = "lblGraphicsDesc"
+        lblGraphicsDesc.Size = New Size(420, 13)
+        lblGraphicsDesc.TabIndex = 1
+        lblGraphicsDesc.Text = "Improves browser performance by using the GPU for rendering when supported by your hardware."
         ' 
-        ' grpDoH
+        ' lblGraphicsStatus
         ' 
-        grpDoH.Controls.Add(lblDoH)
-        grpDoH.Controls.Add(cmbDoH)
-        grpDoH.Controls.Add(lblDoHCustom)
-        grpDoH.Controls.Add(txtDoHCustom)
-        grpDoH.Location = New Point(13, 115)
-        grpDoH.Name = "grpDoH"
-        grpDoH.Size = New Size(557, 114)
-        grpDoH.TabIndex = 1
-        grpDoH.TabStop = False
-        grpDoH.Text = "DNS-over-HTTPS (DoH) Settings"
+        lblGraphicsStatus.AutoSize = True
+        lblGraphicsStatus.Font = New Font("Tahoma", 8.25F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
+        lblGraphicsStatus.ForeColor = Color.DarkGoldenrod
+        lblGraphicsStatus.Location = New Point(34, 62)
+        lblGraphicsStatus.Name = "lblGraphicsStatus"
+        lblGraphicsStatus.Size = New Size(245, 13)
+        lblGraphicsStatus.TabIndex = 2
+        lblGraphicsStatus.Text = "⚠️ Restart required for this setting to take effect."
         ' 
-        ' lblDoH
+        ' grpTabs
         ' 
-        lblDoH.AutoSize = True
-        lblDoH.Location = New Point(15, 30)
-        lblDoH.Name = "lblDoH"
-        lblDoH.Size = New Size(74, 13)
-        lblDoH.TabIndex = 0
-        lblDoH.Text = "DoH Provider:"
+        grpTabs.Controls.Add(chkFadeInactiveTabs)
+        grpTabs.Controls.Add(lblTabsDesc)
+        grpTabs.Controls.Add(lblTabsStatus)
+        grpTabs.Location = New Point(10, 115)
+        grpTabs.Name = "grpTabs"
+        grpTabs.Size = New Size(578, 95)
+        grpTabs.TabIndex = 1
+        grpTabs.TabStop = False
+        grpTabs.Text = "📑 Tabs"
         ' 
-        ' cmbDoH
+        ' chkFadeInactiveTabs
         ' 
-        cmbDoH.DropDownStyle = ComboBoxStyle.DropDownList
-        cmbDoH.FormattingEnabled = True
-        cmbDoH.Items.AddRange(New Object() {"Off (Default System DNS)", "Cloudflare (1.1.1.1)", "Google (8.8.8.8)", "Custom"})
-        cmbDoH.Location = New Point(120, 27)
-        cmbDoH.Name = "cmbDoH"
-        cmbDoH.Size = New Size(250, 21)
-        cmbDoH.TabIndex = 1
+        chkFadeInactiveTabs.AutoSize = True
+        chkFadeInactiveTabs.Font = New Font("Tahoma", 8.25F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
+        chkFadeInactiveTabs.Location = New Point(15, 20)
+        chkFadeInactiveTabs.Name = "chkFadeInactiveTabs"
+        chkFadeInactiveTabs.Size = New Size(130, 17)
+        chkFadeInactiveTabs.TabIndex = 0
+        chkFadeInactiveTabs.Text = "Fade inactive tabs"
+        ToolTip1.SetToolTip(chkFadeInactiveTabs, "Tabs will appear visually inactive when they are sleeping or saving memory and CPU resources.")
+        chkFadeInactiveTabs.UseVisualStyleBackColor = True
         ' 
-        ' lblDoHCustom
+        ' lblTabsDesc
         ' 
-        lblDoHCustom.AutoSize = True
-        lblDoHCustom.Location = New Point(15, 68)
-        lblDoHCustom.Name = "lblDoHCustom"
-        lblDoHCustom.Size = New Size(92, 13)
-        lblDoHCustom.TabIndex = 2
-        lblDoHCustom.Text = "Custom DoH URL:"
+        lblTabsDesc.AutoSize = True
+        lblTabsDesc.ForeColor = Color.DimGray
+        lblTabsDesc.Location = New Point(34, 40)
+        lblTabsDesc.Name = "lblTabsDesc"
+        lblTabsDesc.Size = New Size(410, 13)
+        lblTabsDesc.TabIndex = 1
+        lblTabsDesc.Text = "Tabs will appear visually inactive when they are sleeping or saving memory and CPU resources."
         ' 
-        ' txtDoHCustom
+        ' lblTabsStatus
         ' 
-        txtDoHCustom.Location = New Point(120, 65)
-        txtDoHCustom.Name = "txtDoHCustom"
-        txtDoHCustom.Size = New Size(380, 21)
-        txtDoHCustom.TabIndex = 3
+        lblTabsStatus.AutoSize = True
+        lblTabsStatus.Font = New Font("Tahoma", 8.25F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
+        lblTabsStatus.ForeColor = Color.ForestGreen
+        lblTabsStatus.Location = New Point(34, 62)
+        lblTabsStatus.Name = "lblTabsStatus"
+        lblTabsStatus.Size = New Size(125, 13)
+        lblTabsStatus.TabIndex = 2
+        lblTabsStatus.Text = "✓ Applied immediately"
         ' 
-        ' tpAdvanced
+        ' grpPageLoading
         ' 
-        tpAdvanced.Controls.Add(grpDns)
-        tpAdvanced.Controls.Add(grpProxy)
+        grpPageLoading.Controls.Add(chkPreloadPages)
+        grpPageLoading.Controls.Add(lblPageLoadingDesc)
+        grpPageLoading.Controls.Add(lblPageLoadingInfo)
+        grpPageLoading.Controls.Add(lblPageLoadingStatus)
+        grpPageLoading.Location = New Point(10, 220)
+        grpPageLoading.Name = "grpPageLoading"
+        grpPageLoading.Size = New Size(578, 120)
+        grpPageLoading.TabIndex = 2
+        grpPageLoading.TabStop = False
+        grpPageLoading.Text = "⚡ Page Loading"
+        ' 
+        ' chkPreloadPages
+        ' 
+        chkPreloadPages.AutoSize = True
+        chkPreloadPages.Font = New Font("Tahoma", 8.25F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
+        chkPreloadPages.Location = New Point(15, 20)
+        chkPreloadPages.Name = "chkPreloadPages"
+        chkPreloadPages.Size = New Size(298, 17)
+        chkPreloadPages.TabIndex = 0
+        chkPreloadPages.Text = "Preload pages for faster browsing and searching"
+        ToolTip1.SetToolTip(chkPreloadPages, "Uses cookies and predictive loading to improve browsing performance by preloading likely pages.")
+        chkPreloadPages.UseVisualStyleBackColor = True
+        ' 
+        ' lblPageLoadingDesc
+        ' 
+        lblPageLoadingDesc.AutoSize = True
+        lblPageLoadingDesc.ForeColor = Color.DimGray
+        lblPageLoadingDesc.Location = New Point(34, 40)
+        lblPageLoadingDesc.Name = "lblPageLoadingDesc"
+        lblPageLoadingDesc.Size = New Size(420, 13)
+        lblPageLoadingDesc.TabIndex = 1
+        lblPageLoadingDesc.Text = "Uses cookies and predictive loading to improve browsing performance by preloading likely pages."
+        ' 
+        ' lblPageLoadingInfo
+        ' 
+        lblPageLoadingInfo.AutoSize = True
+        lblPageLoadingInfo.ForeColor = Color.DimGray
+        lblPageLoadingInfo.Location = New Point(34, 58)
+        lblPageLoadingInfo.Name = "lblPageLoadingInfo"
+        lblPageLoadingInfo.Size = New Size(365, 13)
+        lblPageLoadingInfo.TabIndex = 2
+        lblPageLoadingInfo.Text = "Uses cookies to remember your preferences, even if you don't visit those pages."
+        ' 
+        ' lblPageLoadingStatus
+        ' 
+        lblPageLoadingStatus.AutoSize = True
+        lblPageLoadingStatus.Font = New Font("Tahoma", 8.25F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
+        lblPageLoadingStatus.ForeColor = Color.ForestGreen
+        lblPageLoadingStatus.Location = New Point(34, 85)
+        lblPageLoadingStatus.Name = "lblPageLoadingStatus"
+        lblPageLoadingStatus.Size = New Size(125, 13)
+        lblPageLoadingStatus.TabIndex = 3
+        lblPageLoadingStatus.Text = "✓ Applied immediately"
         tpAdvanced.Location = New Point(4, 22)
         tpAdvanced.Name = "tpAdvanced"
         tpAdvanced.Padding = New Padding(10)
@@ -1036,57 +1112,6 @@ Partial Class Settings
         btnApply.TabIndex = 2
         btnApply.Text = "Apply"
         btnApply.UseVisualStyleBackColor = True
-chkHardwareAccel.TabIndex = 1
-        chkHardwareAccel.Text = "Enable Hardware Acceleration when available"
-        chkHardwareAccel.UseVisualStyleBackColor = True
-        ' 
-        ' grpDoH
-        ' 
-        grpDoH.Controls.Add(lblDoH)
-        grpDoH.Controls.Add(cmbDoH)
-        grpDoH.Controls.Add(lblDoHCustom)
-        grpDoH.Controls.Add(txtDoHCustom)
-        grpDoH.Location = New Point(13, 115)
-        grpDoH.Name = "grpDoH"
-        grpDoH.Size = New Size(557, 114)
-        grpDoH.TabIndex = 1
-        grpDoH.TabStop = False
-        grpDoH.Text = "DNS-over-HTTPS (DoH) Settings"
-        ' 
-        ' lblDoH
-        ' 
-        lblDoH.AutoSize = True
-        lblDoH.Location = New Point(15, 30)
-        lblDoH.Name = "lblDoH"
-        lblDoH.Size = New Size(74, 13)
-        lblDoH.TabIndex = 0
-        lblDoH.Text = "DoH Provider:"
-        ' 
-        ' cmbDoH
-        ' 
-        cmbDoH.DropDownStyle = ComboBoxStyle.DropDownList
-        cmbDoH.FormattingEnabled = True
-        cmbDoH.Items.AddRange(New Object() {"Off (Default System DNS)", "Cloudflare (1.1.1.1)", "Google (8.8.8.8)", "Custom"})
-        cmbDoH.Location = New Point(120, 27)
-        cmbDoH.Name = "cmbDoH"
-        cmbDoH.Size = New Size(250, 21)
-        cmbDoH.TabIndex = 1
-        ' 
-        ' lblDoHCustom
-        ' 
-        lblDoHCustom.AutoSize = True
-        lblDoHCustom.Location = New Point(15, 68)
-        lblDoHCustom.Name = "lblDoHCustom"
-        lblDoHCustom.Size = New Size(92, 13)
-        lblDoHCustom.TabIndex = 2
-        lblDoHCustom.Text = "Custom DoH URL:"
-        ' 
-        ' txtDoHCustom
-        ' 
-        txtDoHCustom.Location = New Point(120, 65)
-        txtDoHCustom.Name = "txtDoHCustom"
-        txtDoHCustom.Size = New Size(380, 21)
-        txtDoHCustom.TabIndex = 3
         ' 
         ' tpAdvanced
         ' 
@@ -1254,6 +1279,12 @@ chkHardwareAccel.TabIndex = 1
         grpStartupSection.PerformLayout()
         grpBackupRestore.ResumeLayout(False)
         grpBackupRestore.PerformLayout()
+        grpGraphics.ResumeLayout(False)
+        grpGraphics.PerformLayout()
+        grpTabs.ResumeLayout(False)
+        grpTabs.PerformLayout()
+        grpPageLoading.ResumeLayout(False)
+        grpPageLoading.PerformLayout()
         tpPrivacyTab.ResumeLayout(False)
         grpCookies.ResumeLayout(False)
         grpCookies.PerformLayout()
@@ -1269,10 +1300,12 @@ chkHardwareAccel.TabIndex = 1
         grpBlocked.ResumeLayout(False)
         grpBlocked.PerformLayout()
         tpPerformance.ResumeLayout(False)
-        grpPerfGeneral.ResumeLayout(False)
-        grpPerfGeneral.PerformLayout()
-        grpDoH.ResumeLayout(False)
-        grpDoH.PerformLayout()
+        grpGraphics.ResumeLayout(False)
+        grpGraphics.PerformLayout()
+        grpTabs.ResumeLayout(False)
+        grpTabs.PerformLayout()
+        grpPageLoading.ResumeLayout(False)
+        grpPageLoading.PerformLayout()
         tpAdvanced.ResumeLayout(False)
         grpDns.ResumeLayout(False)
         grpDns.PerformLayout()
@@ -1337,14 +1370,19 @@ chkHardwareAccel.TabIndex = 1
     Friend WithEvents btnRemoveBlock As System.Windows.Forms.Button
 
     ' Performance Controls
-    Friend WithEvents grpPerfGeneral As System.Windows.Forms.GroupBox
-    Friend WithEvents chkMemorySaver As System.Windows.Forms.CheckBox
-    Friend WithEvents chkHardwareAccel As System.Windows.Forms.CheckBox
-    Friend WithEvents grpDoH As System.Windows.Forms.GroupBox
-    Friend WithEvents lblDoH As System.Windows.Forms.Label
-    Friend WithEvents cmbDoH As System.Windows.Forms.ComboBox
-    Friend WithEvents lblDoHCustom As System.Windows.Forms.Label
-    Friend WithEvents txtDoHCustom As System.Windows.Forms.TextBox
+    Friend WithEvents grpGraphics As System.Windows.Forms.GroupBox
+    Friend WithEvents chkUseHardwareAcceleration As System.Windows.Forms.CheckBox
+    Friend WithEvents lblGraphicsDesc As System.Windows.Forms.Label
+    Friend WithEvents lblGraphicsStatus As System.Windows.Forms.Label
+    Friend WithEvents grpTabs As System.Windows.Forms.GroupBox
+    Friend WithEvents chkFadeInactiveTabs As System.Windows.Forms.CheckBox
+    Friend WithEvents lblTabsDesc As System.Windows.Forms.Label
+    Friend WithEvents lblTabsStatus As System.Windows.Forms.Label
+    Friend WithEvents grpPageLoading As System.Windows.Forms.GroupBox
+    Friend WithEvents chkPreloadPages As System.Windows.Forms.CheckBox
+    Friend WithEvents lblPageLoadingDesc As System.Windows.Forms.Label
+    Friend WithEvents lblPageLoadingInfo As System.Windows.Forms.Label
+    Friend WithEvents lblPageLoadingStatus As System.Windows.Forms.Label
 
     ' Advanced Controls
     Friend WithEvents grpDns As System.Windows.Forms.GroupBox
