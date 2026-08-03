@@ -8,7 +8,19 @@ Public Class Settings
     Private m_blockedSitesDraft As New List(Of String)()
     Private m_isSyncingDns As Boolean = False
 
-    Private Sub Settings_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
+    Private ReadOnly _privacySettingsService As New PrivacySettingsService()
+    Private ReadOnly _cookieService As New CookieService()
+    Private ReadOnly _cookieExportService As New CookieExportService()
+    Private ReadOnly _backupService As New BackupService()
+    Private ReadOnly _restoreService As New RestoreService()
+    Private ReadOnly _sessionService As New SessionService()
+    Private ReadOnly _settingsService As New SettingsService()
+    Private _privacyModel As PrivacySettingsModel = New PrivacySettingsModel()
+    Private _loadedCookies As New List(Of CookieItem)()
+    Private _activeWebView As Microsoft.Web.WebView2.WinForms.WebView2 = Nothing
+    Private Const SearchPlaceholder As String = "Search website..."
+
+    Private Async Sub Settings_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
         ThemeManager.ApplyTheme(Me)
         Try
             If Form1.ActiveForm IsNot Nothing AndAlso Form1.ActiveForm.Icon IsNot Nothing Then
@@ -18,19 +30,75 @@ Public Class Settings
             End If
         Catch
         End Try
+
         LoadAllSettings()
+        FindActiveWebView()
+        Await LoadPrivacyTabSettingsAsync()
+        Await RefreshCookiesGridAsync()
     End Sub
+
+    Private Sub FindActiveWebView()
+        Try
+            If Form1.ActiveForm IsNot Nothing AndAlso TypeOf Form1.ActiveForm Is Form1 Then
+                Dim main As Form1 = DirectCast(Form1.ActiveForm, Form1)
+                If main.TabControl1 IsNot Nothing AndAlso main.TabControl1.SelectedTab IsNot Nothing AndAlso main.TabControl1.SelectedTab.Controls.Count > 0 Then
+                    _activeWebView = TryCast(main.TabControl1.SelectedTab.Controls(0), Microsoft.Web.WebView2.WinForms.WebView2)
+                End If
+            End If
+
+            If _activeWebView Is Nothing Then
+                For Each f As Form In Application.OpenForms
+                    If TypeOf f Is Form1 Then
+                        Dim main As Form1 = DirectCast(f, Form1)
+                        If main.TabControl1 IsNot Nothing AndAlso main.TabControl1.SelectedTab IsNot Nothing AndAlso main.TabControl1.SelectedTab.Controls.Count > 0 Then
+                            _activeWebView = TryCast(main.TabControl1.SelectedTab.Controls(0), Microsoft.Web.WebView2.WinForms.WebView2)
+                            If _activeWebView IsNot Nothing Then Exit For
+                        End If
+                    End If
+                Next
+            End If
+        Catch ex As Exception
+            System.Diagnostics.Debug.WriteLine("Settings: Error discovering active WebView2 control: " & ex.Message)
+        End Try
+    End Sub
+
+    Private Async Function LoadPrivacyTabSettingsAsync() As Task
+        Try
+            _privacyModel = Await _privacySettingsService.LoadPrivacySettingsAsync()
+            chkBlockThirdPartyCookies.Checked = _privacyModel.BlockThirdPartyCookies
+
+            ' Restore StartupMode
+            If _privacyModel.StartupMode = "RestoreSession" Then
+                rbContinueWhereLeftOff.Checked = True
+                rbOpenNewTabPage.Checked = False
+            Else
+                rbOpenNewTabPage.Checked = True
+                rbContinueWhereLeftOff.Checked = False
+            End If
+
+            ' Restore LastBackup label
+            If _privacyModel.LastBackup.HasValue Then
+                lblLastBackup.Text = "Last backup: " & _privacyModel.LastBackup.Value.ToString("dd MMM yyyy HH:mm")
+            Else
+                lblLastBackup.Text = "Last backup: Never"
+            End If
+
+            ' Restore saved column widths from Settings.json
+            If _privacyModel.ColumnWidths IsNot Nothing AndAlso _privacyModel.ColumnWidths.Count > 0 Then
+                For Each col As DataGridViewColumn In dgvCookies.Columns
+                    If _privacyModel.ColumnWidths.ContainsKey(col.Name) Then
+                        col.Width = _privacyModel.ColumnWidths(col.Name)
+                    End If
+                Next
+            End If
+        Catch ex As Exception
+            System.Diagnostics.Debug.WriteLine("Settings: Error loading Privacy Tab Settings: " & ex.Message)
+        End Try
+    End Function
 
     Private Sub LoadAllSettings()
         ' Browser Settings
         txtHomePage.Text = If(String.IsNullOrEmpty(My.Settings.HomePageUrl), "https://www.google.com", My.Settings.HomePageUrl)
-        Select Case My.Settings.StartupBehavior
-            Case 1 : rbStartupBlank.Checked = True
-            Case 2 : rbStartupRestore.Checked = True
-            Case 3 : rbStartupSpecific.Checked = True
-            Case Else : rbStartupHome.Checked = True
-        End Select
-        cmbNewTab.SelectedIndex = Math.Max(0, Math.Min(2, My.Settings.NewTabPage))
         cmbSearchEngine.SelectedItem = If(String.IsNullOrEmpty(My.Settings.SearchEngine), "Google", My.Settings.SearchEngine)
         If cmbSearchEngine.SelectedIndex < 0 Then cmbSearchEngine.SelectedIndex = 0
         txtDownloads.Text = If(String.IsNullOrEmpty(My.Settings.DownloadsFolder), Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Downloads"), My.Settings.DownloadsFolder)
@@ -81,19 +149,37 @@ Public Class Settings
         txtProxyPort.Text = My.Settings.CustomProxyPort.ToString()
     End Sub
 
+    Private Async Function SaveAllSettingsAsync() As Task
+        ' Save standard WinForms settings
+        SaveAllSettings()
+
+        ' Save Privacy & Startup Settings to Settings.json
+        If _privacyModel Is Nothing Then _privacyModel = New PrivacySettingsModel()
+        _privacyModel.BlockThirdPartyCookies = chkBlockThirdPartyCookies.Checked
+        _privacyModel.StartupMode = If(rbContinueWhereLeftOff.Checked, "RestoreSession", "NewTab")
+
+        ' Preserve column widths
+        If _privacyModel.ColumnWidths Is Nothing Then _privacyModel.ColumnWidths = New Dictionary(Of String, Integer)()
+        For Each col As DataGridViewColumn In dgvCookies.Columns
+            _privacyModel.ColumnWidths(col.Name) = col.Width
+        Next
+
+        Try
+            Await _privacySettingsService.SavePrivacySettingsAsync(_privacyModel)
+
+            ' Apply privacy settings immediately to active WebView2 control
+            If _activeWebView IsNot Nothing Then
+                _privacySettingsService.ApplyThirdPartyCookieBlocking(_activeWebView, _privacyModel.BlockThirdPartyCookies)
+            End If
+        Catch ex As Exception
+            System.Diagnostics.Debug.WriteLine("Settings: Error saving privacy settings to Settings.json: " & ex.Message)
+        End Try
+    End Function
+
     Private Sub SaveAllSettings()
         ' Browser Settings
         My.Settings.HomePageUrl = txtHomePage.Text.Trim()
-        If rbStartupBlank.Checked Then
-            My.Settings.StartupBehavior = 1
-        ElseIf rbStartupRestore.Checked Then
-            My.Settings.StartupBehavior = 2
-        ElseIf rbStartupSpecific.Checked Then
-            My.Settings.StartupBehavior = 3
-        Else
-            My.Settings.StartupBehavior = 0
-        End If
-        My.Settings.NewTabPage = cmbNewTab.SelectedIndex
+        My.Settings.StartupBehavior = If(rbContinueWhereLeftOff.Checked, 2, 0)
         My.Settings.SearchEngine = If(cmbSearchEngine.SelectedItem IsNot Nothing, cmbSearchEngine.SelectedItem.ToString(), "Google")
         My.Settings.DownloadsFolder = txtDownloads.Text.Trim()
         My.Settings.FontSize = cmbFontSize.SelectedIndex
@@ -146,6 +232,240 @@ Public Class Settings
 
         My.Settings.Save()
         SettingsManager.NotifySettingsChanged()
+    End Sub
+
+    Private Async Sub btnCreateBackup_Click(ByVal sender As Object, ByVal e As EventArgs) Handles btnCreateBackup.Click
+        Using sfd As New SaveFileDialog()
+            sfd.Title = "Save Browser Backup"
+            sfd.Filter = "ZIP Archive (*.zip)|*.zip"
+            sfd.FileName = BackupService.GetDefaultBackupFileName()
+            If sfd.ShowDialog() = DialogResult.OK Then
+                Try
+                    btnCreateBackup.Enabled = False
+                    Dim backupTime As DateTime = Await _backupService.CreateBackupAsync(sfd.FileName)
+                    lblLastBackup.Text = "Last backup: " & backupTime.ToString("dd MMM yyyy HH:mm")
+                    MessageBox.Show("Backup completed successfully.", "Backup Complete", MessageBoxButtons.OK, MessageBoxIcon.Information)
+                Catch ex As Exception
+                    MessageBox.Show("Backup failed: " & ex.Message, "Backup Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                Finally
+                    btnCreateBackup.Enabled = True
+                End Try
+            End If
+        End Using
+    End Sub
+
+    Private Async Sub btnRestoreBackup_Click(ByVal sender As Object, ByVal e As EventArgs) Handles btnRestoreBackup.Click
+        Using ofd As New OpenFileDialog()
+            ofd.Title = "Select Browser Backup File"
+            ofd.Filter = "ZIP Archive (*.zip)|*.zip"
+            If ofd.ShowDialog() = DialogResult.OK Then
+                If Not _restoreService.ValidateBackupArchive(ofd.FileName) Then
+                    MessageBox.Show("The selected file is not a valid browser backup archive.", "Invalid Backup Archive", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                    Return
+                End If
+
+                Dim confirm As DialogResult = MessageBox.Show("Restoring browser settings will overwrite your current configuration." & vbCrLf & vbCrLf & "Continue?", "Confirm Restore", MessageBoxButtons.YesNo, MessageBoxIcon.Warning)
+                If confirm <> DialogResult.Yes Then Return
+
+                Try
+                    btnRestoreBackup.Enabled = False
+                    Await _restoreService.RestoreBackupAsync(ofd.FileName)
+
+                    Dim restart As DialogResult = MessageBox.Show("Browser restart required." & vbCrLf & vbCrLf & "Restart now?", "Restart Required", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+                    If restart = DialogResult.Yes Then
+                        Application.Restart()
+                        Environment.Exit(0)
+                    Else
+                        LoadAllSettings()
+                        Await LoadPrivacyTabSettingsAsync()
+                    End If
+                Catch ex As Exception
+                    MessageBox.Show("Restore failed: " & ex.Message, "Restore Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                Finally
+                    btnRestoreBackup.Enabled = True
+                End Try
+            End If
+        End Using
+    End Sub
+
+    Private Async Sub btnResetSettings_Click(ByVal sender As Object, ByVal e As EventArgs) Handles btnResetSettings.Click
+        Dim confirm As DialogResult = MessageBox.Show("Restore all browser settings to their default values?" & vbCrLf & vbCrLf & "Bookmarks and downloads will not be deleted.", "Confirm Reset Settings", MessageBoxButtons.YesNo, MessageBoxIcon.Warning)
+        If confirm <> DialogResult.Yes Then Return
+
+        Try
+            btnResetSettings.Enabled = False
+            Await _restoreService.ResetSettingsAsync()
+            LoadAllSettings()
+            Await LoadPrivacyTabSettingsAsync()
+            MessageBox.Show("All browser settings have been reset to default values.", "Settings Reset", MessageBoxButtons.OK, MessageBoxIcon.Information)
+        Catch ex As Exception
+            MessageBox.Show("Reset settings failed: " & ex.Message, "Reset Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        Finally
+            btnResetSettings.Enabled = True
+        End Try
+    End Sub
+
+    Private Async Function RefreshCookiesGridAsync() As Task
+        If _activeWebView Is Nothing OrElse _activeWebView.CoreWebView2 Is Nothing Then
+            dgvCookies.Rows.Clear()
+            _loadedCookies.Clear()
+            lblCookieCount.Text = "Current cookie count: 0"
+            Return
+        End If
+
+        Try
+            btnRefreshCookies.Enabled = False
+            _loadedCookies = Await _cookieService.GetCookiesAsync(_activeWebView)
+            PopulateCookiesGrid()
+        Catch ex As Exception
+            MessageBox.Show("Failed to retrieve cookies: " & ex.Message, "Cookie Retrieval Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            dgvCookies.Rows.Clear()
+            lblCookieCount.Text = "Current cookie count: 0"
+        Finally
+            btnRefreshCookies.Enabled = True
+        End Try
+    End Function
+
+    Private Sub PopulateCookiesGrid()
+        dgvCookies.Rows.Clear()
+
+        Dim query As String = If(txtCookieSearch.Text = SearchPlaceholder, "", txtCookieSearch.Text)
+        Dim filteredList As List(Of CookieItem) = _cookieService.FilterCookies(_loadedCookies, query)
+
+        For Each cookie In filteredList
+            Dim rowIndex As Integer = dgvCookies.Rows.Add(
+                cookie.Website,
+                cookie.Name,
+                cookie.Domain,
+                cookie.Path,
+                cookie.DisplayExpires,
+                cookie.IsSecure,
+                cookie.IsHttpOnly,
+                cookie.SameSite
+            )
+            dgvCookies.Rows(rowIndex).Tag = cookie
+        Next
+
+        lblCookieCount.Text = "Current cookie count: " & filteredList.Count
+    End Sub
+
+    Private Sub txtCookieSearch_Enter(ByVal sender As Object, ByVal e As EventArgs) Handles txtCookieSearch.Enter
+        If txtCookieSearch.Text = SearchPlaceholder Then
+            txtCookieSearch.Text = ""
+            txtCookieSearch.ForeColor = System.Drawing.Color.Black
+        End If
+    End Sub
+
+    Private Sub txtCookieSearch_Leave(ByVal sender As Object, ByVal e As EventArgs) Handles txtCookieSearch.Leave
+        If String.IsNullOrWhiteSpace(txtCookieSearch.Text) Then
+            txtCookieSearch.Text = SearchPlaceholder
+            txtCookieSearch.ForeColor = System.Drawing.Color.Gray
+        End If
+    End Sub
+
+    Private Sub txtCookieSearch_TextChanged(ByVal sender As Object, ByVal e As EventArgs) Handles txtCookieSearch.TextChanged
+        If txtCookieSearch.Text <> SearchPlaceholder Then
+            PopulateCookiesGrid()
+        End If
+    End Sub
+
+    Private Async Sub btnRefreshCookies_Click(ByVal sender As Object, ByVal e As EventArgs) Handles btnRefreshCookies.Click
+        Await RefreshCookiesGridAsync()
+    End Sub
+
+    Private Async Sub btnDeleteSelectedCookie_Click(ByVal sender As Object, ByVal e As EventArgs) Handles btnDeleteSelectedCookie.Click
+        If dgvCookies.SelectedRows.Count = 0 Then
+            MessageBox.Show("Please select a cookie from the table to delete.", "Delete Cookie", MessageBoxButtons.OK, MessageBoxIcon.Information)
+            Return
+        End If
+
+        Dim selectedRow As DataGridViewRow = dgvCookies.SelectedRows(0)
+        Dim cookieItem As CookieItem = TryCast(selectedRow.Tag, CookieItem)
+        If cookieItem Is Nothing Then Return
+
+        Dim confirmResult As DialogResult = MessageBox.Show("Delete this cookie?", "Confirm Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+        If confirmResult = DialogResult.Yes Then
+            Try
+                If _activeWebView IsNot Nothing AndAlso _activeWebView.CoreWebView2 IsNot Nothing Then
+                    Dim deleted As Boolean = Await _cookieService.DeleteCookieAsync(_activeWebView, cookieItem)
+                    If deleted Then
+                        _loadedCookies.Remove(cookieItem)
+                        PopulateCookiesGrid()
+                    Else
+                        MessageBox.Show("Could not locate the specified cookie in WebView2 store.", "Delete Failed", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                    End If
+                Else
+                    MessageBox.Show("WebView2 is not initialized.", "Delete Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                End If
+            Catch ex As Exception
+                MessageBox.Show("Error deleting cookie: " & ex.Message, "Delete Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            End Try
+        End If
+    End Sub
+
+    Private Sub btnDeleteAllCookies_Click(ByVal sender As Object, ByVal e As EventArgs) Handles btnDeleteAllCookies.Click
+        Dim confirmResult As DialogResult = MessageBox.Show("Delete ALL stored cookies?" & vbCrLf & vbCrLf & "This action cannot be undone.", "Confirm Delete All", MessageBoxButtons.YesNo, MessageBoxIcon.Warning)
+        If confirmResult = DialogResult.Yes Then
+            Try
+                If _activeWebView IsNot Nothing AndAlso _activeWebView.CoreWebView2 IsNot Nothing Then
+                    _cookieService.DeleteAllCookies(_activeWebView)
+                    _loadedCookies.Clear()
+                    PopulateCookiesGrid()
+                    MessageBox.Show("All cookies have been deleted successfully.", "Cookies Cleared", MessageBoxButtons.OK, MessageBoxIcon.Information)
+                Else
+                    MessageBox.Show("WebView2 is not initialized.", "Delete Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                End If
+            Catch ex As Exception
+                MessageBox.Show("Error deleting all cookies: " & ex.Message, "Delete Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            End Try
+        End If
+    End Sub
+
+    Private Async Sub btnExportCookies_Click(ByVal sender As Object, ByVal e As EventArgs) Handles btnExportCookies.Click
+        Dim query As String = If(txtCookieSearch.Text = SearchPlaceholder, "", txtCookieSearch.Text)
+        Dim visibleCookies As List(Of CookieItem) = _cookieService.FilterCookies(_loadedCookies, query)
+
+        If visibleCookies.Count = 0 Then
+            MessageBox.Show("There are no cookies available to export.", "Export Cookies", MessageBoxButtons.OK, MessageBoxIcon.Information)
+            Return
+        End If
+
+        Using sfd As New SaveFileDialog()
+            sfd.Title = "Export Cookies to CSV"
+            sfd.Filter = "CSV Files (*.csv)|*.csv|All Files (*.*)|*.*"
+            sfd.FileName = "cookies.csv"
+
+            If sfd.ShowDialog() = DialogResult.OK Then
+                Try
+                    Await _cookieExportService.ExportToCsvAsync(visibleCookies, sfd.FileName)
+                    MessageBox.Show($"Successfully exported {visibleCookies.Count} cookies to " & Path.GetFileName(sfd.FileName), "Export Complete", MessageBoxButtons.OK, MessageBoxIcon.Information)
+                Catch ex As Exception
+                    MessageBox.Show("Failed to export cookies: " & ex.Message, "Export Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                End Try
+            End If
+        End Using
+    End Sub
+
+    Private Sub dgvCookies_CellDoubleClick(ByVal sender As Object, ByVal e As DataGridViewCellEventArgs) Handles dgvCookies.CellDoubleClick
+        If e.RowIndex < 0 OrElse e.RowIndex >= dgvCookies.Rows.Count Then Return
+
+        Dim row As DataGridViewRow = dgvCookies.Rows(e.RowIndex)
+        Dim cookieItem As CookieItem = TryCast(row.Tag, CookieItem)
+        If cookieItem IsNot Nothing AndAlso Not String.IsNullOrWhiteSpace(cookieItem.Website) Then
+            Dim targetUrl As String = cookieItem.Website.Trim()
+            If Not targetUrl.StartsWith("http://", StringComparison.OrdinalIgnoreCase) AndAlso Not targetUrl.StartsWith("https://", StringComparison.OrdinalIgnoreCase) Then
+                targetUrl = "https://" & targetUrl
+            End If
+
+            Try
+                If Form1.ActiveForm IsNot Nothing AndAlso TypeOf Form1.ActiveForm Is Form1 Then
+                    DirectCast(Form1.ActiveForm, Form1).NavigateActiveTab(targetUrl)
+                    Me.Close()
+                End If
+            Catch ex As Exception
+                System.Diagnostics.Debug.WriteLine("Error opening website from Cookie Manager: " & ex.Message)
+            End Try
+        End If
     End Sub
 
     Private Sub LoadJsDisabledSites()
@@ -231,14 +551,14 @@ Public Class Settings
         Form3.ShowDialog()
     End Sub
 
-    Private Sub btnOK_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnOK.Click
-        SaveAllSettings()
+    Private Async Sub btnOK_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnOK.Click
+        Await SaveAllSettingsAsync()
         Me.DialogResult = DialogResult.OK
         Me.Close()
     End Sub
 
-    Private Sub btnApply_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnApply.Click
-        SaveAllSettings()
+    Private Async Sub btnApply_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnApply.Click
+        Await SaveAllSettingsAsync()
         MessageBox.Show("Settings applied successfully!", "Browser Settings", MessageBoxButtons.OK, MessageBoxIcon.Information)
     End Sub
 

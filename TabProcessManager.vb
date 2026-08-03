@@ -26,6 +26,12 @@ Public Class TabProcessManager
             ' Enforce Chromium process isolation per origin and disable single-process flags
             options.AdditionalBrowserArguments = "--enable-features=IsolateOrigins,site-per-process --disable-features=SingleProcess"
 
+            ' Automatically load privacy preference from Settings.json on startup
+            Dim settingsSvc As New SettingsService()
+            Dim privacySvc As New PrivacySettingsService(settingsSvc)
+            Dim privacyModel As PrivacySettingsModel = Await settingsSvc.LoadSettingsAsync()
+            privacySvc.ConfigureEnvironmentOptions(options, privacyModel.BlockThirdPartyCookies)
+
             SharedEnvironment = Await CoreWebView2Environment.CreateAsync(Nothing, userDataDir, options)
             Return SharedEnvironment
         Catch ex As Exception
@@ -48,6 +54,11 @@ Public Class TabProcessManager
 
             Dim options As New CoreWebView2EnvironmentOptions()
             options.AdditionalBrowserArguments = "--enable-features=IsolateOrigins,site-per-process --disable-features=SingleProcess"
+
+            Dim settingsSvc As New SettingsService()
+            Dim privacySvc As New PrivacySettingsService(settingsSvc)
+            Dim privacyModel As PrivacySettingsModel = Await settingsSvc.LoadSettingsAsync()
+            privacySvc.ConfigureEnvironmentOptions(options, privacyModel.BlockThirdPartyCookies)
 
             env = Await CoreWebView2Environment.CreateAsync(Nothing, userDataDir, options)
         Catch ex As Exception

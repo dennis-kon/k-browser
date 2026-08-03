@@ -13,6 +13,7 @@
   </PropertyGroup>
   <PropertyGroup>
     <EnableSecurityDebugging>false</EnableSecurityDebugging>
+    <_LastSelectedProfileId>C:\Users\dennis\Documents\GitHub\k-browser\My Project\PublishProfiles\ClickOnceProfile.pubxml</_LastSelectedProfileId>
   </PropertyGroup>
   <ItemGroup>
     <Compile Update="AboutBox.vb">

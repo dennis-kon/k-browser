@@ -123,25 +123,53 @@ Public Class Form1
                 FullScreen()
                 full = True
             End If
-            Dim initialUrl As String = GetHomePageUrl()
-            Select Case My.Settings.StartupBehavior
-                Case 1
-                    initialUrl = "about:blank"
-                Case 2
-                    If My.Settings.History IsNot Nothing AndAlso My.Settings.History.Count > 0 Then
-                        Dim lastEntry As String = My.Settings.History(My.Settings.History.Count - 1)
-                        ' History entries are stored as "Title|URL|DateTime" — extract the URL portion
-                        Dim parts() As String = lastEntry.Split("|"c)
-                        If parts.Length >= 2 Then
-                            initialUrl = parts(1)
-                        Else
-                            initialUrl = lastEntry
+            Dim settingsSvc As New SettingsService()
+            Dim appSettings As PrivacySettingsModel = Await settingsSvc.LoadSettingsAsync()
+            Dim sessionRestored As Boolean = False
+
+            If appSettings IsNot Nothing AndAlso appSettings.StartupMode = "RestoreSession" Then
+                Try
+                    Dim sessionSvc As New SessionService()
+                    Dim session As SessionModel = Await sessionSvc.LoadSessionAsync()
+                    If session IsNot Nothing AndAlso session.Tabs IsNot Nothing AndAlso session.Tabs.Count > 0 Then
+                        For Each tabItem In session.Tabs
+                            Try
+                                Await CreateNewTab(tabItem.Url)
+                            Catch exTab As Exception
+                                System.Diagnostics.Debug.WriteLine("Form1: Error restoring tab (" & tabItem.Url & "): " & exTab.Message)
+                            End Try
+                        Next
+                        If TabControl1.TabPages.Count > 0 Then
+                            TabControl1.SelectedIndex = Math.Max(0, Math.Min(session.SelectedTab, TabControl1.TabPages.Count - 1))
                         End If
+                        sessionRestored = (TabControl1.TabPages.Count > 0)
                     End If
-                Case 3
-                    initialUrl = GetHomePageUrl()
-            End Select
-            Dim brws = Await CreateNewTab(initialUrl)
+                Catch exSession As Exception
+                    System.Diagnostics.Debug.WriteLine("Form1: Error restoring session: " & exSession.Message)
+                End Try
+            End If
+
+            If Not sessionRestored Then
+                Dim initialUrl As String = GetHomePageUrl()
+                Select Case My.Settings.StartupBehavior
+                    Case 1
+                        initialUrl = "about:blank"
+                    Case 2
+                        If My.Settings.History IsNot Nothing AndAlso My.Settings.History.Count > 0 Then
+                            Dim lastEntry As String = My.Settings.History(My.Settings.History.Count - 1)
+                            ' History entries are stored as "Title|URL|DateTime" — extract the URL portion
+                            Dim parts() As String = lastEntry.Split("|"c)
+                            If parts.Length >= 2 Then
+                                initialUrl = parts(1)
+                            Else
+                                initialUrl = lastEntry
+                            End If
+                        End If
+                    Case 3
+                        initialUrl = GetHomePageUrl()
+                End Select
+                Dim brws = Await CreateNewTab(initialUrl)
+            End If
             AdBlockEngine.LoadAllRules()
             Dim unusedTask = System.Threading.Tasks.Task.Run(Function() AdBlockEngine.CheckAndAutoUpdateListsAsync())
             If tsbAdBlockBadge IsNot Nothing Then
@@ -186,6 +214,25 @@ Public Class Form1
                 End If
             End If
         Next
+
+        Try
+            Dim privacySvc As New PrivacySettingsService()
+            Task.Run(Async Function()
+                         Dim pSettings = Await privacySvc.LoadPrivacySettingsAsync()
+                         Me.BeginInvoke(Sub()
+                                            For Each page As TabPage In TabControl1.TabPages
+                                                If page.Controls.Count > 0 Then
+                                                    Dim brws = TryCast(page.Controls(0), WebView2)
+                                                    If brws IsNot Nothing Then
+                                                        privacySvc.ApplyThirdPartyCookieBlocking(brws, pSettings.BlockThirdPartyCookies)
+                                                    End If
+                                                End If
+                                            Next
+                                        End Sub)
+                     End Function)
+        Catch ex As Exception
+            System.Diagnostics.Debug.WriteLine("Error applying privacy settings in OnSettingsChanged: " & ex.Message)
+        End Try
     End Sub
 
 
@@ -658,6 +705,15 @@ Public Class Form1
         If brws.CoreWebView2 IsNot Nothing Then
             ThemeManager.ApplyWebView2Theme(brws)
             Await UserScriptManager.RegisterScriptsForTabAsync(brws)
+
+            Try
+                Dim privacySvc As New PrivacySettingsService()
+                Dim pSettings = Await privacySvc.LoadPrivacySettingsAsync()
+                privacySvc.ApplyThirdPartyCookieBlocking(brws, pSettings.BlockThirdPartyCookies)
+            Catch ex As Exception
+                System.Diagnostics.Debug.WriteLine("Error applying privacy settings to new tab: " & ex.Message)
+            End Try
+
             brws.CoreWebView2.Settings.IsStatusBarEnabled = True
             brws.CoreWebView2.Settings.AreDefaultScriptDialogsEnabled = True
             brws.CoreWebView2.Settings.IsScriptEnabled = True
@@ -1228,7 +1284,44 @@ Public Class Form1
             My.Settings.MainLocation = Me.Location
             My.Settings.MainSize = Me.Size
             My.Settings.Save()
+
+            ' Save active session to Session.json if StartupMode = RestoreSession
+            SaveCurrentSessionIfEnabled()
         Catch ex As Exception
+            System.Diagnostics.Debug.WriteLine("Form1: Error on FormClosing: " & ex.Message)
+        End Try
+    End Sub
+
+    Private Sub SaveCurrentSessionIfEnabled()
+        Try
+            Dim settingsSvc As New SettingsService()
+            Dim settingsModel As PrivacySettingsModel = settingsSvc.LoadSettings()
+            If settingsModel IsNot Nothing AndAlso settingsModel.StartupMode = "RestoreSession" Then
+                Dim session As New SessionModel()
+                If TabControl1 IsNot Nothing AndAlso TabControl1.TabPages.Count > 0 Then
+                    For i As Integer = 0 To TabControl1.TabPages.Count - 1
+                        Dim tp As TabPage = TabControl1.TabPages(i)
+                        If tp.Controls.Count > 0 AndAlso TypeOf tp.Controls(0) Is WebView2 Then
+                            Dim wv As WebView2 = DirectCast(tp.Controls(0), WebView2)
+                            Dim urlStr As String = String.Empty
+                            If wv.Source IsNot Nothing Then
+                                urlStr = wv.Source.ToString()
+                            ElseIf wv.CoreWebView2 IsNot Nothing Then
+                                urlStr = wv.CoreWebView2.Source
+                            End If
+
+                            If Not String.IsNullOrWhiteSpace(urlStr) Then
+                                session.Tabs.Add(New TabItemModel With {.Url = urlStr, .Pinned = False})
+                            End If
+                        End If
+                    Next
+                    session.SelectedTab = Math.Max(0, Math.Min(TabControl1.SelectedIndex, session.Tabs.Count - 1))
+                End If
+                Dim sessionSvc As New SessionService()
+                sessionSvc.SaveSession(session)
+            End If
+        Catch ex As Exception
+            System.Diagnostics.Debug.WriteLine("Form1: Error saving session on exit: " & ex.Message)
         End Try
     End Sub
 

@@ -1,0 +1,127 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<asmv1:assembly xsi:schemaLocation="urn:schemas-microsoft-com:asm.v1 assembly.adaptive.xsd" manifestVersion="1.0" xmlns:asmv1="urn:schemas-microsoft-com:asm.v1" xmlns="urn:schemas-microsoft-com:asm.v2" xmlns:asmv2="urn:schemas-microsoft-com:asm.v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:co.v1="urn:schemas-microsoft-com:clickonce.v1" xmlns:asmv3="urn:schemas-microsoft-com:asm.v3" xmlns:dsig="http://www.w3.org/2000/09/xmldsig#" xmlns:co.v2="urn:schemas-microsoft-com:clickonce.v2">
+  <asmv1:assemblyIdentity name="K-Browser.exe" version="5.0.0.1" publicKeyToken="1b508e1ec57e482e" language="neutral" processorArchitecture="msil" type="win32" />
+  <description asmv2:iconFile="favicon.ico" xmlns="urn:schemas-microsoft-com:asm.v1" />
+  <application />
+  <entryPoint>
+    <assemblyIdentity name="Launcher" version="8.0.0.0" language="neutral" processorArchitecture="msil" />
+    <commandLine file="Launcher.exe" parameters="" />
+  </entryPoint>
+  <trustInfo>
+    <security>
+      <applicationRequestMinimum>
+        <PermissionSet Unrestricted="true" ID="Custom" SameSite="site" />
+        <defaultAssemblyRequest permissionSetReference="Custom" />
+      </applicationRequestMinimum>
+      <requestedPrivileges xmlns="urn:schemas-microsoft-com:asm.v3">
+        <!-- UAC Manifest Options
+            If you want to change the Windows User Account Control level replace the 
+            requestedExecutionLevel node with one of the following.
+
+        <requestedExecutionLevel  level="asInvoker" uiAccess="false" />
+        <requestedExecutionLevel  level="requireAdministrator" uiAccess="false" />
+        <requestedExecutionLevel  level="highestAvailable" uiAccess="false" />
+
+            Specifying requestedExecutionLevel node will disable file and registry virtualization.
+            If you want to utilize File and Registry Virtualization for backward 
+            compatibility then delete the requestedExecutionLevel node.
+        -->
+        <requestedExecutionLevel level="asInvoker" uiAccess="false" />
+      </requestedPrivileges>
+    </security>
+  </trustInfo>
+  <dependency>
+    <dependentOS>
+      <osVersionInfo>
+        <os majorVersion="5" minorVersion="1" buildNumber="2600" servicePackMajor="0" />
+      </osVersionInfo>
+    </dependentOS>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="preRequisite" allowDelayedBinding="true">
+      <assemblyIdentity name="Microsoft.Windows.CommonLanguageRuntime" version="4.0.30319.0" />
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Launcher.exe" size="17304">
+      <assemblyIdentity name="Launcher" version="8.0.0.0" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>D2d6MmhIwN+mPNxkh1ccP/LQnFdouOokyczcTYIQM0I=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <file name="favicon.ico" size="15086">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>t1/KfgNzFtzvB4Q9TOQsBfP0LOTTwVXGG9epmgdpFoA=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="K-Browser.dll.config" size="4543">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>bjE8vrH/h7ZUKHru7WjbVUEl6qhy9zm80IC0278+cxo=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="K-Browser.exe" size="1977496">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>dfVm95H0crrkPripwCDuUSh6h4C1oLcM8Zsna7k3awA=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Microsoft.Web.WebView2.Core.xml" size="630199" writeableType="applicationData">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>wVkaa23Ibt6LNIouqwU7l0QRbvWTGSGOJRoCNRh+fwA=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Microsoft.Web.WebView2.WinForms.xml" size="41393" writeableType="applicationData">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>S0DkmuxdvaWXIk+ZfVehZkXdwusA8xpjKSBNGFOiJFo=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Microsoft.Web.WebView2.Wpf.xml" size="143909" writeableType="applicationData">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>l1WnrVAbEH56OQXRva9eBivltPBDkOxhQp443HaG1/s=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="runtimes\win-x64\native\WebView2Loader.dll" size="165968">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>Ris2/Rvmyp91Y0ZqieV8Qe9KTe8+CoT6iF0gOupKOq8=</dsig:DigestValue>
+    </hash>
+  </file>
+  <compatibility xmlns="urn:schemas-microsoft-com:compatibility.v1">
+    <application>
+      <!-- A list of all Windows versions that this application is designed to work with. Windows will automatically select the most compatible environment.-->
+      <!-- If your application is designed to work with Windows 7, uncomment the following supportedOS node-->
+      <!--<supportedOS Id="{35138b9a-5d96-4fbd-8e2d-a2440225f93a}"/>-->
+    </application>
+  </compatibility>
+<publisherIdentity name="CN=DK\dennis" issuerKeyHash="e50b411bd0027ff3d55f6cdf9c744c1fd10b4f82" /><Signature Id="StrongNameSignature" xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" /><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha256" /><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature" /><Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" /></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" /><DigestValue>heYZJe92y6gup7c/ObLpza7U9a0padHWIDiGMjmJGcU=</DigestValue></Reference></SignedInfo><SignatureValue>I/7CvngjGpcjaA5PktCamoACzv1q7jzDUajDNTitVpAX+Vs6SxMPo5DzKEb4UlKJUIcs1CmrX1pcUh5hkrvtcNqTvFyWJjdVCCLQApSm4fWFROpnTzvceLWh8jJqzwmUbg4B12RhqGnez3GMtL3UuBW2LYAQIdouf3CgyPzIiuQ=</SignatureValue><KeyInfo Id="StrongNameKeyInfo"><KeyValue><RSAKeyValue><Modulus>mviBrTRvlkWnWZ9QLb2BeOQKjGK7/3TQ/GzuQOmOFQUjN4j4stl4zefOIMNK0vKdZM9yOj90iHigmOpEIscbxNlIOgBLPA1QGmg6eRSJu2eX7SVLl6nf3MH4+19uPG9HOZ/EkCs2Eoi0r13IOloEQvZJBJ7Sz1uFM0KjwI1HIOU=</Modulus><Exponent>AQAB</Exponent></RSAKeyValue></KeyValue><msrel:RelData xmlns:msrel="http://schemas.microsoft.com/windows/rel/2005/reldata"><r:license xmlns:r="urn:mpeg:mpeg21:2003:01-REL-R-NS" xmlns:as="http://schemas.microsoft.com/windows/pki/2005/Authenticode"><r:grant><as:ManifestInformation Hash="c519893932863820d6d16929adf5d4aecde9b2393fb7a72ea8cb76ef2519e685" Description="" Url=""><as:assemblyIdentity name="K-Browser.exe" version="5.0.0.1" publicKeyToken="1b508e1ec57e482e" language="neutral" processorArchitecture="msil" type="win32" /></as:ManifestInformation><as:SignedBy /><as:AuthenticodePublisher><as:X509SubjectName>CN=DK\dennis</as:X509SubjectName></as:AuthenticodePublisher></r:grant><r:issuer><Signature Id="AuthenticodeSignature" xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" /><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha256" /><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature" /><Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" /></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" /><DigestValue>2uiGLt0iCgHE7/f/ndXAxzGMr9DjyZUWEl4fFHjEcnI=</DigestValue></Reference></SignedInfo><SignatureValue>CmtXt+B6UvALkoln3AJNeQ65ETVe423GnsJxZIN+k/0mnA9SKG0INn2ZziWDPNIYuwk281hEr9xFyk9hx4zl24n4a2oMfjxz+HfrWvLjUK6CDScmJlwsEGaffm8cGCeEk7PuRCeLwW8udeLImlquvJD4XAdD4MUyFYtVlmLuio0=</SignatureValue><KeyInfo><KeyValue><RSAKeyValue><Modulus>mviBrTRvlkWnWZ9QLb2BeOQKjGK7/3TQ/GzuQOmOFQUjN4j4stl4zefOIMNK0vKdZM9yOj90iHigmOpEIscbxNlIOgBLPA1QGmg6eRSJu2eX7SVLl6nf3MH4+19uPG9HOZ/EkCs2Eoi0r13IOloEQvZJBJ7Sz1uFM0KjwI1HIOU=</Modulus><Exponent>AQAB</Exponent></RSAKeyValue></KeyValue><X509Data><X509Certificate>MIIBvTCCASagAwIBAgIQXqZ4Z+ZQgIxHpAFYGPbQ7zANBgkqhkiG9w0BAQsFADAdMRswGQYDVQQDHhIARABLAFwAZABlAG4AbgBpAHMwHhcNMjYwODAyMTM0MTA4WhcNMjcwODAyMTk0MTA4WjAdMRswGQYDVQQDHhIARABLAFwAZABlAG4AbgBpAHMwgZ8wDQYJKoZIhvcNAQEBBQADgY0AMIGJAoGBAJr4ga00b5ZFp1mfUC29gXjkCoxiu/900Pxs7kDpjhUFIzeI+LLZeM3nziDDStLynWTPcjo/dIh4oJjqRCLHG8TZSDoASzwNUBpoOnkUibtnl+0lS5ep39zB+PtfbjxvRzmfxJArNhKItK9dyDpaBEL2SQSe0s9bhTNCo8CNRyDlAgMBAAEwDQYJKoZIhvcNAQELBQADgYEAExe1oQLbS/LE6iCUpU6qKlXR0CsXF1mRfvNv/MYpUtlfIFfefPIIJKVnvBwnn5+aRGEcXTnHlj7W1paNMiUVYaGtHvmLy3CESXkgr99LnHhk1kyWNM+ws3JAl/l20p5Ha6uNcrTwGNh9IDuOG3/KvDdFTzBP/19RFJdDSBRsKXA=</X509Certificate></X509Data></KeyInfo></Signature></r:issuer></r:license></msrel:RelData></KeyInfo></Signature></asmv1:assembly>
