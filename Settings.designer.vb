@@ -76,6 +76,24 @@ Partial Class Settings
         btnDeleteSelectedCookie = New Button()
         btnRefreshCookies = New Button()
         txtCookieSearch = New TextBox()
+        tpPasswords = New TabPage()
+        grpSavedPasswords = New GroupBox()
+        txtPasswordSearch = New TextBox()
+        lblPasswordCount = New Label()
+        dgvPasswords = New DataGridView()
+        colPassWebsite = New DataGridViewTextBoxColumn()
+        colPassUsername = New DataGridViewTextBoxColumn()
+        colPassPassword = New DataGridViewTextBoxColumn()
+        colPassCreated = New DataGridViewTextBoxColumn()
+        colPassLastUsed = New DataGridViewTextBoxColumn()
+        btnDeletePassword = New Button()
+        btnDeleteAllPasswords = New Button()
+        btnExportPasswords = New Button()
+        btnImportPasswords = New Button()
+        grpPasswordPreferences = New GroupBox()
+        chkSavePasswords = New CheckBox()
+        chkAutoFill = New CheckBox()
+        chkRequireAuth = New CheckBox()
         tpPrivacy = New TabPage()
         grpPermissions = New GroupBox()
         chkPermCamera = New CheckBox()
@@ -138,6 +156,10 @@ Partial Class Settings
         grpCookies.SuspendLayout()
         grpCookieManager.SuspendLayout()
         CType(dgvCookies, ComponentModel.ISupportInitialize).BeginInit()
+        tpPasswords.SuspendLayout()
+        grpSavedPasswords.SuspendLayout()
+        grpPasswordPreferences.SuspendLayout()
+        CType(dgvPasswords, ComponentModel.ISupportInitialize).BeginInit()
         tpPrivacy.SuspendLayout()
         grpPermissions.SuspendLayout()
         grpJsSites.SuspendLayout()
@@ -156,6 +178,7 @@ Partial Class Settings
         ' 
         TabControl1.Controls.Add(tpBrowser)
         TabControl1.Controls.Add(tpPrivacyTab)
+        TabControl1.Controls.Add(tpPasswords)
         TabControl1.Controls.Add(tpPrivacy)
         TabControl1.Controls.Add(tpPerformance)
         TabControl1.Controls.Add(tpAdvanced)
@@ -580,6 +603,184 @@ Partial Class Settings
         txtCookieSearch.Size = New Size(125, 21)
         txtCookieSearch.TabIndex = 0
         txtCookieSearch.Text = "Search website..."
+        ' 
+        ' tpPasswords
+        ' 
+        tpPasswords.Controls.Add(grpSavedPasswords)
+        tpPasswords.Controls.Add(grpPasswordPreferences)
+        tpPasswords.Location = New Point(4, 22)
+        tpPasswords.Name = "tpPasswords"
+        tpPasswords.Padding = New Padding(10)
+        tpPasswords.Size = New Size(601, 452)
+        tpPasswords.TabIndex = 5
+        tpPasswords.Text = "Passwords"
+        tpPasswords.UseVisualStyleBackColor = True
+        ' 
+        ' grpSavedPasswords
+        ' 
+        grpSavedPasswords.Controls.Add(txtPasswordSearch)
+        grpSavedPasswords.Controls.Add(lblPasswordCount)
+        grpSavedPasswords.Controls.Add(dgvPasswords)
+        grpSavedPasswords.Controls.Add(btnDeletePassword)
+        grpSavedPasswords.Controls.Add(btnDeleteAllPasswords)
+        grpSavedPasswords.Controls.Add(btnExportPasswords)
+        grpSavedPasswords.Controls.Add(btnImportPasswords)
+        grpSavedPasswords.Location = New Point(10, 8)
+        grpSavedPasswords.Name = "grpSavedPasswords"
+        grpSavedPasswords.Size = New Size(578, 280)
+        grpSavedPasswords.TabIndex = 0
+        grpSavedPasswords.TabStop = False
+        grpSavedPasswords.Text = "Saved Passwords"
+        ' 
+        ' txtPasswordSearch
+        ' 
+        txtPasswordSearch.ForeColor = Color.Gray
+        txtPasswordSearch.Location = New Point(12, 20)
+        txtPasswordSearch.Name = "txtPasswordSearch"
+        txtPasswordSearch.Size = New Size(180, 21)
+        txtPasswordSearch.TabIndex = 0
+        txtPasswordSearch.Text = "Search passwords..."
+        ' 
+        ' lblPasswordCount
+        ' 
+        lblPasswordCount.AutoSize = True
+        lblPasswordCount.Font = New Font("Tahoma", 8.25F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
+        lblPasswordCount.Location = New Point(205, 23)
+        lblPasswordCount.Name = "lblPasswordCount"
+        lblPasswordCount.Size = New Size(144, 13)
+        lblPasswordCount.TabIndex = 1
+        lblPasswordCount.Text = "Saved passwords: 0"
+        ' 
+        ' dgvPasswords
+        ' 
+        dgvPasswords.AllowUserToAddRows = False
+        dgvPasswords.AllowUserToDeleteRows = False
+        dgvPasswords.AllowUserToResizeRows = False
+        dgvPasswords.BackgroundColor = Color.White
+        dgvPasswords.BorderStyle = BorderStyle.Fixed3D
+        dgvPasswords.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize
+        dgvPasswords.Columns.AddRange(New DataGridViewColumn() {colPassWebsite, colPassUsername, colPassPassword, colPassCreated, colPassLastUsed})
+        dgvPasswords.Location = New Point(12, 48)
+        dgvPasswords.MultiSelect = False
+        dgvPasswords.Name = "dgvPasswords"
+        dgvPasswords.ReadOnly = True
+        dgvPasswords.RowHeadersVisible = False
+        dgvPasswords.SelectionMode = DataGridViewSelectionMode.FullRowSelect
+        dgvPasswords.Size = New Size(554, 190)
+        dgvPasswords.TabIndex = 2
+        ' 
+        ' colPassWebsite
+        ' 
+        colPassWebsite.HeaderText = "Website"
+        colPassWebsite.Name = "colPassWebsite"
+        colPassWebsite.ReadOnly = True
+        colPassWebsite.Width = 120
+        ' 
+        ' colPassUsername
+        ' 
+        colPassUsername.HeaderText = "Username"
+        colPassUsername.Name = "colPassUsername"
+        colPassUsername.ReadOnly = True
+        colPassUsername.Width = 150
+        ' 
+        ' colPassPassword
+        ' 
+        colPassPassword.HeaderText = "Password"
+        colPassPassword.Name = "colPassPassword"
+        colPassPassword.ReadOnly = True
+        colPassPassword.Width = 90
+        ' 
+        ' colPassCreated
+        ' 
+        colPassCreated.HeaderText = "Created Date"
+        colPassCreated.Name = "colPassCreated"
+        colPassCreated.ReadOnly = True
+        colPassCreated.Width = 95
+        ' 
+        ' colPassLastUsed
+        ' 
+        colPassLastUsed.HeaderText = "Last Used"
+        colPassLastUsed.Name = "colPassLastUsed"
+        colPassLastUsed.ReadOnly = True
+        colPassLastUsed.Width = 95
+        ' 
+        ' btnDeletePassword
+        ' 
+        btnDeletePassword.Location = New Point(12, 244)
+        btnDeletePassword.Name = "btnDeletePassword"
+        btnDeletePassword.Size = New Size(110, 25)
+        btnDeletePassword.TabIndex = 3
+        btnDeletePassword.Text = "Delete Selected"
+        btnDeletePassword.UseVisualStyleBackColor = True
+        ' 
+        ' btnDeleteAllPasswords
+        ' 
+        btnDeleteAllPasswords.Location = New Point(128, 244)
+        btnDeleteAllPasswords.Name = "btnDeleteAllPasswords"
+        btnDeleteAllPasswords.Size = New Size(90, 25)
+        btnDeleteAllPasswords.TabIndex = 4
+        btnDeleteAllPasswords.Text = "Delete All"
+        btnDeleteAllPasswords.UseVisualStyleBackColor = True
+        ' 
+        ' btnExportPasswords
+        ' 
+        btnExportPasswords.Location = New Point(350, 244)
+        btnExportPasswords.Name = "btnExportPasswords"
+        btnExportPasswords.Size = New Size(105, 25)
+        btnExportPasswords.TabIndex = 5
+        btnExportPasswords.Text = "Export Passwords"
+        btnExportPasswords.UseVisualStyleBackColor = True
+        ' 
+        ' btnImportPasswords
+        ' 
+        btnImportPasswords.Location = New Point(461, 244)
+        btnImportPasswords.Name = "btnImportPasswords"
+        btnImportPasswords.Size = New Size(105, 25)
+        btnImportPasswords.TabIndex = 6
+        btnImportPasswords.Text = "Import Passwords"
+        btnImportPasswords.UseVisualStyleBackColor = True
+        ' 
+        ' grpPasswordPreferences
+        ' 
+        grpPasswordPreferences.Controls.Add(chkSavePasswords)
+        grpPasswordPreferences.Controls.Add(chkAutoFill)
+        grpPasswordPreferences.Controls.Add(chkRequireAuth)
+        grpPasswordPreferences.Location = New Point(10, 294)
+        grpPasswordPreferences.Name = "grpPasswordPreferences"
+        grpPasswordPreferences.Size = New Size(578, 110)
+        grpPasswordPreferences.TabIndex = 1
+        grpPasswordPreferences.TabStop = False
+        grpPasswordPreferences.Text = "Password Saving Preferences"
+        ' 
+        ' chkSavePasswords
+        ' 
+        chkSavePasswords.AutoSize = True
+        chkSavePasswords.Location = New Point(15, 22)
+        chkSavePasswords.Name = "chkSavePasswords"
+        chkSavePasswords.Size = New Size(143, 17)
+        chkSavePasswords.TabIndex = 0
+        chkSavePasswords.Text = "Offer to save passwords"
+        chkSavePasswords.UseVisualStyleBackColor = True
+        ' 
+        ' chkAutoFill
+        ' 
+        chkAutoFill.AutoSize = True
+        chkAutoFill.Location = New Point(15, 47)
+        chkAutoFill.Name = "chkAutoFill"
+        chkAutoFill.Size = New Size(135, 17)
+        chkAutoFill.TabIndex = 1
+        chkAutoFill.Text = "Enable password autofill"
+        chkAutoFill.UseVisualStyleBackColor = True
+        ' 
+        ' chkRequireAuth
+        ' 
+        chkRequireAuth.AutoSize = True
+        chkRequireAuth.Location = New Point(15, 72)
+        chkRequireAuth.Name = "chkRequireAuth"
+        chkRequireAuth.Size = New Size(309, 17)
+        chkRequireAuth.TabIndex = 2
+        chkRequireAuth.Text = "Require Windows authentication before viewing passwords"
+        chkRequireAuth.UseVisualStyleBackColor = True
         ' 
         ' tpPrivacy
         ' 
@@ -1291,6 +1492,12 @@ Partial Class Settings
         grpCookieManager.ResumeLayout(False)
         grpCookieManager.PerformLayout()
         CType(dgvCookies, ComponentModel.ISupportInitialize).EndInit()
+        tpPasswords.ResumeLayout(False)
+        grpSavedPasswords.ResumeLayout(False)
+        grpSavedPasswords.PerformLayout()
+        grpPasswordPreferences.ResumeLayout(False)
+        grpPasswordPreferences.PerformLayout()
+        CType(dgvPasswords, ComponentModel.ISupportInitialize).EndInit()
         tpPrivacy.ResumeLayout(False)
         tpPrivacy.PerformLayout()
         grpPermissions.ResumeLayout(False)
@@ -1432,5 +1639,25 @@ Partial Class Settings
     Friend WithEvents colHttpOnly As System.Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents colSameSite As System.Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents lblCookieCount As System.Windows.Forms.Label
+
+    ' Password Manager Controls
+    Friend WithEvents tpPasswords As System.Windows.Forms.TabPage
+    Friend WithEvents grpSavedPasswords As System.Windows.Forms.GroupBox
+    Friend WithEvents txtPasswordSearch As System.Windows.Forms.TextBox
+    Friend WithEvents lblPasswordCount As System.Windows.Forms.Label
+    Friend WithEvents dgvPasswords As System.Windows.Forms.DataGridView
+    Friend WithEvents colPassWebsite As System.Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents colPassUsername As System.Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents colPassPassword As System.Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents colPassCreated As System.Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents colPassLastUsed As System.Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents btnDeletePassword As System.Windows.Forms.Button
+    Friend WithEvents btnDeleteAllPasswords As System.Windows.Forms.Button
+    Friend WithEvents btnExportPasswords As System.Windows.Forms.Button
+    Friend WithEvents btnImportPasswords As System.Windows.Forms.Button
+    Friend WithEvents grpPasswordPreferences As System.Windows.Forms.GroupBox
+    Friend WithEvents chkSavePasswords As System.Windows.Forms.CheckBox
+    Friend WithEvents chkAutoFill As System.Windows.Forms.CheckBox
+    Friend WithEvents chkRequireAuth As System.Windows.Forms.CheckBox
 
 End Class

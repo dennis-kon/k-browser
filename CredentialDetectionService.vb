@@ -118,11 +118,6 @@ Public Class CredentialDetectionService
             Dim doc = System.Text.Json.JsonDocument.Parse(message)
             Dim root = doc.RootElement
 
-            Dim messageType As String = String.Empty
-            If root.TryGetProperty("type", messageType) Then
-                ' Must check the actual string value
-            End If
-
             Dim typeProp As System.Text.Json.JsonElement = Nothing
             If Not root.TryGetProperty("type", typeProp) Then Return
             If typeProp.GetString() <> "kbrowser_credential_capture" Then Return

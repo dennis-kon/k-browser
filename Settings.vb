@@ -20,6 +20,11 @@ Public Class Settings
     Private _activeWebView As Microsoft.Web.WebView2.WinForms.WebView2 = Nothing
     Private Const SearchPlaceholder As String = "Search website..."
 
+    Private ReadOnly _passwordManager As New PasswordManagerService()
+    Private ReadOnly _authService As New WindowsAuthenticationService()
+    Private _loadedCredentials As New List(Of CredentialEntry)()
+    Private Const PasswordSearchPlaceholder As String = "Search passwords..."
+
     Private Async Sub Settings_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
         ThemeManager.ApplyTheme(Me)
         Try
@@ -35,6 +40,7 @@ Public Class Settings
         FindActiveWebView()
         Await LoadPrivacyTabSettingsAsync()
         Await RefreshCookiesGridAsync()
+        Await RefreshPasswordsGridAsync()
     End Sub
 
     Private Sub FindActiveWebView()
@@ -97,6 +103,13 @@ Public Class Settings
                 chkUseHardwareAcceleration.Checked = _privacyModel.Performance.UseHardwareAcceleration
                 chkFadeInactiveTabs.Checked = _privacyModel.Performance.FadeInactiveTabs
                 chkPreloadPages.Checked = _privacyModel.Performance.PreloadPages
+            End If
+
+            ' Restore Password preferences
+            If _privacyModel.Passwords IsNot Nothing Then
+                chkSavePasswords.Checked = _privacyModel.Passwords.SavePasswords
+                chkAutoFill.Checked = _privacyModel.Passwords.OfferAutoFill
+                chkRequireAuth.Checked = _privacyModel.Passwords.RequireWindowsAuthentication
             End If
         Catch ex As Exception
             System.Diagnostics.Debug.WriteLine("Settings: Error loading Privacy Tab Settings: " & ex.Message)
@@ -163,6 +176,11 @@ Public Class Settings
         _privacyModel.Performance.UseHardwareAcceleration = chkUseHardwareAcceleration.Checked
         _privacyModel.Performance.FadeInactiveTabs = chkFadeInactiveTabs.Checked
         _privacyModel.Performance.PreloadPages = chkPreloadPages.Checked
+
+        If _privacyModel.Passwords Is Nothing Then _privacyModel.Passwords = New PasswordSettingsModel()
+        _privacyModel.Passwords.SavePasswords = chkSavePasswords.Checked
+        _privacyModel.Passwords.OfferAutoFill = chkAutoFill.Checked
+        _privacyModel.Passwords.RequireWindowsAuthentication = chkRequireAuth.Checked
 
         ' Apply live preferences
         TabLifecycleManager.FadeInactiveTabsEnabled = chkFadeInactiveTabs.Checked
@@ -562,6 +580,184 @@ Public Class Settings
     Private Sub btnConfigureAdBlocker_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnConfigureAdBlocker.Click
         AdBlockerSettings.ShowDialog()
         chkAdBlocker.Checked = My.Settings.AdBlockerEnabled
+    End Sub
+
+    ' ─────────────────────────────────────────────────
+    ' Password Manager Logic
+    ' ─────────────────────────────────────────────────
+
+    Private Async Function RefreshPasswordsGridAsync() As Task
+        Try
+            _loadedCredentials = Await _passwordManager.GetAllCredentialsAsync()
+            PopulatePasswordsGrid()
+        Catch ex As Exception
+            System.Diagnostics.Debug.WriteLine("Settings: Error refreshing passwords grid: " & ex.Message)
+            dgvPasswords.Rows.Clear()
+            lblPasswordCount.Text = "Saved passwords: 0"
+        End Try
+    End Function
+
+    Private Sub PopulatePasswordsGrid()
+        dgvPasswords.Rows.Clear()
+
+        Dim query As String = If(txtPasswordSearch.Text = PasswordSearchPlaceholder, "", txtPasswordSearch.Text)
+        Dim filteredList As List(Of CredentialEntry) = _passwordManager.SearchCredentials(_loadedCredentials, query)
+
+        For Each cred In filteredList
+            Dim rowIndex As Integer = dgvPasswords.Rows.Add(
+                cred.Website,
+                cred.Username,
+                "********",
+                cred.CreatedDate.ToString("dd MMM yyyy"),
+                cred.LastUsed.ToString("dd MMM yyyy")
+            )
+            dgvPasswords.Rows(rowIndex).Tag = cred
+        Next
+
+        lblPasswordCount.Text = "Saved passwords: " & filteredList.Count
+    End Sub
+
+    Private Sub txtPasswordSearch_Enter(ByVal sender As Object, ByVal e As EventArgs) Handles txtPasswordSearch.Enter
+        If txtPasswordSearch.Text = PasswordSearchPlaceholder Then
+            txtPasswordSearch.Text = ""
+            txtPasswordSearch.ForeColor = System.Drawing.Color.Black
+        End If
+    End Sub
+
+    Private Sub txtPasswordSearch_Leave(ByVal sender As Object, ByVal e As EventArgs) Handles txtPasswordSearch.Leave
+        If String.IsNullOrWhiteSpace(txtPasswordSearch.Text) Then
+            txtPasswordSearch.Text = PasswordSearchPlaceholder
+            txtPasswordSearch.ForeColor = System.Drawing.Color.Gray
+        End If
+    End Sub
+
+    Private Sub txtPasswordSearch_TextChanged(ByVal sender As Object, ByVal e As EventArgs) Handles txtPasswordSearch.TextChanged
+        If txtPasswordSearch.Text <> PasswordSearchPlaceholder Then
+            PopulatePasswordsGrid()
+        End If
+    End Sub
+
+    Private Async Sub dgvPasswords_CellDoubleClick(ByVal sender As Object, ByVal e As DataGridViewCellEventArgs) Handles dgvPasswords.CellDoubleClick
+        If e.RowIndex < 0 OrElse e.RowIndex >= dgvPasswords.Rows.Count Then Return
+
+        Dim row As DataGridViewRow = dgvPasswords.Rows(e.RowIndex)
+        Dim cred As CredentialEntry = TryCast(row.Tag, CredentialEntry)
+        If cred IsNot Nothing Then
+            Using dlg As New PasswordDetailForm(cred)
+                dlg.ShowDialog(Me)
+                If dlg.WasDeleted Then
+                    Await RefreshPasswordsGridAsync()
+                End If
+            End Using
+        End If
+    End Sub
+
+    Private Async Sub btnDeletePassword_Click(ByVal sender As Object, ByVal e As EventArgs) Handles btnDeletePassword.Click
+        If dgvPasswords.SelectedRows.Count = 0 Then
+            MessageBox.Show("Please select a saved credential from the table to delete.", "Delete Password", MessageBoxButtons.OK, MessageBoxIcon.Information)
+            Return
+        End If
+
+        Dim selectedRow As DataGridViewRow = dgvPasswords.SelectedRows(0)
+        Dim cred As CredentialEntry = TryCast(selectedRow.Tag, CredentialEntry)
+        If cred Is Nothing Then Return
+
+        Dim confirmResult As DialogResult = MessageBox.Show(
+            "Delete saved credential for " & cred.Website & " (" & cred.Username & ")?",
+            "Confirm Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+
+        If confirmResult = DialogResult.Yes Then
+            Try
+                Dim deleted As Boolean = Await _passwordManager.DeleteCredentialAsync(cred.Website, cred.Username)
+                If deleted Then
+                    _loadedCredentials.Remove(cred)
+                    PopulatePasswordsGrid()
+                Else
+                    MessageBox.Show("Could not locate the specified credential.", "Delete Failed", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                End If
+            Catch ex As Exception
+                MessageBox.Show("Error deleting password: " & ex.Message, "Delete Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            End Try
+        End If
+    End Sub
+
+    Private Async Sub btnDeleteAllPasswords_Click(ByVal sender As Object, ByVal e As EventArgs) Handles btnDeleteAllPasswords.Click
+        If _loadedCredentials.Count = 0 Then
+            MessageBox.Show("There are no saved passwords to delete.", "Delete All Passwords", MessageBoxButtons.OK, MessageBoxIcon.Information)
+            Return
+        End If
+
+        Dim confirmResult As DialogResult = MessageBox.Show(
+            "Delete ALL saved passwords?" & vbCrLf & vbCrLf & "This action cannot be undone.",
+            "Confirm Delete All Passwords", MessageBoxButtons.YesNo, MessageBoxIcon.Warning)
+
+        If confirmResult = DialogResult.Yes Then
+            Try
+                Await _passwordManager.DeleteAllCredentialsAsync()
+                _loadedCredentials.Clear()
+                PopulatePasswordsGrid()
+                MessageBox.Show("All saved passwords have been deleted.", "Passwords Cleared", MessageBoxButtons.OK, MessageBoxIcon.Information)
+            Catch ex As Exception
+                MessageBox.Show("Error deleting all passwords: " & ex.Message, "Delete Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            End Try
+        End If
+    End Sub
+
+    Private Async Sub btnExportPasswords_Click(ByVal sender As Object, ByVal e As EventArgs) Handles btnExportPasswords.Click
+        If _loadedCredentials.Count = 0 Then
+            MessageBox.Show("There are no saved passwords to export.", "Export Passwords", MessageBoxButtons.OK, MessageBoxIcon.Information)
+            Return
+        End If
+
+        ' Authenticate Windows identity before exporting sensitive credentials
+        If chkRequireAuth.Checked Then
+            If Not _authService.Authenticate(Me.Handle) Then
+                MessageBox.Show("Authentication required to export passwords.", "Export Cancelled", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                Return
+            End If
+        End If
+
+        Using sfd As New SaveFileDialog()
+            sfd.Title = "Export Encrypted Passwords"
+            sfd.Filter = "K-Browser Password Package (*.kpass)|*.kpass"
+            sfd.FileName = "passwords.kpass"
+
+            If sfd.ShowDialog() = DialogResult.OK Then
+                Try
+                    Await _passwordManager.ExportCredentialsAsync(sfd.FileName)
+                    MessageBox.Show("Successfully exported " & _loadedCredentials.Count & " credentials to " & Path.GetFileName(sfd.FileName),
+                                    "Export Complete", MessageBoxButtons.OK, MessageBoxIcon.Information)
+                Catch ex As Exception
+                    MessageBox.Show("Failed to export passwords: " & ex.Message, "Export Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                End Try
+            End If
+        End Using
+    End Sub
+
+    Private Async Sub btnImportPasswords_Click(ByVal sender As Object, ByVal e As EventArgs) Handles btnImportPasswords.Click
+        ' Authenticate Windows identity before importing
+        If chkRequireAuth.Checked Then
+            If Not _authService.Authenticate(Me.Handle) Then
+                MessageBox.Show("Authentication required to import passwords.", "Import Cancelled", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                Return
+            End If
+        End If
+
+        Using ofd As New OpenFileDialog()
+            ofd.Title = "Import Encrypted Passwords"
+            ofd.Filter = "K-Browser Password Package (*.kpass)|*.kpass"
+
+            If ofd.ShowDialog() = DialogResult.OK Then
+                Try
+                    Dim importedCount As Integer = Await _passwordManager.ImportCredentialsAsync(ofd.FileName)
+                    Await RefreshPasswordsGridAsync()
+                    MessageBox.Show("Successfully imported " & importedCount & " new credential(s).",
+                                    "Import Complete", MessageBoxButtons.OK, MessageBoxIcon.Information)
+                Catch ex As Exception
+                    MessageBox.Show("Failed to import passwords: " & ex.Message, "Import Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                End Try
+            End If
+        End Using
     End Sub
 
 End Class

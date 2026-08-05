@@ -15,11 +15,16 @@ Public Class Form1
     Public full As Boolean = False
     Public Event FileDownload As EventHandler
 
+    Private ReadOnly _credentialDetectionService As New CredentialDetectionService()
+    Private ReadOnly _passwordManagerService As New PasswordManagerService()
+
     Public Sub New()
         SetBrowserFeatureControl()
         InitializeComponent()
         wb = New WebView2()
         isUserAgentSet = False
+        AddHandler _credentialDetectionService.CredentialsCaptured, AddressOf OnCredentialsCaptured
+        AddHandler _credentialDetectionService.LoginFormDetected, AddressOf OnLoginFormDetected
     End Sub
 
     Public Sub NormalMode()
@@ -738,6 +743,7 @@ Public Class Form1
             AddHandler brws.CoreWebView2.DownloadStarting, AddressOf WebView2_DownloadStarting
             AddHandler brws.CoreWebView2.ProcessFailed, AddressOf WebView2_ProcessFailed
             AddHandler brws.CoreWebView2.NewWindowRequested, AddressOf WebView2_NewWindowRequested
+            AddHandler brws.CoreWebView2.WebMessageReceived, AddressOf WebView2_WebMessageReceived
 
             Try
                 brws.CoreWebView2.AddWebResourceRequestedFilter("*", CoreWebView2WebResourceContext.All)
@@ -1044,11 +1050,19 @@ Public Class Form1
         End If
     End Sub
 
-    Private Sub WebView2_DOMContentLoaded(ByVal sender As Object, ByVal e As CoreWebView2DOMContentLoadedEventArgs)
+    Private Async Sub WebView2_DOMContentLoaded(ByVal sender As Object, ByVal e As CoreWebView2DOMContentLoadedEventArgs)
         Dim core = TryCast(sender, CoreWebView2)
         If IsActiveTabWebView(core) Then
             ProgressBar1.Value = 85
             Label1.Text = "Rendering..."
+        End If
+
+        If core IsNot Nothing Then
+            Dim activeBrws = GetWebView2FromCore(core)
+            If activeBrws IsNot Nothing Then
+                Await _credentialDetectionService.InjectLoginDetectionScriptAsync(activeBrws)
+                Await _credentialDetectionService.CheckForAutofillAsync(activeBrws)
+            End If
         End If
     End Sub
 
@@ -1532,5 +1546,65 @@ Public Class Form1
                            "Private Mode Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
+
+    ' ─────────────────────────────────────────────────
+    ' Credential Detection & Password Manager Handlers
+    ' ─────────────────────────────────────────────────
+
+    Private Sub WebView2_WebMessageReceived(ByVal sender As Object, ByVal e As CoreWebView2WebMessageReceivedEventArgs)
+        _credentialDetectionService.HandleWebMessage(sender, e)
+    End Sub
+
+    Private Async Sub OnCredentialsCaptured(ByVal sender As Object, ByVal e As CredentialCapturedEventArgs)
+        Dim domain As String = PasswordManagerService.ExtractDomain(e.Url)
+        Using dlg As New SavePasswordForm(domain, e.Username)
+            dlg.ShowDialog(Me)
+            Select Case dlg.UserChoice
+                Case SavePasswordChoice.Save
+                    Await _passwordManagerService.SaveCredentialAsync(e.Url, e.Username, e.Password)
+                    MessageBox.Show("Password saved successfully.", "Password Saved", MessageBoxButtons.OK, MessageBoxIcon.Information)
+                Case SavePasswordChoice.Never
+                    _passwordManagerService.AddBlockedSite(e.Url)
+                Case SavePasswordChoice.NotNow
+                    ' Do nothing
+            End Select
+        End Using
+    End Sub
+
+    Private Async Sub OnLoginFormDetected(ByVal sender As Object, ByVal e As LoginFormDetectedEventArgs)
+        If e.SavedCredentials Is Nothing OrElse e.SavedCredentials.Count = 0 Then Return
+
+        Dim selectedCred As CredentialEntry = Nothing
+        If e.SavedCredentials.Count = 1 Then
+            selectedCred = e.SavedCredentials(0)
+            Dim result = MessageBox.Show(
+                "Saved login detected for " & selectedCred.Website & vbCrLf & vbCrLf &
+                "Username: " & selectedCred.Username & vbCrLf & vbCrLf &
+                "Use this account?",
+                "Saved Login Detected", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+
+            If result <> DialogResult.Yes Then Return
+        Else
+            ' Multiple accounts
+            Dim accountList As String = String.Join(vbCrLf, e.SavedCredentials.Select(Function(c, idx) (idx + 1).ToString() & ". " & c.Username))
+            Dim result = MessageBox.Show(
+                "Multiple saved accounts detected for " & e.SavedCredentials(0).Website & ":" & vbCrLf & vbCrLf &
+                accountList & vbCrLf & vbCrLf &
+                "Autofill with " & e.SavedCredentials(0).Username & "?",
+                "Saved Logins Detected", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+
+            If result = DialogResult.Yes Then
+                selectedCred = e.SavedCredentials(0)
+            Else
+                Return
+            End If
+        End If
+
+        If selectedCred IsNot Nothing Then
+            Await _credentialDetectionService.InjectAutofillAsync(e.WebView, selectedCred.Username, selectedCred.Password)
+            Await _passwordManagerService.UpdateLastUsedAsync(selectedCred.Website, selectedCred.Username)
+        End If
+    End Sub
+
 End Class
 
