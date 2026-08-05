@@ -55,10 +55,19 @@
     <Compile Update="mainForm.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Update="PasswordDetailForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="Phising.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Update="PrivateBrowserForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="Rss.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="SavePasswordForm.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="Settings.vb">

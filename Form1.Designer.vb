@@ -165,6 +165,8 @@ Partial Class Form1
         ToolStripButton8 = New ToolStripButton()
         ToolStripButton9 = New ToolStripButton()
         tsbAdBlockBadge = New ToolStripButton()
+        btnPrivateMode = New ToolStripButton()
+        PrivateWindowToolStripMenuItem = New ToolStripMenuItem()
         ToolStrip1 = New ToolStrip()
         StatusStrip1.SuspendLayout()
         ContextMenuStrip1.SuspendLayout()
@@ -275,7 +277,7 @@ Partial Class Form1
         ' 
         ' FileToolStripMenuItem
         ' 
-        FileToolStripMenuItem.DropDownItems.AddRange(New ToolStripItem() {NewWindowToolStripMenuItem, ToolStripMenuItem4, ToolStripSeparator6, NewTabToolStripMenuItem, DeleteTabToolStripMenuItem, ToolStripSeparator2, OpenFileToolStripMenuItem, SaveFileToolStripMenuItem, ToolStripSeparator3, ToolStripMenuItem1, ToolStripSeparator8, PrintToolStripMenuItem, PrintPreviewToolStripMenuItem, ToolStripSeparator4, ExitToolStripMenuItem})
+        FileToolStripMenuItem.DropDownItems.AddRange(New ToolStripItem() {NewWindowToolStripMenuItem, PrivateWindowToolStripMenuItem, ToolStripMenuItem4, ToolStripSeparator6, NewTabToolStripMenuItem, DeleteTabToolStripMenuItem, ToolStripSeparator2, OpenFileToolStripMenuItem, SaveFileToolStripMenuItem, ToolStripSeparator3, ToolStripMenuItem1, ToolStripSeparator8, PrintToolStripMenuItem, PrintPreviewToolStripMenuItem, ToolStripSeparator4, ExitToolStripMenuItem})
         FileToolStripMenuItem.Name = "FileToolStripMenuItem"
         FileToolStripMenuItem.Size = New Size(41, 22)
         FileToolStripMenuItem.Text = "&File"
@@ -1173,11 +1175,28 @@ Partial Class Form1
         tsbAdBlockBadge.Text = "🛡️ 0"
         tsbAdBlockBadge.ToolTipText = "Ads & Trackers Blocked"
         ' 
+        ' btnPrivateMode
+        ' 
+        btnPrivateMode.DisplayStyle = ToolStripItemDisplayStyle.Text
+        btnPrivateMode.Font = New Font("Segoe UI", 9F, FontStyle.Bold)
+        btnPrivateMode.ForeColor = Color.FromArgb(CType(CType(100, Byte), Integer), CType(CType(110, Byte), Integer), CType(CType(130, Byte), Integer))
+        btnPrivateMode.Name = "btnPrivateMode"
+        btnPrivateMode.Size = New Size(72, 36)
+        btnPrivateMode.Text = "🕶 Private"
+        btnPrivateMode.ToolTipText = "Open a private browsing window" & vbCrLf & vbCrLf & "Your browsing history, cookies, and site data will not be saved after closing."
+        ' 
+        ' PrivateWindowToolStripMenuItem
+        ' 
+        PrivateWindowToolStripMenuItem.Name = "PrivateWindowToolStripMenuItem"
+        PrivateWindowToolStripMenuItem.ShortcutKeys = Keys.Control Or Keys.Shift Or Keys.N
+        PrivateWindowToolStripMenuItem.Size = New Size(206, 22)
+        PrivateWindowToolStripMenuItem.Text = "🕶 New Private Window"
+        ' 
         ' ToolStrip1
         ' 
         ToolStrip1.BackColor = Color.WhiteSmoke
         ToolStrip1.Font = New Font("Segoe UI", 8.25F)
-        ToolStrip1.Items.AddRange(New ToolStripItem() {Back, ToolStripButton2, ToolStripButton3, ToolStripButton4, ToolStripButton7, ToolStripButton6, img, ToolStripTextBox1, ToolStripButton5, ToolStripButton9, tsbAdBlockBadge})
+        ToolStrip1.Items.AddRange(New ToolStripItem() {Back, ToolStripButton2, ToolStripButton3, ToolStripButton4, ToolStripButton7, ToolStripButton6, btnPrivateMode, img, ToolStripTextBox1, ToolStripButton5, ToolStripButton9, tsbAdBlockBadge})
         ToolStrip1.Location = New Point(0, 26)
         ToolStrip1.Name = "ToolStrip1"
         ToolStrip1.Size = New Size(1440, 39)
@@ -1353,6 +1372,8 @@ Partial Class Form1
     Friend WithEvents ToolStripButton8 As System.Windows.Forms.ToolStripButton
     Friend WithEvents ToolStripButton9 As System.Windows.Forms.ToolStripButton
     Friend WithEvents tsbAdBlockBadge As System.Windows.Forms.ToolStripButton
+    Friend WithEvents btnPrivateMode As System.Windows.Forms.ToolStripButton
+    Friend WithEvents PrivateWindowToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolStrip1 As System.Windows.Forms.ToolStrip
 
 End Class

@@ -269,6 +269,20 @@ Namespace My
                 Me("AdBlockLastUpdateCheck") = value
             End Set
         End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property SuppressPrivateCloseMessage() As Boolean
+            Get
+                Dim val As Object = Me("SuppressPrivateCloseMessage")
+                If val Is Nothing OrElse IsDBNull(val) Then Return False
+                Return CBool(val)
+            End Get
+            Set(ByVal value As Boolean)
+                Me("SuppressPrivateCloseMessage") = value
+            End Set
+        End Property
     End Class
 End Namespace
 

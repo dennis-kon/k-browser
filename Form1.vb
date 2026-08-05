@@ -1500,4 +1500,37 @@ Public Class Form1
             DarkModeToolStripMenuItem.Checked = ThemeManager.IsDarkMode
         End If
     End Sub
+
+    ''' <summary>
+    ''' Opens a new Private Browsing window via the toolbar button.
+    ''' Delegates all private session logic to PrivateSessionService.
+    ''' </summary>
+    Private Sub btnPrivateMode_Click(ByVal sender As Object, ByVal e As EventArgs) Handles btnPrivateMode.Click
+        OpenPrivateWindow()
+    End Sub
+
+    ''' <summary>
+    ''' Opens a new Private Browsing window via the File menu item (Ctrl+Shift+N).
+    ''' </summary>
+    Private Sub PrivateWindowToolStripMenuItem_Click(ByVal sender As Object, ByVal e As EventArgs) Handles PrivateWindowToolStripMenuItem.Click
+        OpenPrivateWindow()
+    End Sub
+
+    ''' <summary>
+    ''' Creates a new PrivateSessionService and opens a PrivateBrowserForm.
+    ''' Each call creates a completely isolated private session with its own
+    ''' WebView2 environment and temporary user data folder.
+    ''' </summary>
+    Private Sub OpenPrivateWindow()
+        Try
+            Dim sessionService As New PrivateSessionService()
+            Dim privateForm As New PrivateBrowserForm(sessionService)
+            privateForm.Show()
+        Catch ex As Exception
+            System.Diagnostics.Debug.WriteLine("Form1: Error opening private window: " & ex.Message)
+            MessageBox.Show("Failed to open private browsing window." & vbCrLf & "Please try again.",
+                           "Private Mode Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
 End Class
+

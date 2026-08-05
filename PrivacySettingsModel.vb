@@ -29,6 +29,11 @@ Public Class PrivacySettingsModel
     ''' Performance configuration section (Graphics, Tabs, Page Loading).
     ''' </summary>
     Public Property Performance As PerformanceSettingsModel = New PerformanceSettingsModel()
+
+    ''' <summary>
+    ''' Password Manager preferences (save, autofill, authentication).
+    ''' </summary>
+    Public Property Passwords As PasswordSettingsModel = New PasswordSettingsModel()
 End Class
 
 ''' <summary>
@@ -37,3 +42,24 @@ End Class
 Public Class AppSettingsModel
     Inherits PrivacySettingsModel
 End Class
+
+''' <summary>
+''' Data transfer object for Password Manager preferences persisted in Settings.json.
+''' </summary>
+Public Class PasswordSettingsModel
+    ''' <summary>
+    ''' Whether K Browser offers to save passwords after login form submission.
+    ''' </summary>
+    Public Property SavePasswords As Boolean = True
+
+    ''' <summary>
+    ''' Whether K Browser automatically fills login forms with saved credentials.
+    ''' </summary>
+    Public Property OfferAutoFill As Boolean = True
+
+    ''' <summary>
+    ''' Whether Windows authentication is required before viewing saved passwords.
+    ''' </summary>
+    Public Property RequireWindowsAuthentication As Boolean = True
+End Class
+
