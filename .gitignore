@@ -55,3 +55,6 @@ Backup*/
 _UpgradeReport_Files/
 UpgradeLog.XML
 UpgradeLog.htm
+
+# ClickOnce / Authenticode signing keys — must never be committed
+*.pfx

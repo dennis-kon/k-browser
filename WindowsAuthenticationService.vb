@@ -1,5 +1,4 @@
 Imports System.Runtime.InteropServices
-Imports System.Security.Principal
 Imports System.Threading.Tasks
 
 ''' <summary>
@@ -81,8 +80,10 @@ Public Class WindowsAuthenticationService
     ''' <summary>
     ''' Shows the native Windows credential dialog and validates the entered credentials
     ''' against the current Windows user.
-    ''' 
-    ''' Returns True only if the user successfully authenticates.
+    '''
+    ''' Returns True only if the user successfully authenticates. Fails closed: if the
+    ''' native CredUI/LogonUser path is unavailable for any reason, access is denied rather
+    ''' than falling back to a non-authenticating confirmation dialog.
     ''' </summary>
     ''' <param name="parentHandle">Handle of the parent window for the credential dialog.</param>
     Public Function Authenticate(Optional ByVal parentHandle As IntPtr = Nothing) As Boolean
@@ -90,8 +91,13 @@ Public Class WindowsAuthenticationService
             Return AuthenticateViaCredUI(parentHandle)
         Catch ex As Exception
             System.Diagnostics.Debug.WriteLine("WindowsAuthenticationService: CredUI authentication failed: " & ex.Message)
-            ' Fall back to a simple MessageBox-based check
-            Return AuthenticateFallback()
+            System.Windows.Forms.MessageBox.Show(
+                "Windows authentication is unavailable on this system, so saved passwords cannot be revealed." & vbCrLf & vbCrLf &
+                "This protection cannot be bypassed.",
+                "K Browser - Verify Identity",
+                System.Windows.Forms.MessageBoxButtons.OK,
+                System.Windows.Forms.MessageBoxIcon.Warning)
+            Return False
         End Try
     End Function
 
@@ -189,24 +195,6 @@ Public Class WindowsAuthenticationService
                 CloseHandle(tokenHandle)
             End If
         End Try
-    End Function
-
-    ''' <summary>
-    ''' Fallback authentication method using InputBox when CredUI is unavailable.
-    ''' Validates the current user's identity.
-    ''' </summary>
-    Private Function AuthenticateFallback() As Boolean
-        ' In fallback mode, we just verify the user is the current Windows user
-        ' by asking them to re-enter their credentials
-        Dim currentUser As String = WindowsIdentity.GetCurrent().Name
-        Dim result = System.Windows.Forms.MessageBox.Show(
-            "Windows authentication is required to view saved passwords." & vbCrLf & vbCrLf &
-            "Current user: " & currentUser & vbCrLf & vbCrLf &
-            "Do you want to continue?",
-            "K Browser - Verify Identity",
-            System.Windows.Forms.MessageBoxButtons.YesNo,
-            System.Windows.Forms.MessageBoxIcon.Question)
-        Return (result = System.Windows.Forms.DialogResult.Yes)
     End Function
 
 End Class

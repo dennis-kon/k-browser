@@ -94,9 +94,11 @@ Public Class CredentialDetectionService
         If String.IsNullOrEmpty(username) OrElse String.IsNullOrEmpty(password) Then Return
 
         Try
-            ' Escape single quotes in the values for safe JS injection
-            Dim safeUser As String = username.Replace("'", "\'").Replace("\", "\\")
-            Dim safePass As String = password.Replace("'", "\'").Replace("\", "\\")
+            ' Escape backslashes BEFORE single quotes for safe JS injection.
+            ' Escaping quotes first would double the backslash just inserted,
+            ' un-escaping the quote and breaking out of the string literal.
+            Dim safeUser As String = username.Replace("\", "\\").Replace("'", "\'")
+            Dim safePass As String = password.Replace("\", "\\").Replace("'", "\'")
 
             Dim script As String = GetAutofillScript(safeUser, safePass)
             Await webView.CoreWebView2.ExecuteScriptAsync(script)
@@ -136,6 +138,18 @@ Public Class CredentialDetectionService
 
             If String.IsNullOrWhiteSpace(capturedUsername) OrElse String.IsNullOrWhiteSpace(capturedPassword) Then Return
 
+            ' Security: e.Source is supplied by the WebView2 runtime itself and cannot be
+            ' spoofed by page content, unlike the "url" field inside the JSON payload.
+            ' Any page can call window.chrome.webview.postMessage() directly (not just our
+            ' injected script), so without this check a malicious site could forge a capture
+            ' claiming to be a different (e.g. banking) domain and poison that domain's saved
+            ' credentials. Reject the message unless the claimed url's host actually matches
+            ' the document that sent it.
+            If Not IsSameHost(capturedUrl, e.Source) Then
+                System.Diagnostics.Debug.WriteLine("CredentialDetectionService: Rejected credential capture — url/source host mismatch.")
+                Return
+            End If
+
             ' Check if this site is blocked
             If _passwordManager.IsBlockedSite(capturedUrl) Then Return
 
@@ -144,6 +158,16 @@ Public Class CredentialDetectionService
             System.Diagnostics.Debug.WriteLine("CredentialDetectionService: Error processing web message: " & ex.Message)
         End Try
     End Sub
+
+    ''' <summary>
+    ''' Compares the host of a page-claimed URL against the host of the WebView2-provided
+    ''' source URL. Used to reject forged credential-capture messages from untrusted page content.
+    ''' </summary>
+    Private Shared Function IsSameHost(ByVal claimedUrl As String, ByVal actualSourceUrl As String) As Boolean
+        Dim claimedHost As String = PasswordManagerService.ExtractDomain(claimedUrl)
+        Dim actualHost As String = PasswordManagerService.ExtractDomain(actualSourceUrl)
+        Return Not String.IsNullOrEmpty(claimedHost) AndAlso claimedHost.Equals(actualHost, StringComparison.OrdinalIgnoreCase)
+    End Function
 
     ' ─────────────────────────────────────────────────
     ' JavaScript Generation

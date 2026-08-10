@@ -28,6 +28,9 @@ Public Class PrivateBrowserForm
     Private ReadOnly _sessionService As PrivateSessionService
     Private _isInitialized As Boolean = False
 
+    ' URLs the user chose to ignore a phishing warning for, within this private window only.
+    Private ReadOnly _ignoredUrls As New HashSet(Of String)()
+
     ''' <summary>
     ''' Creates a new PrivateBrowserForm with the given session service.
     ''' The session service provides the isolated WebView2 environment.
@@ -134,6 +137,15 @@ Public Class PrivateBrowserForm
         AddHandler wvPrivate.CoreWebView2.DocumentTitleChanged, AddressOf PrivateWebView_DocumentTitleChanged
         AddHandler wvPrivate.CoreWebView2.NewWindowRequested, AddressOf PrivateWebView_NewWindowRequested
         AddHandler wvPrivate.CoreWebView2.DownloadStarting, AddressOf PrivateWebView_DownloadStarting
+
+        ' Wire up the ad blocker so Private Mode gets the same resource-level protection
+        ' as regular tabs — private browsing should not be MORE exposed to trackers/ads.
+        Try
+            wvPrivate.CoreWebView2.AddWebResourceRequestedFilter("*", CoreWebView2WebResourceContext.All)
+            AddHandler wvPrivate.CoreWebView2.WebResourceRequested, AddressOf PrivateWebView_WebResourceRequested
+        Catch ex As Exception
+            System.Diagnostics.Debug.WriteLine("PrivateBrowserForm: AddWebResourceRequestedFilter failed: " & ex.Message)
+        End Try
 
         ' Apply dark color scheme to WebView2
         Try
@@ -250,6 +262,8 @@ Public Class PrivateBrowserForm
         tspProgress.Value = 30
         tslStatus.Text = "Connecting..."
 
+        AdBlockEngine.ClearTabBlockedItems(wvPrivate)
+
         ' Apply HTTPS-Only Mode if enabled
         If My.Settings.HttpsOnlyMode AndAlso e.Uri.StartsWith("http://", StringComparison.OrdinalIgnoreCase) Then
             e.Cancel = True
@@ -270,6 +284,63 @@ Public Class PrivateBrowserForm
                     End If
                 End If
             Next
+        End If
+
+        ' Phishing sites check — private browsing must not be less protected than normal tabs
+        If My.Settings.UsePhishingFilter AndAlso My.Settings.PhishingSites IsNot Nothing Then
+            For Each phishingUrl As String In My.Settings.PhishingSites
+                If Not String.IsNullOrEmpty(phishingUrl) Then
+                    If e.Uri.ToLower().Contains(phishingUrl.ToLower()) Then
+                        If _ignoredUrls.Contains(e.Uri) Then Return
+
+                        e.Cancel = True
+
+                        Dim warningForm As New Phising()
+                        warningForm.lbPhishing.Items.Clear()
+                        warningForm.lbPhishing.Items.Add("Detected Phishing URL:")
+                        warningForm.lbPhishing.Items.Add(e.Uri)
+
+                        Dim result As DialogResult = warningForm.ShowDialog()
+                        If result = DialogResult.Ignore Then
+                            _ignoredUrls.Add(e.Uri)
+                            Dim core = TryCast(sender, CoreWebView2)
+                            If core IsNot Nothing Then core.Navigate(e.Uri)
+                        End If
+                        Return
+                    End If
+                End If
+            Next
+        End If
+    End Sub
+
+    ''' <summary>
+    ''' Ad blocker resource filter for the private WebView2 — mirrors Form1's
+    ''' WebView2_WebResourceRequested so Private Mode gets the same protection.
+    ''' </summary>
+    Private Sub PrivateWebView_WebResourceRequested(ByVal sender As Object, ByVal e As CoreWebView2WebResourceRequestedEventArgs)
+        If Not My.Settings.AdBlockerEnabled Then Return
+
+        ' NEVER block top-level document navigations (main page itself)
+        If e.ResourceContext = CoreWebView2WebResourceContext.Document Then Return
+
+        Dim core = TryCast(sender, CoreWebView2)
+        If core IsNot Nothing Then
+            If AdBlockEngine.IsSiteDisabled(core.Source) Then Return
+        End If
+
+        ' Protect stylesheets & fonts from substring path blocking so pages never lose CSS or typography
+        If e.ResourceContext = CoreWebView2WebResourceContext.Stylesheet OrElse e.ResourceContext = CoreWebView2WebResourceContext.Font Then
+            If Not AdBlockEngine.ShouldBlockDomainOnly(e.Request.Uri) Then Return
+        End If
+
+        If AdBlockEngine.ShouldBlock(e.Request.Uri) Then
+            If core IsNot Nothing Then
+                Try
+                    e.Response = core.Environment.CreateWebResourceResponse(Nothing, 403, "Blocked by AdBlocker", "Content-Type: text/plain")
+                Catch
+                End Try
+            End If
+            AdBlockEngine.RecordBlockedItem(wvPrivate, e.Request.Uri)
         End If
     End Sub
 
@@ -400,7 +471,11 @@ Public Class PrivateBrowserForm
                 RemoveHandler wvPrivate.CoreWebView2.DocumentTitleChanged, AddressOf PrivateWebView_DocumentTitleChanged
                 RemoveHandler wvPrivate.CoreWebView2.NewWindowRequested, AddressOf PrivateWebView_NewWindowRequested
                 RemoveHandler wvPrivate.CoreWebView2.DownloadStarting, AddressOf PrivateWebView_DownloadStarting
+                RemoveHandler wvPrivate.CoreWebView2.WebResourceRequested, AddressOf PrivateWebView_WebResourceRequested
             End If
+
+            ' Release this tab's entries from the AdBlockEngine's static per-tab tracking
+            AdBlockEngine.RemoveTab(wvPrivate)
 
             ' Cleanup the private session (clear browsing data + delete temp folder)
             Await _sessionService.CleanupSessionAsync(wvPrivate)
