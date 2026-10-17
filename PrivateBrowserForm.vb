@@ -544,10 +544,10 @@ Public Class PrivateBrowserForm
                 End Try
 
                 Dim iconLabel As New Label()
-                iconLabel.Text = "🕶"
-                iconLabel.Font = New Drawing.Font("Segoe UI", 24.0F)
-                iconLabel.AutoSize = True
+                iconLabel.AutoSize = False
+                iconLabel.Size = New Drawing.Size(48, 48)
                 iconLabel.Location = New Drawing.Point(20, 15)
+                IconService.SetIcon(iconLabel, FluentIcon.Incognito, 32, Drawing.Color.FromArgb(161, 197, 74))
                 notifyForm.Controls.Add(iconLabel)
 
                 Dim msgLabel As New Label()

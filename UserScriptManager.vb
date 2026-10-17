@@ -99,7 +99,7 @@ Public Class UserScriptManager
                                          "// @name         K-Browser Custom UserScript Helper" & vbCrLf &
                                          "// @match        *://*/*" & vbCrLf &
                                          "// ==/UserScript==" & vbCrLf & vbCrLf &
-                                         "console.log('⚡ K-Browser UserScript Engine loaded successfully!');"
+                                         "console.log('K-Browser UserScript Engine loaded successfully!');"
             File.WriteAllText(samplePath, sampleContent)
         Catch
         End Try

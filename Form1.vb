@@ -885,7 +885,7 @@ Public Class Form1
                 If page.Controls.Count > 0 Then
                     Dim browserControl = TryCast(page.Controls(0), WebView2)
                     If browserControl IsNot Nothing AndAlso browserControl.CoreWebView2 Is core Then
-                        page.Text = "⚠️ Tab Crashed"
+                        page.Text = "Tab Crashed"
 
                         If e.ProcessFailedKind = CoreWebView2ProcessFailedKind.RenderProcessExited Then
                             Dim result = MessageBox.Show("A web page process on '" & page.Text & "' has crashed unexpectedly." & vbCrLf & vbCrLf & "Would you like to reload this tab?", "Tab Crashed - K-Browser", MessageBoxButtons.YesNo, MessageBoxIcon.Warning)

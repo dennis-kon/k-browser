@@ -7,9 +7,9 @@ Public Class task_manager
         For Each p As Process In Process.GetProcesses()
             Dim displayName As String = p.ProcessName
             If p.ProcessName.Equals("msedgewebview2", StringComparison.OrdinalIgnoreCase) Then
-                displayName = "🌐 WebView2 Process (" & p.ProcessName & ")"
+                displayName = "WebView2 Process (" & p.ProcessName & ")"
             ElseIf p.ProcessName.Equals("K-Browser", StringComparison.OrdinalIgnoreCase) Then
-                displayName = "🖥️ K-Browser Main Process"
+                displayName = "K-Browser Main Process"
             End If
             Dim item As New ListViewItem(displayName)
             
