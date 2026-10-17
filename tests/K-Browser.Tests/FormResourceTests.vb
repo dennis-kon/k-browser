@@ -65,4 +65,12 @@ Public Class FormResourceTests
         Assert.DoesNotContain("🕶", designer)
     End Sub
 
+    <Fact>
+    Public Sub PrivateBrowserForm_HasNoGlyphText()
+        Dim designer = Source("PrivateBrowserForm.Designer.vb")
+        Dim glyphs = {"◀", "▶", "🔄", "🏠", "→", "⭐", "🕶"}
+
+        Assert.Empty(glyphs.Where(Function(g) designer.Contains(g)))
+    End Sub
+
 End Class

@@ -61,14 +61,14 @@ Partial Class PrivateBrowserForm
         '
         ' lblPrivateIcon
         '
-        lblPrivateIcon.AutoSize = True
+        lblPrivateIcon.AutoSize = False
         lblPrivateIcon.Font = New System.Drawing.Font("Segoe UI", 20.0F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point)
         lblPrivateIcon.ForeColor = System.Drawing.Color.FromArgb(CType(CType(161, Byte), Integer), CType(CType(197, Byte), Integer), CType(CType(74, Byte), Integer))
         lblPrivateIcon.Location = New System.Drawing.Point(16, 12)
         lblPrivateIcon.Name = "lblPrivateIcon"
         lblPrivateIcon.Size = New System.Drawing.Size(50, 40)
         lblPrivateIcon.TabIndex = 0
-        lblPrivateIcon.Text = "🕶"
+        lblPrivateIcon.Text = ""
         '
         ' lblPrivateMode
         '
@@ -106,42 +106,42 @@ Partial Class PrivateBrowserForm
         '
         ' btnBack
         '
-        btnBack.DisplayStyle = ToolStripItemDisplayStyle.Text
+        btnBack.DisplayStyle = ToolStripItemDisplayStyle.Image
         btnBack.Font = New System.Drawing.Font("Segoe UI", 11.0F)
         btnBack.ForeColor = System.Drawing.Color.FromArgb(CType(CType(235, Byte), Integer), CType(CType(240, Byte), Integer), CType(CType(245, Byte), Integer))
         btnBack.Name = "btnBack"
         btnBack.Size = New System.Drawing.Size(30, 32)
-        btnBack.Text = "◀"
+        btnBack.Text = "Back"
         btnBack.ToolTipText = "Go Back"
         '
         ' btnForward
         '
-        btnForward.DisplayStyle = ToolStripItemDisplayStyle.Text
+        btnForward.DisplayStyle = ToolStripItemDisplayStyle.Image
         btnForward.Font = New System.Drawing.Font("Segoe UI", 11.0F)
         btnForward.ForeColor = System.Drawing.Color.FromArgb(CType(CType(235, Byte), Integer), CType(CType(240, Byte), Integer), CType(CType(245, Byte), Integer))
         btnForward.Name = "btnForward"
         btnForward.Size = New System.Drawing.Size(30, 32)
-        btnForward.Text = "▶"
+        btnForward.Text = "Forward"
         btnForward.ToolTipText = "Go Forward"
         '
         ' btnRefresh
         '
-        btnRefresh.DisplayStyle = ToolStripItemDisplayStyle.Text
+        btnRefresh.DisplayStyle = ToolStripItemDisplayStyle.Image
         btnRefresh.Font = New System.Drawing.Font("Segoe UI", 11.0F)
         btnRefresh.ForeColor = System.Drawing.Color.FromArgb(CType(CType(235, Byte), Integer), CType(CType(240, Byte), Integer), CType(CType(245, Byte), Integer))
         btnRefresh.Name = "btnRefresh"
         btnRefresh.Size = New System.Drawing.Size(30, 32)
-        btnRefresh.Text = "🔄"
+        btnRefresh.Text = "Refresh"
         btnRefresh.ToolTipText = "Refresh"
         '
         ' btnHome
         '
-        btnHome.DisplayStyle = ToolStripItemDisplayStyle.Text
+        btnHome.DisplayStyle = ToolStripItemDisplayStyle.Image
         btnHome.Font = New System.Drawing.Font("Segoe UI", 11.0F)
         btnHome.ForeColor = System.Drawing.Color.FromArgb(CType(CType(235, Byte), Integer), CType(CType(240, Byte), Integer), CType(CType(245, Byte), Integer))
         btnHome.Name = "btnHome"
         btnHome.Size = New System.Drawing.Size(30, 32)
-        btnHome.Text = "🏠"
+        btnHome.Text = "Home"
         btnHome.ToolTipText = "Home Page"
         '
         ' txtAddress
@@ -157,22 +157,22 @@ Partial Class PrivateBrowserForm
         '
         ' btnGo
         '
-        btnGo.DisplayStyle = ToolStripItemDisplayStyle.Text
+        btnGo.DisplayStyle = ToolStripItemDisplayStyle.Image
         btnGo.Font = New System.Drawing.Font("Segoe UI", 10.0F, System.Drawing.FontStyle.Bold)
         btnGo.ForeColor = System.Drawing.Color.FromArgb(CType(CType(161, Byte), Integer), CType(CType(197, Byte), Integer), CType(CType(74, Byte), Integer))
         btnGo.Name = "btnGo"
         btnGo.Size = New System.Drawing.Size(30, 32)
-        btnGo.Text = "→"
+        btnGo.Text = "Go"
         btnGo.ToolTipText = "Navigate"
         '
         ' btnBookmark
         '
-        btnBookmark.DisplayStyle = ToolStripItemDisplayStyle.Text
+        btnBookmark.DisplayStyle = ToolStripItemDisplayStyle.Image
         btnBookmark.Font = New System.Drawing.Font("Segoe UI", 10.0F)
         btnBookmark.ForeColor = System.Drawing.Color.FromArgb(CType(CType(160, Byte), Integer), CType(CType(175, Byte), Integer), CType(CType(195, Byte), Integer))
         btnBookmark.Name = "btnBookmark"
         btnBookmark.Size = New System.Drawing.Size(30, 32)
-        btnBookmark.Text = "⭐"
+        btnBookmark.Text = "Bookmark"
         btnBookmark.ToolTipText = "Bookmark (disabled in Private Mode)"
         '
         ' lblPrivateBadge
@@ -182,7 +182,7 @@ Partial Class PrivateBrowserForm
         lblPrivateBadge.ForeColor = System.Drawing.Color.FromArgb(CType(CType(161, Byte), Integer), CType(CType(197, Byte), Integer), CType(CType(74, Byte), Integer))
         lblPrivateBadge.Name = "lblPrivateBadge"
         lblPrivateBadge.Size = New System.Drawing.Size(90, 32)
-        lblPrivateBadge.Text = "🕶 Private Mode"
+        lblPrivateBadge.Text = "Private Mode"
         '
         ' wvPrivate
         '

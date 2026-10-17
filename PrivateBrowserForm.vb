@@ -49,7 +49,23 @@ Public Class PrivateBrowserForm
     ''' Initializes the private browser window: applies dark theme, dark title bar,
     ''' and initializes the WebView2 control with the private environment.
     ''' </summary>
+    ''' <summary>
+    ''' Assigns Fluent icons. This window keeps its own fixed dark palette, so each icon takes its
+    ''' control's designer ForeColor (lime accent on Go and the incognito marks).
+    ''' </summary>
+    Private Sub ApplyIcons()
+        IconService.SetIcon(btnBack, FluentIcon.ArrowLeft, 20)
+        IconService.SetIcon(btnForward, FluentIcon.ArrowRight, 20)
+        IconService.SetIcon(btnRefresh, FluentIcon.ArrowClockwise, 20)
+        IconService.SetIcon(btnHome, FluentIcon.Home, 20)
+        IconService.SetIcon(btnGo, FluentIcon.ArrowEnter, 20)
+        IconService.SetIcon(btnBookmark, FluentIcon.Star, 20)
+        IconService.SetIcon(lblPrivateBadge, FluentIcon.Incognito, 16)
+        IconService.SetIcon(lblPrivateIcon, FluentIcon.Incognito, 32)
+    End Sub
+
     Private Async Sub PrivateBrowserForm_Load(ByVal sender As Object, ByVal e As EventArgs) Handles MyBase.Load
+        ApplyIcons()
         Try
             ' Apply dark title bar via Windows DWM API
             ApplyDarkTitleBar()
