@@ -15,6 +15,8 @@ Public Class AdBlockPopup
     End Sub
 
     Private Sub AdBlockPopup_Load(ByVal sender As Object, ByVal e As EventArgs) Handles MyBase.Load
+        IconService.SetIcon(btnAdBlockSettings, FluentIcon.Settings)
+        IconService.SetIcon(btnReload, FluentIcon.ArrowClockwise)
         ThemeManager.ApplyTheme(Me)
 
         Try
@@ -34,6 +36,7 @@ Public Class AdBlockPopup
             chkDisableOnSite.Checked = False
             lblStatusText.Text = "Status: Not applicable on internal pages"
             lblStatusText.ForeColor = Color.Gray
+            IconService.SetIcon(lblShield, FluentIcon.Shield, 32, Color.Gray)
         Else
             lblSiteDomain.Text = domain
             lblFullUrl.Text = m_url
@@ -52,11 +55,11 @@ Public Class AdBlockPopup
         If isDisabled Then
             lblStatusText.Text = "Status: DISABLED on this site (Ads & trackers allowed)"
             lblStatusText.ForeColor = Color.FromArgb(220, 50, 50)
-            lblShield.Text = "🛡️"
+            IconService.SetIcon(lblShield, FluentIcon.Shield, 32, Color.FromArgb(220, 50, 50))
         Else
             lblStatusText.Text = "Status: ACTIVE on this site (Ads & trackers blocked)"
             lblStatusText.ForeColor = Color.FromArgb(30, 150, 60)
-            lblShield.Text = "🛡️"
+            IconService.SetIcon(lblShield, FluentIcon.Shield, 32, Color.FromArgb(30, 150, 60))
         End If
     End Sub
 

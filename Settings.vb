@@ -26,6 +26,13 @@ Public Class Settings
     Private Const PasswordSearchPlaceholder As String = "Search passwords..."
 
     Private Async Sub Settings_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
+        IconService.SetIcon(btnCreateBackup, FluentIcon.Box)
+        IconService.SetIcon(btnRestoreBackup, FluentIcon.ArrowUpload)
+        IconService.SetIcon(btnResetSettings, FluentIcon.Warning)
+        ' Status marks keep their warning/applied colours (ThemeManager recolours the labels themselves).
+        IconService.SetIcon(picGraphicsStatus, FluentIcon.Warning, 16, Color.DarkGoldenrod)
+        IconService.SetIcon(picTabsStatus, FluentIcon.Checkmark, 16, Color.ForestGreen)
+        IconService.SetIcon(picPageLoadingStatus, FluentIcon.Checkmark, 16, Color.ForestGreen)
         ThemeManager.ApplyTheme(Me)
         Try
             If Form1.ActiveForm IsNot Nothing AndAlso Form1.ActiveForm.Icon IsNot Nothing Then

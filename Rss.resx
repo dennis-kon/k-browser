@@ -121,21 +121,6 @@
     <value>17, 17</value>
   </metadata>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-  <data name="tsRssGo.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-    <value>
-        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
-        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAIOSURBVDhP3ZLbS1RRFMbnb8hbVtBT9BLRaxFFSFghMiBj
-        GYOJZUjamFEmRSQmmdG9Bk3Lyi5q0pQxaCaVo4aDiOWL9CakUCCCmtacy96/1jmnoqL3oA0f53AO67e+
-        /a3l+w8OHev4u9bCwzXQshqaV8GNlRBeAZeXwQVRbTpUpeMB3p37XaNnYeQMDNdAvBreVEH/Seg7Ab2V
-        8PwodJXDsaW/AAYOQSyEflWC7i1Gd+9DRQtQT4LYHTuxW3OwWrIxm3dgNm6FpwchlPYDUCcdymDxI5gL
-        6OHzqCH59mUG5qew2wPo2Un5P40VPYJZnyFXLIaiVAG0yj0duzEhmovo/goXwtcZ1EANqq8aPRFDT7/H
-        vOtHvW3DCG+RfPZCMEUATkjx0/C6FGwDPRqGxCz60xgoG+bEwYvjgEYviIPOcoxrmyTcPRBIFoCT7uAp
-        9MsDLsC9wng7+sMg9qNc9NwkemoE89Y27HiTwOcxrmyUyQQhO0kAV5e76TrBOcVqqNZzMh6RZwKMz1jd
-        krwl71JsRcowLm2Axl2w3QHUyUx7KtA9+1Fdhahn+diPd7vBWff9WHeyMG9mYjZkYFzf7HZPXFwP9QHI
-        XCIAWQaiMtPOEERKvHTbiuCBhHSvAG7ne3ab8mSZpGtDrlf8EyDLwOE0KE11x0JhipsuecmQI/InQZZI
-        7DoFf+r7Qv+z4/N9A4WKHng+DwhoAAAAAElFTkSuQmCC
-</value>
-  </data>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         AAABAAIAEBAAAAEAIABoBAAAJgAAACAgAAABACAAqBAAAI4EAAAoAAAAEAAAACAAAAABACAAAAAAAAAE

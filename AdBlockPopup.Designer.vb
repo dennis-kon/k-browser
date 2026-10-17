@@ -63,13 +63,13 @@ Partial Class AdBlockPopup
         '
         'lblShield
         '
-        Me.lblShield.AutoSize = True
+        Me.lblShield.AutoSize = False
         Me.lblShield.Font = New System.Drawing.Font("Segoe UI Emoji", 20.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblShield.Location = New System.Drawing.Point(12, 12)
         Me.lblShield.Name = "lblShield"
         Me.lblShield.Size = New System.Drawing.Size(53, 36)
         Me.lblShield.TabIndex = 0
-        Me.lblShield.Text = "🛡️"
+        Me.lblShield.Text = ""
         '
         'lblSiteDomain
         '
@@ -264,7 +264,7 @@ Partial Class AdBlockPopup
         Me.btnAdBlockSettings.Name = "btnAdBlockSettings"
         Me.btnAdBlockSettings.Size = New System.Drawing.Size(160, 28)
         Me.btnAdBlockSettings.TabIndex = 0
-        Me.btnAdBlockSettings.Text = "⚙️ AdBlocker Settings..."
+        Me.btnAdBlockSettings.Text = "AdBlocker Settings..."
         Me.btnAdBlockSettings.UseVisualStyleBackColor = True
         '
         'btnReload
@@ -273,7 +273,7 @@ Partial Class AdBlockPopup
         Me.btnReload.Name = "btnReload"
         Me.btnReload.Size = New System.Drawing.Size(120, 28)
         Me.btnReload.TabIndex = 1
-        Me.btnReload.Text = "↻ Reload Page"
+        Me.btnReload.Text = "Reload Page"
         Me.btnReload.UseVisualStyleBackColor = True
         '
         'btnClose

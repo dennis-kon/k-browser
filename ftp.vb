@@ -154,6 +154,9 @@ Public Class ftp
 
 
     Private Sub ftp_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
+        IconService.SetIcon(ToolStripLabel1, FluentIcon.Server)
+        IconService.SetIcon(ToolStripLabel2, FluentIcon.Person)
+        IconService.SetIcon(ToolStripLabel3, FluentIcon.Password)
         ThemeManager.ApplyTheme(Me)
         txt_pw.TextBox.PasswordChar = "*"c
     End Sub

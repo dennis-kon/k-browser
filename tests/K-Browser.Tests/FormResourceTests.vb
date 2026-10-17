@@ -73,4 +73,24 @@ Public Class FormResourceTests
         Assert.Empty(glyphs.Where(Function(g) designer.Contains(g)))
     End Sub
 
+    <Fact>
+    Public Sub ThemedDialogs_HaveNoBitmapIcons()
+        Dim expectedGone = {
+            ("CookieViewer.resx", "btnDeleteALL.Image"), ("CookieViewer.resx", "ImageList1.ImageStream"),
+            ("Rss.resx", "tsRssGo.Image"),
+            ("ftp.resx", "ToolStripLabel1.Image"), ("ftp.resx", "ToolStripLabel2.Image"), ("ftp.resx", "ToolStripLabel3.Image"),
+            ("task manager.resx", "ToolStripButton1.Image")}
+
+        Assert.Empty(expectedGone.Where(Function(e) ResxDataNames(e.Item1).Contains(e.Item2)))
+    End Sub
+
+    <Fact>
+    Public Sub ThemedDialogs_HaveNoEmojiText()
+        Dim files = {"AdBlockPopup.Designer.vb", "AdBlockPopup.vb", "Settings.designer.vb", "Source.designer.vb", "Source.vb"}
+        Dim glyphs = {"🛡", "⚙", "↻", "📦", "🔄", "⚠", "🖥", "📑", "⚡", "✓", "🔍", "📋", "💾", "📄", "🖨"}
+
+        Dim found = From f In files, g In glyphs Where Source(f).Contains(g) Select f & ": " & g
+        Assert.Empty(found)
+    End Sub
+
 End Class

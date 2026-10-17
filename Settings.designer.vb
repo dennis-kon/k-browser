@@ -47,15 +47,18 @@ Partial Class Settings
         chkUseHardwareAcceleration = New CheckBox()
         lblGraphicsDesc = New Label()
         lblGraphicsStatus = New Label()
+        picGraphicsStatus = New PictureBox()
         grpTabs = New GroupBox()
         chkFadeInactiveTabs = New CheckBox()
         lblTabsDesc = New Label()
         lblTabsStatus = New Label()
+        picTabsStatus = New PictureBox()
         grpPageLoading = New GroupBox()
         chkPreloadPages = New CheckBox()
         lblPageLoadingDesc = New Label()
         lblPageLoadingInfo = New Label()
         lblPageLoadingStatus = New Label()
+        picPageLoadingStatus = New PictureBox()
         tpPrivacyTab = New TabPage()
         grpCookies = New GroupBox()
         chkBlockThirdPartyCookies = New CheckBox()
@@ -357,7 +360,7 @@ Partial Class Settings
         btnCreateBackup.Name = "btnCreateBackup"
         btnCreateBackup.Size = New Size(150, 32)
         btnCreateBackup.TabIndex = 0
-        btnCreateBackup.Text = "📦 Create Backup"
+        btnCreateBackup.Text = "Create Backup"
         ToolTip1.SetToolTip(btnCreateBackup, "Create a compressed (.zip) backup of your browser settings, session, bookmarks, and preferences.")
         btnCreateBackup.UseVisualStyleBackColor = True
         ' 
@@ -367,7 +370,7 @@ Partial Class Settings
         btnRestoreBackup.Name = "btnRestoreBackup"
         btnRestoreBackup.Size = New Size(150, 32)
         btnRestoreBackup.TabIndex = 1
-        btnRestoreBackup.Text = "🔄 Restore Backup"
+        btnRestoreBackup.Text = "Restore Backup"
         ToolTip1.SetToolTip(btnRestoreBackup, "Restore browser settings, session, bookmarks, and preferences from a backup ZIP file.")
         btnRestoreBackup.UseVisualStyleBackColor = True
         ' 
@@ -377,7 +380,7 @@ Partial Class Settings
         btnResetSettings.Name = "btnResetSettings"
         btnResetSettings.Size = New Size(150, 32)
         btnResetSettings.TabIndex = 2
-        btnResetSettings.Text = "⚠️ Reset Settings"
+        btnResetSettings.Text = "Reset Settings"
         ToolTip1.SetToolTip(btnResetSettings, "Restore all browser settings to default values. Bookmarks and downloaded files will not be deleted.")
         btnResetSettings.UseVisualStyleBackColor = True
         ' 
@@ -1034,12 +1037,13 @@ Partial Class Settings
         grpGraphics.Controls.Add(chkUseHardwareAcceleration)
         grpGraphics.Controls.Add(lblGraphicsDesc)
         grpGraphics.Controls.Add(lblGraphicsStatus)
+        grpGraphics.Controls.Add(picGraphicsStatus)
         grpGraphics.Location = New Point(10, 10)
         grpGraphics.Name = "grpGraphics"
         grpGraphics.Size = New Size(578, 95)
         grpGraphics.TabIndex = 0
         grpGraphics.TabStop = False
-        grpGraphics.Text = "🖥️ Graphics"
+        grpGraphics.Text = "Graphics"
         ' 
         ' chkUseHardwareAcceleration
         ' 
@@ -1072,19 +1076,28 @@ Partial Class Settings
         lblGraphicsStatus.Name = "lblGraphicsStatus"
         lblGraphicsStatus.Size = New Size(245, 13)
         lblGraphicsStatus.TabIndex = 2
-        lblGraphicsStatus.Text = "⚠️ Restart required for this setting to take effect."
+        lblGraphicsStatus.Text = "Restart required for this setting to take effect."
+        ' 
+        ' picGraphicsStatus
+        ' 
+        picGraphicsStatus.Location = New Point(15, 60)
+        picGraphicsStatus.Name = "picGraphicsStatus"
+        picGraphicsStatus.Size = New Size(16, 16)
+        picGraphicsStatus.SizeMode = PictureBoxSizeMode.CenterImage
+        picGraphicsStatus.TabStop = False
         ' 
         ' grpTabs
         ' 
         grpTabs.Controls.Add(chkFadeInactiveTabs)
         grpTabs.Controls.Add(lblTabsDesc)
         grpTabs.Controls.Add(lblTabsStatus)
+        grpTabs.Controls.Add(picTabsStatus)
         grpTabs.Location = New Point(10, 115)
         grpTabs.Name = "grpTabs"
         grpTabs.Size = New Size(578, 95)
         grpTabs.TabIndex = 1
         grpTabs.TabStop = False
-        grpTabs.Text = "📑 Tabs"
+        grpTabs.Text = "Tabs"
         ' 
         ' chkFadeInactiveTabs
         ' 
@@ -1117,7 +1130,15 @@ Partial Class Settings
         lblTabsStatus.Name = "lblTabsStatus"
         lblTabsStatus.Size = New Size(125, 13)
         lblTabsStatus.TabIndex = 2
-        lblTabsStatus.Text = "✓ Applied immediately"
+        lblTabsStatus.Text = "Applied immediately"
+        ' 
+        ' picTabsStatus
+        ' 
+        picTabsStatus.Location = New Point(15, 60)
+        picTabsStatus.Name = "picTabsStatus"
+        picTabsStatus.Size = New Size(16, 16)
+        picTabsStatus.SizeMode = PictureBoxSizeMode.CenterImage
+        picTabsStatus.TabStop = False
         ' 
         ' grpPageLoading
         ' 
@@ -1125,12 +1146,13 @@ Partial Class Settings
         grpPageLoading.Controls.Add(lblPageLoadingDesc)
         grpPageLoading.Controls.Add(lblPageLoadingInfo)
         grpPageLoading.Controls.Add(lblPageLoadingStatus)
+        grpPageLoading.Controls.Add(picPageLoadingStatus)
         grpPageLoading.Location = New Point(10, 220)
         grpPageLoading.Name = "grpPageLoading"
         grpPageLoading.Size = New Size(578, 120)
         grpPageLoading.TabIndex = 2
         grpPageLoading.TabStop = False
-        grpPageLoading.Text = "⚡ Page Loading"
+        grpPageLoading.Text = "Page Loading"
         ' 
         ' chkPreloadPages
         ' 
@@ -1173,7 +1195,15 @@ Partial Class Settings
         lblPageLoadingStatus.Name = "lblPageLoadingStatus"
         lblPageLoadingStatus.Size = New Size(125, 13)
         lblPageLoadingStatus.TabIndex = 3
-        lblPageLoadingStatus.Text = "✓ Applied immediately"
+        lblPageLoadingStatus.Text = "Applied immediately"
+        ' 
+        ' picPageLoadingStatus
+        ' 
+        picPageLoadingStatus.Location = New Point(15, 83)
+        picPageLoadingStatus.Name = "picPageLoadingStatus"
+        picPageLoadingStatus.Size = New Size(16, 16)
+        picPageLoadingStatus.SizeMode = PictureBoxSizeMode.CenterImage
+        picPageLoadingStatus.TabStop = False
         tpAdvanced.Location = New Point(4, 22)
         tpAdvanced.Name = "tpAdvanced"
         tpAdvanced.Padding = New Padding(10)
@@ -1581,15 +1611,18 @@ Partial Class Settings
     Friend WithEvents chkUseHardwareAcceleration As System.Windows.Forms.CheckBox
     Friend WithEvents lblGraphicsDesc As System.Windows.Forms.Label
     Friend WithEvents lblGraphicsStatus As System.Windows.Forms.Label
+    Friend WithEvents picGraphicsStatus As System.Windows.Forms.PictureBox
     Friend WithEvents grpTabs As System.Windows.Forms.GroupBox
     Friend WithEvents chkFadeInactiveTabs As System.Windows.Forms.CheckBox
     Friend WithEvents lblTabsDesc As System.Windows.Forms.Label
     Friend WithEvents lblTabsStatus As System.Windows.Forms.Label
+    Friend WithEvents picTabsStatus As System.Windows.Forms.PictureBox
     Friend WithEvents grpPageLoading As System.Windows.Forms.GroupBox
     Friend WithEvents chkPreloadPages As System.Windows.Forms.CheckBox
     Friend WithEvents lblPageLoadingDesc As System.Windows.Forms.Label
     Friend WithEvents lblPageLoadingInfo As System.Windows.Forms.Label
     Friend WithEvents lblPageLoadingStatus As System.Windows.Forms.Label
+    Friend WithEvents picPageLoadingStatus As System.Windows.Forms.PictureBox
 
     ' Advanced Controls
     Friend WithEvents grpDns As System.Windows.Forms.GroupBox

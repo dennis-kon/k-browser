@@ -20,6 +20,11 @@ Public Class Source
     End Sub
 
     Private Sub Source_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
+        IconService.SetIcon(lblSearch, FluentIcon.Search)
+        IconService.SetIcon(btnCopy, FluentIcon.Copy)
+        IconService.SetIcon(btnSave, FluentIcon.Save)
+        IconService.SetIcon(btnToggleWrap, FluentIcon.TextWrap)
+        IconService.SetIcon(btnPrint, FluentIcon.Print)
         ThemeManager.ApplyTheme(Me)
 
         ' Apply Monospace font for sharp code readability
@@ -130,9 +135,9 @@ Public Class Source
             Clipboard.SetText(RichTextBox1.Text)
         End If
 
-        btnCopy.Text = "✓ Copied!"
+        btnCopy.Text = "Copied!"
         Await System.Threading.Tasks.Task.Delay(1500)
-        btnCopy.Text = "📋 Copy All"
+        btnCopy.Text = "Copy All"
     End Sub
 
     Private Sub btnSave_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnSave.Click
@@ -149,7 +154,7 @@ Public Class Source
     Private Sub btnToggleWrap_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnToggleWrap.Click
         RichTextBox1.WordWrap = Not RichTextBox1.WordWrap
         btnToggleWrap.Checked = RichTextBox1.WordWrap
-        btnToggleWrap.Text = If(RichTextBox1.WordWrap, "📄 Word Wrap (On)", "📄 Word Wrap (Off)")
+        btnToggleWrap.Text = If(RichTextBox1.WordWrap, "Word Wrap (On)", "Word Wrap (Off)")
     End Sub
 
     Private Sub btnPrint_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnPrint.Click, PrintToolStripMenuItem.Click

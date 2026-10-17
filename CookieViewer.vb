@@ -4,8 +4,21 @@ Public Class CookieViewer
     Private SelNode As TreeNode
 
     Private Sub frmCookieViewer_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
+        IconService.SetIcon(btnDeleteALL, FluentIcon.Delete)
         ThemeManager.ApplyTheme(Me)
+        BuildTreeImages()
         LoadCookies()
+    End Sub
+
+    ''' <summary>
+    ''' Tree node icon, drawn in the tree's themed text colour (call after ApplyTheme).
+    ''' </summary>
+    Private Sub BuildTreeImages()
+        Dim size = IconService.GetIcon(FluentIcon.Cookies, 16, tvCookies.ForeColor).Size
+        ImageList1.Images.Clear()
+        ImageList1.ColorDepth = ColorDepth.Depth32Bit
+        ImageList1.ImageSize = size
+        ImageList1.Images.Add("cookie.png", IconService.GetIcon(FluentIcon.Cookies, 16, tvCookies.ForeColor))
     End Sub
 
     Private Sub LoadCookies()

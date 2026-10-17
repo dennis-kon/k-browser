@@ -1,6 +1,7 @@
 Public Class task_manager
 
     Private Sub task_manager_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
+        IconService.SetIcon(ToolStripButton1, FluentIcon.DismissCircle)
         ThemeManager.ApplyTheme(Me)
         ListView1.Items.Clear()
         For Each p As Process In Process.GetProcesses()

@@ -55,8 +55,6 @@ Partial Class Rss
         'tsRssGo
         '
         Me.tsRssGo.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.tsRssGo.Image = CType(resources.GetObject("tsRssGo.Image"), System.Drawing.Image)
-        Me.tsRssGo.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.tsRssGo.Name = "tsRssGo"
         Me.tsRssGo.Size = New System.Drawing.Size(23, 22)
         Me.tsRssGo.Text = "rssGo"

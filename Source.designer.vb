@@ -117,7 +117,7 @@ Partial Class Source
         '
         Me.lblSearch.Name = "lblSearch"
         Me.lblSearch.Size = New System.Drawing.Size(42, 20)
-        Me.lblSearch.Text = "🔍 Find:"
+        Me.lblSearch.Text = "Find:"
         '
         'txtSearch
         '
@@ -153,31 +153,31 @@ Partial Class Source
         '
         'btnCopy
         '
-        Me.btnCopy.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text
+        Me.btnCopy.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.ImageAndText
         Me.btnCopy.Name = "btnCopy"
         Me.btnCopy.Size = New System.Drawing.Size(66, 20)
-        Me.btnCopy.Text = "📋 Copy All"
+        Me.btnCopy.Text = "Copy All"
         '
         'btnSave
         '
-        Me.btnSave.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text
+        Me.btnSave.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.ImageAndText
         Me.btnSave.Name = "btnSave"
         Me.btnSave.Size = New System.Drawing.Size(76, 20)
-        Me.btnSave.Text = "💾 Save As..."
+        Me.btnSave.Text = "Save As..."
         '
         'btnToggleWrap
         '
-        Me.btnToggleWrap.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text
+        Me.btnToggleWrap.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.ImageAndText
         Me.btnToggleWrap.Name = "btnToggleWrap"
         Me.btnToggleWrap.Size = New System.Drawing.Size(117, 20)
-        Me.btnToggleWrap.Text = "📄 Toggle Word Wrap"
+        Me.btnToggleWrap.Text = "Toggle Word Wrap"
         '
         'btnPrint
         '
-        Me.btnPrint.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text
+        Me.btnPrint.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.ImageAndText
         Me.btnPrint.Name = "btnPrint"
         Me.btnPrint.Size = New System.Drawing.Size(48, 20)
-        Me.btnPrint.Text = "🖨️ Print"
+        Me.btnPrint.Text = "Print"
         '
         'StatusStrip1
         '

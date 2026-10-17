@@ -89,9 +89,7 @@ Partial Class CookieViewer
         '
         'ImageList1
         '
-        Me.ImageList1.ImageStream = CType(resources.GetObject("ImageList1.ImageStream"), System.Windows.Forms.ImageListStreamer)
         Me.ImageList1.TransparentColor = System.Drawing.Color.Transparent
-        Me.ImageList1.Images.SetKeyName(0, "cookie.png")
         '
         'ToolStrip1
         '
@@ -107,8 +105,6 @@ Partial Class CookieViewer
         'btnDeleteALL
         '
         Me.btnDeleteALL.Font = New System.Drawing.Font("Tahoma", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(161, Byte))
-        Me.btnDeleteALL.Image = CType(resources.GetObject("btnDeleteALL.Image"), System.Drawing.Image)
-        Me.btnDeleteALL.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.btnDeleteALL.Name = "btnDeleteALL"
         Me.btnDeleteALL.Size = New System.Drawing.Size(124, 22)
         Me.btnDeleteALL.Text = "Delete All Cookies"
