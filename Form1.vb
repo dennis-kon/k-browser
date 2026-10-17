@@ -6,8 +6,6 @@ Imports Microsoft.Web.WebView2.Core
 
 Public Class Form1
 
-    Private faviconCache As New Dictionary(Of String, Image)()
-    Private Const MAX_FAVICON_CACHE As Integer = 100
     Public WithEvents wb As WebView2
     Dim isUserAgentSet As Boolean
     Dim MyUserAgent As String = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36 Edg/120.0.0.0"
@@ -174,6 +172,38 @@ Public Class Form1
         IconService.SetIcon(ProxySettingsToolStripMenuItem, FluentIcon.Globe)
         IconService.SetIcon(AboutToolStripMenuItem, FluentIcon.Info)
         IconService.SetIcon(CheckForUpdatesToolStripMenuItem, FluentIcon.ArrowSync)
+
+        ' Search-engine and social links: globe until the site's favicon loads (see LoadBrandIconsAsync)
+        brandDomains = New Dictionary(Of ToolStripMenuItem, String) From {
+            {BingToolStripMenuItem, "bing.com"}, {GoogleToolStripMenuItem1, "google.com"},
+            {YahooToolStripMenuItem, "yahoo.com"}, {EBayToolStripMenuItem, "ebay.com"},
+            {MSNToolStripMenuItem, "msn.com"}, {DuckDuckGoToolStripMenuItem, "duckduckgo.com"},
+            {VimeoToolStripMenuItem, "vimeo.com"}, {AccuWeatherToolStripMenuItem, "accuweather.com"},
+            {FacebookToolStripMenuItem, "facebook.com"}, {TwitterToolStripMenuItem, "x.com"},
+            {GoogleToolStripMenuItem, "google.com"}, {LinkedinToolStripMenuItem, "linkedin.com"},
+            {InstagramToolStripMenuItem, "instagram.com"}, {VkToolStripMenuItem, "vk.com"},
+            {PinterestToolStripMenuItem, "pinterest.com"}}
+        For Each item In brandDomains.Keys
+            IconService.SetIcon(item, FluentIcon.Globe)
+        Next
+    End Sub
+
+    Private brandDomains As Dictionary(Of ToolStripMenuItem, String)
+
+    ''' <summary>
+    ''' Swaps each brand link's globe for the site's real favicon once it has been fetched (or read from cache).
+    ''' Items whose favicon can't be fetched keep the globe and are retried the next time the menu opens.
+    ''' </summary>
+    Private Async Sub LoadBrandIconsAsync(sender As Object, e As EventArgs) Handles LinksToolStripMenuItem.DropDownOpening, SocialNetworksToolStripMenuItem.DropDownOpening
+        Dim menu = DirectCast(sender, ToolStripMenuItem)
+        Dim pending = menu.DropDownItems.OfType(Of ToolStripMenuItem)().Where(Function(i) brandDomains.ContainsKey(i) AndAlso IconService.IsBound(i)).ToList()
+        For Each item In pending
+            Dim favicon = Await FaviconService.Default.GetFaviconAsync(brandDomains(item))
+            If favicon IsNot Nothing AndAlso Not item.IsDisposed AndAlso IconService.IsBound(item) Then
+                IconService.ClearIcon(item)
+                item.Image = IconService.ScaleImage(favicon, 16)
+            End If
+        Next
     End Sub
 
     Private Async Sub Form1_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load

@@ -60,6 +60,22 @@ Public NotInheritable Class IconService
     End Function
 
     ''' <summary>
+    ''' High-quality resize of an arbitrary image (e.g. a favicon) to the DPI-scaled square for logicalSize.
+    ''' The caller owns the returned bitmap.
+    ''' </summary>
+    Public Shared Function ScaleImage(img As Image, logicalSize As Integer) As Bitmap
+        Dim pixelSize = CInt(Math.Round(logicalSize * SystemDpi / 96.0))
+        Dim bmp As New Bitmap(pixelSize, pixelSize, PixelFormat.Format32bppPArgb)
+        Using g = Graphics.FromImage(bmp)
+            g.InterpolationMode = InterpolationMode.HighQualityBicubic
+            g.PixelOffsetMode = PixelOffsetMode.HighQuality
+            g.SmoothingMode = SmoothingMode.AntiAlias
+            g.DrawImage(img, New Rectangle(0, 0, pixelSize, pixelSize))
+        End Using
+        Return bmp
+    End Function
+
+    ''' <summary>
     ''' Fluent draws each icon separately for several pixel sizes. Use the largest design that fits
     ''' the target size (so 1px strokes stay on the pixel grid), or the smallest if none fits.
     ''' </summary>

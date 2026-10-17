@@ -704,49 +704,42 @@ Partial Class Form1
         ' 
         ' BingToolStripMenuItem
         ' 
-        BingToolStripMenuItem.Image = CType(resources.GetObject("BingToolStripMenuItem.Image"), Image)
         BingToolStripMenuItem.Name = "BingToolStripMenuItem"
         BingToolStripMenuItem.Size = New Size(145, 22)
         BingToolStripMenuItem.Text = "Bing"
         ' 
         ' GoogleToolStripMenuItem1
         ' 
-        GoogleToolStripMenuItem1.Image = CType(resources.GetObject("GoogleToolStripMenuItem1.Image"), Image)
         GoogleToolStripMenuItem1.Name = "GoogleToolStripMenuItem1"
         GoogleToolStripMenuItem1.Size = New Size(145, 22)
         GoogleToolStripMenuItem1.Text = "Google"
         ' 
         ' YahooToolStripMenuItem
         ' 
-        YahooToolStripMenuItem.Image = CType(resources.GetObject("YahooToolStripMenuItem.Image"), Image)
         YahooToolStripMenuItem.Name = "YahooToolStripMenuItem"
         YahooToolStripMenuItem.Size = New Size(145, 22)
         YahooToolStripMenuItem.Text = "Yahoo"
         ' 
         ' EBayToolStripMenuItem
         ' 
-        EBayToolStripMenuItem.Image = CType(resources.GetObject("EBayToolStripMenuItem.Image"), Image)
         EBayToolStripMenuItem.Name = "EBayToolStripMenuItem"
         EBayToolStripMenuItem.Size = New Size(145, 22)
         EBayToolStripMenuItem.Text = "eBay"
         ' 
         ' MSNToolStripMenuItem
         ' 
-        MSNToolStripMenuItem.Image = CType(resources.GetObject("MSNToolStripMenuItem.Image"), Image)
         MSNToolStripMenuItem.Name = "MSNToolStripMenuItem"
         MSNToolStripMenuItem.Size = New Size(145, 22)
         MSNToolStripMenuItem.Text = "MSN Search"
         ' 
         ' DuckDuckGoToolStripMenuItem
         ' 
-        DuckDuckGoToolStripMenuItem.Image = CType(resources.GetObject("DuckDuckGoToolStripMenuItem.Image"), Image)
         DuckDuckGoToolStripMenuItem.Name = "DuckDuckGoToolStripMenuItem"
         DuckDuckGoToolStripMenuItem.Size = New Size(145, 22)
         DuckDuckGoToolStripMenuItem.Text = "DuckDuckGo"
         ' 
         ' VimeoToolStripMenuItem
         ' 
-        VimeoToolStripMenuItem.Image = CType(resources.GetObject("VimeoToolStripMenuItem.Image"), Image)
         VimeoToolStripMenuItem.Name = "VimeoToolStripMenuItem"
         VimeoToolStripMenuItem.Size = New Size(145, 22)
         VimeoToolStripMenuItem.Text = "Vimeo"
@@ -766,7 +759,6 @@ Partial Class Form1
         ' 
         ' FacebookToolStripMenuItem
         ' 
-        FacebookToolStripMenuItem.Image = CType(resources.GetObject("FacebookToolStripMenuItem.Image"), Image)
         FacebookToolStripMenuItem.Name = "FacebookToolStripMenuItem"
         FacebookToolStripMenuItem.Size = New Size(135, 22)
         FacebookToolStripMenuItem.Text = "Facebook"
@@ -774,7 +766,6 @@ Partial Class Form1
         ' 
         ' TwitterToolStripMenuItem
         ' 
-        TwitterToolStripMenuItem.Image = CType(resources.GetObject("TwitterToolStripMenuItem.Image"), Image)
         TwitterToolStripMenuItem.Name = "TwitterToolStripMenuItem"
         TwitterToolStripMenuItem.Size = New Size(135, 22)
         TwitterToolStripMenuItem.Text = "Twitter"
@@ -782,7 +773,6 @@ Partial Class Form1
         ' 
         ' GoogleToolStripMenuItem
         ' 
-        GoogleToolStripMenuItem.Image = CType(resources.GetObject("GoogleToolStripMenuItem.Image"), Image)
         GoogleToolStripMenuItem.Name = "GoogleToolStripMenuItem"
         GoogleToolStripMenuItem.Size = New Size(135, 22)
         GoogleToolStripMenuItem.Text = "Google+"
@@ -790,7 +780,6 @@ Partial Class Form1
         ' 
         ' LinkedinToolStripMenuItem
         ' 
-        LinkedinToolStripMenuItem.Image = CType(resources.GetObject("LinkedinToolStripMenuItem.Image"), Image)
         LinkedinToolStripMenuItem.Name = "LinkedinToolStripMenuItem"
         LinkedinToolStripMenuItem.Size = New Size(135, 22)
         LinkedinToolStripMenuItem.Text = "LinkedIn"
@@ -798,14 +787,12 @@ Partial Class Form1
         ' 
         ' InstagramToolStripMenuItem
         ' 
-        InstagramToolStripMenuItem.Image = CType(resources.GetObject("InstagramToolStripMenuItem.Image"), Image)
         InstagramToolStripMenuItem.Name = "InstagramToolStripMenuItem"
         InstagramToolStripMenuItem.Size = New Size(135, 22)
         InstagramToolStripMenuItem.Text = "Instagram"
         ' 
         ' VkToolStripMenuItem
         ' 
-        VkToolStripMenuItem.Image = CType(resources.GetObject("VkToolStripMenuItem.Image"), Image)
         VkToolStripMenuItem.Name = "VkToolStripMenuItem"
         VkToolStripMenuItem.Size = New Size(135, 22)
         VkToolStripMenuItem.Text = "VK"
@@ -813,7 +800,6 @@ Partial Class Form1
         ' 
         ' PinterestToolStripMenuItem
         ' 
-        PinterestToolStripMenuItem.Image = CType(resources.GetObject("PinterestToolStripMenuItem.Image"), Image)
         PinterestToolStripMenuItem.Name = "PinterestToolStripMenuItem"
         PinterestToolStripMenuItem.Size = New Size(135, 22)
         PinterestToolStripMenuItem.Text = "Pinterest"
