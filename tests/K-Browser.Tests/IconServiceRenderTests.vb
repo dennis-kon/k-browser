@@ -73,6 +73,34 @@ Public Class IconServiceRenderTests
         Next
     End Sub
 
+    <Fact>
+    Public Sub GetIcon_BetweenDesignSizes_DrawsDesignUnscaledAndCentred()
+        ' 32px at 125% is a 40px box; Home has 32 and 48 designs. The 32 design must be drawn at its own
+        ' size (crisp) and centred, not stretched to 40px (blurred strokes).
+        Dim native = InkBounds(IconService.GetIcon(FluentIcon.Home, 32, Color.Black, 96))
+        Dim boxed = IconService.GetIcon(FluentIcon.Home, 32, Color.Black, 120)
+        Dim ink = InkBounds(boxed)
+
+        Assert.Equal(40, boxed.Width)
+        Assert.InRange(ink.Width, native.Width - 1, native.Width + 1)
+        Assert.InRange(ink.Height, native.Height - 1, native.Height + 1)
+        Assert.InRange(ink.X + ink.Width / 2.0, 18.5, 21.5)
+        Assert.InRange(ink.Y + ink.Height / 2.0, 18.5, 21.5)
+    End Sub
+
+    Private Shared Function InkBounds(bmp As Bitmap) As Rectangle
+        Dim minX = Integer.MaxValue, minY = Integer.MaxValue, maxX = -1, maxY = -1
+        For y = 0 To bmp.Height - 1
+            For x = 0 To bmp.Width - 1
+                If bmp.GetPixel(x, y).A > 0 Then
+                    minX = Math.Min(minX, x) : maxX = Math.Max(maxX, x)
+                    minY = Math.Min(minY, y) : maxY = Math.Max(maxY, y)
+                End If
+            Next
+        Next
+        Return Rectangle.FromLTRB(minX, minY, maxX + 1, maxY + 1)
+    End Function
+
     Friend Shared Function Pixels(bmp As Bitmap) As IEnumerable(Of Color)
         Dim result As New List(Of Color)
         For y = 0 To bmp.Height - 1

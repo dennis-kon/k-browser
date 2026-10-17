@@ -56,7 +56,10 @@ Public NotInheritable Class IconService
     Public Shared Function GetIcon(icon As FluentIcon, logicalSize As Integer, color As Color, dpi As Integer) As Bitmap
         Dim pixelSize = CInt(Math.Round(logicalSize * dpi / 96.0))
         Return Cache.GetOrAdd((icon, pixelSize, color.ToArgb()),
-                              Function(key) Render(PickDesign(icon, pixelSize), pixelSize, color))
+                              Function(key)
+                                  Dim design = PickDesign(icon, pixelSize)
+                                  Return Render(design.CodePoint, Math.Min(design.Size, pixelSize), pixelSize, color)
+                              End Function)
     End Function
 
     ''' <summary>
@@ -77,18 +80,22 @@ Public NotInheritable Class IconService
 
     ''' <summary>
     ''' Fluent draws each icon separately for several pixel sizes. Use the largest design that fits
-    ''' the target size (so 1px strokes stay on the pixel grid), or the smallest if none fits.
+    ''' the target size, or the smallest if none fits. The caller draws it at its own size (never
+    ''' enlarged) so 1px strokes stay on the pixel grid.
     ''' </summary>
-    Private Shared Function PickDesign(icon As FluentIcon, pixelSize As Integer) As Integer
+    Private Shared Function PickDesign(icon As FluentIcon, pixelSize As Integer) As (Size As Integer, CodePoint As Integer)
         Dim designs = FluentIconGlyphs.Designs(icon)
         Dim chosen = designs(0)
         For Each candidate In designs
             If candidate.Size <= pixelSize Then chosen = candidate
         Next
-        Return chosen.CodePoint
+        Return chosen
     End Function
 
-    Private Shared Function Render(codePoint As Integer, pixelSize As Integer, color As Color) As Bitmap
+    ''' <summary>
+    ''' Draws the glyph at emSize pixels, centred in a pixelSize square bitmap.
+    ''' </summary>
+    Private Shared Function Render(codePoint As Integer, emSize As Integer, pixelSize As Integer, color As Color) As Bitmap
         Dim bmp As New Bitmap(pixelSize, pixelSize, PixelFormat.Format32bppPArgb)
         ' The glyph is drawn as a vector path centred on its own outline: the font's line height is
         ' taller than its em box, so text-layout centring would push icons off-centre (or, with
@@ -99,7 +106,7 @@ Public NotInheritable Class IconService
             Using path As New GraphicsPath(),
                   g = Graphics.FromImage(bmp),
                   brush As New SolidBrush(color)
-                path.AddString(Char.ConvertFromUtf32(codePoint), IconFontFamily.Value, FontStyle.Regular, pixelSize, PointF.Empty, StringFormat.GenericTypographic)
+                path.AddString(Char.ConvertFromUtf32(codePoint), IconFontFamily.Value, FontStyle.Regular, emSize, PointF.Empty, StringFormat.GenericTypographic)
                 Dim bounds = path.GetBounds()
                 Using centre As New Matrix()
                     centre.Translate(CSng(Math.Round(pixelSize / 2.0 - (bounds.X + bounds.Width / 2.0))),
