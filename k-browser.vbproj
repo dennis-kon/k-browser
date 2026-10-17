@@ -36,6 +36,13 @@
   <ItemGroup>
     <Compile Remove="Form4*.vb" />
     <EmbeddedResource Remove="Form4.resx" />
+    <Compile Remove="tests\**" />
+    <EmbeddedResource Remove="tests\**" />
+    <None Remove="tests\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Assets\Fonts\FluentSystemIcons-Resizable.ttf" LogicalName="KBrowser.Fonts.FluentSystemIcons-Resizable.ttf" />
   </ItemGroup>
 
   <ItemGroup>
