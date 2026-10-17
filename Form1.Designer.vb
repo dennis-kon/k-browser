@@ -1061,9 +1061,7 @@ Partial Class Form1
         ' Back
         ' 
         Back.DisplayStyle = ToolStripItemDisplayStyle.Image
-        Back.Image = CType(resources.GetObject("Back.Image"), Image)
         Back.ImageScaling = ToolStripItemImageScaling.None
-        Back.ImageTransparentColor = Color.Magenta
         Back.Name = "Back"
         Back.Size = New Size(36, 36)
         Back.Text = "Back"
@@ -1071,9 +1069,7 @@ Partial Class Form1
         ' ToolStripButton2
         ' 
         ToolStripButton2.DisplayStyle = ToolStripItemDisplayStyle.Image
-        ToolStripButton2.Image = CType(resources.GetObject("ToolStripButton2.Image"), Image)
         ToolStripButton2.ImageScaling = ToolStripItemImageScaling.None
-        ToolStripButton2.ImageTransparentColor = Color.Magenta
         ToolStripButton2.Name = "ToolStripButton2"
         ToolStripButton2.Size = New Size(36, 36)
         ToolStripButton2.Text = "Forward"
@@ -1081,9 +1077,7 @@ Partial Class Form1
         ' ToolStripButton3
         ' 
         ToolStripButton3.DisplayStyle = ToolStripItemDisplayStyle.Image
-        ToolStripButton3.Image = CType(resources.GetObject("ToolStripButton3.Image"), Image)
         ToolStripButton3.ImageScaling = ToolStripItemImageScaling.None
-        ToolStripButton3.ImageTransparentColor = Color.Magenta
         ToolStripButton3.Name = "ToolStripButton3"
         ToolStripButton3.Size = New Size(36, 36)
         ToolStripButton3.Text = "Refresh"
@@ -1091,9 +1085,7 @@ Partial Class Form1
         ' ToolStripButton4
         ' 
         ToolStripButton4.DisplayStyle = ToolStripItemDisplayStyle.Image
-        ToolStripButton4.Image = CType(resources.GetObject("ToolStripButton4.Image"), Image)
         ToolStripButton4.ImageScaling = ToolStripItemImageScaling.None
-        ToolStripButton4.ImageTransparentColor = Color.Magenta
         ToolStripButton4.Name = "ToolStripButton4"
         ToolStripButton4.Size = New Size(36, 36)
         ToolStripButton4.Text = "Home"
@@ -1101,9 +1093,7 @@ Partial Class Form1
         ' ToolStripButton7
         ' 
         ToolStripButton7.DisplayStyle = ToolStripItemDisplayStyle.Image
-        ToolStripButton7.Image = CType(resources.GetObject("ToolStripButton7.Image"), Image)
         ToolStripButton7.ImageScaling = ToolStripItemImageScaling.None
-        ToolStripButton7.ImageTransparentColor = Color.Magenta
         ToolStripButton7.Name = "ToolStripButton7"
         ToolStripButton7.Size = New Size(36, 36)
         ToolStripButton7.Text = "New tab"
@@ -1111,9 +1101,7 @@ Partial Class Form1
         ' ToolStripButton6
         ' 
         ToolStripButton6.DisplayStyle = ToolStripItemDisplayStyle.Image
-        ToolStripButton6.Image = CType(resources.GetObject("ToolStripButton6.Image"), Image)
         ToolStripButton6.ImageScaling = ToolStripItemImageScaling.None
-        ToolStripButton6.ImageTransparentColor = Color.Magenta
         ToolStripButton6.Name = "ToolStripButton6"
         ToolStripButton6.Size = New Size(36, 36)
         ToolStripButton6.Text = "Close tab"
@@ -1138,9 +1126,7 @@ Partial Class Form1
         ' ToolStripButton5
         ' 
         ToolStripButton5.DisplayStyle = ToolStripItemDisplayStyle.Image
-        ToolStripButton5.Image = CType(resources.GetObject("ToolStripButton5.Image"), Image)
         ToolStripButton5.ImageScaling = ToolStripItemImageScaling.None
-        ToolStripButton5.ImageTransparentColor = Color.Magenta
         ToolStripButton5.Name = "ToolStripButton5"
         ToolStripButton5.Size = New Size(36, 36)
         ToolStripButton5.Text = "Go"
@@ -1148,9 +1134,7 @@ Partial Class Form1
         ' ToolStripButton8
         ' 
         ToolStripButton8.DisplayStyle = ToolStripItemDisplayStyle.Image
-        ToolStripButton8.Image = CType(resources.GetObject("ToolStripButton8.Image"), Image)
         ToolStripButton8.ImageScaling = ToolStripItemImageScaling.None
-        ToolStripButton8.ImageTransparentColor = Color.Magenta
         ToolStripButton8.Name = "ToolStripButton8"
         ToolStripButton8.Size = New Size(36, 36)
         ToolStripButton8.Text = "RSS"
@@ -1158,31 +1142,31 @@ Partial Class Form1
         ' ToolStripButton9
         ' 
         ToolStripButton9.DisplayStyle = ToolStripItemDisplayStyle.Image
-        ToolStripButton9.Image = CType(resources.GetObject("ToolStripButton9.Image"), Image)
         ToolStripButton9.ImageScaling = ToolStripItemImageScaling.None
-        ToolStripButton9.ImageTransparentColor = Color.Magenta
         ToolStripButton9.Name = "ToolStripButton9"
         ToolStripButton9.Size = New Size(36, 36)
         ToolStripButton9.Text = "Add Bookmark"
         ' 
         ' tsbAdBlockBadge
         ' 
-        tsbAdBlockBadge.DisplayStyle = ToolStripItemDisplayStyle.Text
+        tsbAdBlockBadge.AutoSize = True
+        tsbAdBlockBadge.DisplayStyle = ToolStripItemDisplayStyle.ImageAndText
         tsbAdBlockBadge.Font = New Font("Segoe UI", 9F, FontStyle.Bold)
         tsbAdBlockBadge.ForeColor = Color.DarkRed
         tsbAdBlockBadge.Name = "tsbAdBlockBadge"
         tsbAdBlockBadge.Size = New Size(34, 36)
-        tsbAdBlockBadge.Text = "🛡️ 0"
+        tsbAdBlockBadge.Text = "0"
         tsbAdBlockBadge.ToolTipText = "Ads & Trackers Blocked"
         ' 
         ' btnPrivateMode
         ' 
-        btnPrivateMode.DisplayStyle = ToolStripItemDisplayStyle.Text
+        btnPrivateMode.AutoSize = True
+        btnPrivateMode.DisplayStyle = ToolStripItemDisplayStyle.ImageAndText
         btnPrivateMode.Font = New Font("Segoe UI", 9F, FontStyle.Bold)
         btnPrivateMode.ForeColor = Color.FromArgb(CType(CType(100, Byte), Integer), CType(CType(110, Byte), Integer), CType(CType(130, Byte), Integer))
         btnPrivateMode.Name = "btnPrivateMode"
         btnPrivateMode.Size = New Size(72, 36)
-        btnPrivateMode.Text = "🕶 Private"
+        btnPrivateMode.Text = "Private"
         btnPrivateMode.ToolTipText = "Open a private browsing window" & vbCrLf & vbCrLf & "Your browsing history, cookies, and site data will not be saved after closing."
         ' 
         ' PrivateWindowToolStripMenuItem

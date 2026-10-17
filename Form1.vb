@@ -119,8 +119,27 @@ Public Class Form1
         End If
     End Sub
 
+    ''' <summary>
+    ''' Assigns Fluent icons to the toolbar and menus. Colours follow the theme via ThemeManager.ApplyTheme.
+    ''' </summary>
+    Private Sub ApplyIcons()
+        ' Toolbar (20px)
+        IconService.SetIcon(Back, FluentIcon.ArrowLeft, 20)
+        IconService.SetIcon(ToolStripButton2, FluentIcon.ArrowRight, 20)
+        IconService.SetIcon(ToolStripButton3, FluentIcon.ArrowClockwise, 20)
+        IconService.SetIcon(ToolStripButton4, FluentIcon.Home, 20)
+        IconService.SetIcon(ToolStripButton7, FluentIcon.TabAdd, 20)
+        IconService.SetIcon(ToolStripButton6, FluentIcon.Dismiss, 20)
+        IconService.SetIcon(ToolStripButton5, FluentIcon.ArrowEnter, 20)
+        IconService.SetIcon(ToolStripButton8, FluentIcon.Rss, 20)
+        IconService.SetIcon(ToolStripButton9, FluentIcon.Star, 20)
+        IconService.SetIcon(tsbAdBlockBadge, FluentIcon.Shield, 20)
+        IconService.SetIcon(btnPrivateMode, FluentIcon.Incognito, 20)
+    End Sub
+
     Private Async Sub Form1_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
         Try
+            ApplyIcons()
             ThemeManager.ApplyTheme(Me)
             UpdateDarkModeMenuCheckedState()
             UserScriptManager.Initialize()
@@ -179,7 +198,7 @@ Public Class Form1
             Dim unusedTask = System.Threading.Tasks.Task.Run(Function() AdBlockEngine.CheckAndAutoUpdateListsAsync())
             If tsbAdBlockBadge IsNot Nothing Then
                 tsbAdBlockBadge.Visible = My.Settings.ShowBlockedCount AndAlso My.Settings.AdBlockerEnabled
-                tsbAdBlockBadge.Text = "🛡️ " & AdBlockEngine.TotalBlockedCount
+                tsbAdBlockBadge.Text = AdBlockEngine.TotalBlockedCount.ToString()
             End If
 
             AddHandler SettingsManager.SettingsChanged, AddressOf OnSettingsChanged
@@ -203,7 +222,7 @@ Public Class Form1
 
         If tsbAdBlockBadge IsNot Nothing Then
             tsbAdBlockBadge.Visible = My.Settings.ShowBlockedCount AndAlso My.Settings.AdBlockerEnabled
-            tsbAdBlockBadge.Text = "🛡️ " & AdBlockEngine.TotalBlockedCount
+            tsbAdBlockBadge.Text = AdBlockEngine.TotalBlockedCount.ToString()
         End If
 
         For Each page As TabPage In TabControl1.TabPages
@@ -901,7 +920,7 @@ Public Class Form1
             Return
         End If
         If tsbAdBlockBadge IsNot Nothing Then
-            tsbAdBlockBadge.Text = "🛡️ " & AdBlockEngine.TotalBlockedCount
+            tsbAdBlockBadge.Text = AdBlockEngine.TotalBlockedCount.ToString()
             tsbAdBlockBadge.Visible = My.Settings.ShowBlockedCount AndAlso My.Settings.AdBlockerEnabled
         End If
     End Sub
@@ -919,7 +938,7 @@ Public Class Form1
 
         If tsbAdBlockBadge IsNot Nothing Then
             tsbAdBlockBadge.Visible = My.Settings.ShowBlockedCount AndAlso My.Settings.AdBlockerEnabled
-            tsbAdBlockBadge.Text = "🛡️ " & AdBlockEngine.TotalBlockedCount
+            tsbAdBlockBadge.Text = AdBlockEngine.TotalBlockedCount.ToString()
         End If
     End Sub
 
