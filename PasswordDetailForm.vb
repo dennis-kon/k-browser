@@ -24,6 +24,8 @@ Public Class PasswordDetailForm
     ''' <param name="credential">The credential entry (with encrypted password).</param>
     Public Sub New(ByVal credential As CredentialEntry)
         InitializeComponent()
+        IconService.SetIcon(lblIcon, FluentIcon.LockClosed, 32)
+        IconService.SetIcon(btnTogglePassword, FluentIcon.Eye)
 
         _passwordManager = New PasswordManagerService()
         _authService = New WindowsAuthenticationService()
@@ -79,7 +81,8 @@ Public Class PasswordDetailForm
             ' Decrypt and display the password
             Dim plainPassword As String = _passwordManager.DecryptPassword(_encryptedPassword)
             txtPasswordValue.Text = plainPassword
-            btnTogglePassword.Text = "🙈 Hide Password"
+            btnTogglePassword.Text = "Hide Password"
+            IconService.SetIcon(btnTogglePassword, FluentIcon.EyeOff)
             _isPasswordVisible = True
         Catch ex As Exception
             MessageBox.Show("Failed to reveal password: " & ex.Message,
@@ -89,7 +92,8 @@ Public Class PasswordDetailForm
 
     Private Sub HidePassword()
         txtPasswordValue.Text = "••••••••••••"
-        btnTogglePassword.Text = "👁 Show Password"
+        btnTogglePassword.Text = "Show Password"
+        IconService.SetIcon(btnTogglePassword, FluentIcon.Eye)
         _isPasswordVisible = False
     End Sub
 

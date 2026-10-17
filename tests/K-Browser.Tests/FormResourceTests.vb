@@ -93,4 +93,18 @@ Public Class FormResourceTests
         Assert.Empty(found)
     End Sub
 
+    <Fact>
+    Public Sub FixedPaletteDialogs_HaveNoEmojiText()
+        Dim files = {"PasswordDetailForm.Designer.vb", "PasswordDetailForm.vb", "SavePasswordForm.Designer.vb"}
+        Dim glyphs = {"🔐", "👁", "🙈", "🔑"}
+
+        Dim found = From f In files, g In glyphs Where Source(f).Contains(g) Select f & ": " & g
+        Assert.Empty(found)
+    End Sub
+
+    <Fact>
+    Public Sub DownloadManager_HasNoBitmapIcon()
+        Assert.DoesNotContain("PictureBox1.Image", ResxDataNames("mainForm.resx"))
+    End Sub
+
 End Class

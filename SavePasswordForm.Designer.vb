@@ -46,14 +46,14 @@ Partial Class SavePasswordForm
         '
         ' lblIcon
         '
-        lblIcon.AutoSize = True
+        lblIcon.AutoSize = False
         lblIcon.Font = New System.Drawing.Font("Segoe UI", 16.0F)
         lblIcon.ForeColor = System.Drawing.Color.FromArgb(CType(CType(161, Byte), Integer), CType(CType(197, Byte), Integer), CType(CType(74, Byte), Integer))
         lblIcon.Location = New System.Drawing.Point(14, 8)
         lblIcon.Name = "lblIcon"
         lblIcon.Size = New System.Drawing.Size(36, 30)
         lblIcon.TabIndex = 0
-        lblIcon.Text = "🔑"
+        lblIcon.Text = ""
         '
         ' lblTitle
         '

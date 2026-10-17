@@ -26,6 +26,7 @@ Public Class SavePasswordForm
     ''' <param name="username">The detected username or email.</param>
     Public Sub New(ByVal domain As String, ByVal username As String)
         InitializeComponent()
+        IconService.SetIcon(lblIcon, FluentIcon.Key, 32)
         lblDomain.Text = domain
         lblUsername.Text = username
 

@@ -155,6 +155,7 @@ Public Class downman
     End Sub
 
     Private Sub mainForm_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
+        IconService.SetIcon(PictureBox1, FluentIcon.ArrowDownload, 32)
         Me.Label4.Text = ""
     End Sub
 
