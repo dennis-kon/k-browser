@@ -135,6 +135,45 @@ Public Class Form1
         IconService.SetIcon(ToolStripButton9, FluentIcon.Star, 20)
         IconService.SetIcon(tsbAdBlockBadge, FluentIcon.Shield, 20)
         IconService.SetIcon(btnPrivateMode, FluentIcon.Incognito, 20)
+
+        ' Menus (16px)
+        IconService.SetIcon(ToolStripMenuItem5, FluentIcon.Open)
+        IconService.SetIcon(OpePageInNToolStripMenuItem, FluentIcon.Open)
+        IconService.SetIcon(NewTabToolStripMenuItem1, FluentIcon.TabAdd)
+        IconService.SetIcon(CloseTabToolStripMenuItem, FluentIcon.Dismiss)
+        IconService.SetIcon(NewWindowToolStripMenuItem, FluentIcon.WindowNew)
+        IconService.SetIcon(PrivateWindowToolStripMenuItem, FluentIcon.Incognito)
+        IconService.SetIcon(DefualtToolStripMenuItem, FluentIcon.Document)
+        IconService.SetIcon(SaveFileToolStripMenuItem, FluentIcon.Save)
+        IconService.SetIcon(PrintToolStripMenuItem, FluentIcon.Print)
+        IconService.SetIcon(ExitToolStripMenuItem, FluentIcon.SignOut)
+        IconService.SetIcon(CutToolStripMenuItem, FluentIcon.Cut)
+        IconService.SetIcon(CopyToolStripMenuItem, FluentIcon.Copy)
+        IconService.SetIcon(ZooomToolStripMenuItem, FluentIcon.ZoomIn)
+        IconService.SetIcon(ImageToolStripMenuItem, FluentIcon.Screenshot)
+        IconService.SetIcon(HistoryToolStripMenuItem, FluentIcon.History)
+        IconService.SetIcon(BackToolStripMenuItem, FluentIcon.ArrowLeft)
+        IconService.SetIcon(ForwardToolStripMenuItem, FluentIcon.ArrowRight)
+        IconService.SetIcon(ReloadToolStripMenuItem1, FluentIcon.ArrowClockwise)
+        IconService.SetIcon(StopToolStripMenuItem1, FluentIcon.Dismiss)
+        IconService.SetIcon(ToolStripMenuItem3, FluentIcon.Home)
+        IconService.SetIcon(CookieToolStripMenuItem, FluentIcon.Cookies)
+        IconService.SetIcon(CookieViewerToolStripMenuItem, FluentIcon.Broom)
+        IconService.SetIcon(ViewToolStripMenuItem1, FluentIcon.Bookmark)
+        IconService.SetIcon(DarkModeToolStripMenuItem, FluentIcon.WeatherMoon)
+        IconService.SetIcon(LinksToolStripMenuItem, FluentIcon.Search)
+        IconService.SetIcon(SocialNetworksToolStripMenuItem, FluentIcon.People)
+        IconService.SetIcon(SettingsToolStripMenuItem, FluentIcon.Settings)
+        IconService.SetIcon(DownloadManagerToolStripMenuItem, FluentIcon.ArrowDownload)
+        IconService.SetIcon(FtpClientToolStripMenuItem, FluentIcon.Server)
+        IconService.SetIcon(TaskToolStripMenuItem, FluentIcon.DataUsage)
+        IconService.SetIcon(SetHomePageToolStripMenuItem, FluentIcon.Rss)
+        IconService.SetIcon(MediaToolStripMenuItem, FluentIcon.Video)
+        IconService.SetIcon(SendALinkToolStripMenuItem, FluentIcon.Send)
+        IconService.SetIcon(InternetSettingsToolStripMenuItem, FluentIcon.GlobeDesktop)
+        IconService.SetIcon(ProxySettingsToolStripMenuItem, FluentIcon.Globe)
+        IconService.SetIcon(AboutToolStripMenuItem, FluentIcon.Info)
+        IconService.SetIcon(CheckForUpdatesToolStripMenuItem, FluentIcon.ArrowSync)
     End Sub
 
     Private Async Sub Form1_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
@@ -679,20 +718,8 @@ Public Class Form1
         NavigateActiveTab("https://duckduckgo.com/")
     End Sub
 
-    Private Sub DogpileToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles DogpileToolStripMenuItem.Click
-        NavigateActiveTab("http://www.dogpile.com/")
-    End Sub
-
-    Private Sub WebCrawlerToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles WebCrawlerToolStripMenuItem.Click
-        NavigateActiveTab("http://www.webcrawler.com/")
-    End Sub
-
     Private Sub GopherToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
         NavigateActiveTab("http://wt.gopherite.org/")
-    End Sub
-
-    Private Sub LycosToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles LycosToolStripMenuItem.Click
-        NavigateActiveTab("http://www.lycos.com/")
     End Sub
 
     Private Sub AccuWeatherToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles AccuWeatherToolStripMenuItem.Click

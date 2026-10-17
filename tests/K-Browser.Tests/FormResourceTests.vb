@@ -34,4 +34,35 @@ Public Class FormResourceTests
         Assert.Empty(offending)
     End Sub
 
+    <Fact>
+    Public Sub Form1_HasNoRemovedServices()
+        Dim text = Source("Form1.vb") & Source("Form1.Designer.vb") & Source("Form1.resx")
+        Dim removed = {"Formspring", "Keek", "WebCrawler", "Lycos", "Dogpile", "Badoo"}
+
+        Assert.Empty(removed.Where(Function(s) text.IndexOf(s, StringComparison.OrdinalIgnoreCase) >= 0))
+    End Sub
+
+    ''' <summary>Brand menu bitmaps that Task 5 replaces with favicons.</summary>
+    Friend Shared ReadOnly BrandImageKeys As String() = {
+        "BingToolStripMenuItem.Image", "GoogleToolStripMenuItem1.Image", "YahooToolStripMenuItem.Image",
+        "EBayToolStripMenuItem.Image", "MSNToolStripMenuItem.Image", "DuckDuckGoToolStripMenuItem.Image",
+        "VimeoToolStripMenuItem.Image", "FacebookToolStripMenuItem.Image", "TwitterToolStripMenuItem.Image",
+        "GoogleToolStripMenuItem.Image", "LinkedinToolStripMenuItem.Image", "InstagramToolStripMenuItem.Image",
+        "VkToolStripMenuItem.Image", "PinterestToolStripMenuItem.Image"}
+
+    <Fact>
+    Public Sub Form1_OnlyBrandBitmapsRemain()
+        Dim leftover = ResxDataNames("Form1.resx").Where(Function(n) n.EndsWith(".Image")).Except(BrandImageKeys).ToList()
+
+        Assert.Empty(leftover)
+    End Sub
+
+    <Fact>
+    Public Sub Form1Menus_HaveNoEmojiText()
+        Dim designer = Source("Form1.Designer.vb")
+
+        Assert.DoesNotContain("🌙", designer)
+        Assert.DoesNotContain("🕶", designer)
+    End Sub
+
 End Class

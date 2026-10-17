@@ -112,9 +112,6 @@ Partial Class Form1
         EBayToolStripMenuItem = New ToolStripMenuItem()
         MSNToolStripMenuItem = New ToolStripMenuItem()
         DuckDuckGoToolStripMenuItem = New ToolStripMenuItem()
-        DogpileToolStripMenuItem = New ToolStripMenuItem()
-        WebCrawlerToolStripMenuItem = New ToolStripMenuItem()
-        LycosToolStripMenuItem = New ToolStripMenuItem()
         VimeoToolStripMenuItem = New ToolStripMenuItem()
         AccuWeatherToolStripMenuItem = New ToolStripMenuItem()
         SocialNetworksToolStripMenuItem = New ToolStripMenuItem()
@@ -123,11 +120,8 @@ Partial Class Form1
         GoogleToolStripMenuItem = New ToolStripMenuItem()
         LinkedinToolStripMenuItem = New ToolStripMenuItem()
         InstagramToolStripMenuItem = New ToolStripMenuItem()
-        BadooToolStripMenuItem = New ToolStripMenuItem()
         VkToolStripMenuItem = New ToolStripMenuItem()
         PinterestToolStripMenuItem = New ToolStripMenuItem()
-        FormspringToolStripMenuItem = New ToolStripMenuItem()
-        KeekToolStripMenuItem = New ToolStripMenuItem()
         ToolsToolStripMenuItem = New ToolStripMenuItem()
         SettingsToolStripMenuItem = New ToolStripMenuItem()
         DownloadManagerToolStripMenuItem = New ToolStripMenuItem()
@@ -237,7 +231,6 @@ Partial Class Form1
         ' 
         ' ToolStripMenuItem5
         ' 
-        ToolStripMenuItem5.Image = CType(resources.GetObject("ToolStripMenuItem5.Image"), Image)
         ToolStripMenuItem5.Name = "ToolStripMenuItem5"
         ToolStripMenuItem5.Size = New Size(164, 22)
         ToolStripMenuItem5.Text = "Open page in IE"
@@ -250,14 +243,12 @@ Partial Class Form1
         ' 
         ' NewTabToolStripMenuItem1
         ' 
-        NewTabToolStripMenuItem1.Image = CType(resources.GetObject("NewTabToolStripMenuItem1.Image"), Image)
         NewTabToolStripMenuItem1.Name = "NewTabToolStripMenuItem1"
         NewTabToolStripMenuItem1.Size = New Size(164, 22)
         NewTabToolStripMenuItem1.Text = "New tab"
         ' 
         ' CloseTabToolStripMenuItem
         ' 
-        CloseTabToolStripMenuItem.Image = CType(resources.GetObject("CloseTabToolStripMenuItem.Image"), Image)
         CloseTabToolStripMenuItem.Name = "CloseTabToolStripMenuItem"
         CloseTabToolStripMenuItem.Size = New Size(164, 22)
         CloseTabToolStripMenuItem.Text = "Close tab"
@@ -284,7 +275,6 @@ Partial Class Form1
         ' 
         ' NewWindowToolStripMenuItem
         ' 
-        NewWindowToolStripMenuItem.Image = CType(resources.GetObject("NewWindowToolStripMenuItem.Image"), Image)
         NewWindowToolStripMenuItem.Name = "NewWindowToolStripMenuItem"
         NewWindowToolStripMenuItem.ShortcutKeys = Keys.Control Or Keys.O
         NewWindowToolStripMenuItem.Size = New Size(206, 22)
@@ -310,7 +300,6 @@ Partial Class Form1
         ' 
         ' DefualtToolStripMenuItem
         ' 
-        DefualtToolStripMenuItem.Image = CType(resources.GetObject("DefualtToolStripMenuItem.Image"), Image)
         DefualtToolStripMenuItem.Name = "DefualtToolStripMenuItem"
         DefualtToolStripMenuItem.ShortcutKeys = Keys.Control Or Keys.D
         DefualtToolStripMenuItem.Size = New Size(221, 22)
@@ -355,7 +344,6 @@ Partial Class Form1
         ' 
         ' SaveFileToolStripMenuItem
         ' 
-        SaveFileToolStripMenuItem.Image = CType(resources.GetObject("SaveFileToolStripMenuItem.Image"), Image)
         SaveFileToolStripMenuItem.Name = "SaveFileToolStripMenuItem"
         SaveFileToolStripMenuItem.ShortcutKeys = Keys.Control Or Keys.S
         SaveFileToolStripMenuItem.Size = New Size(206, 22)
@@ -379,7 +367,6 @@ Partial Class Form1
         ' 
         ' PrintToolStripMenuItem
         ' 
-        PrintToolStripMenuItem.Image = CType(resources.GetObject("PrintToolStripMenuItem.Image"), Image)
         PrintToolStripMenuItem.Name = "PrintToolStripMenuItem"
         PrintToolStripMenuItem.Size = New Size(206, 22)
         PrintToolStripMenuItem.Text = "Print"
@@ -397,7 +384,6 @@ Partial Class Form1
         ' 
         ' ExitToolStripMenuItem
         ' 
-        ExitToolStripMenuItem.Image = CType(resources.GetObject("ExitToolStripMenuItem.Image"), Image)
         ExitToolStripMenuItem.Name = "ExitToolStripMenuItem"
         ExitToolStripMenuItem.ShortcutKeys = Keys.Alt Or Keys.F4
         ExitToolStripMenuItem.Size = New Size(206, 22)
@@ -414,7 +400,6 @@ Partial Class Form1
         ' 
         ' CutToolStripMenuItem
         ' 
-        CutToolStripMenuItem.Image = CType(resources.GetObject("CutToolStripMenuItem.Image"), Image)
         CutToolStripMenuItem.Name = "CutToolStripMenuItem"
         CutToolStripMenuItem.ShortcutKeys = Keys.Control Or Keys.X
         CutToolStripMenuItem.Size = New Size(177, 22)
@@ -422,7 +407,6 @@ Partial Class Form1
         ' 
         ' CopyToolStripMenuItem
         ' 
-        CopyToolStripMenuItem.Image = CType(resources.GetObject("CopyToolStripMenuItem.Image"), Image)
         CopyToolStripMenuItem.Name = "CopyToolStripMenuItem"
         CopyToolStripMenuItem.ShortcutKeys = Keys.Control Or Keys.C
         CopyToolStripMenuItem.Size = New Size(177, 22)
@@ -450,7 +434,6 @@ Partial Class Form1
         ' ZooomToolStripMenuItem
         ' 
         ZooomToolStripMenuItem.DropDownItems.AddRange(New ToolStripItem() {ZoomInToolStripMenuItem, ZoomOutToolStripMenuItem})
-        ZooomToolStripMenuItem.Image = CType(resources.GetObject("ZooomToolStripMenuItem.Image"), Image)
         ZooomToolStripMenuItem.Name = "ZooomToolStripMenuItem"
         ZooomToolStripMenuItem.Size = New Size(177, 22)
         ZooomToolStripMenuItem.Text = "&Zoom"
@@ -482,7 +465,6 @@ Partial Class Form1
         ' 
         ' ImageToolStripMenuItem
         ' 
-        ImageToolStripMenuItem.Image = CType(resources.GetObject("ImageToolStripMenuItem.Image"), Image)
         ImageToolStripMenuItem.Name = "ImageToolStripMenuItem"
         ImageToolStripMenuItem.Size = New Size(177, 22)
         ImageToolStripMenuItem.Text = "Take a Screenshot"
@@ -556,7 +538,6 @@ Partial Class Form1
         ' 
         ' HistoryToolStripMenuItem
         ' 
-        HistoryToolStripMenuItem.Image = CType(resources.GetObject("HistoryToolStripMenuItem.Image"), Image)
         HistoryToolStripMenuItem.Name = "HistoryToolStripMenuItem"
         HistoryToolStripMenuItem.ShortcutKeys = Keys.Control Or Keys.H
         HistoryToolStripMenuItem.Size = New Size(180, 22)
@@ -596,14 +577,12 @@ Partial Class Form1
         ' 
         ' BackToolStripMenuItem
         ' 
-        BackToolStripMenuItem.Image = CType(resources.GetObject("BackToolStripMenuItem.Image"), Image)
         BackToolStripMenuItem.Name = "BackToolStripMenuItem"
         BackToolStripMenuItem.Size = New Size(221, 22)
         BackToolStripMenuItem.Text = "Back"
         ' 
         ' ForwardToolStripMenuItem
         ' 
-        ForwardToolStripMenuItem.Image = CType(resources.GetObject("ForwardToolStripMenuItem.Image"), Image)
         ForwardToolStripMenuItem.Name = "ForwardToolStripMenuItem"
         ForwardToolStripMenuItem.Size = New Size(221, 22)
         ForwardToolStripMenuItem.Text = "Forward"
@@ -617,7 +596,6 @@ Partial Class Form1
         ' 
         ' ReloadToolStripMenuItem1
         ' 
-        ReloadToolStripMenuItem1.Image = CType(resources.GetObject("ReloadToolStripMenuItem1.Image"), Image)
         ReloadToolStripMenuItem1.Name = "ReloadToolStripMenuItem1"
         ReloadToolStripMenuItem1.ShortcutKeys = Keys.F5
         ReloadToolStripMenuItem1.Size = New Size(186, 22)
@@ -632,7 +610,6 @@ Partial Class Form1
         ' 
         ' StopToolStripMenuItem1
         ' 
-        StopToolStripMenuItem1.Image = CType(resources.GetObject("StopToolStripMenuItem1.Image"), Image)
         StopToolStripMenuItem1.Name = "StopToolStripMenuItem1"
         StopToolStripMenuItem1.Size = New Size(221, 22)
         StopToolStripMenuItem1.Text = "Stop"
@@ -644,7 +621,6 @@ Partial Class Form1
         ' 
         ' ToolStripMenuItem3
         ' 
-        ToolStripMenuItem3.Image = CType(resources.GetObject("ToolStripMenuItem3.Image"), Image)
         ToolStripMenuItem3.Name = "ToolStripMenuItem3"
         ToolStripMenuItem3.ShortcutKeys = Keys.Control Or Keys.Shift Or Keys.H
         ToolStripMenuItem3.Size = New Size(221, 22)
@@ -673,7 +649,7 @@ Partial Class Form1
         ' 
         DarkModeToolStripMenuItem.Name = "DarkModeToolStripMenuItem"
         DarkModeToolStripMenuItem.Size = New Size(180, 22)
-        DarkModeToolStripMenuItem.Text = "🌙 Dark Mode"
+        DarkModeToolStripMenuItem.Text = "Dark Mode"
         ' 
         ' ToolStripSeparator14
         ' 
@@ -689,7 +665,6 @@ Partial Class Form1
         ' 
         ' CookieToolStripMenuItem
         ' 
-        CookieToolStripMenuItem.Image = CType(resources.GetObject("CookieToolStripMenuItem.Image"), Image)
         CookieToolStripMenuItem.Name = "CookieToolStripMenuItem"
         CookieToolStripMenuItem.Size = New Size(169, 22)
         CookieToolStripMenuItem.Text = "Cookie Viewer"
@@ -704,7 +679,6 @@ Partial Class Form1
         ' 
         ' ViewToolStripMenuItem1
         ' 
-        ViewToolStripMenuItem1.Image = CType(resources.GetObject("ViewToolStripMenuItem1.Image"), Image)
         ViewToolStripMenuItem1.Name = "ViewToolStripMenuItem1"
         ViewToolStripMenuItem1.ShortcutKeys = Keys.Control Or Keys.B
         ViewToolStripMenuItem1.Size = New Size(194, 22)
@@ -723,8 +697,7 @@ Partial Class Form1
         ' 
         ' LinksToolStripMenuItem
         ' 
-        LinksToolStripMenuItem.DropDownItems.AddRange(New ToolStripItem() {BingToolStripMenuItem, GoogleToolStripMenuItem1, YahooToolStripMenuItem, EBayToolStripMenuItem, MSNToolStripMenuItem, DuckDuckGoToolStripMenuItem, DogpileToolStripMenuItem, WebCrawlerToolStripMenuItem, LycosToolStripMenuItem, VimeoToolStripMenuItem, AccuWeatherToolStripMenuItem})
-        LinksToolStripMenuItem.Image = CType(resources.GetObject("LinksToolStripMenuItem.Image"), Image)
+        LinksToolStripMenuItem.DropDownItems.AddRange(New ToolStripItem() {BingToolStripMenuItem, GoogleToolStripMenuItem1, YahooToolStripMenuItem, EBayToolStripMenuItem, MSNToolStripMenuItem, DuckDuckGoToolStripMenuItem, VimeoToolStripMenuItem, AccuWeatherToolStripMenuItem})
         LinksToolStripMenuItem.Name = "LinksToolStripMenuItem"
         LinksToolStripMenuItem.Size = New Size(185, 22)
         LinksToolStripMenuItem.Text = "Web search engines"
@@ -771,27 +744,6 @@ Partial Class Form1
         DuckDuckGoToolStripMenuItem.Size = New Size(145, 22)
         DuckDuckGoToolStripMenuItem.Text = "DuckDuckGo"
         ' 
-        ' DogpileToolStripMenuItem
-        ' 
-        DogpileToolStripMenuItem.Image = CType(resources.GetObject("DogpileToolStripMenuItem.Image"), Image)
-        DogpileToolStripMenuItem.Name = "DogpileToolStripMenuItem"
-        DogpileToolStripMenuItem.Size = New Size(145, 22)
-        DogpileToolStripMenuItem.Text = "Dogpile"
-        ' 
-        ' WebCrawlerToolStripMenuItem
-        ' 
-        WebCrawlerToolStripMenuItem.Image = CType(resources.GetObject("WebCrawlerToolStripMenuItem.Image"), Image)
-        WebCrawlerToolStripMenuItem.Name = "WebCrawlerToolStripMenuItem"
-        WebCrawlerToolStripMenuItem.Size = New Size(145, 22)
-        WebCrawlerToolStripMenuItem.Text = "WebCrawler"
-        ' 
-        ' LycosToolStripMenuItem
-        ' 
-        LycosToolStripMenuItem.Image = CType(resources.GetObject("LycosToolStripMenuItem.Image"), Image)
-        LycosToolStripMenuItem.Name = "LycosToolStripMenuItem"
-        LycosToolStripMenuItem.Size = New Size(145, 22)
-        LycosToolStripMenuItem.Text = "Lycos"
-        ' 
         ' VimeoToolStripMenuItem
         ' 
         VimeoToolStripMenuItem.Image = CType(resources.GetObject("VimeoToolStripMenuItem.Image"), Image)
@@ -807,8 +759,7 @@ Partial Class Form1
         ' 
         ' SocialNetworksToolStripMenuItem
         ' 
-        SocialNetworksToolStripMenuItem.DropDownItems.AddRange(New ToolStripItem() {FacebookToolStripMenuItem, TwitterToolStripMenuItem, GoogleToolStripMenuItem, LinkedinToolStripMenuItem, InstagramToolStripMenuItem, BadooToolStripMenuItem, VkToolStripMenuItem, PinterestToolStripMenuItem, FormspringToolStripMenuItem, KeekToolStripMenuItem})
-        SocialNetworksToolStripMenuItem.Image = CType(resources.GetObject("SocialNetworksToolStripMenuItem.Image"), Image)
+        SocialNetworksToolStripMenuItem.DropDownItems.AddRange(New ToolStripItem() {FacebookToolStripMenuItem, TwitterToolStripMenuItem, GoogleToolStripMenuItem, LinkedinToolStripMenuItem, InstagramToolStripMenuItem, VkToolStripMenuItem, PinterestToolStripMenuItem})
         SocialNetworksToolStripMenuItem.Name = "SocialNetworksToolStripMenuItem"
         SocialNetworksToolStripMenuItem.Size = New Size(185, 22)
         SocialNetworksToolStripMenuItem.Text = "Social Networks "
@@ -852,14 +803,6 @@ Partial Class Form1
         InstagramToolStripMenuItem.Size = New Size(135, 22)
         InstagramToolStripMenuItem.Text = "Instagram"
         ' 
-        ' BadooToolStripMenuItem
-        ' 
-        BadooToolStripMenuItem.Image = CType(resources.GetObject("BadooToolStripMenuItem.Image"), Image)
-        BadooToolStripMenuItem.Name = "BadooToolStripMenuItem"
-        BadooToolStripMenuItem.Size = New Size(135, 22)
-        BadooToolStripMenuItem.Text = "Badoo"
-        BadooToolStripMenuItem.ToolTipText = "Meet People on Badoo, Make New Friends, Chat, Flirt"
-        ' 
         ' VkToolStripMenuItem
         ' 
         VkToolStripMenuItem.Image = CType(resources.GetObject("VkToolStripMenuItem.Image"), Image)
@@ -876,22 +819,6 @@ Partial Class Form1
         PinterestToolStripMenuItem.Text = "Pinterest"
         PinterestToolStripMenuItem.ToolTipText = "A content sharing service that allows members to ""pin"" images, videos and other objects to their pinboard"
         ' 
-        ' FormspringToolStripMenuItem
-        ' 
-        FormspringToolStripMenuItem.Image = CType(resources.GetObject("FormspringToolStripMenuItem.Image"), Image)
-        FormspringToolStripMenuItem.Name = "FormspringToolStripMenuItem"
-        FormspringToolStripMenuItem.Size = New Size(135, 22)
-        FormspringToolStripMenuItem.Text = "Formspring"
-        FormspringToolStripMenuItem.ToolTipText = "The place to share your perspective on anything"
-        ' 
-        ' KeekToolStripMenuItem
-        ' 
-        KeekToolStripMenuItem.Image = CType(resources.GetObject("KeekToolStripMenuItem.Image"), Image)
-        KeekToolStripMenuItem.Name = "KeekToolStripMenuItem"
-        KeekToolStripMenuItem.Size = New Size(135, 22)
-        KeekToolStripMenuItem.Text = "Keek"
-        KeekToolStripMenuItem.ToolTipText = "Share Quick Video Updates With Friends"
-        ' 
         ' ToolsToolStripMenuItem
         ' 
         ToolsToolStripMenuItem.DropDownItems.AddRange(New ToolStripItem() {SettingsToolStripMenuItem, DownloadManagerToolStripMenuItem, FtpClientToolStripMenuItem, TaskToolStripMenuItem})
@@ -901,14 +828,12 @@ Partial Class Form1
         ' 
         ' SettingsToolStripMenuItem
         ' 
-        SettingsToolStripMenuItem.Image = CType(resources.GetObject("SettingsToolStripMenuItem.Image"), Image)
         SettingsToolStripMenuItem.Name = "SettingsToolStripMenuItem"
         SettingsToolStripMenuItem.Size = New Size(229, 22)
         SettingsToolStripMenuItem.Text = "Browser &Settings"
         ' 
         ' DownloadManagerToolStripMenuItem
         ' 
-        DownloadManagerToolStripMenuItem.Image = CType(resources.GetObject("DownloadManagerToolStripMenuItem.Image"), Image)
         DownloadManagerToolStripMenuItem.Name = "DownloadManagerToolStripMenuItem"
         DownloadManagerToolStripMenuItem.ShortcutKeys = Keys.Control Or Keys.D
         DownloadManagerToolStripMenuItem.Size = New Size(229, 22)
@@ -916,42 +841,36 @@ Partial Class Form1
         ' 
         ' FtpClientToolStripMenuItem
         ' 
-        FtpClientToolStripMenuItem.Image = CType(resources.GetObject("FtpClientToolStripMenuItem.Image"), Image)
         FtpClientToolStripMenuItem.Name = "FtpClientToolStripMenuItem"
         FtpClientToolStripMenuItem.Size = New Size(229, 22)
         FtpClientToolStripMenuItem.Text = "Ftp Client"
         ' 
         ' TaskToolStripMenuItem
         ' 
-        TaskToolStripMenuItem.Image = CType(resources.GetObject("TaskToolStripMenuItem.Image"), Image)
         TaskToolStripMenuItem.Name = "TaskToolStripMenuItem"
         TaskToolStripMenuItem.Size = New Size(229, 22)
         TaskToolStripMenuItem.Text = "Cpu Task"
         ' 
         ' SetHomePageToolStripMenuItem
         ' 
-        SetHomePageToolStripMenuItem.Image = CType(resources.GetObject("SetHomePageToolStripMenuItem.Image"), Image)
         SetHomePageToolStripMenuItem.Name = "SetHomePageToolStripMenuItem"
         SetHomePageToolStripMenuItem.Size = New Size(219, 22)
         SetHomePageToolStripMenuItem.Text = "Rss Reader"
         ' 
         ' MediaToolStripMenuItem
         ' 
-        MediaToolStripMenuItem.Image = CType(resources.GetObject("MediaToolStripMenuItem.Image"), Image)
         MediaToolStripMenuItem.Name = "MediaToolStripMenuItem"
         MediaToolStripMenuItem.Size = New Size(219, 22)
         MediaToolStripMenuItem.Text = "Media player"
         ' 
         ' CookieViewerToolStripMenuItem
         ' 
-        CookieViewerToolStripMenuItem.Image = CType(resources.GetObject("CookieViewerToolStripMenuItem.Image"), Image)
         CookieViewerToolStripMenuItem.Name = "CookieViewerToolStripMenuItem"
         CookieViewerToolStripMenuItem.Size = New Size(219, 22)
         CookieViewerToolStripMenuItem.Text = "Clear All Recent Data"
         ' 
         ' SendALinkToolStripMenuItem
         ' 
-        SendALinkToolStripMenuItem.Image = CType(resources.GetObject("SendALinkToolStripMenuItem.Image"), Image)
         SendALinkToolStripMenuItem.Name = "SendALinkToolStripMenuItem"
         SendALinkToolStripMenuItem.Size = New Size(219, 22)
         SendALinkToolStripMenuItem.Text = "Send Link.."
@@ -963,14 +882,12 @@ Partial Class Form1
         ' 
         ' InternetSettingsToolStripMenuItem
         ' 
-        InternetSettingsToolStripMenuItem.Image = CType(resources.GetObject("InternetSettingsToolStripMenuItem.Image"), Image)
         InternetSettingsToolStripMenuItem.Name = "InternetSettingsToolStripMenuItem"
         InternetSettingsToolStripMenuItem.Size = New Size(219, 22)
         InternetSettingsToolStripMenuItem.Text = "Internet Settings"
         ' 
         ' ProxySettingsToolStripMenuItem
         ' 
-        ProxySettingsToolStripMenuItem.Image = CType(resources.GetObject("ProxySettingsToolStripMenuItem.Image"), Image)
         ProxySettingsToolStripMenuItem.Name = "ProxySettingsToolStripMenuItem"
         ProxySettingsToolStripMenuItem.Size = New Size(219, 22)
         ProxySettingsToolStripMenuItem.Text = "Proxy"
@@ -982,7 +899,6 @@ Partial Class Form1
         ' 
         ' OpePageInNToolStripMenuItem
         ' 
-        OpePageInNToolStripMenuItem.Image = CType(resources.GetObject("OpePageInNToolStripMenuItem.Image"), Image)
         OpePageInNToolStripMenuItem.Name = "OpePageInNToolStripMenuItem"
         OpePageInNToolStripMenuItem.Size = New Size(219, 22)
         OpePageInNToolStripMenuItem.Text = "Open page in IE"
@@ -996,14 +912,12 @@ Partial Class Form1
         ' 
         ' AboutToolStripMenuItem
         ' 
-        AboutToolStripMenuItem.Image = CType(resources.GetObject("AboutToolStripMenuItem.Image"), Image)
         AboutToolStripMenuItem.Name = "AboutToolStripMenuItem"
         AboutToolStripMenuItem.Size = New Size(185, 22)
         AboutToolStripMenuItem.Text = "&About"
         ' 
         ' CheckForUpdatesToolStripMenuItem
         ' 
-        CheckForUpdatesToolStripMenuItem.Image = CType(resources.GetObject("CheckForUpdatesToolStripMenuItem.Image"), Image)
         CheckForUpdatesToolStripMenuItem.Name = "CheckForUpdatesToolStripMenuItem"
         CheckForUpdatesToolStripMenuItem.Size = New Size(185, 22)
         CheckForUpdatesToolStripMenuItem.Text = "Check For Updates"
@@ -1174,7 +1088,7 @@ Partial Class Form1
         PrivateWindowToolStripMenuItem.Name = "PrivateWindowToolStripMenuItem"
         PrivateWindowToolStripMenuItem.ShortcutKeys = Keys.Control Or Keys.Shift Or Keys.N
         PrivateWindowToolStripMenuItem.Size = New Size(206, 22)
-        PrivateWindowToolStripMenuItem.Text = "🕶 New Private Window"
+        PrivateWindowToolStripMenuItem.Text = "New Private Window"
         ' 
         ' ToolStrip1
         ' 
@@ -1288,9 +1202,6 @@ Partial Class Form1
     Friend WithEvents EBayToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents MSNToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents DuckDuckGoToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents DogpileToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents WebCrawlerToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents LycosToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents VimeoToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents AccuWeatherToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents SocialNetworksToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
@@ -1299,11 +1210,8 @@ Partial Class Form1
     Friend WithEvents GoogleToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents LinkedinToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents InstagramToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents BadooToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents VkToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents PinterestToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents FormspringToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents KeekToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolsToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents DownloadManagerToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents SetHomePageToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
