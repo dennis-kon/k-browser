@@ -2,15 +2,7 @@ Public Class AboutBox
 
     Private Sub AboutBox_Load(ByVal sender As Object, ByVal e As EventArgs) Handles MyBase.Load
         ThemeManager.ApplyTheme(Me)
-        RichTextBox1.Text = "K-Browser is a modern, lightweight web browser for Microsoft Windows powered by the high-performance Microsoft Edge WebView2 (Chromium) engine. It is designed for intuitive navigation, enhanced privacy, and fast, secure browsing." & vbCrLf & vbCrLf &
-                            "Key Features:" & vbCrLf &
-                            "• Microsoft Edge WebView2 (Chromium) Core" & vbCrLf &
-                            "• Built-in EasyList Ad Blocker & Badge Counter" & vbCrLf &
-                            "• HTTPS-Only Mode & Security Policies" & vbCrLf &
-                            "• Built-in Download Manager & FTP Client" & vbCrLf &
-                            "• Hierarchical Bookmarks & Folder Management" & vbCrLf &
-                            "• Anti-Phishing Protection & Site Controls" & vbCrLf &
-                            "• Custom Zoom UI & Multi-Tab Navigation"
+        RichTextBox1.Text = "K-Browser is a lightweight, secure, multi-tabbed web browser and desktop productivity platform built for Windows. It couples a modern rendering engine (Microsoft WebView2 Chromium with fallback IE emulation registry control) with embedded privacy and utility tools, including a custom Trie-based AdBlocker Engine, UserScript Injection Host, Smart Tab Lifecycle Manager, Multi-Process Architecture Manager, Dark Mode & Modern Styling Engine, Modular Services Infrastructure, JSON Session State Manager, Compressed Backup & Restore Engine, Advanced Cookie Manager, Phishing Security Guard, RSS Feed Reader, FTP Client, Task Manager, and TCP Port Scanner. K-Browser is designed to be a fast, secure, and privacy-focused web browser that provides users with a seamless browsing experience while also offering advanced features for power users and developers."
     End Sub
 
     Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button1.Click

@@ -58,3 +58,7 @@ UpgradeLog.htm
 
 # ClickOnce / Authenticode signing keys — must never be committed
 *.pfx
+
+# Installer build output
+publish/
+installer/
