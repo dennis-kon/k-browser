@@ -41,11 +41,14 @@ K-Browser looks like a native Windows 11 browser (the same visual language as Ed
    MIT licence) — chosen by the user ("native Windows 11 (Fluent)").
 2. **Ship the font with the app rather than rely on the OS** *(Claude's call)*. The built-in
    Segoe Fluent Icons font exists only on Windows 11; Windows 10 has the older Segoe MDL2 Assets.
-   Bundling the font gives the same result on both. Use **`FluentSystemIcons-Resizable.ttf`**
-   (~1.6 MB) from commit `a347af95478f989038cccbf085978865264c048a` of the Fluent repo: one file
-   holding both regular and filled glyphs, designed for drawing at any size, with every code
-   point in the Basic Multilingual Plane (the size-specific Regular/Filled fonts put some glyphs
-   above U+FFFF, which GDI+ handles poorly) *(Claude's call, made while planning)*.
+   Bundling the font gives the same result on both. Use **`FluentSystemIcons-Regular.ttf`**
+   (~2.8 MB) from commit `a347af95478f989038cccbf085978865264c048a` of the Fluent repo. It holds
+   each icon drawn separately for 12/16/20/24/28/32/48 px, so a 16 px menu icon (or a 24 px one
+   at 150% scaling) uses a design whose 1 px strokes sit on the pixel grid. The single-design
+   "Resizable" font was tried first and its 20 px designs shrunk to 16 px came out visibly blurry.
+   GDI+ draws this font's above-U+FFFF code points correctly when glyphs are rendered as paths
+   *(Claude's call, revised during implementation)*. This font has no filled glyphs, so the
+   optional filled-star state is dropped.
 3. **Scope: the whole app** — chosen by the user. Main browser window (`Form1`), the private
    browsing window (`PrivateBrowserForm`), and all smaller dialogs.
 4. **Search-engine and social-network menu items show each site's real favicon**, not a library
@@ -116,11 +119,11 @@ anything this list missed.
 ### `IconService` (new, e.g. `IconService.vb`)
 - Loads the bundled Fluent font(s) once into a `PrivateFontCollection`.
 - API shape (names are the builder's call):
-  `GetIcon(glyph As FluentIcon, sizePx As Integer, color As Color, Optional filled As Boolean = False) As Bitmap`
+  `GetIcon(glyph As FluentIcon, sizePx As Integer, color As Color) As Bitmap`
   where `FluentIcon` is an enum (or constants) mapping readable names → code points, covering
   only the icons the app uses.
 - Renders the glyph centred on a transparent bitmap sized for the current DPI
-  (logical size × `DeviceDpi / 96`). Caches by (glyph, size, colour, filled, dpi).
+  (logical size × `DeviceDpi / 96`), using the largest size-specific design that fits. Caches by (glyph, pixel size, colour).
 - Convenience helpers to apply an icon to a `ToolStripItem`, `Button`, `Label` so forms don't
   repeat boilerplate.
 
@@ -157,7 +160,7 @@ anything this list missed.
   every form's layout and is **out of scope** for this change.
 - Toolbar buttons: 20 px logical glyph on the existing 36×36 buttons; 16 px for menu items and
   inline button/label icons; 32 px for the large banner glyphs (`lblPrivateIcon`, password-form
-  icons, dialog picture boxes). All drawn from the Resizable font's `_20_` glyph designs.
+  icons, dialog picture boxes).
 - Menu strips: set `ImageScalingSize` to the DPI-scaled 16 px so menus don't stretch the bitmap.
 
 ### Favicons for brand menu items
@@ -192,7 +195,7 @@ anything this list missed.
 | New window | `WindowNew` |
 | Go | `ArrowEnter` (distinct from Forward) |
 | RSS | `Rss` |
-| Add bookmark | `Star` (regular); `Star` filled when the current page is already bookmarked, if that state is readily available |
+| Add bookmark | `Star` |
 | Ad blocker | `Shield` / `ShieldCheckmark` |
 | Private | `Glasses` (or closest incognito-style glyph) |
 | Dark mode | `WeatherMoon` |

@@ -53,6 +53,9 @@ Public Class ThemeManager
         ' 3. Apply Controls Recursively
         ApplyControlsTheme(form.Controls)
 
+        ' 4. Re-colour Fluent icons from the new control colours
+        IconService.RefreshIcons(form)
+
         form.Refresh()
     End Sub
 

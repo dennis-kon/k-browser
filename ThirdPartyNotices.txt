@@ -2,7 +2,7 @@ K-Browser includes the following third-party components.
 
 ========================================================================
 Fluent UI System Icons — https://github.com/microsoft/fluentui-system-icons
-File: Assets/Fonts/FluentSystemIcons-Resizable.ttf (commit a347af95478f989038cccbf085978865264c048a)
+File: Assets/Fonts/FluentSystemIcons-Regular.ttf (commit a347af95478f989038cccbf085978865264c048a)
 ========================================================================
 
 MIT License

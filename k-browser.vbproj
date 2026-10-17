@@ -42,7 +42,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Assets\Fonts\FluentSystemIcons-Resizable.ttf" LogicalName="KBrowser.Fonts.FluentSystemIcons-Resizable.ttf" />
+    <EmbeddedResource Include="Assets\Fonts\FluentSystemIcons-Regular.ttf" LogicalName="KBrowser.Fonts.FluentSystemIcons-Regular.ttf" />
   </ItemGroup>
 
   <ItemGroup>

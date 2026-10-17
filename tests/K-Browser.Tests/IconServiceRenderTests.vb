@@ -8,14 +8,14 @@ Public Class IconServiceRenderTests
 
     <Fact>
     Public Sub GetIcon_SizeScalesWithDpi()
-        Assert.Equal(16, IconService.GetIcon(FluentIcon.Home, 16, Color.Black, 96, False).Width)
-        Assert.Equal(24, IconService.GetIcon(FluentIcon.Home, 16, Color.Black, 144, False).Width)
-        Assert.Equal(25, IconService.GetIcon(FluentIcon.Home, 20, Color.Black, 120, False).Height)
+        Assert.Equal(16, IconService.GetIcon(FluentIcon.Home, 16, Color.Black, 96).Width)
+        Assert.Equal(24, IconService.GetIcon(FluentIcon.Home, 16, Color.Black, 144).Width)
+        Assert.Equal(25, IconService.GetIcon(FluentIcon.Home, 20, Color.Black, 120).Height)
     End Sub
 
     <Fact>
     Public Sub GetIcon_DrawsInRequestedColor()
-        Dim bmp = IconService.GetIcon(FluentIcon.Home, 20, Lime, 96, False)
+        Dim bmp = IconService.GetIcon(FluentIcon.Home, 20, Lime, 96)
         Dim opaque = Pixels(bmp).Where(Function(p) p.A > 200).ToList()
 
         Assert.NotEmpty(opaque)
@@ -28,7 +28,7 @@ Public Class IconServiceRenderTests
 
     <Fact>
     Public Sub GetIcon_GlyphCentredAndFillsBox()
-        Dim bmp = IconService.GetIcon(FluentIcon.Home, 20, Color.Black, 96, False)
+        Dim bmp = IconService.GetIcon(FluentIcon.Home, 20, Color.Black, 96)
         Dim minX = Integer.MaxValue, minY = Integer.MaxValue, maxX = -1, maxY = -1
         For y = 0 To bmp.Height - 1
             For x = 0 To bmp.Width - 1
@@ -48,32 +48,29 @@ Public Class IconServiceRenderTests
     <Fact>
     Public Sub GetIcon_AllEnumValuesRenderDistinctGlyphs()
         Dim icons = [Enum].GetValues(GetType(FluentIcon)).Cast(Of FluentIcon)().ToList()
-        Dim hashes = icons.Select(Function(i) PixelSignature(IconService.GetIcon(i, 20, Color.Black, 96, False))).ToList()
+        Dim hashes = icons.Select(Function(i) PixelSignature(IconService.GetIcon(i, 20, Color.Black, 96))).ToList()
 
         Assert.Equal(icons.Count, hashes.Distinct().Count())
     End Sub
 
     <Fact>
     Public Sub GetIcon_IsCached()
-        Dim a = IconService.GetIcon(FluentIcon.Star, 16, Color.Black, 96, False)
-        Dim b = IconService.GetIcon(FluentIcon.Star, 16, Color.Black, 96, False)
-        Dim c = IconService.GetIcon(FluentIcon.Star, 16, Color.Red, 96, False)
+        Dim a = IconService.GetIcon(FluentIcon.Star, 16, Color.Black, 96)
+        Dim b = IconService.GetIcon(FluentIcon.Star, 16, Color.Black, 96)
+        Dim c = IconService.GetIcon(FluentIcon.Star, 16, Color.Red, 96)
 
         Assert.Same(a, b)
         Assert.NotSame(a, c)
     End Sub
 
     <Fact>
-    Public Sub GetIcon_FilledStarDiffersFromRegular()
-        Dim regular = IconService.GetIcon(FluentIcon.Star, 20, Color.Black, 96, False)
-        Dim filled = IconService.GetIcon(FluentIcon.Star, 20, Color.Black, 96, True)
-
-        Assert.NotEqual(PixelSignature(regular), PixelSignature(filled))
-    End Sub
-
-    <Fact>
-    Public Sub GetIcon_FilledWithoutVariant_Throws()
-        Assert.Throws(Of ArgumentException)(Function() IconService.GetIcon(FluentIcon.Home, 20, Color.Black, 96, True))
+    Public Sub GetIcon_SmallSizesStayCrisp()
+        ' Size-specific designs keep 1px strokes on the pixel grid, so a 16px icon has 8+ near-solid pixels
+        ' (the 20px designs of these icons shrunk to 16px have 1-7).
+        For Each icon In {FluentIcon.Home, FluentIcon.ArrowLeft, FluentIcon.Star}
+            Dim bmp = IconService.GetIcon(icon, 16, Color.Black, 96)
+            Assert.True(Pixels(bmp).Count(Function(p) p.A >= 200) >= 8, $"{icon} has too few solid pixels at 16px")
+        Next
     End Sub
 
     Friend Shared Function Pixels(bmp As Bitmap) As IEnumerable(Of Color)
