@@ -1,6 +1,6 @@
 ; Inno Setup script for K-Browser. Build with build-installer.ps1.
 #ifndef AppVersion
-  #define AppVersion "5.1.0.0"
+  #define AppVersion "5.2.0.0"
 #endif
 #ifndef PublishDir
   #define PublishDir "publish"
@@ -40,6 +40,8 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 
 [Files]
 Source: "{#PublishDir}\*"; DestDir: "{app}"; Excludes: "*.pdb"; Flags: recursesubdirs createallsubdirs ignoreversion
+; Licence notices for bundled third-party components (Fluent UI System Icons font, MIT)
+Source: "ThirdPartyNotices.txt"; DestDir: "{app}"; Flags: ignoreversion
 
 [Icons]
 Name: "{group}\{#AppName}"; Filename: "{app}\{#AppExe}"

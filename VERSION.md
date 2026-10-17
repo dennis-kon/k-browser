@@ -2,8 +2,8 @@
 
 **Application Title:** K-Browser  
 **Executable / Assembly Name:** `K-Browser.exe`  
-**Current Version:** `5.1.0.0` (`AssemblyVersion` / `AssemblyFileVersion`)  
-**Git Release Tag:** `Version_5.1.0.0`  
+**Current Version:** `5.2.0.0` (`AssemblyVersion` / `AssemblyFileVersion`)  
+**Git Release Tag:** `Version_5.2.0.0`  
 **License:** GNU General Public License v3.0 (GPL-3.0)  
 **Target Framework:** .NET Framework 4.8 / Windows Forms  
 **Author:** Dennis Kon  
@@ -70,8 +70,9 @@
 
 | Version Tag | Release Date | Summary & Major Features Introduced | Key Architectural Changes |
 | :--- | :--- | :--- | :--- |
-| **v5.1.0.0** | *Current* | Smart Tab Suspending (`TabLifecycleManager`), UserScript Host (`UserScriptManager`), Trie AdBlock Engine (`AdBlockTrie`), Services Layer (`Settings`, `Session`, `Backup/Restore`, `Cookie` Services), Site-Specific AdBlock Popup (`AdBlockPopup`), Redesigned Page Source Viewer (`Source.vb`). | Introduced SOLID Services Layer, `Settings.json` & `Session.json` persistence, `BackupService.vb`, `RestoreService.vb`, `CookieService.vb`, `BrowserInitializationService.vb`, and `AdBlockPopup.vb`. |
-| **v5.0.0.0** | Previous | Dark Mode Engine (`ThemeManager`), Native DWM Dark Titlebar, PreferredColorScheme Sync, Multi-Process Architecture (`TabProcessManager`), Process Isolation & Crash Resilience, EasyList AdBlocker CSS protection, Date-filtered History. | Introduced `ThemeManager.vb`, `TabProcessManager.vb`, `WebView2_ProcessFailed`, `ShouldBlockDomainOnly()`, `GenericWebPaths`, and `"Title|URL|DateTime"` history. |
+| **v5.2.0.0** | *Current* | Fluent icons across the app: Microsoft Fluent UI System Icons replace the old toolbar/menu bitmaps and emoji icons in the main window, private window and all dialogs; icons follow dark/light mode, disabled icons are muted, and dark-mode menus and hover states are dark. Removed outdated Formspring, Keek, WebCrawler, Lycos, Dogpile and Badoo links. | Introduced `IconService.vb` (renders size-specific Fluent glyphs from the embedded `FluentSystemIcons-Regular.ttf`), `FluentIcon.vb`, `IconToolStripRenderer.vb`, `FaviconService.vb`, an xUnit test project (`tests/K-Browser.Tests`) and `ThirdPartyNotices.txt`. |
+| **v5.1.0.0** | Previous | Smart Tab Suspending (`TabLifecycleManager`), UserScript Host (`UserScriptManager`), Trie AdBlock Engine (`AdBlockTrie`), Services Layer (`Settings`, `Session`, `Backup/Restore`, `Cookie` Services), Site-Specific AdBlock Popup (`AdBlockPopup`), Redesigned Page Source Viewer (`Source.vb`). | Introduced SOLID Services Layer, `Settings.json` & `Session.json` persistence, `BackupService.vb`, `RestoreService.vb`, `CookieService.vb`, `BrowserInitializationService.vb`, and `AdBlockPopup.vb`. |
+| **v5.0.0.0** | Legacy | Dark Mode Engine (`ThemeManager`), Native DWM Dark Titlebar, PreferredColorScheme Sync, Multi-Process Architecture (`TabProcessManager`), Process Isolation & Crash Resilience, EasyList AdBlocker CSS protection, Date-filtered History. | Introduced `ThemeManager.vb`, `TabProcessManager.vb`, `WebView2_ProcessFailed`, `ShouldBlockDomainOnly()`, `GenericWebPaths`, and `"Title|URL|DateTime"` history. |
 | **v4.8.1** | Legacy | Engine stabilization, Visual Studio project setup, URL validation, process termination safety, tab disposal cleanup. | Migrated core browser runtime towards WebView2 integration with IE emulation fallback. |
 | **v4.8.0** | Legacy | Multi-tab UI overhaul, initial phishing filter dialog, enhanced `My.Settings` storage schemas. | TabControl event architecture, `Form1.Designer.vb` restructuring. |
 | **v1.0.0 - v4.5** | Legacy | Initial browser releases, FTP client, Task Manager, RSS parser, Cookie Viewer. | Original Windows Forms codebase architecture by Dennis Kon. |
