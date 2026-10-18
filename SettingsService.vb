@@ -10,6 +10,19 @@ Imports System.Threading.Tasks
 Public Class SettingsService
     Private ReadOnly _settingsFilePath As String
 
+    Private Shared ReadOnly ReadOptions As New JsonSerializerOptions With {.PropertyNameCaseInsensitive = True}
+    Private Shared ReadOnly WriteOptions As New JsonSerializerOptions With {.WriteIndented = True}
+
+    ' Settings.json is read on every page load and for every new tab. Its text is kept here (per file) and
+    ' only read from disk again when the file's time stamp or size changes; each caller still gets a fresh copy.
+    Private Class CachedFile
+        Public Json As String
+        Public Stamp As DateTime
+        Public Length As Long
+    End Class
+    Private Shared ReadOnly Cache As New Dictionary(Of String, CachedFile)(StringComparer.OrdinalIgnoreCase)
+    Private Shared ReadOnly CacheLock As New Object()
+
     Public Sub New()
         Dim appDataFolder As String = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "K-Browser")
         If Not Directory.Exists(appDataFolder) Then
@@ -37,13 +50,15 @@ Public Class SettingsService
     ''' </summary>
     Public Function LoadSettings() As PrivacySettingsModel
         Try
-            If Not File.Exists(_settingsFilePath) Then Return New PrivacySettingsModel()
-            Dim json As String = File.ReadAllText(_settingsFilePath)
-            Dim options As New JsonSerializerOptions With {
-                .PropertyNameCaseInsensitive = True
-            }
-            Dim result As PrivacySettingsModel = JsonSerializer.Deserialize(Of PrivacySettingsModel)(json, options)
-            Return If(result, New PrivacySettingsModel())
+            Dim info As New FileInfo(_settingsFilePath)
+            If Not info.Exists Then Return New PrivacySettingsModel()
+
+            Dim json As String = CachedJson(info)
+            If json Is Nothing Then
+                json = File.ReadAllText(_settingsFilePath)
+                Remember(info, json)
+            End If
+            Return Parse(json)
         Catch ex As Exception
             System.Diagnostics.Debug.WriteLine("SettingsService: Error reading Settings.json synchronously: " & ex.Message)
             Return New PrivacySettingsModel()
@@ -56,17 +71,17 @@ Public Class SettingsService
     ''' </summary>
     Public Async Function LoadSettingsAsync() As Task(Of PrivacySettingsModel)
         Try
-            If Not File.Exists(_settingsFilePath) Then
-                Return New PrivacySettingsModel()
-            End If
+            Dim info As New FileInfo(_settingsFilePath)
+            If Not info.Exists Then Return New PrivacySettingsModel()
 
-            Using stream As FileStream = New FileStream(_settingsFilePath, FileMode.Open, FileAccess.Read, FileShare.Read, 4096, True)
-                Dim options As New JsonSerializerOptions With {
-                    .PropertyNameCaseInsensitive = True
-                }
-                Dim result As PrivacySettingsModel = Await JsonSerializer.DeserializeAsync(Of PrivacySettingsModel)(stream, options)
-                Return If(result, New PrivacySettingsModel())
-            End Using
+            Dim json As String = CachedJson(info)
+            If json Is Nothing Then
+                Using reader As New StreamReader(New FileStream(_settingsFilePath, FileMode.Open, FileAccess.Read, FileShare.Read, 4096, True))
+                    json = Await reader.ReadToEndAsync()
+                End Using
+                Remember(info, json)
+            End If
+            Return Parse(json)
         Catch ex As Exception
             System.Diagnostics.Debug.WriteLine("SettingsService: Error reading Settings.json: " & ex.Message)
             Return New PrivacySettingsModel()
@@ -85,11 +100,9 @@ Public Class SettingsService
                 Directory.CreateDirectory(dir)
             End If
 
-            Dim options As New JsonSerializerOptions With {
-                .WriteIndented = True
-            }
-            Dim json As String = JsonSerializer.Serialize(model, options)
+            Dim json As String = JsonSerializer.Serialize(model, WriteOptions)
             File.WriteAllText(_settingsFilePath, json)
+            Remember(New FileInfo(_settingsFilePath), json)
         Catch ex As Exception
             System.Diagnostics.Debug.WriteLine("SettingsService: Error writing Settings.json synchronously: " & ex.Message)
         End Try
@@ -107,15 +120,37 @@ Public Class SettingsService
                 Directory.CreateDirectory(dir)
             End If
 
-            Using stream As FileStream = New FileStream(_settingsFilePath, FileMode.Create, FileAccess.Write, FileShare.None, 4096, True)
-                Dim options As New JsonSerializerOptions With {
-                    .WriteIndented = True
-                }
-                Await JsonSerializer.SerializeAsync(stream, model, options)
+            Dim json As String = JsonSerializer.Serialize(model, WriteOptions)
+            Using writer As New StreamWriter(New FileStream(_settingsFilePath, FileMode.Create, FileAccess.Write, FileShare.None, 4096, True))
+                Await writer.WriteAsync(json)
             End Using
+            Remember(New FileInfo(_settingsFilePath), json)
         Catch ex As Exception
             System.Diagnostics.Debug.WriteLine("SettingsService: Error writing Settings.json: " & ex.Message)
             Throw New IOException("Failed to save settings to " & _settingsFilePath & ": " & ex.Message, ex)
         End Try
     End Function
+
+    Private Shared Function Parse(ByVal json As String) As PrivacySettingsModel
+        Return If(JsonSerializer.Deserialize(Of PrivacySettingsModel)(json, ReadOptions), New PrivacySettingsModel())
+    End Function
+
+    ''' <summary>The remembered text of the file, or Nothing when the file changed since (or was never read).</summary>
+    Private Function CachedJson(ByVal info As FileInfo) As String
+        SyncLock CacheLock
+            Dim entry As CachedFile = Nothing
+            If Cache.TryGetValue(_settingsFilePath, entry) AndAlso entry.Stamp = info.LastWriteTimeUtc AndAlso entry.Length = info.Length Then
+                Return entry.Json
+            End If
+        End SyncLock
+        Return Nothing
+    End Function
+
+    Private Sub Remember(ByVal info As FileInfo, ByVal json As String)
+        info.Refresh()
+        If Not info.Exists Then Return
+        SyncLock CacheLock
+            Cache(_settingsFilePath) = New CachedFile With {.Json = json, .Stamp = info.LastWriteTimeUtc, .Length = info.Length}
+        End SyncLock
+    End Sub
 End Class

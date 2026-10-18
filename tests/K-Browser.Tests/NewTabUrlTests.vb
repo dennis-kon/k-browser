@@ -35,6 +35,16 @@ Public Class NewTabUrlTests
     End Sub
 
     <Theory>
+    <InlineData("https://www.example.com/a/b?c=1", "example.com")>
+    <InlineData("https://news.ycombinator.com/", "news.ycombinator.com")>
+    <InlineData("about:blank", "New tab")>
+    <InlineData("", "New tab")>
+    <InlineData("not a url at all but quite a long piece of text", "not a url at all but...")>
+    Public Sub NotYetLoadedTab_IsTitledBySiteName(url As String, expected As String)
+        Assert.Equal(expected, AppManager.TabTitleForUrl(url))
+    End Sub
+
+    <Theory>
     <InlineData("C:\Program Files\K-Browser\homepage\index.html", "file:///C:/Program%20Files/K-Browser/homepage/index.html")>
     <InlineData("C:\Users\me\page.html", "file:///C:/Users/me/page.html")>
     Public Sub LocalFilePath_OpensTheFile_NotASearch(path As String, expected As String)

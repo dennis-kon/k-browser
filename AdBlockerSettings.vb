@@ -81,6 +81,8 @@ Public Class AdBlockerSettings
 
         My.Settings.FilterListsConfig = String.Join(";", entries.ToArray())
         My.Settings.Save()
+        ' Open windows attach or remove their request filters to match the on/off switch.
+        SettingsManager.NotifySettingsChanged()
     End Sub
 
     Private Async Sub btnUpdateLists_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnUpdateLists.Click
@@ -104,9 +106,11 @@ Public Class AdBlockerSettings
             End If
         Next
 
-        Dim totalRules As Integer = AdBlockEngine.LoadAllRules()
+        ' Save first: the reload reads which lists are switched on from the saved config.
         My.Settings.AdBlockLastUpdateCheck = DateTime.Now.ToString("yyyy-MM-dd HH:mm")
         SaveConfig()
+        lblStatus.Text = "Loading rules..."
+        Dim totalRules As Integer = Await AdBlockEngine.LoadAllRulesAsync()
 
         lblStatus.Text = "Updated " & successCount & " list(s). Active rules: " & totalRules
         btnUpdateLists.Enabled = True
@@ -114,6 +118,8 @@ Public Class AdBlockerSettings
 
     Private Sub btnOK_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnOK.Click
         SaveConfig()
+        ' Apply lists that were switched on or off (in the background; lookups use the old rules meanwhile).
+        Dim reload = AdBlockEngine.LoadAllRulesAsync()
         Me.DialogResult = DialogResult.OK
         Me.Close()
     End Sub

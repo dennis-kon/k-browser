@@ -26,12 +26,10 @@ Public Class BrowserInitializationService
                 System.Diagnostics.Debug.WriteLine("BrowserInitializationService: Disabling GPU acceleration (--disable-gpu).")
             End If
 
-            ' Section 3 - Page Loading: Enable predictive preloading and DNS prefetching when enabled
-            If perfSettings.PreloadPages Then
-                switches.Append("--enable-features=PredictivePrefetching --dns-prefetch-disable=false ")
-                System.Diagnostics.Debug.WriteLine("BrowserInitializationService: Enabling predictive preloading and DNS prefetching.")
-            Else
-                switches.Append("--dns-prefetch-disable=true ")
+            ' Section 3 - Page Loading: the engine prefetches DNS by default; "Preload pages" off turns that off.
+            ' (The switch counts as set whenever it is present, so it is only added when prefetching is unwanted.)
+            If Not perfSettings.PreloadPages Then
+                switches.Append("--dns-prefetch-disable ")
             End If
         End If
 

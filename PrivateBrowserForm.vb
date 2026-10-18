@@ -157,12 +157,8 @@ Public Class PrivateBrowserForm
 
         ' Wire up the ad blocker so Private Mode gets the same resource-level protection
         ' as regular tabs — private browsing should not be MORE exposed to trackers/ads.
-        Try
-            wvPrivate.CoreWebView2.AddWebResourceRequestedFilter("*", CoreWebView2WebResourceContext.All)
-            AddHandler wvPrivate.CoreWebView2.WebResourceRequested, AddressOf PrivateWebView_WebResourceRequested
-        Catch ex As Exception
-            System.Diagnostics.Debug.WriteLine("PrivateBrowserForm: AddWebResourceRequestedFilter failed: " & ex.Message)
-        End Try
+        AddHandler wvPrivate.CoreWebView2.WebResourceRequested, AddressOf PrivateWebView_WebResourceRequested
+        AdBlockRequestFilter.Apply(wvPrivate.CoreWebView2, My.Settings.AdBlockerEnabled)
 
         ' Apply dark color scheme to WebView2
         Try
@@ -438,7 +434,7 @@ Public Class PrivateBrowserForm
     Private Sub PrivateWebView_NewWindowRequested(ByVal sender As Object, ByVal e As CoreWebView2NewWindowRequestedEventArgs)
         e.Handled = True
         ' Same rule as normal tabs: no navigation hijacking from a script with no click behind it.
-        If Not e.IsUserInitiated Then
+        If Not e.IsUserInitiated AndAlso My.Settings.PopUpBlockerEnabled Then
             tslStatus.Text = "Popup blocked"
             Return
         End If

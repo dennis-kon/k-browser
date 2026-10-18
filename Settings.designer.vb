@@ -50,6 +50,7 @@ Partial Class Settings
         picGraphicsStatus = New PictureBox()
         grpTabs = New GroupBox()
         chkFadeInactiveTabs = New CheckBox()
+        chkMemorySaver = New CheckBox()
         lblTabsDesc = New Label()
         lblTabsStatus = New Label()
         picTabsStatus = New PictureBox()
@@ -120,19 +121,8 @@ Partial Class Settings
         btnAddBlock = New Button()
         btnRemoveBlock = New Button()
         tpPerformance = New TabPage()
-        grpGraphics = New GroupBox()
-        chkUseHardwareAcceleration = New CheckBox()
-        lblGraphicsDesc = New Label()
-        lblGraphicsStatus = New Label()
-        grpTabs = New GroupBox()
-        chkFadeInactiveTabs = New CheckBox()
-        lblTabsDesc = New Label()
-        lblTabsStatus = New Label()
-        grpPageLoading = New GroupBox()
-        chkPreloadPages = New CheckBox()
-        lblPageLoadingDesc = New Label()
-        lblPageLoadingInfo = New Label()
-        lblPageLoadingStatus = New Label()
+        lblNewTab = New Label()
+        cmbNewTab = New ComboBox()
         tpAdvanced = New TabPage()
         grpDns = New GroupBox()
         lblCustomDns = New Label()
@@ -168,9 +158,6 @@ Partial Class Settings
         grpJsSites.SuspendLayout()
         grpBlocked.SuspendLayout()
         tpPerformance.SuspendLayout()
-        grpGraphics.SuspendLayout()
-        grpTabs.SuspendLayout()
-        grpPageLoading.SuspendLayout()
         tpAdvanced.SuspendLayout()
         grpDns.SuspendLayout()
         grpProxy.SuspendLayout()
@@ -207,6 +194,27 @@ Partial Class Settings
         tpBrowser.Controls.Add(lblFontSize)
         tpBrowser.Controls.Add(cmbFontSize)
         tpBrowser.Controls.Add(chkFullScreen)
+        tpBrowser.Controls.Add(lblNewTab)
+        tpBrowser.Controls.Add(cmbNewTab)
+        ' 
+        ' lblNewTab
+        ' 
+        lblNewTab.AutoSize = True
+        lblNewTab.Location = New Point(13, 405)
+        lblNewTab.Name = "lblNewTab"
+        lblNewTab.Size = New Size(84, 13)
+        lblNewTab.TabIndex = 14
+        lblNewTab.Text = "New tabs open:"
+        ' 
+        ' cmbNewTab
+        ' 
+        cmbNewTab.DropDownStyle = ComboBoxStyle.DropDownList
+        cmbNewTab.FormattingEnabled = True
+        cmbNewTab.Items.AddRange(New Object() {"Home page", "Blank page"})
+        cmbNewTab.Location = New Point(135, 402)
+        cmbNewTab.Name = "cmbNewTab"
+        cmbNewTab.Size = New Size(280, 21)
+        cmbNewTab.TabIndex = 15
         tpBrowser.Location = New Point(4, 22)
         tpBrowser.Name = "tpBrowser"
         tpBrowser.Padding = New Padding(10)
@@ -873,6 +881,7 @@ Partial Class Settings
         chkIncognito.Size = New Size(197, 17)
         chkIncognito.TabIndex = 1
         chkIncognito.Text = "Incognito / Private Mode by Default"
+        chkIncognito.Visible = False
         chkIncognito.UseVisualStyleBackColor = True
         ' 
         ' chkHttpsOnly
@@ -1092,9 +1101,10 @@ Partial Class Settings
         grpTabs.Controls.Add(lblTabsDesc)
         grpTabs.Controls.Add(lblTabsStatus)
         grpTabs.Controls.Add(picTabsStatus)
+        grpTabs.Controls.Add(chkMemorySaver)
         grpTabs.Location = New Point(10, 115)
         grpTabs.Name = "grpTabs"
-        grpTabs.Size = New Size(578, 95)
+        grpTabs.Size = New Size(578, 125)
         grpTabs.TabIndex = 1
         grpTabs.TabStop = False
         grpTabs.Text = "Tabs"
@@ -1140,6 +1150,18 @@ Partial Class Settings
         picTabsStatus.SizeMode = PictureBoxSizeMode.CenterImage
         picTabsStatus.TabStop = False
         ' 
+        ' chkMemorySaver
+        ' 
+        chkMemorySaver.AutoSize = True
+        chkMemorySaver.Font = New Font("Tahoma", 8.25F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
+        chkMemorySaver.Location = New Point(15, 92)
+        chkMemorySaver.Name = "chkMemorySaver"
+        chkMemorySaver.Size = New Size(380, 17)
+        chkMemorySaver.TabIndex = 3
+        chkMemorySaver.Text = "Memory Saver: put tabs to sleep after 5 minutes in the background"
+        ToolTip1.SetToolTip(chkMemorySaver, "Sleeping tabs free memory and CPU but stop running until you switch back to them. Tabs playing sound are never put to sleep.")
+        chkMemorySaver.UseVisualStyleBackColor = True
+        ' 
         ' grpPageLoading
         ' 
         grpPageLoading.Controls.Add(chkPreloadPages)
@@ -1147,7 +1169,7 @@ Partial Class Settings
         grpPageLoading.Controls.Add(lblPageLoadingInfo)
         grpPageLoading.Controls.Add(lblPageLoadingStatus)
         grpPageLoading.Controls.Add(picPageLoadingStatus)
-        grpPageLoading.Location = New Point(10, 220)
+        grpPageLoading.Location = New Point(10, 250)
         grpPageLoading.Name = "grpPageLoading"
         grpPageLoading.Size = New Size(578, 120)
         grpPageLoading.TabIndex = 2
@@ -1190,12 +1212,12 @@ Partial Class Settings
         ' 
         lblPageLoadingStatus.AutoSize = True
         lblPageLoadingStatus.Font = New Font("Tahoma", 8.25F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
-        lblPageLoadingStatus.ForeColor = Color.ForestGreen
+        lblPageLoadingStatus.ForeColor = Color.DarkGoldenrod
         lblPageLoadingStatus.Location = New Point(34, 85)
         lblPageLoadingStatus.Name = "lblPageLoadingStatus"
-        lblPageLoadingStatus.Size = New Size(125, 13)
+        lblPageLoadingStatus.Size = New Size(245, 13)
         lblPageLoadingStatus.TabIndex = 3
-        lblPageLoadingStatus.Text = "Applied immediately"
+        lblPageLoadingStatus.Text = "Restart required for this setting to take effect."
         ' 
         ' picPageLoadingStatus
         ' 
@@ -1537,12 +1559,6 @@ Partial Class Settings
         grpBlocked.ResumeLayout(False)
         grpBlocked.PerformLayout()
         tpPerformance.ResumeLayout(False)
-        grpGraphics.ResumeLayout(False)
-        grpGraphics.PerformLayout()
-        grpTabs.ResumeLayout(False)
-        grpTabs.PerformLayout()
-        grpPageLoading.ResumeLayout(False)
-        grpPageLoading.PerformLayout()
         tpAdvanced.ResumeLayout(False)
         grpDns.ResumeLayout(False)
         grpDns.PerformLayout()
@@ -1614,6 +1630,7 @@ Partial Class Settings
     Friend WithEvents picGraphicsStatus As System.Windows.Forms.PictureBox
     Friend WithEvents grpTabs As System.Windows.Forms.GroupBox
     Friend WithEvents chkFadeInactiveTabs As System.Windows.Forms.CheckBox
+    Friend WithEvents chkMemorySaver As System.Windows.Forms.CheckBox
     Friend WithEvents lblTabsDesc As System.Windows.Forms.Label
     Friend WithEvents lblTabsStatus As System.Windows.Forms.Label
     Friend WithEvents picTabsStatus As System.Windows.Forms.PictureBox

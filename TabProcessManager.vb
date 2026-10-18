@@ -10,17 +10,26 @@ Imports Microsoft.Web.WebView2.WinForms
 Public Class TabProcessManager
 
     Private Shared ReadOnly LockObj As New Object()
-    Private Shared SharedEnvironment As CoreWebView2Environment
+    Private Shared SharedEnvironmentTask As Task(Of CoreWebView2Environment)
 
     ''' <summary>
-    ''' Gets or creates the primary shared CoreWebView2Environment configured with Chromium site isolation,
-    ''' GPU acceleration policies, preloading options, and privacy switches.
+    ''' Gets or creates the primary shared CoreWebView2Environment configured with GPU acceleration policies,
+    ''' preloading options, and privacy switches. Tabs opened at the same moment share one creation (each
+    ''' environment is a separate browser process); a failed creation is retried on the next call.
     ''' </summary>
-    Public Shared Async Function GetSharedEnvironmentAsync() As Task(Of CoreWebView2Environment)
-        If SharedEnvironment IsNot Nothing Then
-            Return SharedEnvironment
-        End If
+    Public Shared Function GetSharedEnvironmentAsync() As Task(Of CoreWebView2Environment)
+        SyncLock LockObj
+            Dim current = SharedEnvironmentTask
+            Dim failed As Boolean = current IsNot Nothing AndAlso current.IsCompleted AndAlso
+                                    (current.Status <> TaskStatus.RanToCompletion OrElse current.Result Is Nothing)
+            If current Is Nothing OrElse failed Then
+                SharedEnvironmentTask = CreateSharedEnvironmentAsync()
+            End If
+            Return SharedEnvironmentTask
+        End SyncLock
+    End Function
 
+    Private Shared Async Function CreateSharedEnvironmentAsync() As Task(Of CoreWebView2Environment)
         Try
             Dim userDataDir As String = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "K-Browser", "UserData")
             If Not Directory.Exists(userDataDir) Then
@@ -35,15 +44,11 @@ Public Class TabProcessManager
             Dim options As CoreWebView2EnvironmentOptions = BrowserInitializationService.CreateEnvironmentOptions(perfSettings, settingsModel.BlockThirdPartyCookies,
                 My.Settings.CustomProxyEnabled, My.Settings.CustomProxyHost, My.Settings.CustomProxyPort)
 
-            ' Append process isolation switches
-            Dim curArgs As String = If(options.AdditionalBrowserArguments, "")
-            options.AdditionalBrowserArguments = (curArgs & " --enable-features=IsolateOrigins,site-per-process --disable-features=SingleProcess").Trim()
-
+            ' Site isolation is the engine's default on desktop; no extra switches are needed for it.
             ' Configure live TabLifecycleManager options
             TabLifecycleManager.FadeInactiveTabsEnabled = perfSettings.FadeInactiveTabs
 
-            SharedEnvironment = Await CoreWebView2Environment.CreateAsync(Nothing, userDataDir, options)
-            Return SharedEnvironment
+            Return Await CoreWebView2Environment.CreateAsync(Nothing, userDataDir, options)
         Catch ex As Exception
             System.Diagnostics.Debug.WriteLine("Error initializing TabProcessManager shared environment: " & ex.Message)
             Return Nothing
@@ -68,8 +73,6 @@ Public Class TabProcessManager
 
             Dim options As CoreWebView2EnvironmentOptions = BrowserInitializationService.CreateEnvironmentOptions(perfSettings, settingsModel.BlockThirdPartyCookies,
                 My.Settings.CustomProxyEnabled, My.Settings.CustomProxyHost, My.Settings.CustomProxyPort)
-            Dim curArgs As String = If(options.AdditionalBrowserArguments, "")
-            options.AdditionalBrowserArguments = (curArgs & " --enable-features=IsolateOrigins,site-per-process --disable-features=SingleProcess").Trim()
 
             env = Await CoreWebView2Environment.CreateAsync(Nothing, userDataDir, options)
         Catch ex As Exception

@@ -32,7 +32,7 @@ Public Class Settings
         ' Status marks keep their warning/applied colours (ThemeManager recolours the labels themselves).
         IconService.SetIcon(picGraphicsStatus, FluentIcon.Warning, 16, Color.DarkGoldenrod)
         IconService.SetIcon(picTabsStatus, FluentIcon.Checkmark, 16, Color.ForestGreen)
-        IconService.SetIcon(picPageLoadingStatus, FluentIcon.Checkmark, 16, Color.ForestGreen)
+        IconService.SetIcon(picPageLoadingStatus, FluentIcon.Warning, 16, Color.DarkGoldenrod)
         ThemeManager.ApplyTheme(Me)
         Try
             If Form1.ActiveForm IsNot Nothing AndAlso Form1.ActiveForm.Icon IsNot Nothing Then
@@ -46,9 +46,26 @@ Public Class Settings
         LoadAllSettings()
         FindActiveWebView()
         Await LoadPrivacyTabSettingsAsync()
-        Await RefreshCookiesGridAsync()
-        Await RefreshPasswordsGridAsync()
+        ' Cookies and saved passwords are fetched (and decrypted) the first time their tab is opened.
+        Await LoadTabContentAsync(TabControl1.SelectedTab)
     End Sub
+
+    Private _cookiesLoaded As Boolean
+    Private _passwordsLoaded As Boolean
+
+    Private Async Sub TabControl1_SelectedIndexChanged(ByVal sender As Object, ByVal e As EventArgs) Handles TabControl1.SelectedIndexChanged
+        Await LoadTabContentAsync(TabControl1.SelectedTab)
+    End Sub
+
+    Private Async Function LoadTabContentAsync(ByVal page As TabPage) As Task
+        If page Is tpPrivacyTab AndAlso Not _cookiesLoaded Then
+            _cookiesLoaded = True
+            Await RefreshCookiesGridAsync()
+        ElseIf page Is tpPasswords AndAlso Not _passwordsLoaded Then
+            _passwordsLoaded = True
+            Await RefreshPasswordsGridAsync()
+        End If
+    End Function
 
     Private Sub FindActiveWebView()
         Try
@@ -131,6 +148,8 @@ Public Class Settings
         txtDownloads.Text = If(String.IsNullOrEmpty(My.Settings.DownloadsFolder), Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Downloads"), My.Settings.DownloadsFolder)
         cmbFontSize.SelectedIndex = Math.Max(0, Math.Min(3, My.Settings.FontSize))
         chkFullScreen.Checked = My.Settings.FullScreenOnStartup
+        ' NewTabPage: 2 = blank page, anything else = home page (see AppManager.NewTabUrl).
+        cmbNewTab.SelectedIndex = If(My.Settings.NewTabPage = 2, 1, 0)
 
         ' Privacy & Security
         chkPermCamera.Checked = My.Settings.PermissionCamera
@@ -161,6 +180,7 @@ Public Class Settings
         LoadBlockedSites()
 
         ' Performance settings are loaded asynchronously from Settings.json via LoadPrivacyTabSettingsAsync()
+        chkMemorySaver.Checked = My.Settings.MemorySaverEnabled
 
         txtCustomDns.Text = If(My.Settings.CustomDnsServer IsNot Nothing, My.Settings.CustomDnsServer, "")
         ' The embedded engine has no way to use a custom DNS server, so don't offer a control that does nothing.
@@ -188,7 +208,9 @@ Public Class Settings
         ' Save standard WinForms settings
         SaveAllSettings()
 
-        ' Save Privacy, Startup & Performance Settings to Settings.json
+        ' Save Privacy, Startup & Performance Settings to Settings.json. Start from what is on disk now, so
+        ' values written while this window was open (such as the last-backup time) are kept.
+        _privacyModel = Await _privacySettingsService.LoadPrivacySettingsAsync()
         If _privacyModel Is Nothing Then _privacyModel = New PrivacySettingsModel()
         _privacyModel.BlockThirdPartyCookies = chkBlockThirdPartyCookies.Checked
         _privacyModel.StartupMode = If(rbContinueWhereLeftOff.Checked, "RestoreSession", "NewTab")
@@ -212,17 +234,19 @@ Public Class Settings
             _privacyModel.ColumnWidths(col.Name) = col.Width
         Next
 
+        Dim saved As Boolean = True
         Try
             Await _privacySettingsService.SavePrivacySettingsAsync(_privacyModel)
-
-            ' Apply privacy settings immediately to active WebView2 control
-            If _activeWebView IsNot Nothing Then
-                _privacySettingsService.ApplyThirdPartyCookieBlocking(_activeWebView, _privacyModel.BlockThirdPartyCookies)
-            End If
         Catch ex As Exception
             System.Diagnostics.Debug.WriteLine("Settings: Error saving privacy settings to Settings.json: " & ex.Message)
+            saved = False
+            MessageBox.Show("Some settings could not be saved:" & vbCrLf & ex.Message, "Settings",
+                            MessageBoxButtons.OK, MessageBoxIcon.Warning)
         End Try
-        Return True
+
+        ' Only now tell open windows: they read Settings.json when notified, so it has to be written first.
+        SettingsManager.NotifySettingsChanged()
+        Return saved
     End Function
 
     Private Sub SaveAllSettings()
@@ -233,6 +257,8 @@ Public Class Settings
         My.Settings.DownloadsFolder = txtDownloads.Text.Trim()
         My.Settings.FontSize = cmbFontSize.SelectedIndex
         My.Settings.FullScreenOnStartup = chkFullScreen.Checked
+        My.Settings.MemorySaverEnabled = chkMemorySaver.Checked
+        My.Settings.NewTabPage = If(cmbNewTab.SelectedIndex = 1, 2, 1)
 
         ' Privacy & Security
         My.Settings.PermissionCamera = chkPermCamera.Checked
@@ -277,7 +303,6 @@ Public Class Settings
         My.Settings.CustomProxyPort = port
 
         My.Settings.Save()
-        SettingsManager.NotifySettingsChanged()
     End Sub
 
     Private Async Sub btnCreateBackup_Click(ByVal sender As Object, ByVal e As EventArgs) Handles btnCreateBackup.Click
@@ -373,26 +398,45 @@ Public Class Settings
     End Function
 
     Private Sub PopulateCookiesGrid()
-        dgvCookies.Rows.Clear()
-
         Dim query As String = If(txtCookieSearch.Text = SearchPlaceholder, "", txtCookieSearch.Text)
         Dim filteredList As List(Of CookieItem) = _cookieService.FilterCookies(_loadedCookies, query)
 
+        ' Build all rows first and add them in one go: adding thousands one at a time re-lays out the grid each time.
+        Dim rows As New List(Of DataGridViewRow)(filteredList.Count)
         For Each cookie In filteredList
-            Dim rowIndex As Integer = dgvCookies.Rows.Add(
-                cookie.Website,
-                cookie.Name,
-                cookie.Domain,
-                cookie.Path,
-                cookie.DisplayExpires,
-                cookie.IsSecure,
-                cookie.IsHttpOnly,
-                cookie.SameSite
-            )
-            dgvCookies.Rows(rowIndex).Tag = cookie
+            Dim row As New DataGridViewRow()
+            row.CreateCells(dgvCookies, cookie.Website, cookie.Name, cookie.Domain, cookie.Path,
+                            cookie.DisplayExpires, cookie.IsSecure, cookie.IsHttpOnly, cookie.SameSite)
+            row.Tag = cookie
+            rows.Add(row)
         Next
 
+        dgvCookies.SuspendLayout()
+        dgvCookies.Rows.Clear()
+        dgvCookies.Rows.AddRange(rows.ToArray())
+        dgvCookies.ResumeLayout()
+
         lblCookieCount.Text = "Current cookie count: " & filteredList.Count
+    End Sub
+
+    Private _cookieSearchTimer As System.Windows.Forms.Timer
+
+    Private Sub Settings_FormClosed(ByVal sender As Object, ByVal e As FormClosedEventArgs) Handles Me.FormClosed
+        _cookieSearchTimer?.Dispose()
+        _cookieSearchTimer = Nothing
+    End Sub
+
+    ''' <summary>Refilters once typing pauses, instead of rebuilding the whole grid on every keystroke.</summary>
+    Private Sub ScheduleCookieSearch()
+        If _cookieSearchTimer Is Nothing Then
+            _cookieSearchTimer = New System.Windows.Forms.Timer() With {.Interval = 250}
+            AddHandler _cookieSearchTimer.Tick, Sub()
+                                                    _cookieSearchTimer.Stop()
+                                                    PopulateCookiesGrid()
+                                                End Sub
+        End If
+        _cookieSearchTimer.Stop()
+        _cookieSearchTimer.Start()
     End Sub
 
     Private Sub txtCookieSearch_Enter(ByVal sender As Object, ByVal e As EventArgs) Handles txtCookieSearch.Enter
@@ -410,8 +454,8 @@ Public Class Settings
     End Sub
 
     Private Sub txtCookieSearch_TextChanged(ByVal sender As Object, ByVal e As EventArgs) Handles txtCookieSearch.TextChanged
-        If txtCookieSearch.Text <> SearchPlaceholder Then
-            PopulateCookiesGrid()
+        If txtCookieSearch.Text <> SearchPlaceholder AndAlso _cookiesLoaded Then
+            ScheduleCookieSearch()
         End If
     End Sub
 

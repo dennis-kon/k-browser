@@ -17,9 +17,7 @@ Public Class Form1
     Private ReadOnly _passwordManagerService As New PasswordManagerService()
 
     Public Sub New()
-        SetBrowserFeatureControl()
         InitializeComponent()
-        wb = New WebView2()
         isUserAgentSet = False
         AddHandler _credentialDetectionService.CredentialsCaptured, AddressOf OnCredentialsCaptured
         AddHandler _credentialDetectionService.LoginFormDetected, AddressOf OnLoginFormDetected
@@ -35,6 +33,9 @@ Public Class Form1
         Me.FormBorderStyle = FormBorderStyle.None
         Me.TopMost = True
     End Sub
+
+    ''' <summary>Batches frequent My.Settings writes (history) into one save every few seconds.</summary>
+    Friend Shared ReadOnly SettingsSaver As New DeferredSave(Sub() My.Settings.Save(), 5000)
 
     Public Shared Function GetHomePageUrl() As String
         Return AppManager.HomePageOrDefault(My.Settings.HomePageUrl)
@@ -72,35 +73,6 @@ Public Class Form1
         If brws IsNot Nothing AndAlso brws.CoreWebView2 IsNot Nothing Then
             brws.CoreWebView2.OpenDevToolsWindow()
         End If
-    End Sub
-
-    Private Sub SetBrowserFeatureControl()
-        Try
-            Dim exeName As String = System.IO.Path.GetFileName(System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName)
-            Dim targetExes As String() = {exeName, "K-Browser.exe", "K-Browser.vshost.exe", "devenv.exe"}
-
-            Dim featureKeys As New Dictionary(Of String, Integer) From {
-                {"FEATURE_BROWSER_EMULATION", 11001},
-                {"FEATURE_GPU_RENDERING", 1},
-                {"FEATURE_NATIVE_DOCUMENT_MODE", 1},
-                {"FEATURE_SCRIPT_URL_MITIGATION", 1}
-            }
-
-            For Each featureKey As String In featureKeys.Keys
-                Dim featureValue As Integer = featureKeys(featureKey)
-                Using key As RegistryKey = Registry.CurrentUser.CreateSubKey("Software\Microsoft\Internet Explorer\Main\FeatureControl\" & featureKey)
-                    If key IsNot Nothing Then
-                        For Each targetExe As String In targetExes
-                            If Not String.IsNullOrEmpty(targetExe) Then
-                                key.SetValue(targetExe, featureValue, RegistryValueKind.DWord)
-                            End If
-                        Next
-                    End If
-                End Using
-            Next
-        Catch ex As Exception
-            System.Diagnostics.Debug.WriteLine("Failed to set browser emulation registry key: " & ex.Message)
-        End Try
     End Sub
 
     Private Sub NewWindowToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles NewWindowToolStripMenuItem.Click
@@ -205,6 +177,8 @@ Public Class Form1
 
     Private Async Sub Form1_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
         Try
+            ' Parse the filter lists in the background while the window and browser engine start up.
+            Dim rulesLoading = AdBlockEngine.EnsureRulesLoadedAsync()
             ApplyIcons()
             ThemeManager.ApplyTheme(Me)
             UpdateDarkModeMenuCheckedState()
@@ -222,15 +196,20 @@ Public Class Form1
                     Dim sessionSvc As New SessionService()
                     Dim session As SessionModel = Await sessionSvc.LoadSessionAsync()
                     If session IsNot Nothing AndAlso session.Tabs IsNot Nothing AndAlso session.Tabs.Count > 0 Then
-                        For Each tabItem In session.Tabs
-                            Try
-                                Await CreateNewTab(tabItem.Url)
-                            Catch exTab As Exception
-                                System.Diagnostics.Debug.WriteLine("Form1: Error restoring tab (" & tabItem.Url & "): " & exTab.Message)
-                            End Try
-                        Next
-                        If TabControl1.TabPages.Count > 0 Then
-                            TabControl1.SelectedIndex = Math.Max(0, Math.Min(session.SelectedTab, TabControl1.TabPages.Count - 1))
+                        ' Only the tab that was selected is loaded now; the others load when first opened.
+                        _restoringSession = True
+                        Try
+                            For Each tabItem In session.Tabs
+                                If Not String.IsNullOrWhiteSpace(tabItem.Url) Then AddPendingTab(tabItem.Url)
+                            Next
+                            If TabControl1.TabPages.Count > 0 Then
+                                TabControl1.SelectedIndex = Math.Max(0, Math.Min(session.SelectedTab, TabControl1.TabPages.Count - 1))
+                            End If
+                        Finally
+                            _restoringSession = False
+                        End Try
+                        If TabControl1.SelectedTab IsNot Nothing Then
+                            TabControl1_SelectedIndexChanged(TabControl1, EventArgs.Empty)
                         End If
                         sessionRestored = (TabControl1.TabPages.Count > 0)
                     End If
@@ -260,7 +239,6 @@ Public Class Form1
                 End Select
                 Dim brws = Await CreateNewTab(initialUrl)
             End If
-            AdBlockEngine.LoadAllRules()
             Dim unusedTask = System.Threading.Tasks.Task.Run(Function() AdBlockEngine.CheckAndAutoUpdateListsAsync())
             If tsbAdBlockBadge IsNot Nothing Then
                 tsbAdBlockBadge.Visible = My.Settings.ShowBlockedCount AndAlso My.Settings.AdBlockerEnabled
@@ -268,6 +246,7 @@ Public Class Form1
             End If
 
             AddHandler SettingsManager.SettingsChanged, AddressOf OnSettingsChanged
+            StartMemorySaverTimer()
 
             If My.Settings.MainSize.Width > 200 AndAlso My.Settings.MainSize.Height > 200 Then
                 Me.Size = My.Settings.MainSize
@@ -291,10 +270,14 @@ Public Class Form1
             tsbAdBlockBadge.Text = AdBlockEngine.TotalBlockedCount.ToString()
         End If
 
+        ' Memory Saver may have been switched on or off: update the background tabs' memory targets.
+        TabLifecycleManager.OnTabSelectionChanged(TabControl1, My.Settings.MemorySaverEnabled)
+
         For Each page As TabPage In TabControl1.TabPages
             If page.Controls.Count > 0 Then
                 Dim brws = TryCast(page.Controls(0), WebView2)
                 If brws IsNot Nothing Then
+                    AdBlockRequestFilter.Apply(brws.CoreWebView2, My.Settings.AdBlockerEnabled)
                     Select Case My.Settings.FontSize
                         Case 0 : brws.ZoomFactor = 0.85
                         Case 2 : brws.ZoomFactor = 1.25
@@ -780,15 +763,50 @@ Public Class Form1
 
     Public Async Function CreateNewTab(Optional ByVal targetUrl As String = "") As System.Threading.Tasks.Task(Of WebView2)
         Dim tab As New TabPage()
-        Dim brws As New WebView2()
-        brws.Name = "WebView2"
-        brws.Dock = DockStyle.Fill
         tab.Text = "Loading..."
-        tab.Controls.Add(brws)
+        Dim brws As WebView2 = AddBrowserControl(tab)
 
         Me.TabControl1.TabPages.Add(tab)
         Me.TabControl1.SelectedTab = tab
 
+        Return Await LoadBrowserIntoTabAsync(brws, targetUrl)
+    End Function
+
+    ''' <summary>A restored tab that has not been opened yet: it gets its browser the first time it is selected.</summary>
+    Private Class PendingTab
+        Public Url As String
+    End Class
+
+    Private _restoringSession As Boolean
+
+    ''' <summary>Adds a tab that shows the address's site name and loads nothing until it is selected.</summary>
+    Private Sub AddPendingTab(ByVal url As String)
+        Dim tab As New TabPage() With {.Text = AppManager.TabTitleForUrl(url), .Tag = New PendingTab With {.Url = url}, .ToolTipText = url}
+        Me.TabControl1.TabPages.Add(tab)
+    End Sub
+
+    ''' <summary>Gives a restored tab its browser and loads its page, the first time it is selected.</summary>
+    Private Async Sub EnsureTabLoaded(ByVal tab As TabPage)
+        Dim pending = TryCast(tab?.Tag, PendingTab)
+        If pending Is Nothing OrElse tab.Controls.Count > 0 Then Return
+        tab.Tag = Nothing
+        Try
+            Await LoadBrowserIntoTabAsync(AddBrowserControl(tab), pending.Url)
+        Catch ex As Exception
+            System.Diagnostics.Debug.WriteLine("Form1: Error loading restored tab (" & pending.Url & "): " & ex.Message)
+        End Try
+    End Sub
+
+    Private Function AddBrowserControl(ByVal tab As TabPage) As WebView2
+        Dim brws As New WebView2()
+        brws.Name = "WebView2"
+        brws.Dock = DockStyle.Fill
+        tab.Controls.Add(brws)
+        If tab Is TabControl1.SelectedTab Then wb = brws
+        Return brws
+    End Function
+
+    Private Async Function LoadBrowserIntoTabAsync(ByVal brws As WebView2, ByVal targetUrl As String) As System.Threading.Tasks.Task(Of WebView2)
         Try
             Dim env = Await TabProcessManager.GetSharedEnvironmentAsync()
             Await brws.EnsureCoreWebView2Async(env)
@@ -835,12 +853,8 @@ Public Class Form1
             AddHandler brws.CoreWebView2.NewWindowRequested, AddressOf WebView2_NewWindowRequested
             AddHandler brws.CoreWebView2.WebMessageReceived, AddressOf WebView2_WebMessageReceived
 
-            Try
-                brws.CoreWebView2.AddWebResourceRequestedFilter("*", CoreWebView2WebResourceContext.All)
-                AddHandler brws.CoreWebView2.WebResourceRequested, AddressOf WebView2_WebResourceRequested
-            Catch ex As Exception
-                System.Diagnostics.Debug.WriteLine("AddWebResourceRequestedFilter failed: " & ex.Message)
-            End Try
+            AddHandler brws.CoreWebView2.WebResourceRequested, AddressOf WebView2_WebResourceRequested
+            AdBlockRequestFilter.Apply(brws.CoreWebView2, My.Settings.AdBlockerEnabled)
         End If
 
         Dim effectiveUrl As String = targetUrl
@@ -849,6 +863,16 @@ Public Class Form1
         End If
 
         Dim targetFix As String = AppManager.ResolveUrlOrSearch(effectiveUrl, My.Settings.SearchEngine)
+
+        ' Without this the first page after startup would load before the filter lists are parsed.
+        If My.Settings.AdBlockerEnabled Then
+            Try
+                Await AdBlockEngine.EnsureRulesLoadedAsync()
+            Catch ex As Exception
+                System.Diagnostics.Debug.WriteLine("Ad-block rules failed to load: " & ex.Message)
+            End Try
+        End If
+
         If brws.CoreWebView2 IsNot Nothing Then
             brws.CoreWebView2.Navigate(targetFix)
         Else
@@ -924,8 +948,8 @@ Public Class Form1
     Private Async Sub WebView2_NewWindowRequested(ByVal sender As Object, ByVal e As CoreWebView2NewWindowRequestedEventArgs)
         e.Handled = True
         ' WebView2 has no popup blocker of its own: without this check a page can open
-        ' tabs (and steal focus) from a script with no click behind it.
-        If Not e.IsUserInitiated Then
+        ' tabs (and steal focus) from a script with no click behind it. On unless switched off in Settings.
+        If Not e.IsUserInitiated AndAlso My.Settings.PopUpBlockerEnabled Then
             Label1.Text = "Popup blocked: " & e.Uri
             Return
         End If
@@ -987,11 +1011,28 @@ Public Class Form1
         End If
     End Sub
 
+    Private _badgeTimer As System.Windows.Forms.Timer
+
+    ''' <summary>
+    ''' A page can block hundreds of requests while loading; the badge text (which re-lays out the toolbar)
+    ''' is refreshed at most four times a second instead of once per blocked request.
+    ''' </summary>
     Private Sub IncrementBlockedAdCount()
         If Me.InvokeRequired Then
             Me.BeginInvoke(Sub() IncrementBlockedAdCount())
             Return
         End If
+        If _badgeTimer Is Nothing Then
+            _badgeTimer = New System.Windows.Forms.Timer() With {.Interval = 250}
+            AddHandler _badgeTimer.Tick, Sub()
+                                             _badgeTimer.Stop()
+                                             UpdateBlockedAdBadge()
+                                         End Sub
+        End If
+        If Not _badgeTimer.Enabled Then _badgeTimer.Start()
+    End Sub
+
+    Private Sub UpdateBlockedAdBadge()
         If tsbAdBlockBadge IsNot Nothing Then
             tsbAdBlockBadge.Text = AdBlockEngine.TotalBlockedCount.ToString()
             tsbAdBlockBadge.Visible = My.Settings.ShowBlockedCount AndAlso My.Settings.AdBlockerEnabled
@@ -1214,36 +1255,12 @@ Public Class Form1
             End If
         Next
 
-        ' Record history as "Title|URL" so the History form can display the page title
+        ' Record history as "Title|URL|DateTime" so the History form can display the page title. Titles change
+        ' often (unread counters, players), so the settings file is written at most once per few seconds.
         Try
-            Dim currentUri As String = core.Source
-            Dim title As String = core.DocumentTitle
-            If Not String.IsNullOrWhiteSpace(currentUri) AndAlso
-               Not currentUri.Equals("about:blank", StringComparison.OrdinalIgnoreCase) Then
-
-                If My.Settings.History Is Nothing Then My.Settings.History = New System.Collections.Specialized.StringCollection()
-
-                ' Remove any existing entry for this URL (could be URL-only from old format or a previous title)
-                Dim existingIndex As Integer = -1
-                For i As Integer = 0 To My.Settings.History.Count - 1
-                    Dim entry As String = My.Settings.History(i)
-                    Dim entryParts() As String = entry.Split("|"c)
-                    Dim entryUrl As String = If(entryParts.Length >= 2, entryParts(1), entry)
-                    If entryUrl.Equals(currentUri, StringComparison.OrdinalIgnoreCase) Then
-                        existingIndex = i
-                        Exit For
-                    End If
-                Next
-
-                If existingIndex >= 0 Then
-                    My.Settings.History.RemoveAt(existingIndex)
-                End If
-
-                ' Store as "Title|URL|DateTime" — use the URL as fallback display if no title
-                Dim displayTitle As String = If(String.IsNullOrWhiteSpace(title), currentUri, title)
-                Dim timestamp As String = DateTime.Now.ToString("o") ' ISO 8601 format
-                My.Settings.History.Add(displayTitle & "|" & currentUri & "|" & timestamp)
-                My.Settings.Save()
+            If My.Settings.History Is Nothing Then My.Settings.History = New System.Collections.Specialized.StringCollection()
+            If HistoryRecorder.Record(My.Settings.History, core.DocumentTitle, core.Source, DateTime.Now) Then
+                SettingsSaver.Request()
             End If
         Catch ex As Exception
             System.Diagnostics.Debug.WriteLine("Error recording history: " & ex.Message)
@@ -1259,6 +1276,9 @@ Public Class Form1
     End Sub
 
     Private Sub TabControl1_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles TabControl1.SelectedIndexChanged
+        If _restoringSession Then Return
+        EnsureTabLoaded(Me.TabControl1.SelectedTab)
+
         If Me.TabControl1.SelectedTab IsNot Nothing AndAlso Me.TabControl1.SelectedTab.Controls.Count > 0 Then
             wb = TryCast(Me.TabControl1.SelectedTab.Controls(0), WebView2)
             If wb IsNot Nothing Then
@@ -1277,8 +1297,18 @@ Public Class Form1
             wb = Nothing
         End If
 
-        ' Memory & Resource Saver: Use TabLifecycleManager to suspend background tabs and resume active tab
-        TabLifecycleManager.OnTabSelectionChanged(Me.TabControl1)
+        ' Memory Saver: resume the active tab and note when the others went to the background.
+        TabLifecycleManager.OnTabSelectionChanged(Me.TabControl1, My.Settings.MemorySaverEnabled)
+    End Sub
+
+    Private _memorySaverTimer As System.Windows.Forms.Timer
+
+    ''' <summary>Checks once a minute for background tabs that Memory Saver should put to sleep.</summary>
+    Private Sub StartMemorySaverTimer()
+        If _memorySaverTimer IsNot Nothing Then Return
+        _memorySaverTimer = New System.Windows.Forms.Timer() With {.Interval = 60000}
+        AddHandler _memorySaverTimer.Tick, Sub() TabLifecycleManager.SuspendIdleTabs(TabControl1, My.Settings.MemorySaverEnabled)
+        _memorySaverTimer.Start()
     End Sub
 
 
@@ -1406,11 +1436,31 @@ Public Class Form1
         NavigateActiveTab(GetHomePageUrl())
     End Sub
 
+    ''' <summary>
+    ''' Lets a closed window be freed: the settings event is shared (it would keep this window, and every
+    ''' browser in it, alive), and the tab trackers hold on to each tab's browser.
+    ''' </summary>
+    Private Sub Form1_FormClosed(sender As Object, e As FormClosedEventArgs) Handles Me.FormClosed
+        RemoveHandler SettingsManager.SettingsChanged, AddressOf OnSettingsChanged
+        _memorySaverTimer?.Dispose()
+        _memorySaverTimer = Nothing
+        _badgeTimer?.Dispose()
+        _badgeTimer = Nothing
+        For Each page As TabPage In TabControl1.TabPages
+            Dim brws = If(page.Controls.Count > 0, TryCast(page.Controls(0), WebView2), Nothing)
+            If brws IsNot Nothing Then
+                TabLifecycleManager.OnTabClosed(brws)
+                AdBlockEngine.RemoveTab(brws)
+            End If
+        Next
+    End Sub
+
     Private Sub Form1_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
         Try
             My.Settings.MainLocation = Me.Location
             My.Settings.MainSize = Me.Size
-            My.Settings.Save()
+            SettingsSaver.Request()
+            SettingsSaver.Flush()
 
             ' Save active session to Session.json if StartupMode = RestoreSession
             SaveCurrentSessionIfEnabled()
@@ -1428,7 +1478,11 @@ Public Class Form1
                 If TabControl1 IsNot Nothing AndAlso TabControl1.TabPages.Count > 0 Then
                     For i As Integer = 0 To TabControl1.TabPages.Count - 1
                         Dim tp As TabPage = TabControl1.TabPages(i)
-                        If tp.Controls.Count > 0 AndAlso TypeOf tp.Controls(0) Is WebView2 Then
+                        Dim pending = TryCast(tp.Tag, PendingTab)
+                        If pending IsNot Nothing Then
+                            ' Restored tab that was never opened: keep its address for next time.
+                            session.Tabs.Add(New TabItemModel With {.Url = pending.Url, .Pinned = False})
+                        ElseIf tp.Controls.Count > 0 AndAlso TypeOf tp.Controls(0) Is WebView2 Then
                             Dim wv As WebView2 = DirectCast(tp.Controls(0), WebView2)
                             Dim urlStr As String = String.Empty
                             If wv.Source IsNot Nothing Then
@@ -1610,13 +1664,8 @@ Public Class Form1
             If page.Controls.Count > 0 Then
                 Dim brws = TryCast(page.Controls(0), WebView2)
                 If brws IsNot Nothing Then
+                    ' Pages see the new colour scheme straight away (prefers-color-scheme), so no reload is needed.
                     ThemeManager.ApplyWebView2Theme(brws)
-                    If brws.CoreWebView2 IsNot Nothing Then
-                        Try
-                            brws.CoreWebView2.Reload()
-                        Catch
-                        End Try
-                    End If
                 End If
             End If
         Next

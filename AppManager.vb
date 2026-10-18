@@ -48,6 +48,20 @@ Public Class AppManager
         Return HomePageOrDefault(homePageUrl)
     End Function
 
+    ''' <summary>
+    ''' A short title for a tab whose page has not loaded yet: the site name ("example.com"), or "New tab".
+    ''' </summary>
+    Public Shared Function TabTitleForUrl(ByVal url As String) As String
+        If String.IsNullOrWhiteSpace(url) OrElse url.Trim().Equals("about:blank", StringComparison.OrdinalIgnoreCase) Then Return "New tab"
+        Dim uri As Uri = Nothing
+        Dim title As String = url.Trim()
+        If Uri.TryCreate(title, UriKind.Absolute, uri) AndAlso Not String.IsNullOrEmpty(uri.Host) Then
+            title = uri.Host
+            If title.StartsWith("www.", StringComparison.OrdinalIgnoreCase) Then title = title.Substring(4)
+        End If
+        Return If(title.Length > 20, title.Substring(0, 20).TrimEnd() & "...", title)
+    End Function
+
     Public Shared Function ResolveUrlOrSearch(ByVal input As String, Optional ByVal engine As String = "Google") As String
         If String.IsNullOrWhiteSpace(input) Then Return "about:blank"
         Dim trimmed As String = input.Trim()
