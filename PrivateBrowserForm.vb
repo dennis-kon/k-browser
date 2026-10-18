@@ -148,6 +148,7 @@ Public Class PrivateBrowserForm
 
         ' Wire up event handlers
         AddHandler wvPrivate.CoreWebView2.NavigationStarting, AddressOf PrivateWebView_NavigationStarting
+        AddHandler wvPrivate.CoreWebView2.FrameNavigationStarting, AddressOf PrivateWebView_FrameNavigationStarting
         AddHandler wvPrivate.CoreWebView2.NavigationCompleted, AddressOf PrivateWebView_NavigationCompleted
         AddHandler wvPrivate.CoreWebView2.SourceChanged, AddressOf PrivateWebView_SourceChanged
         AddHandler wvPrivate.CoreWebView2.DocumentTitleChanged, AddressOf PrivateWebView_DocumentTitleChanged
@@ -293,7 +294,7 @@ Public Class PrivateBrowserForm
         If My.Settings.BlockedSites IsNot Nothing Then
             For Each blockedUrl As String In My.Settings.BlockedSites
                 If Not String.IsNullOrEmpty(blockedUrl) Then
-                    If e.Uri.ToLower().Contains(blockedUrl.ToLower()) Then
+                    If SiteFilter.UrlMatchesEntry(e.Uri, blockedUrl) Then
                         e.Cancel = True
                         MessageBox.Show("This site is blocked by K-Browser Settings.", "Access Blocked", MessageBoxButtons.OK, MessageBoxIcon.Warning)
                         Return
@@ -306,7 +307,7 @@ Public Class PrivateBrowserForm
         If My.Settings.UsePhishingFilter AndAlso My.Settings.PhishingSites IsNot Nothing Then
             For Each phishingUrl As String In My.Settings.PhishingSites
                 If Not String.IsNullOrEmpty(phishingUrl) Then
-                    If e.Uri.ToLower().Contains(phishingUrl.ToLower()) Then
+                    If SiteFilter.UrlMatchesEntry(e.Uri, phishingUrl) Then
                         If _ignoredUrls.Contains(e.Uri) Then Return
 
                         e.Cancel = True
@@ -327,6 +328,20 @@ Public Class PrivateBrowserForm
                 End If
             Next
         End If
+    End Sub
+
+    ''' <summary>
+    ''' Same sub-frame rules as normal tabs: NavigationStarting only sees the main frame.
+    ''' </summary>
+    Private Sub PrivateWebView_FrameNavigationStarting(ByVal sender As Object, ByVal e As CoreWebView2NavigationStartingEventArgs)
+        Dim phishingList As IEnumerable(Of String) = Nothing
+        If My.Settings.UsePhishingFilter AndAlso My.Settings.PhishingSites IsNot Nothing Then
+            phishingList = My.Settings.PhishingSites.Cast(Of String)()
+        End If
+        Dim blockedList As IEnumerable(Of String) = Nothing
+        If My.Settings.BlockedSites IsNot Nothing Then blockedList = My.Settings.BlockedSites.Cast(Of String)()
+
+        If SiteFilter.IsFrameBlocked(e.Uri, My.Settings.HttpsOnlyMode, blockedList, phishingList) Then e.Cancel = True
     End Sub
 
     ''' <summary>
@@ -422,6 +437,11 @@ Public Class PrivateBrowserForm
     ''' </summary>
     Private Sub PrivateWebView_NewWindowRequested(ByVal sender As Object, ByVal e As CoreWebView2NewWindowRequestedEventArgs)
         e.Handled = True
+        ' Same rule as normal tabs: no navigation hijacking from a script with no click behind it.
+        If Not e.IsUserInitiated Then
+            tslStatus.Text = "Popup blocked"
+            Return
+        End If
         If Not String.IsNullOrWhiteSpace(e.Uri) AndAlso wvPrivate.CoreWebView2 IsNot Nothing Then
             wvPrivate.CoreWebView2.Navigate(e.Uri)
         End If
@@ -482,6 +502,7 @@ Public Class PrivateBrowserForm
             ' Unhook event handlers to prevent callbacks during disposal
             If wvPrivate.CoreWebView2 IsNot Nothing Then
                 RemoveHandler wvPrivate.CoreWebView2.NavigationStarting, AddressOf PrivateWebView_NavigationStarting
+                RemoveHandler wvPrivate.CoreWebView2.FrameNavigationStarting, AddressOf PrivateWebView_FrameNavigationStarting
                 RemoveHandler wvPrivate.CoreWebView2.NavigationCompleted, AddressOf PrivateWebView_NavigationCompleted
                 RemoveHandler wvPrivate.CoreWebView2.SourceChanged, AddressOf PrivateWebView_SourceChanged
                 RemoveHandler wvPrivate.CoreWebView2.DocumentTitleChanged, AddressOf PrivateWebView_DocumentTitleChanged

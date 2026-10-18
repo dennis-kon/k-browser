@@ -163,6 +163,8 @@ Public Class Settings
         ' Performance settings are loaded asynchronously from Settings.json via LoadPrivacyTabSettingsAsync()
 
         txtCustomDns.Text = If(My.Settings.CustomDnsServer IsNot Nothing, My.Settings.CustomDnsServer, "")
+        ' The embedded engine has no way to use a custom DNS server, so don't offer a control that does nothing.
+        grpDns.Enabled = False
 
         ' Advanced
         chkEnableProxy.Checked = My.Settings.CustomProxyEnabled
@@ -170,7 +172,19 @@ Public Class Settings
         txtProxyPort.Text = My.Settings.CustomProxyPort.ToString()
     End Sub
 
-    Private Async Function SaveAllSettingsAsync() As Task
+    ''' <summary>
+    ''' Saves every setting. Returns False (and saves nothing) when a value is invalid, after telling the user.
+    ''' </summary>
+    Private Async Function SaveAllSettingsAsync() As Task(Of Boolean)
+        ' The proxy host ends up in the browser engine's command line: refuse anything but a plain host.
+        If chkEnableProxy.Checked AndAlso Not BrowserInitializationService.IsValidProxyHost(txtProxyHost.Text) Then
+            MessageBox.Show("Enter a valid proxy host name or IP address, without a scheme, port or spaces." & vbCrLf &
+                            "Use the port box for the port.",
+                            "Proxy Settings", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            txtProxyHost.Focus()
+            Return False
+        End If
+
         ' Save standard WinForms settings
         SaveAllSettings()
 
@@ -208,6 +222,7 @@ Public Class Settings
         Catch ex As Exception
             System.Diagnostics.Debug.WriteLine("Settings: Error saving privacy settings to Settings.json: " & ex.Message)
         End Try
+        Return True
     End Function
 
     Private Sub SaveAllSettings()
@@ -569,13 +584,13 @@ Public Class Settings
     End Sub
 
     Private Async Sub btnOK_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnOK.Click
-        Await SaveAllSettingsAsync()
+        If Not Await SaveAllSettingsAsync() Then Return
         Me.DialogResult = DialogResult.OK
         Me.Close()
     End Sub
 
     Private Async Sub btnApply_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnApply.Click
-        Await SaveAllSettingsAsync()
+        If Not Await SaveAllSettingsAsync() Then Return
         MessageBox.Show("Settings applied successfully!", "Browser Settings", MessageBoxButtons.OK, MessageBoxIcon.Information)
     End Sub
 

@@ -338,6 +338,7 @@ Public Class Form1
                 If browserControl IsNot Nothing Then
                     If browserControl.CoreWebView2 IsNot Nothing Then
                         RemoveHandler browserControl.CoreWebView2.NavigationStarting, AddressOf WebView2_NavigationStarting
+                        RemoveHandler browserControl.CoreWebView2.FrameNavigationStarting, AddressOf WebView2_FrameNavigationStarting
                         RemoveHandler browserControl.CoreWebView2.NavigationCompleted, AddressOf WebView2_NavigationCompleted
                         RemoveHandler browserControl.CoreWebView2.SourceChanged, AddressOf WebView2_SourceChanged
                         RemoveHandler browserControl.CoreWebView2.DocumentTitleChanged, AddressOf WebView2_DocumentTitleChanged
@@ -504,22 +505,37 @@ Public Class Form1
         CloseCurrentTab()
     End Sub
 
+    ' The Edit menu owns Ctrl+X/C/V/A, so those shortcuts never reach a focused
+    ' text box on their own. Returns the focused address/search box, if any.
+    Private Function GetFocusedTextBox() As TextBoxBase
+        If ToolStripTextBox1.Focused Then Return ToolStripTextBox1.TextBox
+        Return TryCast(Me.ActiveControl, TextBoxBase)
+    End Function
+
     Private Async Sub CutToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CutToolStripMenuItem.Click
+        Dim tb = GetFocusedTextBox()
+        If tb IsNot Nothing Then tb.Cut() : Return
         Dim brws = GetActiveWebView()
         If brws IsNot Nothing AndAlso brws.CoreWebView2 IsNot Nothing Then Await brws.CoreWebView2.ExecuteScriptAsync("document.execCommand('cut')")
     End Sub
 
     Private Async Sub CopyToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CopyToolStripMenuItem.Click
+        Dim tb = GetFocusedTextBox()
+        If tb IsNot Nothing Then tb.Copy() : Return
         Dim brws = GetActiveWebView()
         If brws IsNot Nothing AndAlso brws.CoreWebView2 IsNot Nothing Then Await brws.CoreWebView2.ExecuteScriptAsync("document.execCommand('copy')")
     End Sub
 
     Private Async Sub PasteToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PasteToolStripMenuItem.Click
+        Dim tb = GetFocusedTextBox()
+        If tb IsNot Nothing Then tb.Paste() : Return
         Dim brws = GetActiveWebView()
         If brws IsNot Nothing AndAlso brws.CoreWebView2 IsNot Nothing Then Await brws.CoreWebView2.ExecuteScriptAsync("document.execCommand('paste')")
     End Sub
 
     Private Async Sub SelectAllToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles SelectAllToolStripMenuItem.Click
+        Dim tb = GetFocusedTextBox()
+        If tb IsNot Nothing Then tb.SelectAll() : Return
         Dim brws = GetActiveWebView()
         If brws IsNot Nothing AndAlso brws.CoreWebView2 IsNot Nothing Then Await brws.CoreWebView2.ExecuteScriptAsync("document.execCommand('selectAll')")
     End Sub
@@ -809,6 +825,7 @@ Public Class Form1
             End Select
 
             AddHandler brws.CoreWebView2.NavigationStarting, AddressOf WebView2_NavigationStarting
+            AddHandler brws.CoreWebView2.FrameNavigationStarting, AddressOf WebView2_FrameNavigationStarting
             AddHandler brws.CoreWebView2.ContentLoading, AddressOf WebView2_ContentLoading
             AddHandler brws.CoreWebView2.DOMContentLoaded, AddressOf WebView2_DOMContentLoaded
             AddHandler brws.CoreWebView2.NavigationCompleted, AddressOf WebView2_NavigationCompleted
@@ -913,6 +930,12 @@ Public Class Form1
 
     Private Async Sub WebView2_NewWindowRequested(ByVal sender As Object, ByVal e As CoreWebView2NewWindowRequestedEventArgs)
         e.Handled = True
+        ' WebView2 has no popup blocker of its own: without this check a page can open
+        ' tabs (and steal focus) from a script with no click behind it.
+        If Not e.IsUserInitiated Then
+            Label1.Text = "Popup blocked: " & e.Uri
+            Return
+        End If
         If Not String.IsNullOrWhiteSpace(e.Uri) Then
             Await CreateNewTab(e.Uri)
         End If
@@ -1052,12 +1075,10 @@ Public Class Form1
         ' 2. Ad Blocker Check
         If My.Settings.AdBlockerEnabled Then
             Dim adDomains As String() = {"doubleclick.net", "adservice.google.com", "adnxs.com", "googlesyndication.com", "taboola.com", "outbrain.com"}
-            For Each adDomain As String In adDomains
-                If url.ToLower().Contains(adDomain) Then
-                    e.Cancel = True
-                    Return
-                End If
-            Next
+            If SiteFilter.MatchesAny(url, adDomains) Then
+                e.Cancel = True
+                Return
+            End If
         End If
 
         ' 3. Per-Site JavaScript Check
@@ -1066,9 +1087,8 @@ Public Class Form1
             If core IsNot Nothing Then
                 Dim isJsDisabled As Boolean = False
                 If Uri.IsWellFormedUriString(url, UriKind.Absolute) Then
-                    Dim u As New Uri(url)
                     For Each disabledDomain As String In My.Settings.JsDisabledSites
-                        If Not String.IsNullOrEmpty(disabledDomain) AndAlso u.Host.ToLower().Contains(disabledDomain.ToLower()) Then
+                        If Not String.IsNullOrEmpty(disabledDomain) AndAlso SiteFilter.UrlMatchesEntry(url, disabledDomain) Then
                             isJsDisabled = True
                             Exit For
                         End If
@@ -1082,7 +1102,7 @@ Public Class Form1
         If My.Settings.BlockedSites IsNot Nothing Then
             For Each blockedUrl As String In My.Settings.BlockedSites
                 If Not String.IsNullOrEmpty(blockedUrl) Then
-                    If url.ToLower().Contains(blockedUrl.ToLower()) Then
+                    If SiteFilter.UrlMatchesEntry(url, blockedUrl) Then
                         e.Cancel = True
                         MsgBox("This site is blocked by K-Browser Settings.", MsgBoxStyle.Critical, "Access Blocked")
                         Return
@@ -1095,7 +1115,7 @@ Public Class Form1
         If My.Settings.UsePhishingFilter AndAlso My.Settings.PhishingSites IsNot Nothing Then
             For Each phishingUrl As String In My.Settings.PhishingSites
                 If Not String.IsNullOrEmpty(phishingUrl) Then
-                    If url.ToLower().Contains(phishingUrl.ToLower()) Then
+                    If SiteFilter.UrlMatchesEntry(url, phishingUrl) Then
                         If IgnoredUrls.Contains(url) Then Return
 
                         e.Cancel = True
@@ -1116,6 +1136,21 @@ Public Class Form1
                 End If
             Next
         End If
+    End Sub
+
+    ''' <summary>
+    ''' NavigationStarting only sees the main frame. Apply the same HTTPS-only, blocked-site and phishing rules
+    ''' to iframes (silently: a dialog per embedded frame would be unusable).
+    ''' </summary>
+    Private Sub WebView2_FrameNavigationStarting(ByVal sender As Object, ByVal e As CoreWebView2NavigationStartingEventArgs)
+        Dim phishingList As IEnumerable(Of String) = Nothing
+        If My.Settings.UsePhishingFilter AndAlso My.Settings.PhishingSites IsNot Nothing Then
+            phishingList = My.Settings.PhishingSites.Cast(Of String)()
+        End If
+        Dim blockedList As IEnumerable(Of String) = Nothing
+        If My.Settings.BlockedSites IsNot Nothing Then blockedList = My.Settings.BlockedSites.Cast(Of String)()
+
+        If SiteFilter.IsFrameBlocked(e.Uri, My.Settings.HttpsOnlyMode, blockedList, phishingList) Then e.Cancel = True
     End Sub
 
     Private Sub WebView2_ContentLoading(ByVal sender As Object, ByVal e As CoreWebView2ContentLoadingEventArgs)
@@ -1296,9 +1331,18 @@ Public Class Form1
     End Sub
 
     Private Sub OpePageInNToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OpePageInNToolStripMenuItem.Click
+        ' The address bar text becomes another program's command line: only a plain http(s) address
+        ' may go through (never something like "--flag"), see ExternalBrowser.
+        Dim address As String = ExternalBrowser.SafeUrlArgument(ToolStripTextBox1.Text)
+        If address Is Nothing Then
+            MessageBox.Show("Only http:// and https:// addresses can be opened in another browser.", "Open Page", MessageBoxButtons.OK, MessageBoxIcon.Information)
+            Return
+        End If
+
         On Error Resume Next
         Dim psi As New System.Diagnostics.ProcessStartInfo("iexplore")
-        psi.Arguments = ToolStripTextBox1.Text
+        psi.UseShellExecute = True
+        psi.Arguments = address
         System.Diagnostics.Process.Start(psi)
     End Sub
 
@@ -1633,18 +1677,24 @@ Public Class Form1
 
     Private Async Sub OnCredentialsCaptured(ByVal sender As Object, ByVal e As CredentialCapturedEventArgs)
         Dim domain As String = PasswordManagerService.ExtractDomain(e.Url)
-        Using dlg As New SavePasswordForm(domain, e.Username)
-            dlg.ShowDialog(Me)
-            Select Case dlg.UserChoice
-                Case SavePasswordChoice.Save
-                    Await _passwordManagerService.SaveCredentialAsync(e.Url, e.Username, e.Password)
-                    MessageBox.Show("Password saved successfully.", "Password Saved", MessageBoxButtons.OK, MessageBoxIcon.Information)
-                Case SavePasswordChoice.Never
-                    _passwordManagerService.AddBlockedSite(e.Url)
-                Case SavePasswordChoice.NotNow
-                    ' Do nothing
-            End Select
-        End Using
+        ' A dismissed prompt mutes this site for the session, so a page cannot nag the user into a corner.
+        Dim muteSite As Boolean = False
+        Try
+            Using dlg As New SavePasswordForm(domain, e.Username)
+                dlg.ShowDialog(Me)
+                Select Case dlg.UserChoice
+                    Case SavePasswordChoice.Save
+                        Await _passwordManagerService.SaveCredentialAsync(e.Url, e.Username, e.Password)
+                        MessageBox.Show("Password saved successfully.", "Password Saved", MessageBoxButtons.OK, MessageBoxIcon.Information)
+                    Case SavePasswordChoice.Never
+                        _passwordManagerService.AddBlockedSite(e.Url)
+                    Case SavePasswordChoice.NotNow
+                        muteSite = True
+                End Select
+            End Using
+        Finally
+            _credentialDetectionService.ReleaseCapturePrompt(e.Url, muteSite)
+        End Try
     End Sub
 
     Private Async Sub OnLoginFormDetected(ByVal sender As Object, ByVal e As LoginFormDetectedEventArgs)
@@ -1677,7 +1727,9 @@ Public Class Form1
         End If
 
         If selectedCred IsNot Nothing Then
-            Await _credentialDetectionService.InjectAutofillAsync(e.WebView, selectedCred.Username, selectedCred.Password)
+            ' Pass the URL the credentials were offered for so the fill is refused if the tab has
+            ' navigated elsewhere while the confirmation dialog was open.
+            Await _credentialDetectionService.InjectAutofillAsync(e.WebView, e.Url, selectedCred.Username, selectedCred.Password)
             Await _passwordManagerService.UpdateLastUsedAsync(selectedCred.Website, selectedCred.Username)
         End If
     End Sub

@@ -58,17 +58,23 @@ Public Class RestoreService
             ' Extract archive asynchronously
             Await Task.Run(Sub() ZipFile.ExtractToDirectory(zipFilePath, tempDir, True))
 
-            ' 1. Restore Settings.json
+            ' 1. Restore Settings.json (only if it is a Settings.json this browser could have written)
             Dim restoredSettingsFile As String = Path.Combine(tempDir, "Settings.json")
             If File.Exists(restoredSettingsFile) Then
-                File.Copy(restoredSettingsFile, _settingsService.SettingsFilePath, True)
+                If BackupValidator.IsValidSettingsJson(File.ReadAllText(restoredSettingsFile)) Then
+                    File.Copy(restoredSettingsFile, _settingsService.SettingsFilePath, True)
+                Else
+                    System.Diagnostics.Debug.WriteLine("RestoreService: Settings.json in the backup is not valid; keeping the current settings.")
+                End If
             End If
 
-            ' 2. Restore Session.json
+            ' 2. Restore Session.json, minus any tab that would open on a script or other non-web address
             Dim restoredSessionFile As String = Path.Combine(tempDir, "Session.json")
-            Dim sessionSvc As New SessionService()
-            If File.Exists(restoredSessionFile) Then
-                File.Copy(restoredSessionFile, sessionSvc.SessionFilePath, True)
+            Dim sessionSvc As New SessionService(restoredSessionFile)
+            Dim restoredSession As SessionModel = If(File.Exists(restoredSessionFile), sessionSvc.LoadSession(), Nothing)
+            If restoredSession IsNot Nothing AndAlso restoredSession.Tabs.Count > 0 Then
+                Dim liveSession As New SessionService()
+                liveSession.SaveSession(BackupValidator.FilterSession(restoredSession))
             End If
 
             ' 3. Restore Bookmarks if included in backup
@@ -107,8 +113,10 @@ Public Class RestoreService
             Dim restoredConfigFile As String = Path.Combine(tempDir, "user_config.json")
             If File.Exists(restoredConfigFile) Then
                 Dim json As String = File.ReadAllText(restoredConfigFile)
-                Dim cfg As Dictionary(Of String, String) = JsonSerializer.Deserialize(Of Dictionary(Of String, String))(json)
-                If cfg IsNot Nothing Then
+                ' Values come from a file the user was handed: keep only the ones that validate (a value that
+                ' does not is skipped and the current setting stays), so the parsing below cannot fail on it.
+                Dim cfg As Dictionary(Of String, String) = BackupValidator.SanitizeUserConfig(JsonSerializer.Deserialize(Of Dictionary(Of String, String))(json))
+                If cfg.Count > 0 Then
                     If cfg.ContainsKey("HomePageUrl") Then My.Settings.HomePageUrl = cfg("HomePageUrl")
                     If cfg.ContainsKey("SearchEngine") Then My.Settings.SearchEngine = cfg("SearchEngine")
                     If cfg.ContainsKey("DownloadsFolder") Then My.Settings.DownloadsFolder = cfg("DownloadsFolder")

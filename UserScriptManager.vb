@@ -10,6 +10,7 @@ Public Class UserScriptManager
         Public Property Name As String = ""
         Public Property Code As String = ""
         Public Property MatchPatterns As New List(Of String)()
+        Public Property Excludes As New List(Of String)()
     End Class
 
     Private Shared ReadOnly Scripts As New List(Of UserScript)()
@@ -44,23 +45,10 @@ Public Class UserScriptManager
                 Dim script As New UserScript With {.Code = scriptText, .Name = Path.GetFileNameWithoutExtension(filePath)}
 
                 ' Parse Greasemonkey / Tampermonkey header metadata
-                Dim headerMatch As Match = Regex.Match(scriptText, "//\s*==UserScript==([\s\S]*?)//\s*==/UserScript==", RegexOptions.IgnoreCase)
-                If headerMatch.Success Then
-                    Dim headerContent As String = headerMatch.Groups(1).Value
-                    For Each line As String In headerContent.Split(New String() {vbCrLf, vbLf}, StringSplitOptions.RemoveEmptyEntries)
-                        If line.Contains("@name") Then
-                            Dim parts = line.Split(New Char() {" "c, vbTab}, StringSplitOptions.RemoveEmptyEntries)
-                            If parts.Length >= 2 Then
-                                script.Name = String.Join(" ", parts, 1, parts.Length - 1)
-                            End If
-                        ElseIf line.Contains("@match") OrElse line.Contains("@include") Then
-                            Dim parts = line.Split(New Char() {" "c, vbTab}, StringSplitOptions.RemoveEmptyEntries)
-                            If parts.Length >= 2 Then
-                                script.MatchPatterns.Add(parts(1).Trim())
-                            End If
-                        End If
-                    Next
-                End If
+                Dim header As UserScriptHeader = UserScriptMatcher.ParseHeader(scriptText)
+                If header.Name.Length > 0 Then script.Name = header.Name
+                script.MatchPatterns.AddRange(header.Patterns)
+                script.Excludes.AddRange(header.Excludes)
 
                 If script.MatchPatterns.Count = 0 Then
                     script.MatchPatterns.Add("*://*/*") ' Default fallback
@@ -83,8 +71,9 @@ Public Class UserScriptManager
 
         For Each script In Scripts
             Try
-                ' Add script to execute on document creation
-                Dim wrappedCode As String = "(function() { try { " & script.Code & " } catch(e) { console.error('K-Browser UserScript [" & script.Name & "] error:', e); } })();"
+                ' The engine injects this into EVERY document, so the wrapper itself checks the page
+                ' address against the script's @match / @include patterns.
+                Dim wrappedCode As String = UserScriptMatcher.BuildWrappedCode(script.Name, script.Code, script.MatchPatterns, script.Excludes)
                 Await brws.CoreWebView2.AddScriptToExecuteOnDocumentCreatedAsync(wrappedCode)
             Catch ex As Exception
                 System.Diagnostics.Debug.WriteLine("Error injecting UserScript [" & script.Name & "]: " & ex.Message)

@@ -1221,7 +1221,7 @@ Partial Class Settings
         grpDns.Size = New Size(556, 68)
         grpDns.TabIndex = 0
         grpDns.TabStop = False
-        grpDns.Text = "Custom DNS Server"
+        grpDns.Text = "Custom DNS Server - not supported by this browser engine; set DNS in Windows network settings"
         ' 
         ' lblCustomDns
         ' 
@@ -1261,7 +1261,7 @@ Partial Class Settings
         chkEnableProxy.Name = "chkEnableProxy"
         chkEnableProxy.Size = New Size(128, 17)
         chkEnableProxy.TabIndex = 0
-        chkEnableProxy.Text = "Enable Custom Proxy"
+        chkEnableProxy.Text = "Enable Custom Proxy (applies after restart)"
         chkEnableProxy.UseVisualStyleBackColor = True
         ' 
         ' lblProxyHost
@@ -1365,7 +1365,7 @@ Partial Class Settings
         grpDns.Size = New Size(556, 68)
         grpDns.TabIndex = 0
         grpDns.TabStop = False
-        grpDns.Text = "Custom DNS Server"
+        grpDns.Text = "Custom DNS Server - not supported by this browser engine; set DNS in Windows network settings"
         ' 
         ' lblCustomDns
         ' 
@@ -1405,7 +1405,7 @@ Partial Class Settings
         chkEnableProxy.Name = "chkEnableProxy"
         chkEnableProxy.Size = New Size(128, 17)
         chkEnableProxy.TabIndex = 0
-        chkEnableProxy.Text = "Enable Custom Proxy"
+        chkEnableProxy.Text = "Enable Custom Proxy (applies after restart)"
         chkEnableProxy.UseVisualStyleBackColor = True
         ' 
         ' lblProxyHost

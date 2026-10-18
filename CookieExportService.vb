@@ -58,6 +58,13 @@ Public Class CookieExportService
     Private Function EscapeCsvField(ByVal field As String) As String
         If String.IsNullOrEmpty(field) Then Return ""
 
+        ' Cookie names, domains and paths are chosen by websites. Spreadsheet programs run a cell that
+        ' starts with = + - @ (or a tab / carriage return) as a formula, so defuse it with a leading quote.
+        Select Case field(0)
+            Case "="c, "+"c, "-"c, "@"c, vbTab(0), vbCr(0)
+                field = "'" & field
+        End Select
+
         If field.Contains(",") OrElse field.Contains("""") OrElse field.Contains(vbCr) OrElse field.Contains(vbLf) Then
             Return """" & field.Replace("""", """""") & """"
         End If

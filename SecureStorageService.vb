@@ -11,9 +11,12 @@ Imports System.Text
 ''' </summary>
 Public Class SecureStorageService
 
-    ' Static entropy adds a layer of application-specific salt to the DPAPI encryption.
-    ' This prevents other applications running under the same user from trivially decrypting
-    ' K Browser's stored credentials (they'd need to know this entropy value).
+    ' Application-specific entropy for DPAPI. It only separates this app's data from data other programs
+    ' protect with plain DPAPI. It is NOT a secret: it is in the source and in every build, so any program
+    ' running as the same Windows user can read these files. What actually protects them is the Windows
+    ' account itself (other users and other machines cannot decrypt) and the identity check shown before a
+    ' password is revealed or exported. Likewise a .kpass export is bound to this Windows user and is not
+    ' protected by a passphrase, so it cannot be opened on another machine or account.
     Private Shared ReadOnly Entropy As Byte() = Encoding.UTF8.GetBytes("KBrowser.PasswordManager.v1.Entropy")
 
     ''' <summary>

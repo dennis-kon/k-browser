@@ -64,6 +64,25 @@ begin
     (RegQueryStringValue(HKCU, WebView2ClientKey, 'pv', Version) and (Version <> '') and (Version <> '0.0.0.0'));
 end;
 
+// True only if the file carries a valid Authenticode signature issued to Microsoft Corporation.
+// The setup program is downloaded over the network and then run, so it must not be run unverified.
+function IsMicrosoftSigned(const FileName: String): Boolean;
+var
+  ResultCode: Integer;
+  Command, QuotedPath: String;
+begin
+  // A single quote in the path (e.g. in a user name) must be doubled inside a PowerShell string.
+  QuotedPath := FileName;
+  StringChangeEx(QuotedPath, '''', '''''', True);
+  Command :=
+    '-NoProfile -ExecutionPolicy Bypass -Command "$s = Get-AuthenticodeSignature -LiteralPath ''' +
+    QuotedPath + '''; ' +
+    'if ($s.Status -eq ''Valid'' -and $s.SignerCertificate.Subject -like ''*O=Microsoft Corporation*'') ' +
+    '{ exit 0 } else { exit 1 }"';
+  Result := Exec(ExpandConstant('{sys}\WindowsPowerShell\v1.0\powershell.exe'), Command, '', SW_HIDE,
+                 ewWaitUntilTerminated, ResultCode) and (ResultCode = 0);
+end;
+
 // Installs the WebView2 runtime (required by the browser engine) when it is missing.
 function PrepareToInstall(var NeedsRestart: Boolean): String;
 var
@@ -78,6 +97,13 @@ begin
     DownloadTemporaryFile('https://go.microsoft.com/fwlink/p/?LinkId=2124703',
       'MicrosoftEdgeWebview2Setup.exe', '', nil);
     Bootstrapper := ExpandConstant('{tmp}\MicrosoftEdgeWebview2Setup.exe');
+    if not IsMicrosoftSigned(Bootstrapper) then
+    begin
+      Result := 'The downloaded Microsoft Edge WebView2 setup program does not have a valid Microsoft ' +
+                'signature, so it was not run. Install the WebView2 Runtime from ' +
+                'https://developer.microsoft.com/microsoft-edge/webview2/ and run Setup again.';
+      Exit;
+    end;
     if not Exec(Bootstrapper, '/silent /install', '', SW_HIDE, ewWaitUntilTerminated, ResultCode)
        or not WebView2Installed then
       Result := 'The Microsoft Edge WebView2 Runtime could not be installed. ' +

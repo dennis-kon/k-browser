@@ -298,7 +298,9 @@ Public Class PasswordManagerService
     End Function
 
     ''' <summary>
-    ''' Extracts the domain from a URL (e.g., "https://github.com/login" → "github.com").
+    ''' Extracts the origin key from a URL (e.g., "https://github.com/login" → "github.com").
+    ''' A non-default port is kept ("localhost:3000"): the same host on another port is a different
+    ''' origin and must not share saved passwords.
     ''' </summary>
     Public Shared Function ExtractDomain(ByVal url As String) As String
         If String.IsNullOrWhiteSpace(url) Then Return String.Empty
@@ -311,7 +313,9 @@ Public Class PasswordManagerService
             End If
 
             Dim uri As New Uri(urlToParse)
-            Return uri.Host.ToLowerInvariant()
+            Dim host As String = uri.Host.ToLowerInvariant()
+            If host.Length = 0 OrElse uri.IsDefaultPort Then Return host
+            Return host & ":" & uri.Port.ToString(System.Globalization.CultureInfo.InvariantCulture)
         Catch
             ' If URL parsing fails, return the input cleaned up
             Return url.Trim().ToLowerInvariant().Replace("https://", "").Replace("http://", "").Split("/"c)(0)

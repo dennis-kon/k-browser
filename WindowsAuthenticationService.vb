@@ -1,4 +1,5 @@
 Imports System.Runtime.InteropServices
+Imports System.Security.Principal
 Imports System.Threading.Tasks
 
 ''' <summary>
@@ -102,6 +103,30 @@ Public Class WindowsAuthenticationService
     End Function
 
     ''' <summary>
+    ''' True when <paramref name="sid"/> is the Windows user running this process.
+    ''' </summary>
+    Public Shared Function IsCurrentUser(ByVal sid As SecurityIdentifier) As Boolean
+        Dim current As SecurityIdentifier = WindowsIdentity.GetCurrent().User
+        Return sid IsNot Nothing AndAlso current IsNot Nothing AndAlso sid.Equals(current)
+    End Function
+
+    ''' <summary>
+    ''' True when a logon token (from LogonUser) belongs to the Windows user running this process.
+    ''' Comparing SIDs works for local, domain and Microsoft accounts alike, where comparing the
+    ''' typed user name would not.
+    ''' </summary>
+    Public Shared Function TokenBelongsToCurrentUser(ByVal token As IntPtr) As Boolean
+        If token = IntPtr.Zero Then Return False
+        Try
+            Using identity As New WindowsIdentity(token)
+                Return IsCurrentUser(identity.User)
+            End Using
+        Catch ex As Exception
+            Return False
+        End Try
+    End Function
+
+    ''' <summary>
     ''' Uses the native Windows CredUI dialog for authentication.
     ''' </summary>
     Private Function AuthenticateViaCredUI(ByVal parentHandle As IntPtr) As Boolean
@@ -189,7 +214,9 @@ Public Class WindowsAuthenticationService
             ' Clear password from memory
             enteredPassword = Nothing
 
-            Return logonResult
+            ' LogonUser succeeds for ANY valid account whose credentials were typed in. Only the user
+            ' running the browser may reveal its saved passwords.
+            Return logonResult AndAlso TokenBelongsToCurrentUser(tokenHandle)
         Finally
             If tokenHandle <> IntPtr.Zero Then
                 CloseHandle(tokenHandle)

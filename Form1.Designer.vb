@@ -1020,6 +1020,7 @@ Partial Class Form1
         ToolStripTextBox1.AutoCompleteMode = AutoCompleteMode.SuggestAppend
         ToolStripTextBox1.AutoCompleteSource = AutoCompleteSource.AllUrl
         ToolStripTextBox1.BackColor = SystemColors.ControlLightLight
+        ToolStripTextBox1.BorderStyle = BorderStyle.None
         ToolStripTextBox1.Name = "ToolStripTextBox1"
         ToolStripTextBox1.Size = New Size(641, 39)
         ' 

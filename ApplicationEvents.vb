@@ -11,6 +11,10 @@
 
         Private Sub MyApplication_Startup(sender As Object, e As ApplicationServices.StartupEventArgs) Handles Me.Startup
             IconService.Initialize()
+
+            ' A crash skips the cleanup a private window does when it closes. Remove such leftovers
+            ' (cookies, cache, history in %TEMP%); sessions still open in another window are left alone.
+            System.Threading.Tasks.Task.Run(Sub() PrivateSessionService.SweepStaleSessions(PrivateSessionService.DefaultRoot))
         End Sub
 
     End Class

@@ -5,14 +5,43 @@ Public Class ftp
     Public Property UseSystemPasswordChar As Boolean
     Public Property PasswordChar As Char
 
+    ' FTP sends the password and files in clear text. Requests ask for TLS first; plain FTP is used
+    ' only after the user has agreed to it for the server currently typed in.
+    Private _allowPlainFtp As Boolean = False
+
+    Private Sub txt_server_TextChanged(ByVal sender As Object, ByVal e As EventArgs) Handles txt_server.TextChanged
+        _allowPlainFtp = False
+    End Sub
+
+    ''' <summary>
+    ''' After a failed TLS attempt that looks like "this server cannot do TLS", asks whether to retry without
+    ''' encryption. Returns True (and allows plain FTP for this server) only if the user says yes.
+    ''' </summary>
+    Private Function OfferPlainFtp(ByVal ex As WebException) As Boolean
+        If _allowPlainFtp Then Return False
+
+        Dim ftpStatus As FtpStatusCode? = Nothing
+        Dim response As FtpWebResponse = TryCast(ex.Response, FtpWebResponse)
+        If response IsNot Nothing Then ftpStatus = response.StatusCode
+        If Not FtpSecurity.ShouldOfferPlainFallback(ex.Status, ftpStatus) Then Return False
+
+        Dim answer As DialogResult = MessageBox.Show(
+            "An encrypted (TLS) connection to this server could not be made:" & vbCrLf & ex.Message & vbCrLf & vbCrLf &
+            "Connect WITHOUT encryption instead?" & vbCrLf &
+            "Your user name, password and files would be sent in clear text.",
+            "FTP - No Encryption", MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2)
+        If answer <> DialogResult.Yes Then Return False
+
+        _allowPlainFtp = True
+        Return True
+    End Function
+
     Private Sub listFTP(ByVal URL As String, ByVal bk As String, ByVal pw As String)
         Dim requ As FtpWebRequest = Nothing
         Dim resp As FtpWebResponse = Nothing
         Dim reader As StreamReader = Nothing
         Try
-            requ = CType(WebRequest.Create(URL), WebRequest)
-            requ.Credentials = New NetworkCredential(bk, pw)
-            requ.Method = WebRequestMethods.Ftp.ListDirectory
+            requ = FtpSecurity.CreateRequest(URL, WebRequestMethods.Ftp.ListDirectory, bk, pw, Not _allowPlainFtp)
             resp = CType(requ.GetResponse(), FtpWebResponse)
             reader = New StreamReader(resp.GetResponseStream())
             While (reader.Peek() > -1)
@@ -23,6 +52,10 @@ Public Class ftp
         Catch ex As UriFormatException
             ToolStripStatusLabel1.Text = ex.Message
         Catch ex As WebException
+            If OfferPlainFtp(ex) Then
+                listFTP(URL, bk, pw)
+                Return
+            End If
             ToolStripStatusLabel2.Text = ex.Message
         Finally
             If reader IsNot Nothing Then reader.Close()
@@ -35,9 +68,7 @@ Public Class ftp
         Dim respStrm As Stream = Nothing
         Dim fileStrm As FileStream = Nothing
         Try
-            requ = CType(WebRequest.Create(URL), FtpWebRequest)
-            requ.Credentials = New NetworkCredential(bk, pw)
-            requ.Method = WebRequestMethods.Ftp.DownloadFile
+            requ = FtpSecurity.CreateRequest(URL, WebRequestMethods.Ftp.DownloadFile, bk, pw, Not _allowPlainFtp)
             resp = CType(requ.GetResponse(), FtpWebResponse)
             respStrm = resp.GetResponseStream()
             SaveFileDialog1.FileName = Path.GetFileName(requ.RequestUri.LocalPath)
@@ -55,6 +86,10 @@ Public Class ftp
         Catch ex As UriFormatException
             ToolStripStatusLabel1.Text = ex.Message
         Catch ex As WebException
+            If OfferPlainFtp(ex) Then
+                downloadFTP(URL, bk, pw)
+                Return
+            End If
             ToolStripStatusLabel2.Text = ex.Message
         Catch ex As IOException
             ToolStripStatusLabel2.Text = ex.Message
@@ -70,9 +105,7 @@ Public Class ftp
         Dim requStrm As Stream = Nothing
         Dim fileStrm As FileStream = Nothing
         Try
-            requ = CType(WebRequest.Create(URL), FtpWebRequest)
-            requ.Credentials = New NetworkCredential(bk, pw)
-            requ.Method = WebRequestMethods.Ftp.UploadFile
+            requ = FtpSecurity.CreateRequest(URL, WebRequestMethods.Ftp.UploadFile, bk, pw, Not _allowPlainFtp)
             requ.Timeout = System.Threading.Timeout.Infinite
             requ.Proxy = Nothing
             requStrm = requ.GetRequestStream()
@@ -92,6 +125,10 @@ Public Class ftp
         Catch ex As IOException
             ToolStripStatusLabel2.Text = ex.Message
         Catch ex As WebException
+            If OfferPlainFtp(ex) Then
+                uploadFTP(URL, filename, bk, pw)
+                Return
+            End If
             ToolStripStatusLabel2.Text = ex.Message
         Finally
             If resp IsNot Nothing Then resp.Close()
@@ -104,14 +141,16 @@ Public Class ftp
         Dim requ As FtpWebRequest = Nothing
         Dim resp As FtpWebResponse = Nothing
         Try
-            requ = CType(WebRequest.Create(URL), FtpWebRequest)
-            requ.Credentials = New NetworkCredential(bk, pw)
-            requ.Method = WebRequestMethods.Ftp.DeleteFile
+            requ = FtpSecurity.CreateRequest(URL, WebRequestMethods.Ftp.DeleteFile, bk, pw, Not _allowPlainFtp)
             resp = CType(requ.GetResponse(), FtpWebResponse)
             ToolStripStatusLabel1.Text = "The File was deleted!"
         Catch ex As UriFormatException
             ToolStripStatusLabel1.Text = ex.Message
         Catch ex As WebException
+            If OfferPlainFtp(ex) Then
+                deleteFTP(URL, bk, pw)
+                Return
+            End If
             ToolStripStatusLabel2.Text = ex.Message
         Finally
             If resp IsNot Nothing Then resp.Close()

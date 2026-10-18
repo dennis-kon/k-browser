@@ -32,7 +32,8 @@ Public Class TabProcessManager
             Dim settingsModel As PrivacySettingsModel = Await settingsSvc.LoadSettingsAsync()
 
             Dim perfSettings As PerformanceSettingsModel = If(settingsModel.Performance, New PerformanceSettingsModel())
-            Dim options As CoreWebView2EnvironmentOptions = BrowserInitializationService.CreateEnvironmentOptions(perfSettings, settingsModel.BlockThirdPartyCookies)
+            Dim options As CoreWebView2EnvironmentOptions = BrowserInitializationService.CreateEnvironmentOptions(perfSettings, settingsModel.BlockThirdPartyCookies,
+                My.Settings.CustomProxyEnabled, My.Settings.CustomProxyHost, My.Settings.CustomProxyPort)
 
             ' Append process isolation switches
             Dim curArgs As String = If(options.AdditionalBrowserArguments, "")
@@ -65,7 +66,8 @@ Public Class TabProcessManager
             Dim settingsModel As PrivacySettingsModel = Await settingsSvc.LoadSettingsAsync()
             Dim perfSettings As PerformanceSettingsModel = If(settingsModel.Performance, New PerformanceSettingsModel())
 
-            Dim options As CoreWebView2EnvironmentOptions = BrowserInitializationService.CreateEnvironmentOptions(perfSettings, settingsModel.BlockThirdPartyCookies)
+            Dim options As CoreWebView2EnvironmentOptions = BrowserInitializationService.CreateEnvironmentOptions(perfSettings, settingsModel.BlockThirdPartyCookies,
+                My.Settings.CustomProxyEnabled, My.Settings.CustomProxyHost, My.Settings.CustomProxyPort)
             Dim curArgs As String = If(options.AdditionalBrowserArguments, "")
             options.AdditionalBrowserArguments = (curArgs & " --enable-features=IsolateOrigins,site-per-process --disable-features=SingleProcess").Trim()
 

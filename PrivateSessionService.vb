@@ -16,6 +16,8 @@ Public Class PrivateSessionService
 
     Private ReadOnly _sessionId As String
     Private ReadOnly _sessionFolder As String
+    Private ReadOnly _rootFolder As String
+    Private _lockStream As FileStream
     Private _environment As CoreWebView2Environment
     Private _disposed As Boolean
 
@@ -63,9 +65,109 @@ Public Class PrivateSessionService
     ''' and a corresponding temporary folder path.
     ''' </summary>
     Public Sub New()
-        _sessionId = Guid.NewGuid().ToString("N")
-        _sessionFolder = Path.Combine(Path.GetTempPath(), "KBrowser", "PrivateSession", _sessionId)
+        Me.New(DefaultRoot)
     End Sub
+
+    ''' <summary>Creates a session whose profile folder lives under <paramref name="rootFolder"/>.</summary>
+    Public Sub New(ByVal rootFolder As String)
+        _sessionId = Guid.NewGuid().ToString("N")
+        _rootFolder = rootFolder
+        _sessionFolder = Path.Combine(rootFolder, _sessionId)
+    End Sub
+
+    ''' <summary>The folder that holds every private session's profile folder and lock file.</summary>
+    Public Shared ReadOnly Property DefaultRoot As String
+        Get
+            Return Path.Combine(Path.GetTempPath(), "KBrowser", "PrivateSession")
+        End Get
+    End Property
+
+    ''' <summary>
+    ''' Takes an exclusive lock on "{id}.lock" next to the session folder for as long as the session lives.
+    ''' The operating system drops the lock if the process dies, which is how
+    ''' <see cref="SweepStaleSessions(String)"/> tells a crashed session from one that is still open.
+    ''' </summary>
+    Public Sub AcquireSessionLock()
+        If _lockStream IsNot Nothing Then Return
+        Directory.CreateDirectory(_rootFolder)
+        _lockStream = New FileStream(Path.Combine(_rootFolder, _sessionId & ".lock"), FileMode.OpenOrCreate,
+                                     FileAccess.ReadWrite, FileShare.None)
+    End Sub
+
+    Private Sub ReleaseSessionLock()
+        If _lockStream Is Nothing Then Return
+        Try
+            _lockStream.Dispose()
+            File.Delete(Path.Combine(_rootFolder, _sessionId & ".lock"))
+        Catch ex As Exception
+            System.Diagnostics.Debug.WriteLine("PrivateSessionService: Could not release the session lock: " & ex.Message)
+        Finally
+            _lockStream = Nothing
+        End Try
+    End Sub
+
+    ''' <summary>
+    ''' Removes private-session folders left behind by a crash: those whose lock file is no longer held, and
+    ''' folders from older versions (no lock file) untouched for more than a day. A session that is still open
+    ''' holds its lock and is never touched. Returns how many session folders were removed.
+    ''' </summary>
+    Public Shared Function SweepStaleSessions(ByVal rootFolder As String) As Integer
+        Return SweepStaleSessions(rootFolder, TimeSpan.FromHours(24))
+    End Function
+
+    Public Shared Function SweepStaleSessions(ByVal rootFolder As String, ByVal legacyMaxAge As TimeSpan) As Integer
+        Dim removed As Integer = 0
+        If String.IsNullOrEmpty(rootFolder) OrElse Not Directory.Exists(rootFolder) Then Return 0
+
+        Try
+            For Each folder As String In Directory.GetDirectories(rootFolder)
+                Try
+                    Dim lockPath As String = Path.Combine(rootFolder, Path.GetFileName(folder) & ".lock")
+                    If File.Exists(lockPath) Then
+                        Dim held As FileStream = TryTakeLock(lockPath)
+                        If held Is Nothing Then Continue For ' a running session owns it
+                        Try
+                            Directory.Delete(folder, True)
+                            removed += 1
+                        Finally
+                            held.Dispose()
+                        End Try
+                        File.Delete(lockPath)
+                    ElseIf DateTime.UtcNow - Directory.GetLastWriteTimeUtc(folder) > legacyMaxAge Then
+                        Directory.Delete(folder, True)
+                        removed += 1
+                    End If
+                Catch ex As Exception
+                    System.Diagnostics.Debug.WriteLine("PrivateSessionService: Could not sweep a stale session: " & ex.Message)
+                End Try
+            Next
+
+            ' Lock files whose session folder is already gone.
+            For Each lockPath As String In Directory.GetFiles(rootFolder, "*.lock")
+                Try
+                    If Directory.Exists(Path.Combine(rootFolder, Path.GetFileNameWithoutExtension(lockPath))) Then Continue For
+                    Dim held As FileStream = TryTakeLock(lockPath)
+                    If held Is Nothing Then Continue For
+                    held.Dispose()
+                    File.Delete(lockPath)
+                Catch ex As Exception
+                    System.Diagnostics.Debug.WriteLine("PrivateSessionService: Could not remove an orphan lock: " & ex.Message)
+                End Try
+            Next
+        Catch ex As Exception
+            System.Diagnostics.Debug.WriteLine("PrivateSessionService: Sweep failed: " & ex.Message)
+        End Try
+        Return removed
+    End Function
+
+    ''' <summary>Opens the lock file exclusively, or returns Nothing when another session holds it.</summary>
+    Private Shared Function TryTakeLock(ByVal lockPath As String) As FileStream
+        Try
+            Return New FileStream(lockPath, FileMode.Open, FileAccess.ReadWrite, FileShare.None)
+        Catch ex As IOException
+            Return Nothing
+        End Try
+    End Function
 
     ''' <summary>
     ''' Creates the isolated CoreWebView2Environment for this private session.
@@ -80,6 +182,9 @@ Public Class PrivateSessionService
         End If
 
         Try
+            ' Claim the session first, so a sweep from another instance never sees the folder unowned.
+            AcquireSessionLock()
+
             ' Create the temporary session folder
             If Not Directory.Exists(_sessionFolder) Then
                 Directory.CreateDirectory(_sessionFolder)
@@ -135,6 +240,7 @@ Public Class PrivateSessionService
 
             ' Step 2: Delete the temporary session folder with retry logic
             Await DeleteSessionFolderAsync()
+            ReleaseSessionLock()
         Catch ex As Exception
             ' Log technical error only — never log any private URLs or session content
             System.Diagnostics.Debug.WriteLine("PrivateSessionService: Cleanup error: " & ex.Message)
@@ -203,6 +309,7 @@ Public Class PrivateSessionService
         If Not _disposed Then
             If disposing Then
                 _environment = Nothing
+                ReleaseSessionLock()
             End If
             _disposed = True
         End If
