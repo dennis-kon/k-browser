@@ -94,11 +94,15 @@ Public Class PrivateSessionService
                                      FileAccess.ReadWrite, FileShare.None)
     End Sub
 
-    Private Sub ReleaseSessionLock()
+    ''' <summary>
+    ''' Lets go of the session lock. The lock file itself is removed only with the session folder: a lock file
+    ''' nobody holds is what tells the start-up sweep that a leftover folder may be deleted.
+    ''' </summary>
+    Private Sub ReleaseSessionLock(Optional ByVal deleteLockFile As Boolean = True)
         If _lockStream Is Nothing Then Return
         Try
             _lockStream.Dispose()
-            File.Delete(Path.Combine(_rootFolder, _sessionId & ".lock"))
+            If deleteLockFile Then File.Delete(Path.Combine(_rootFolder, _sessionId & ".lock"))
         Catch ex As Exception
             System.Diagnostics.Debug.WriteLine("PrivateSessionService: Could not release the session lock: " & ex.Message)
         Finally
@@ -221,89 +225,84 @@ Public Class PrivateSessionService
     End Function
 
     ''' <summary>
-    ''' Performs complete cleanup of the private session.
-    ''' First clears all browsing data via the WebView2 API, then deletes
-    ''' the temporary session folder and all its contents.
+    ''' Ends the private session in the only order that lets its profile folder be deleted:
+    ''' clear the browsing data while the browser still runs, shut the browser down (its process keeps files in
+    ''' the folder open until it has exited), then delete the folder. A step that fails does not stop the
+    ''' ones after it. Returns True when the folder is gone; otherwise it is left, unlocked, for the
+    ''' start-up sweep (<see cref="SweepStaleSessions(String)"/>) to remove.
     ''' </summary>
-    ''' <param name="webView">Optional WebView2 control to clear browsing data from before folder deletion.</param>
-    Public Async Function CleanupSessionAsync(Optional ByVal webView As WebView2 = Nothing) As Task
-        Try
-            ' Step 1: Clear browsing data via WebView2 API if a WebView is available
-            If webView IsNot Nothing AndAlso webView.CoreWebView2 IsNot Nothing Then
-                Try
-                    Await webView.CoreWebView2.Profile.ClearBrowsingDataAsync()
-                Catch ex As Exception
-                    ' Browsing data clear failed — continue with folder deletion
-                    System.Diagnostics.Debug.WriteLine("PrivateSessionService: ClearBrowsingDataAsync failed: " & ex.Message)
-                End Try
-            End If
+    Public Async Function EndSessionAsync(ByVal clearBrowsingData As Func(Of Task), ByVal shutDownBrowser As Func(Of Task)) As Task(Of Boolean)
+        Await RunStepAsync(clearBrowsingData, "clearing browsing data")
+        Await RunStepAsync(shutDownBrowser, "shutting down the browser")
+        _environment = Nothing
 
-            ' Step 2: Delete the temporary session folder with retry logic
-            Await DeleteSessionFolderAsync()
-            ReleaseSessionLock()
+        Dim deleted As Boolean = Await DeleteSessionFolderAsync()
+        ReleaseSessionLock(deleteLockFile:=deleted)
+        Return deleted
+    End Function
+
+    Private Shared Async Function RunStepAsync(ByVal [step] As Func(Of Task), ByVal what As String) As Task
+        If [step] Is Nothing Then Return
+        Try
+            Await [step]()
         Catch ex As Exception
-            ' Log technical error only — never log any private URLs or session content
-            System.Diagnostics.Debug.WriteLine("PrivateSessionService: Cleanup error: " & ex.Message)
+            ' Log technical error only — never log private URLs or session content
+            System.Diagnostics.Debug.WriteLine("PrivateSessionService: Error " & what & ": " & ex.Message)
         End Try
     End Function
 
     ''' <summary>
-    ''' Attempts to delete the temporary session folder with retry logic.
-    ''' WebView2 processes may still hold file locks briefly after the environment is released,
-    ''' so we retry up to 3 times with increasing delays.
+    ''' Disposes the browser control (via <paramref name="closeBrowser"/>) and waits until the session's browser
+    ''' process has exited, or until <paramref name="timeout"/> passes.
     ''' </summary>
-    Private Async Function DeleteSessionFolderAsync() As Task
-        If String.IsNullOrEmpty(_sessionFolder) OrElse Not Directory.Exists(_sessionFolder) Then
+    Public Shared Async Function ShutDownBrowserAsync(ByVal environment As CoreWebView2Environment, ByVal closeBrowser As Action,
+                                                      ByVal timeout As TimeSpan) As Task
+        If environment Is Nothing Then
+            closeBrowser()
             Return
+        End If
+
+        Dim exited As New TaskCompletionSource(Of Boolean)(TaskCreationOptions.RunContinuationsAsynchronously)
+        Dim onExit As EventHandler(Of CoreWebView2BrowserProcessExitedEventArgs) = Sub(s, e) exited.TrySetResult(True)
+        AddHandler environment.BrowserProcessExited, onExit
+        Try
+            closeBrowser()
+            Await Task.WhenAny(exited.Task, Task.Delay(timeout))
+        Finally
+            RemoveHandler environment.BrowserProcessExited, onExit
+        End Try
+    End Function
+
+    ''' <summary>
+    ''' Deletes the session folder, retrying briefly in case a browser helper process is still letting go of a
+    ''' file. Returns True when the folder no longer exists.
+    ''' </summary>
+    Private Async Function DeleteSessionFolderAsync() As Task(Of Boolean)
+        If String.IsNullOrEmpty(_sessionFolder) OrElse Not Directory.Exists(_sessionFolder) Then
+            Return True
         End If
 
         Const MaxRetries As Integer = 3
         For attempt As Integer = 1 To MaxRetries
-            Dim shouldRetry As Boolean = False
             Try
                 Directory.Delete(_sessionFolder, recursive:=True)
-                System.Diagnostics.Debug.WriteLine("PrivateSessionService: Session folder deleted successfully.")
-                Return
+                Return True
             Catch ex As IOException
-                ' File locks from WebView2 processes — wait and retry
                 System.Diagnostics.Debug.WriteLine("PrivateSessionService: Folder deletion attempt " & attempt & " failed (IO): " & ex.Message)
-                shouldRetry = (attempt < MaxRetries)
             Catch ex As UnauthorizedAccessException
-                ' Permission issue — wait and retry
                 System.Diagnostics.Debug.WriteLine("PrivateSessionService: Folder deletion attempt " & attempt & " failed (Access): " & ex.Message)
-                shouldRetry = (attempt < MaxRetries)
-            Catch ex As Exception
-                System.Diagnostics.Debug.WriteLine("PrivateSessionService: Folder deletion failed: " & ex.Message)
-                Return
             End Try
 
             ' Delay outside the Catch block (VB.NET does not allow Await inside Catch)
-            If shouldRetry Then
-                Await Task.Delay(500 * attempt)
-            End If
+            If attempt < MaxRetries Then Await Task.Delay(250 * attempt)
         Next
-
-        ' If all retries failed, schedule a deferred cleanup attempt
-        Try
-            Task.Run(Async Function()
-                         Await Task.Delay(5000)
-                         Try
-                             If Directory.Exists(_sessionFolder) Then
-                                 Directory.Delete(_sessionFolder, recursive:=True)
-                             End If
-                         Catch
-                             ' Final cleanup failed — folder will be cleaned by OS temp cleanup
-                         End Try
-                     End Function)
-        Catch
-            ' Silently ignore if we cannot schedule deferred cleanup
-        End Try
+        Return Not Directory.Exists(_sessionFolder)
     End Function
 
     ''' <summary>
     ''' Disposes the private session service and releases the environment reference.
     ''' Note: Actual cleanup (ClearBrowsingDataAsync + folder deletion) should be called
-    ''' via CleanupSessionAsync before disposal.
+    ''' via EndSessionAsync before disposal.
     ''' </summary>
     Protected Overridable Sub Dispose(ByVal disposing As Boolean)
         If Not _disposed Then

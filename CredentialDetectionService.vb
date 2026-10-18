@@ -42,6 +42,58 @@ Public Class CredentialDetectionService
     ''' </summary>
     Public Event LoginFormDetected As EventHandler(Of LoginFormDetectedEventArgs)
 
+    ''' <summary>What one page scan found (see <see cref="ScanPageAsync"/>).</summary>
+    Public Structure PageScanResult
+        ''' <summary>Our login detector is the one running in the page, so its capture messages can be trusted.</summary>
+        Public DetectorInstalled As Boolean
+        Public HasPasswordField As Boolean
+    End Structure
+
+    ''' <summary>
+    ''' The script for one page scan: installs the login detector and/or checks for a password field, and returns
+    ''' {nonce, hasPasswordField}. The answer is a fresh object literal, so a page cannot intercept the nonce
+    ''' through setters it put on Object.prototype. Returns Nothing when there is nothing to do.
+    ''' </summary>
+    Public Shared Function BuildPageScanScript(ByVal nonceLiteral As String, ByVal installDetector As Boolean, ByVal checkForPasswordField As Boolean) As String
+        If Not installDetector AndAlso Not checkForPasswordField Then Return Nothing
+        Dim detector As String = If(installDetector, GetLoginDetectionScript(nonceLiteral).Trim().TrimEnd(";"c), "null")
+        Dim passwordCheck As String = If(checkForPasswordField, "document.querySelector('input[type=""password""]') !== null", "false")
+        Return "(function() {" & vbLf &
+               "    var installed = " & detector & ";" & vbLf &
+               "    var hasPasswordField = " & passwordCheck & ";" & vbLf &
+               "    return {nonce: installed, hasPasswordField: hasPasswordField};" & vbLf &
+               "})();"
+    End Function
+
+    ''' <summary>
+    ''' Reads a page scan's answer (the JSON ExecuteScriptAsync returns). The detector only counts as ours when
+    ''' the answer carries exactly the nonce we sent; anything unexpected counts as nothing found.
+    ''' </summary>
+    Public Shared Function ParsePageScanResult(ByVal json As String, ByVal expectedNonce As String) As PageScanResult
+        Dim result As New PageScanResult()
+        If String.IsNullOrWhiteSpace(json) Then Return result
+        Try
+            Using doc As JsonDocument = JsonDocument.Parse(json)
+                Dim root As JsonElement = doc.RootElement
+                If root.ValueKind <> JsonValueKind.Object Then Return result
+
+                Dim nonce As JsonElement
+                If Not String.IsNullOrEmpty(expectedNonce) AndAlso root.TryGetProperty("nonce", nonce) AndAlso
+                   nonce.ValueKind = JsonValueKind.String Then
+                    result.DetectorInstalled = String.Equals(nonce.GetString(), expectedNonce, StringComparison.Ordinal)
+                End If
+
+                Dim hasField As JsonElement
+                If root.TryGetProperty("hasPasswordField", hasField) AndAlso hasField.ValueKind = JsonValueKind.True Then
+                    result.HasPasswordField = True
+                End If
+            End Using
+        Catch ex As JsonException
+            Return New PageScanResult()
+        End Try
+        Return result
+    End Function
+
     Public Sub New()
         _passwordManager = New PasswordManagerService()
         _settingsService = New SettingsService()
@@ -53,11 +105,12 @@ Public Class CredentialDetectionService
     End Sub
 
     ''' <summary>
-    ''' Injects the login form detection JavaScript into the WebView2 control.
-    ''' This script monitors for forms with password fields and captures submissions.
-    ''' Must be called after DOMContentLoaded.
+    ''' Runs once per page load (after DOMContentLoaded) and makes a single trip into the page: installs the
+    ''' login form detector, which captures submissions (when saving passwords is on), and checks for a
+    ''' password field (when autofill is on). If the page has one and passwords are saved for the site,
+    ''' raises LoginFormDetected.
     ''' </summary>
-    Public Async Function InjectLoginDetectionScriptAsync(ByVal webView As WebView2) As Task
+    Public Async Function ScanPageAsync(ByVal webView As WebView2) As Task
         If webView Is Nothing OrElse webView.CoreWebView2 Is Nothing Then Return
 
         Try
@@ -67,39 +120,22 @@ Public Class CredentialDetectionService
             ' script has been injected and has reported back that it is the one running.
             SetNonce(core, Nothing)
 
-            ' Check if password saving is enabled in settings
             Dim settings = _settingsService.LoadSettings()
-            If settings?.Passwords IsNot Nothing AndAlso Not settings.Passwords.SavePasswords Then Return
+            Dim savePasswords As Boolean = settings?.Passwords Is Nothing OrElse settings.Passwords.SavePasswords
+            Dim offerAutofill As Boolean = settings?.Passwords Is Nothing OrElse settings.Passwords.OfferAutoFill
 
             Dim nonce As String = NewNonce()
-            Dim nonceLiteral As String = ToJsStringLiteral(nonce)
-            Dim result As String = Await core.ExecuteScriptAsync(GetLoginDetectionScript(nonceLiteral))
+            Dim script As String = BuildPageScanScript(ToJsStringLiteral(nonce), savePasswords, offerAutofill)
+            If script Is Nothing Then Return
 
-            ' The script answers with its nonce only if it was the one that installed itself. If the
+            Dim scan As PageScanResult = ParsePageScanResult(Await core.ExecuteScriptAsync(script), nonce)
+
+            ' The detector answers with its nonce only if it was the one that installed itself. If the
             ' page got there first (set the guard flag), nothing is trusted and capture stays off.
-            If result = nonceLiteral Then SetNonce(core, nonce)
-        Catch ex As Exception
-            System.Diagnostics.Debug.WriteLine("CredentialDetectionService: Error injecting login detection script: " & ex.Message)
-        End Try
-    End Function
+            If savePasswords AndAlso scan.DetectorInstalled Then SetNonce(core, nonce)
 
-    ''' <summary>
-    ''' Checks if the current page has a login form and raises LoginFormDetected if
-    ''' saved credentials exist for the domain.
-    ''' </summary>
-    Public Async Function CheckForAutofillAsync(ByVal webView As WebView2) As Task
-        If webView Is Nothing OrElse webView.CoreWebView2 Is Nothing Then Return
-
-        Try
-            Dim settings = _settingsService.LoadSettings()
-            If settings?.Passwords IsNot Nothing AndAlso Not settings.Passwords.OfferAutoFill Then Return
-
-            ' Check if the page has a password input field
-            Dim hasLoginForm As String = Await webView.CoreWebView2.ExecuteScriptAsync(
-                "(function(){return document.querySelector('input[type=""password""]') !== null;})()")
-
-            If hasLoginForm = "true" Then
-                Dim url As String = webView.CoreWebView2.Source
+            If offerAutofill AndAlso scan.HasPasswordField Then
+                Dim url As String = core.Source
                 ' Don't even offer to fill a page the password may not be filled into (plain HTTP).
                 If Not IsAutofillTargetAllowed(url, url) Then Return
                 Dim savedCredentials = Await _passwordManager.GetCredentialsForSiteAsync(url)
@@ -109,7 +145,7 @@ Public Class CredentialDetectionService
                 End If
             End If
         Catch ex As Exception
-            System.Diagnostics.Debug.WriteLine("CredentialDetectionService: Error checking for autofill: " & ex.Message)
+            System.Diagnostics.Debug.WriteLine("CredentialDetectionService: Error scanning page for login forms: " & ex.Message)
         End Try
     End Function
 

@@ -182,7 +182,7 @@ Public Class Form1
             ApplyIcons()
             ThemeManager.ApplyTheme(Me)
             UpdateDarkModeMenuCheckedState()
-            UserScriptManager.Initialize()
+            Dim userScriptsLoading = UserScriptManager.EnsureLoadedAsync()
             If My.Settings.FullScreenOnStartup Then
                 FullScreen()
                 full = True
@@ -1205,8 +1205,7 @@ Public Class Form1
         If core IsNot Nothing Then
             Dim activeBrws = GetWebView2FromCore(core)
             If activeBrws IsNot Nothing Then
-                Await _credentialDetectionService.InjectLoginDetectionScriptAsync(activeBrws)
-                Await _credentialDetectionService.CheckForAutofillAsync(activeBrws)
+                Await _credentialDetectionService.ScanPageAsync(activeBrws)
             End If
         End If
     End Sub

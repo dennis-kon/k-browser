@@ -489,11 +489,27 @@ Public Class PrivateBrowserForm
     ' Form Closing — Session Cleanup
     ' ─────────────────────────────────────────────────
 
+    Private _cleanupStarted As Boolean
+    Private _cleanupDone As Boolean
+
     ''' <summary>
     ''' Handles form closing: cleans up the private session by clearing all browsing data
     ''' and deleting the temporary user data folder. Shows a dismissible notification.
+    ''' The close is held back (the window is only hidden) until the cleanup has finished, because the
+    ''' browser must shut down before its folder can be deleted; then the window closes for real.
     ''' </summary>
     Private Async Sub PrivateBrowserForm_FormClosing(ByVal sender As Object, ByVal e As FormClosingEventArgs) Handles MyBase.FormClosing
+        If _cleanupDone Then Return
+        ' Never hold up Windows shutting down or the app exiting: the folder stays behind (its lock file
+        ' unheld) and the start-up sweep deletes it next time.
+        If e.CloseReason = CloseReason.WindowsShutDown OrElse e.CloseReason = CloseReason.TaskManagerClosing OrElse
+           e.CloseReason = CloseReason.ApplicationExitCall Then Return
+        e.Cancel = True
+        If _cleanupStarted Then Return
+        _cleanupStarted = True
+        Me.Hide()
+
+        Dim folderDeleted As Boolean = False
         Try
             ' Unhook event handlers to prevent callbacks during disposal
             If wvPrivate.CoreWebView2 IsNot Nothing Then
@@ -510,35 +526,34 @@ Public Class PrivateBrowserForm
             ' Release this tab's entries from the AdBlockEngine's static per-tab tracking
             AdBlockEngine.RemoveTab(wvPrivate)
 
-            ' Cleanup the private session (clear browsing data + delete temp folder)
-            Await _sessionService.CleanupSessionAsync(wvPrivate)
+            ' Clear browsing data, shut the browser down and wait for its process to exit, then delete the folder.
+            Dim core As CoreWebView2 = wvPrivate.CoreWebView2
+            Dim environment As CoreWebView2Environment = If(core IsNot Nothing, core.Environment, Nothing)
+            folderDeleted = Await _sessionService.EndSessionAsync(
+                Function() If(core IsNot Nothing, core.Profile.ClearBrowsingDataAsync(), Task.CompletedTask),
+                Function() PrivateSessionService.ShutDownBrowserAsync(environment, Sub() wvPrivate.Dispose(), TimeSpan.FromSeconds(10)))
 
-            ' Dispose the WebView2 control
-            Try
-                wvPrivate.Dispose()
-            Catch
-                ' Silently ignore disposal errors
-            End Try
-
-            ' Dispose the session service
             _sessionService.Dispose()
-
-            ' Show session closed notification (unless user opted out)
-            ShowSessionClosedNotification()
         Catch ex As Exception
             ' Log technical error only — never log private URLs
             System.Diagnostics.Debug.WriteLine("PrivateBrowserForm: Error during closing cleanup: " & ex.Message)
         End Try
+
+        ' Show session closed notification (unless user opted out)
+        ShowSessionClosedNotification(folderDeleted)
+
+        _cleanupDone = True
+        Me.Close()
     End Sub
 
     ''' <summary>
     ''' Shows a dismissible notification that the private session has been closed
     ''' and all browsing data has been deleted. Includes a "Don't show again" checkbox.
     ''' </summary>
-    Private Sub ShowSessionClosedNotification()
+    Private Sub ShowSessionClosedNotification(ByVal dataDeleted As Boolean)
         Try
             ' Check if user opted out of this notification
-            If My.Settings.SuppressPrivateCloseMessage Then
+            If My.Settings.SuppressPrivateCloseMessage AndAlso dataDeleted Then
                 Return
             End If
 
@@ -568,7 +583,9 @@ Public Class PrivateBrowserForm
                 notifyForm.Controls.Add(iconLabel)
 
                 Dim msgLabel As New Label()
-                msgLabel.Text = "Private browsing session closed." & vbCrLf & vbCrLf & "Your browsing data has been deleted."
+                msgLabel.Text = "Private browsing session closed." & vbCrLf & vbCrLf &
+                                If(dataDeleted, "Your browsing data has been deleted.",
+                                   "Some browsing data could not be deleted yet." & vbCrLf & "It will be removed the next time K-Browser starts.")
                 msgLabel.Font = New Drawing.Font("Segoe UI", 10.0F)
                 msgLabel.ForeColor = Drawing.Color.FromArgb(235, 240, 245)
                 msgLabel.AutoSize = True
