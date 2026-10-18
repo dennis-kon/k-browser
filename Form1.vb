@@ -37,10 +37,7 @@ Public Class Form1
     End Sub
 
     Public Shared Function GetHomePageUrl() As String
-        If Not String.IsNullOrWhiteSpace(My.Settings.HomePageUrl) Then
-            Return AppManager.FixURL(My.Settings.HomePageUrl)
-        End If
-        Return Path.Combine(Application.StartupPath, "homepage", "index.html")
+        Return AppManager.HomePageOrDefault(My.Settings.HomePageUrl)
     End Function
 
     Public Async Sub NavigateActiveTab(ByVal url As String)
@@ -848,11 +845,7 @@ Public Class Form1
 
         Dim effectiveUrl As String = targetUrl
         If String.IsNullOrEmpty(effectiveUrl) Then
-            Select Case My.Settings.NewTabPage
-                Case 1 : effectiveUrl = GetHomePageUrl()
-                Case 2 : effectiveUrl = "about:blank"
-                Case Else : effectiveUrl = Path.Combine(Application.StartupPath, "homepage", "index.html")
-            End Select
+            effectiveUrl = AppManager.NewTabUrl(My.Settings.NewTabPage, My.Settings.HomePageUrl)
         End If
 
         Dim targetFix As String = AppManager.ResolveUrlOrSearch(effectiveUrl, My.Settings.SearchEngine)
@@ -1394,11 +1387,11 @@ Public Class Form1
     End Sub
 
     Private Sub DefualtToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles DefualtToolStripMenuItem.Click
-        NavigateActiveTab(Path.Combine(Application.StartupPath, "homepage", "index.html"))
+        NavigateActiveTab(GetHomePageUrl())
     End Sub
 
     Private Sub HomeToolStripMenuItem1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles HomeToolStripMenuItem1.Click
-        NavigateActiveTab(Path.Combine(Application.StartupPath, "homepage", "index.html"))
+        NavigateActiveTab(GetHomePageUrl())
     End Sub
 
     Private Sub BlancPageToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles BlancPageToolStripMenuItem.Click
@@ -1410,7 +1403,7 @@ Public Class Form1
     End Sub
 
     Private Sub ToolStripMenuItem3_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem3.Click
-        NavigateActiveTab(Path.Combine(Application.StartupPath, "homepage", "index.html"))
+        NavigateActiveTab(GetHomePageUrl())
     End Sub
 
     Private Sub Form1_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing

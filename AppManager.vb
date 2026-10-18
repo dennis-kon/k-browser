@@ -32,6 +32,22 @@ Public Class AppManager
         Return "http://" & trimmed
     End Function
 
+    Public Const DefaultHomePageUrl As String = "https://www.google.com"
+
+    ''' <summary>The home page the user set, or the default one when none is set.</summary>
+    Public Shared Function HomePageOrDefault(ByVal homePageUrl As String) As String
+        If String.IsNullOrWhiteSpace(homePageUrl) Then Return DefaultHomePageUrl
+        Return FixURL(homePageUrl)
+    End Function
+
+    ''' <summary>
+    ''' The address a new tab opens: a blank page when the New Tab setting is 2, otherwise the home page.
+    ''' </summary>
+    Public Shared Function NewTabUrl(ByVal newTabPage As Integer, ByVal homePageUrl As String) As String
+        If newTabPage = 2 Then Return "about:blank"
+        Return HomePageOrDefault(homePageUrl)
+    End Function
+
     Public Shared Function ResolveUrlOrSearch(ByVal input As String, Optional ByVal engine As String = "Google") As String
         If String.IsNullOrWhiteSpace(input) Then Return "about:blank"
         Dim trimmed As String = input.Trim()
@@ -39,6 +55,12 @@ Public Class AppManager
 
         If lowered.StartsWith("http://") OrElse lowered.StartsWith("https://") OrElse lowered.StartsWith("file://") OrElse lowered.StartsWith("about:") OrElse lowered.StartsWith("ftp://") Then
             Return trimmed
+        End If
+
+        ' A local path such as C:\folder\page.html opens the file, rather than being searched for.
+        If System.IO.Path.IsPathFullyQualified(trimmed) Then
+            Dim fileUri As Uri = Nothing
+            If Uri.TryCreate(trimmed, UriKind.Absolute, fileUri) AndAlso fileUri.IsFile Then Return fileUri.AbsoluteUri
         End If
 
         If trimmed.Contains(" ") OrElse (Not trimmed.Contains(".") AndAlso Not trimmed.Contains(":")) Then
