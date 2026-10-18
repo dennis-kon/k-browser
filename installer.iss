@@ -1,6 +1,6 @@
 ; Inno Setup script for K-Browser. Build with build-installer.ps1.
 #ifndef AppVersion
-  #define AppVersion "5.2.0.0"
+  #define AppVersion "5.2.1.0"
 #endif
 #ifndef PublishDir
   #define PublishDir "publish"

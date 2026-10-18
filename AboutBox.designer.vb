@@ -47,7 +47,7 @@ Partial Class AboutBox
         Label2.Name = "Label2"
         Label2.Size = New Size(108, 16)
         Label2.TabIndex = 3
-        Label2.Text = "Version 5.0.0.1"
+        Label2.Text = "Version 5.2.1.0"
         ' 
         ' Button1
         ' 
